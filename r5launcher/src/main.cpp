@@ -3,13 +3,13 @@
 #include <Windows.h>
 #include <detours.h>
 
-/*-----------------------------------------------------------------------------
+/*---------------------------------------------------------------------------------
  * _main.cpp
- *-----------------------------------------------------------------------------*/
+ *---------------------------------------------------------------------------------*/
 
 void PrintLastError()
 {
-    ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////
     // Get the error message, if any.
     DWORD errorMessageID = ::GetLastError();
     if (errorMessageID == 0)
@@ -32,10 +32,13 @@ bool LaunchR5Apex()
     CHAR sCommandDirectory[MAX_PATH];
     LPSTR sCommandLine = sCommandDirectory;
 
-    ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////
     // '+exec autoexec -dev -fnf -noplatform'
+#ifdef NDEBUG
     fopen_s(&sLaunchParams, "platform\\cfg\\startup_debug.cfg", "r");
-
+#elif _DEBUG
+    fopen_s(&sLaunchParams, "..\\platform\\cfg\\startup_debug.cfg", "r");
+#endif ////////////////////////////////////////////////////////////////////////////
     BOOL result;
 
     CHAR sDevDll[MAX_PATH];
@@ -45,11 +48,15 @@ bool LaunchR5Apex()
     STARTUPINFO StartupInfo = { 0 };
     PROCESS_INFORMATION ProcInfo = { 0 };
 
-    ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////
     // Initialize the startup info structure.
     StartupInfo.cb = sizeof(STARTUPINFO);
 
-    ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////
+    // Format the file paths for the game exe and dll.
+    GetCurrentDirectory(MAX_PATH, sGameDirectory);
+
+    ///////////////////////////////////////////////////////////////////////////////
     // Load command line arguments from a file on the disk.
     if (sLaunchParams)
     {
@@ -59,12 +66,15 @@ bool LaunchR5Apex()
         }
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Format the file paths for the game exe and dll.
-    GetCurrentDirectory(MAX_PATH, sGameDirectory);
+#ifdef NDEBUG
     snprintf(sGameExe, sizeof(sGameExe), "%s\\r5apex.exe", sGameDirectory);
-    snprintf(sDevDll, sizeof(sDevDll), "%s\\r5detours.dll", sGameDirectory);
+    snprintf(sDevDll, sizeof(sDevDll), "%s\\r5apexvtxd64.dll", sGameDirectory);
     snprintf(sCommandLine, sizeof(sCommandDirectory), "%s\\r5apex.exe %s", sGameDirectory, sArgumentBuffer);
+#elif _DEBUG
+    snprintf(sGameExe, sizeof(sGameExe), "%s\\..\\r5apex.exe", sGameDirectory);
+    snprintf(sDevDll, sizeof(sDevDll), "%s\\r5apexvtxd.dll", sGameDirectory);
+    snprintf(sCommandLine, sizeof(sCommandDirectory), "%s\\..\\r5apex.exe %s", sGameDirectory, sArgumentBuffer);
+#endif ////////////////////////////////////////////////////////////////////////////
 
     printf("Launching Apex Dev...\n");
     printf(" - CWD: %s\n", sGameDirectory);
@@ -72,14 +82,14 @@ bool LaunchR5Apex()
     printf(" - DLL: %s\n", sDevDll);
     printf(" - CLI: %s\n", sCommandLine);
 
-    ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////
     // Build our list of dlls to inject.
     LPCSTR DllsToInject[1] =
     {
         sDevDll
     };
 
-    ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////
     // Create the game process in a suspended state with our dll.
     result = DetourCreateProcessWithDllsA(
         sGameExe,                 // lpApplicationName
@@ -97,31 +107,31 @@ bool LaunchR5Apex()
         NULL                      // pfCreateProcessA
     );
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Failed to create the process.
+    ///////////////////////////////////////////////////////////////////////////////
+    // Failed to create the game process.
     if (!result)
     {
         PrintLastError();
         return false;
     }
 
-    ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////
     // Resume the process.
     ResumeThread(ProcInfo.hThread);
 
-    ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////
     // Close the process and thread handles.
     CloseHandle(ProcInfo.hProcess);
     CloseHandle(ProcInfo.hThread);
 
     return true;
 }
-
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
 // Entrypoint.
+///////////////////////////////////////////////////////////////////////////////////
 int main(int argc, char* argv[], char* envp[])
 {
     LaunchR5Apex();
-    Sleep(1000);
-    return 0;
+    Sleep(2000);
+	return EXIT_SUCCESS;
 }

@@ -350,6 +350,7 @@ bool    ImGui_ImplDX11_CreateDeviceObjects()
     // See https://github.com/ocornut/imgui/pull/638 for sources and details.
 
     // Create the vertex shader
+    // Shader taken from https://github.com/ocornut/imgui/issues/1724
     {
         static const char* vertexShader =
             "cbuffer vertexBuffer : register(b0) \
@@ -373,9 +374,10 @@ bool    ImGui_ImplDX11_CreateDeviceObjects()
             PS_INPUT main(VS_INPUT input)\
             {\
               PS_INPUT output;\
-              output.pos = mul( ProjectionMatrix, float4(input.pos.xy, 0.f, 1.f));\
-              output.col = input.col;\
-              output.uv  = input.uv;\
+              output.pos     = mul( ProjectionMatrix, float4(input.pos.xy, 0.f, 1.f));\
+              output.col.xyz = pow(abs(input.col.xyz), 2.2f);\
+              output.col.w   = input.col.w;\
+              output.uv      = input.uv;\
               return output;\
             }";
 
@@ -419,17 +421,17 @@ bool    ImGui_ImplDX11_CreateDeviceObjects()
         static const char* pixelShader =
             "struct PS_INPUT\
             {\
-            float4 pos : SV_POSITION;\
-            float4 col : COLOR0;\
-            float2 uv  : TEXCOORD0;\
+              float4 pos : SV_POSITION;\
+              float4 col : COLOR0;\
+              float2 uv  : TEXCOORD0;\
             };\
-            sampler sampler0;\
-            Texture2D texture0;\
+              sampler sampler0;\
+              Texture2D texture0;\
             \
-            float4 main(PS_INPUT input) : SV_Target\
+              float4 main(PS_INPUT input) : SV_Target\
             {\
-            float4 out_col = input.col * texture0.Sample(sampler0, input.uv); \
-            return out_col; \
+              float4 out_col = input.col * texture0.Sample(sampler0, input.uv);\
+              return out_col;\
             }";
 
         ID3DBlob* pixelShaderBlob;

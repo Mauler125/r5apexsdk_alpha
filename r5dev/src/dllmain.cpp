@@ -1,5 +1,5 @@
-#include <Windows.h>
 #include <string>
+#include <Windows.h>
 
 #include "r5dev.h"
 #include "id3dx.h"
@@ -15,26 +15,26 @@
 
 void InitializeR5Dev()
 {
-    SetupConsole();
+	SetupConsole();
     InstallENHooks();
+    InstallCNHooks();
     InstallIPHooks();
     InstallDXHooks();
     InstallOpcodes();
     InstallGlobals();
     SetupDXSwapChain();
     printf("+-----------------------------------------------------------------------------+\n");
-    printf("|   R5 DEV -- INITIALIZED -------------------------------------------------   |\n");
+    printf("|   R5 DEVELOPER CONSOLE -- INITIALIZED -----------------------------------   |\n");
     printf("+-----------------------------------------------------------------------------+\n");
-    printf("\n");
 }
 
 void TerminateR5Dev()
 {
-    RemoveCMHooks();
     RemoveENHooks();
     RemoveIPHooks();
     RemoveDXHooks();
-    FreeConsole();
+    RemoveCNHooks();
+	FreeConsole();
 }
 
 //#############################################################################
@@ -43,7 +43,6 @@ void TerminateR5Dev()
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD  dwReason, LPVOID lpReserved)
 {
-
     switch (dwReason)
     {
         case DLL_PROCESS_ATTACH:

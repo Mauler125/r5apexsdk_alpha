@@ -6,6 +6,7 @@
 #include "patterns.h"
 #include "utility.h"
 #include "structs.h"
+#include "console.h"
 #include "overlay.h"
 #include "hooks.h"
 
@@ -29,14 +30,14 @@ bool HNET_ReceiveDatagram(int sock, void* inpacket, bool raw)
 	return result;
 }
 
-unsigned int HNET_SendDatagram(SOCKET s, const char* buf, int len, int flags)
+int HNET_SendDatagram(SOCKET s, const char* buf, int len, int flags)
 {
-	unsigned int result = NET_SendDatagram(s, buf, len, flags);
+	int result = NET_SendDatagram(s, buf, len, flags);
 	if (result)
 	{
 		///////////////////////////////////////////////////////////////////////////
 		// Log transmitted packet data
-		HexDump("[+] NET_SendDatagram",  0, buf, len);
+		HexDump("[+] NET_SendDatagram", 0, buf, len);
 	}
 
 	return result;
@@ -128,6 +129,47 @@ bool HSQVM_LoadScript(void* sqvm, const char* script_path, const char* script_na
 }
 
 //#################################################################################
+// UTILITY HOOKS
+//#################################################################################
+
+int HMSG_EngineError(char* fmt, va_list args)
+{
+	char buf[1024];
+	printf("ENGINE ERROR #####################################\n");
+	vprintf(fmt, args);
+	vsnprintf(buf, IM_ARRAYSIZE(buf), fmt, args);
+	buf[IM_ARRAYSIZE(buf) - 1] = 0;
+	Items.push_back(Strdup(buf));
+	return MSG_EngineError(fmt, args);
+}
+
+bool HCVEngineServer_IsPersistenceDataAvailable(__int64 entityidx, int clientidx)
+{
+	static bool isPersistenceVarSet[256];
+
+	// TODO: Maybe not hardcode
+	std::uintptr_t playerStructBase = 0x16073B200;
+	std::uintptr_t playerStructSize = 0x4A4C0;
+	std::uintptr_t persistenceVar   = 0x5BC;
+
+	std::uintptr_t targetPlayerStruct = playerStructBase + clientidx * playerStructSize;
+
+	*(char*)(targetPlayerStruct + persistenceVar) = (char)0x5;
+
+	if (!isPersistenceVarSet[clientidx])
+	{
+		printf("\n");
+		printf("##################################################\n");
+		printf("] SETTING PERSISTENCE VAR FOR CLIENT #%d\n", clientidx);
+		printf("##################################################\n");
+		printf("\n");
+		isPersistenceVarSet[clientidx] = true;
+	}
+
+	return CVEngineServer_IsPersistenceDataAvailable(entityidx, clientidx);
+}
+
+//#################################################################################
 // MANAGEMENT
 //#################################################################################
 
@@ -143,6 +185,11 @@ void InstallENHooks()
 	DetourAttach((LPVOID*)&SQVM_Print, &HSQVM_Print);
 	DetourAttach((LPVOID*)&SQVM_LoadRson, &HSQVM_LoadRson);
 	DetourAttach((LPVOID*)&SQVM_LoadScript, &HSQVM_LoadScript);
+
+	///////////////////////////////////////////////////////////////////////////////
+	// Hook Utility functions
+	DetourAttach((LPVOID*)&MSG_EngineError, &HMSG_EngineError);
+	DetourAttach((LPVOID*)&CVEngineServer_IsPersistenceDataAvailable, &HCVEngineServer_IsPersistenceDataAvailable);
 
 	///////////////////////////////////////////////////////////////////////////////
 	// Commit the transaction
@@ -170,6 +217,11 @@ void RemoveENHooks()
 	// Unhook Netchan functions
 	DetourDetach((LPVOID*)&NET_SendDatagram, &HNET_SendDatagram);
 	DetourDetach((LPVOID*)&NET_ReceiveDatagram, &HNET_ReceiveDatagram);
+
+	///////////////////////////////////////////////////////////////////////////////
+	// Unhook Utility functions
+	DetourDetach((LPVOID*)&MSG_EngineError, &HMSG_EngineError);
+	DetourDetach((LPVOID*)&CVEngineServer_IsPersistenceDataAvailable, &HCVEngineServer_IsPersistenceDataAvailable);
 
 	///////////////////////////////////////////////////////////////////////////////
 	// Commit the transaction

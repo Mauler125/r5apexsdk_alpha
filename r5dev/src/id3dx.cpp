@@ -8,6 +8,7 @@
 #include "id3dx.h"
 #include "input.h"
 #include "enums.h"
+#include "classes.h"
 #include "console.h"
 #include "detours.h"
 #include "overlay.h"
@@ -49,6 +50,7 @@ static IDXGIResizeBuffers       g_oResizeBuffers            = nullptr;
 static ID3D11DeviceContext*     g_pDeviceContext            = nullptr;
 static ID3D11Device*            g_pDevice                   = nullptr;
 static ID3D11RenderTargetView*  g_pRenderTargetView         = nullptr;
+static ID3D11DepthStencilView*  g_pDepthStencilView         = nullptr;
 static IPostMessageA            g_oPostMessageA             = nullptr;
 static IPostMessageW            g_oPostMessageW             = nullptr;
 
@@ -65,7 +67,7 @@ LRESULT CALLBACK HwndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	if (uMsg == WM_KEYDOWN)
 	{
-		if (wParam == VK_OEM_3)
+		if (wParam == VK_OEM_3 || wParam == VK_INSERT) // For everyone without a US keyboard layout.
 		{
 			g_bShowMenu = !g_bShowMenu;
 		}
@@ -169,7 +171,7 @@ void GetPresent()
 	///////////////////////////////////////////////////////////////////////////////
 	sd.BufferCount                          = 1;
 	sd.BufferUsage                          = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	sd.BufferDesc.Format                    = DXGI_FORMAT_R8G8B8A8_UNORM;
+	sd.BufferDesc.Format                    = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 	sd.BufferDesc.Height                    = 800;
 	sd.BufferDesc.Width                     = 600;
 	sd.BufferDesc.RefreshRate               = { 60, 1 };
@@ -180,6 +182,7 @@ void GetPresent()
 	sd.SampleDesc.Count                     = 1;
 	sd.SampleDesc.Quality                   = 0;
 	sd.SwapEffect                           = DXGI_SWAP_EFFECT_DISCARD;
+	sd.Flags                                = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
 	///////////////////////////////////////////////////////////////////////////////
 	g_hGameWindow                           = sd.OutputWindow;
@@ -260,23 +263,16 @@ void DrawImGui()
 
 	ImGui::NewFrame();
 
+	static CInputSystem* InputSystem = *reinterpret_cast<CInputSystem**>(0x14D40B380);
+
 	if (g_bShowMenu)
 	{
-		bShowMenu = true;
-		if (!g_bInitMenu)
-		{
-			CommandExecute(NULL, "gameui_activate");
-			g_bInitMenu = true;
-		}
+		InputSystem->EnableInput(false); // Disable input.
 		ShowGameConsole(&bShowMenu);
 	}
-	else if(!g_bShowMenu)
+	else if (!g_bShowMenu)
 	{
-		if (g_bInitMenu)
-		{
-			CommandExecute(NULL, "gameui_hide");
-			g_bInitMenu = false;
-		}
+		InputSystem->EnableInput(true); // Enable input.
 	}
 
 	ImGui::EndFrame();
@@ -298,7 +294,7 @@ void CreateRenderTarget(IDXGISwapChain* pSwapChain)
 	ZeroMemory(&render_target_view_desc, sizeof(render_target_view_desc));
 
 	g_hGameWindow = sd.OutputWindow;
-	render_target_view_desc.Format = sd.BufferDesc.Format;
+	render_target_view_desc.Format        = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 	render_target_view_desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 
 	///////////////////////////////////////////////////////////////////////////////
@@ -453,11 +449,11 @@ void RemoveDXHooks()
 void PrintDXAddress()
 {
 	std::cout << "+--------------------------------------------------------+" << std::endl;
-	std::cout << "| ID3D11DeviceContext    : " << std::hex << g_pDeviceContext << std::endl;
-	std::cout << "| ID3D11Device           : " << std::hex << g_pDevice << std::endl;
-	std::cout << "| ID3D11RenderTargetView : " << std::hex << g_pRenderTargetView << std::endl;
-	std::cout << "| IDXGISwapChain         : " << std::hex << g_pSwapChain << std::endl;
-	std::cout << "| IDXGISwapChainPresent  : " << std::hex << g_fnIDXGISwapChainPresent << std::endl;
+	std::cout << "| ID3D11DeviceContext      : " << std::hex << std::uppercase << g_pDeviceContext          << std::setw(13) << " |" << std::endl;
+	std::cout << "| ID3D11Device             : " << std::hex << std::uppercase << g_pDevice                 << std::setw(13) << " |" << std::endl;
+	std::cout << "| ID3D11RenderTargetView   : " << std::hex << std::uppercase << g_pRenderTargetView       << std::setw(13) << " |" << std::endl;
+	std::cout << "| IDXGISwapChain           : " << std::hex << std::uppercase << g_pSwapChain              << std::setw(13) << " |" << std::endl;
+	std::cout << "| IDXGISwapChainPresent    : " << std::hex << std::uppercase << g_fnIDXGISwapChainPresent << std::setw(13) << " |" << std::endl;
 	std::cout << "+--------------------------------------------------------+" << std::endl;
 }
 

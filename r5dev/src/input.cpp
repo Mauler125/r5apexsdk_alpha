@@ -1,6 +1,5 @@
-#include <cassert>
-
 #include <windows.h>
+#include <cassert>
 #include <stdio.h>
 
 #include "detours.h"

@@ -22,9 +22,9 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{28cc6b4f-7a95-4933-ada9-65e38d48516d}</ProjectGuid>
-    <RootNamespace>r5dev</RootNamespace>
+    <RootNamespace>r5apexvtx</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>r5dev</ProjectName>
+    <ProjectName>r5devdll</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -45,6 +45,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -52,7 +53,7 @@
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
-    <UseOfMfc>false</UseOfMfc>
+    <UseOfMfc>Static</UseOfMfc>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -71,7 +72,7 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="PropertySheet.props" />
+    <Import Project="..\r5launcher\Apex.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -82,13 +83,21 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)external\detours\include;$(SolutionDir)external\imgui\include;$(SolutionDir)external\spdlog\include;$(SolutionDir)r5dev\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)external\detours\lib.X64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)external\detours\include;$(SolutionDir)external\imgui\include;$(SolutionDir)external\spdlog\include;$(SolutionDir)r5dev\include;$(IncludePath);$(DXSDK_DIR)Include</IncludePath>
+    <LibraryPath>$(SolutionDir)external\detours\libs;$(LibraryPath);$(DXSDK_DIR)Lib\x64</LibraryPath>
+    <TargetName>r5apexvtxd</TargetName>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+    <ReferencePath>$(VC_ReferencesPath_x64);</ReferencePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)external\detours\include;$(SolutionDir)external\imgui\include;$(SolutionDir)external\spdlog\include;$(SolutionDir)r5dev\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)external\detours\lib.X64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)external\detours\include;$(SolutionDir)external\imgui\include;$(SolutionDir)external\spdlog\include;$(SolutionDir)r5dev\include;$(IncludePath);$(DXSDK_DIR)Include</IncludePath>
+    <LibraryPath>$(SolutionDir)external\detours\libs;$(LibraryPath);$(DXSDK_DIR)Lib\x64</LibraryPath>
+    <TargetName>r5apexvtxd</TargetName>
+    <ReferencePath>$(VC_ReferencesPath_x64);</ReferencePath>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -135,8 +144,10 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -146,8 +157,7 @@
       <AdditionalDependencies>detours.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>copy /Y "$(TargetPath)" "..\..\..\bin\$(TargetFileName)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -161,12 +171,18 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
+      <OmitFramePointers>true</OmitFramePointers>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
       <StringPooling>true</StringPooling>
+      <CreateHotpatchableImage>
+      </CreateHotpatchableImage>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -178,10 +194,11 @@
       <AdditionalDependencies>detours.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>del "$(TargetDir)\r5detours.dll" &amp;&amp; rename "$(TargetPath)" "r5detours.dll"</Command>
+      <Command>copy /Y "$(TargetPath)" "..\..\..\$(TargetFileName)" &amp;&amp; del "..\..\..\r5apexvtxd64.dll" &amp;&amp; rename "..\..\..\$(TargetFileName)" "r5apexvtxd64.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\external\detours\include\defines.h" />
     <ClInclude Include="..\external\detours\include\detours.h" />
     <ClInclude Include="..\external\detours\include\detver.h" />
     <ClInclude Include="..\external\detours\include\syelog.h" />
@@ -287,14 +304,15 @@
     <ClInclude Include="..\external\spdlog\include\stopwatch.h" />
     <ClInclude Include="..\external\spdlog\include\tweakme.h" />
     <ClInclude Include="..\external\spdlog\include\version.h" />
-    <ClInclude Include="include\console.h" />
+    <ClInclude Include="include\classes.h" />
     <ClInclude Include="include\enums.h" />
-    <ClInclude Include="include\hooks.h" />
     <ClInclude Include="include\id3dx.h" />
     <ClInclude Include="include\input.h" />
     <ClInclude Include="include\opcptc.h" />
+    <ClInclude Include="include\console.h" />
     <ClInclude Include="include\overlay.h" />
     <ClInclude Include="include\patterns.h" />
+    <ClInclude Include="include\hooks.h" />
     <ClInclude Include="include\r5dev.h" />
     <ClInclude Include="include\structs.h" />
     <ClInclude Include="include\utility.h" />
@@ -307,16 +325,17 @@
     <ClCompile Include="..\external\imgui\src\imgui_impl_win32.cpp" />
     <ClCompile Include="..\external\imgui\src\imgui_tables.cpp" />
     <ClCompile Include="..\external\imgui\src\imgui_widgets.cpp" />
-    <ClCompile Include="src\console.cpp" />
-    <ClCompile Include="src\dllmain.cpp" />
-    <ClCompile Include="src\hooks.cpp" />
     <ClCompile Include="src\id3dx.cpp" />
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\opcptc.cpp" />
+    <ClCompile Include="src\console.cpp" />
+    <ClCompile Include="src\dllmain.cpp" />
+    <ClCompile Include="src\hooks.cpp" />
     <ClCompile Include="src\overlay.cpp" />
     <ClCompile Include="src\utility.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="cpp.hint" />
     <None Include="r5dev.def" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

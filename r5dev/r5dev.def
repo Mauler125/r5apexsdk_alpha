@@ -1,4 +1,4 @@
-LIBRARY r5dev
+LIBRARY r5apexvtxd
 
 EXPORTS
     DummyExport @1
