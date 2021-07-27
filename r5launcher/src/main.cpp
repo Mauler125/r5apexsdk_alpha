@@ -1,16 +1,20 @@
+#include <string>
 #include <stdio.h>
 
 #include <Windows.h>
 #include <detours.h>
 
-/*---------------------------------------------------------------------------------
- * _main.cpp
- *---------------------------------------------------------------------------------*/
+#include "main.h"
 
+/*------------------------------------------------------------------------------
+ * _main.cpp
+ *------------------------------------------------------------------------------*/
+
+ //-----------------------------------------------------------------------------
+ // Print the error message to the console if any
+ //-----------------------------------------------------------------------------
 void PrintLastError()
 {
-    ///////////////////////////////////////////////////////////////////////////////
-    // Get the error message, if any.
     DWORD errorMessageID = ::GetLastError();
     if (errorMessageID == 0)
     {
@@ -25,21 +29,17 @@ void PrintLastError()
     LocalFree(messageBuffer);
 }
 
-bool LaunchR5Apex()
+//-----------------------------------------------------------------------------
+// Launch the game in user specified mode and state
+//-----------------------------------------------------------------------------
+bool LaunchR5Apex(LAUNCHMODE lMode, LAUNCHSTATE lState)
 {
+    BOOL result;
+
     FILE* sLaunchParams;
     CHAR sArgumentBuffer[1024] = { 0 };
     CHAR sCommandDirectory[MAX_PATH];
     LPSTR sCommandLine = sCommandDirectory;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // '+exec autoexec -dev -fnf -noplatform'
-#ifdef NDEBUG
-    fopen_s(&sLaunchParams, "platform\\cfg\\startup_debug.cfg", "r");
-#elif _DEBUG
-    fopen_s(&sLaunchParams, "..\\platform\\cfg\\startup_debug.cfg", "r");
-#endif ////////////////////////////////////////////////////////////////////////////
-    BOOL result;
 
     CHAR sDevDll[MAX_PATH];
     CHAR sGameExe[MAX_PATH];
@@ -48,48 +48,80 @@ bool LaunchR5Apex()
     STARTUPINFO StartupInfo = { 0 };
     PROCESS_INFORMATION ProcInfo = { 0 };
 
-    ///////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
     // Initialize the startup info structure.
     StartupInfo.cb = sizeof(STARTUPINFO);
 
-    ///////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
     // Format the file paths for the game exe and dll.
     GetCurrentDirectory(MAX_PATH, sGameDirectory);
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // Load command line arguments from a file on the disk.
-    if (sLaunchParams)
+    switch (lMode)
     {
-        while (fread(sArgumentBuffer, sizeof(sArgumentBuffer), 1, sLaunchParams) != NULL)
+        case LAUNCHMODE::DLL_DEDI:
         {
-            fclose(sLaunchParams);
+            ///////////////////////////////////////////////////////////////////
+            // Load command line arguments from a file on the disk.
+            fopen_s(&sLaunchParams, "platform\\cfg\\startup_dedi.cfg", "r");
+            if (sLaunchParams)
+            {
+                while (fread(sArgumentBuffer, sizeof(sArgumentBuffer), 1, sLaunchParams) != NULL)
+                {
+                    fclose(sLaunchParams);
+                }
+            }
+
+            ///////////////////////////////////////////////////////////////////
+            // Format the file paths for the game exe and dll.
+            snprintf(sGameExe, sizeof(sGameExe), "%s\\r5apex.exe", sGameDirectory);
+            snprintf(sDevDll, sizeof(sDevDll), "%s\\dedicated.dll", sGameDirectory);
+            snprintf(sCommandLine, sizeof(sCommandDirectory), "%s\\r5apex.exe %s", sGameDirectory, sArgumentBuffer);
+            printf("*** LAUNCHING DEDICATED SERVER ***\n");
+            break;
+        }
+        case LAUNCHMODE::DLL_GAME:
+        {
+            ///////////////////////////////////////////////////////////////////
+            // Load command line arguments from a file on the disk.
+            fopen_s(&sLaunchParams, "platform\\cfg\\startup_debug.cfg", "r");
+            if (sLaunchParams)
+            {
+                while (fread(sArgumentBuffer, sizeof(sArgumentBuffer), 1, sLaunchParams) != NULL)
+                {
+                    fclose(sLaunchParams);
+                }
+            }
+
+            ///////////////////////////////////////////////////////////////////
+            // Format the file paths for the game exe and dll.
+            GetCurrentDirectory(MAX_PATH, sGameDirectory);
+            snprintf(sGameExe, sizeof(sGameExe), "%s\\r5apex.exe", sGameDirectory);
+            snprintf(sDevDll, sizeof(sDevDll), "%s\\r5detours.dll", sGameDirectory);
+            snprintf(sCommandLine, sizeof(sCommandDirectory), "%s\\r5apex.exe %s", sGameDirectory, sArgumentBuffer);
+            printf("*** LAUNCHING GAME ***\n");
+            break;
+        }
+        default:
+        {
+            printf("*** ERROR: NO LAUNCHMODE SPECIFIED ***\n");
+            return false;
         }
     }
 
-#ifdef NDEBUG
-    snprintf(sGameExe, sizeof(sGameExe), "%s\\r5apex.exe", sGameDirectory);
-    snprintf(sDevDll, sizeof(sDevDll), "%s\\r5apexvtxd64.dll", sGameDirectory);
-    snprintf(sCommandLine, sizeof(sCommandDirectory), "%s\\r5apex.exe %s", sGameDirectory, sArgumentBuffer);
-#elif _DEBUG
-    snprintf(sGameExe, sizeof(sGameExe), "%s\\..\\r5apex.exe", sGameDirectory);
-    snprintf(sDevDll, sizeof(sDevDll), "%s\\r5apexvtxd.dll", sGameDirectory);
-    snprintf(sCommandLine, sizeof(sCommandDirectory), "%s\\..\\r5apex.exe %s", sGameDirectory, sArgumentBuffer);
-#endif ////////////////////////////////////////////////////////////////////////////
-
-    printf("Launching Apex Dev...\n");
+    ///////////////////////////////////////////////////////////////////////////
+    // Print the filepaths and arguments.
     printf(" - CWD: %s\n", sGameDirectory);
     printf(" - EXE: %s\n", sGameExe);
     printf(" - DLL: %s\n", sDevDll);
     printf(" - CLI: %s\n", sCommandLine);
 
-    ///////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
     // Build our list of dlls to inject.
     LPCSTR DllsToInject[1] =
     {
         sDevDll
     };
 
-    ///////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
     // Create the game process in a suspended state with our dll.
     result = DetourCreateProcessWithDllsA(
         sGameExe,                 // lpApplicationName
@@ -107,31 +139,42 @@ bool LaunchR5Apex()
         NULL                      // pfCreateProcessA
     );
 
-    ///////////////////////////////////////////////////////////////////////////////
-    // Failed to create the game process.
+    ///////////////////////////////////////////////////////////////////////////
+    // Failed to create the process.
     if (!result)
     {
         PrintLastError();
         return false;
     }
 
-    ///////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
     // Resume the process.
     ResumeThread(ProcInfo.hThread);
 
-    ///////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
     // Close the process and thread handles.
     CloseHandle(ProcInfo.hProcess);
     CloseHandle(ProcInfo.hThread);
 
     return true;
 }
-///////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
 // Entrypoint.
-///////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 int main(int argc, char* argv[], char* envp[])
 {
-    LaunchR5Apex();
+    for (int i = 1; i < argc; ++i)
+    {
+        std::string arg = argv[i];
+        if ((arg == "-dedicated") || (arg == "-dedi"))
+        {
+            LaunchR5Apex(LAUNCHMODE::DLL_DEDI, LAUNCHSTATE::LS_CHEATS);
+            Sleep(2000);
+            return EXIT_SUCCESS;
+        }
+    }
+    LaunchR5Apex(LAUNCHMODE::DLL_GAME, LAUNCHSTATE::LS_CHEATS);
     Sleep(2000);
-	return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }

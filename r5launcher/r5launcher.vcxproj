@@ -173,6 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\external\detours\include\defines.h" />
+    <ClInclude Include="include\main.h" />
     <ClInclude Include="include\resource.h" />
   </ItemGroup>
   <ItemGroup>
