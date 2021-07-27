@@ -83,7 +83,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)external\detours\include;$(SolutionDir)external\imgui\include;$(SolutionDir)external\spdlog\include;$(SolutionDir)r5dev\include;$(IncludePath);$(DXSDK_DIR)Include</IncludePath>
+    <IncludePath>$(SolutionDir)external\detours\include;$(SolutionDir)external\imgui\include;$(SolutionDir)external\spdlog\include;$(SolutionDir)shared\include;$(SolutionDir)r5dev\;$(IncludePath);$(DXSDK_DIR)Include</IncludePath>
     <LibraryPath>$(SolutionDir)external\detours\libs;$(LibraryPath);$(DXSDK_DIR)Lib\x64</LibraryPath>
     <TargetName>r5apexvtxd</TargetName>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
@@ -92,7 +92,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)external\detours\include;$(SolutionDir)external\imgui\include;$(SolutionDir)external\spdlog\include;$(SolutionDir)r5dev\include;$(IncludePath);$(DXSDK_DIR)Include</IncludePath>
+    <IncludePath>$(SolutionDir)external\detours\include;$(SolutionDir)external\imgui\include;$(SolutionDir)external\spdlog\include;$(SolutionDir)shared\include;$(SolutionDir)r5dev\;$(IncludePath);$(DXSDK_DIR)Include</IncludePath>
     <LibraryPath>$(SolutionDir)external\detours\libs;$(LibraryPath);$(DXSDK_DIR)Lib\x64</LibraryPath>
     <TargetName>r5apexvtxd</TargetName>
     <ReferencePath>$(VC_ReferencesPath_x64);</ReferencePath>
@@ -141,9 +141,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;R5DEV_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>
-      </PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -168,9 +167,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;R5DEV_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>
-      </PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
@@ -198,7 +196,6 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\external\detours\include\defines.h" />
     <ClInclude Include="..\external\detours\include\detours.h" />
     <ClInclude Include="..\external\detours\include\detver.h" />
     <ClInclude Include="..\external\detours\include\syelog.h" />
@@ -304,35 +301,71 @@
     <ClInclude Include="..\external\spdlog\include\stopwatch.h" />
     <ClInclude Include="..\external\spdlog\include\tweakme.h" />
     <ClInclude Include="..\external\spdlog\include\version.h" />
-    <ClInclude Include="include\classes.h" />
-    <ClInclude Include="include\enums.h" />
-    <ClInclude Include="include\id3dx.h" />
-    <ClInclude Include="include\input.h" />
-    <ClInclude Include="include\opcptc.h" />
-    <ClInclude Include="include\console.h" />
-    <ClInclude Include="include\overlay.h" />
-    <ClInclude Include="include\patterns.h" />
-    <ClInclude Include="include\hooks.h" />
-    <ClInclude Include="include\r5dev.h" />
-    <ClInclude Include="include\structs.h" />
-    <ClInclude Include="include\utility.h" />
+    <ClInclude Include="..\shared\include\utility.h" />
+    <ClInclude Include="classes.h" />
+    <ClInclude Include="cnetchan.h" />
+    <ClInclude Include="concommand.h" />
+    <ClInclude Include="console.h" />
+    <ClInclude Include="cvengineserver.h" />
+    <ClInclude Include="hooks.h" />
+    <ClInclude Include="iconvar.h" />
+    <ClInclude Include="id3dx.h" />
+    <ClInclude Include="input.h" />
+    <ClInclude Include="msgbox.h" />
+    <ClInclude Include="opcptc.h" />
+    <ClInclude Include="overlay.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="r5dev.h" />
+    <ClInclude Include="rtech.h" />
+    <ClInclude Include="sqvm.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\external\imgui\src\imgui.cpp" />
-    <ClCompile Include="..\external\imgui\src\imgui_demo.cpp" />
-    <ClCompile Include="..\external\imgui\src\imgui_draw.cpp" />
-    <ClCompile Include="..\external\imgui\src\imgui_impl_dx11.cpp" />
-    <ClCompile Include="..\external\imgui\src\imgui_impl_win32.cpp" />
-    <ClCompile Include="..\external\imgui\src\imgui_tables.cpp" />
-    <ClCompile Include="..\external\imgui\src\imgui_widgets.cpp" />
-    <ClCompile Include="src\id3dx.cpp" />
-    <ClCompile Include="src\input.cpp" />
-    <ClCompile Include="src\opcptc.cpp" />
-    <ClCompile Include="src\console.cpp" />
-    <ClCompile Include="src\dllmain.cpp" />
-    <ClCompile Include="src\hooks.cpp" />
-    <ClCompile Include="src\overlay.cpp" />
-    <ClCompile Include="src\utility.cpp" />
+    <ClCompile Include="..\external\imgui\src\imgui.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\external\imgui\src\imgui_demo.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\external\imgui\src\imgui_draw.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\external\imgui\src\imgui_impl_dx11.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\external\imgui\src\imgui_impl_win32.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\external\imgui\src\imgui_tables.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\external\imgui\src\imgui_widgets.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\shared\utility.cpp" />
+    <ClCompile Include="cnetchan.cpp" />
+    <ClCompile Include="concommand.cpp" />
+    <ClCompile Include="console.cpp" />
+    <ClCompile Include="cvengineserver.cpp" />
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="hooks.cpp" />
+    <ClCompile Include="iconvar.cpp" />
+    <ClCompile Include="id3dx.cpp" />
+    <ClCompile Include="input.cpp" />
+    <ClCompile Include="msgbox.cpp" />
+    <ClCompile Include="opcptc.cpp" />
+    <ClCompile Include="overlay.cpp" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="sqvm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />

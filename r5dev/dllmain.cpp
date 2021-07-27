@@ -1,13 +1,10 @@
-#include <string>
-#include <Windows.h>
+#include "pch.h"
 
 #include "r5dev.h"
 #include "id3dx.h"
 #include "input.h"
 #include "hooks.h"
-#include "opcptc.h"
 #include "console.h"
-#include "utility.h"
 
 //#############################################################################
 // INITIALIZATION
@@ -16,12 +13,9 @@
 void InitializeR5Dev()
 {
 	SetupConsole();
-    InstallENHooks();
-    InstallCNHooks();
+    InstallHooks();
     InstallIPHooks();
     InstallDXHooks();
-    InstallOpcodes();
-    InstallGlobals();
     SetupDXSwapChain();
     printf("+-----------------------------------------------------------------------------+\n");
     printf("|   R5 DEVELOPER CONSOLE -- INITIALIZED -----------------------------------   |\n");
@@ -30,10 +24,8 @@ void InitializeR5Dev()
 
 void TerminateR5Dev()
 {
-    RemoveENHooks();
     RemoveIPHooks();
     RemoveDXHooks();
-    RemoveCNHooks();
 	FreeConsole();
 }
 

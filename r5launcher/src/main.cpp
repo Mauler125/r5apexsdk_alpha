@@ -6,13 +6,13 @@
 
 #include "main.h"
 
-/*------------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
  * _main.cpp
- *------------------------------------------------------------------------------*/
+ *-----------------------------------------------------------------------------*/
 
- //-----------------------------------------------------------------------------
+ //----------------------------------------------------------------------------
  // Print the error message to the console if any
- //-----------------------------------------------------------------------------
+ //----------------------------------------------------------------------------
 void PrintLastError()
 {
     DWORD errorMessageID = ::GetLastError();
@@ -95,7 +95,7 @@ bool LaunchR5Apex(LAUNCHMODE lMode, LAUNCHSTATE lState)
             // Format the file paths for the game exe and dll.
             GetCurrentDirectory(MAX_PATH, sGameDirectory);
             snprintf(sGameExe, sizeof(sGameExe), "%s\\r5apex.exe", sGameDirectory);
-            snprintf(sDevDll, sizeof(sDevDll), "%s\\r5detours.dll", sGameDirectory);
+            snprintf(sDevDll, sizeof(sDevDll), "%s\\r5apexvtxd64.dll", sGameDirectory);
             snprintf(sCommandLine, sizeof(sCommandDirectory), "%s\\r5apex.exe %s", sGameDirectory, sArgumentBuffer);
             printf("*** LAUNCHING GAME ***\n");
             break;

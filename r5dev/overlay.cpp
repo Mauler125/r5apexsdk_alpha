@@ -1,19 +1,8 @@
-#include <thread>
-#include <fstream>
-
-#include <stdio.h>
-#include <windows.h>
-#include <detours.h>
-
+#include "pch.h"
 #include "hooks.h"
 #include "id3dx.h"
 #include "overlay.h"
 #include "console.h"
-#include "patterns.h"
-
-#include "imgui.h"
-#include "imgui_impl_dx11.h"
-#include "imgui_impl_win32.h"
 
 /*-----------------------------------------------------------------------------
  * _overlay.cpp
@@ -200,7 +189,7 @@ public:
         ImGui::SameLine();
         if (ImGui::SmallButton("Netchannel Trace"))
         {
-            ToggleNetHooks();
+            ToggleNetTrace();
             AddLog("+--------------------------------------------------------+\n");
             AddLog("|>>>>>>>>>>>>>>| NETCHANNEL TRACE TOGGLED |<<<<<<<<<<<<<<|\n");
             AddLog("+--------------------------------------------------------+\n");
@@ -379,7 +368,7 @@ public:
     }
     void ExecCommand(const char* command_line)
     {
-        CVEngineClient_CommandExecute(NULL, command_line);
+        CommandExecute(NULL, command_line);
     }
 
     ///////////////////////////////////////////////////////////////////////////
