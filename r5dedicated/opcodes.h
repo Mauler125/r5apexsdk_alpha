@@ -26,12 +26,15 @@ namespace
 	DWORD64 dst007 = /*0x14028F3B0*/ FindPatternV2("r5apex.exe", (const unsigned char*)"\x48\x8B\xC4\x44\x89\x40\x18\x48\x89\x50\x10\x55\x53\x56\x57\x41", "xxxxxxxxxxxxxxxx");
 	DWORD64 dst008 = /*0x140E3E110*/ FindPatternV2("r5apex.exe", (const unsigned char*)"\x48\x83\xEC\x78\x48\x8B\x84\x24\x00\x00\x00\x00\x4D\x8B\xD8\x00", "xxxxxxxx????xxx?");
 
+	DWORD64 dst009 = FindPatternV2("r5apex.exe", (const unsigned char*)"\x48\x8B\xC4\x55\x41\x54\x41\x55\x41\x56\x41\x57\x48\x8B\xEC\x48\x83\xEC\x60", "xxxxxxxxxxxxxxxxxxx");
+
 	/* -------------- ------- ----------------------------------------------------------------------------------------------------------------------------------------------- */
 
 	/* -------------- GLOBALS ----------------------------------------------------------------------------------------------------------------------------------------------- */
 	DWORD64 ofs000 = 0x00000001634F1690;
 	DWORD64 ofs001 = 0x00000001634F16B0;
 	DWORD64 ofs002 = 0x00000001634F1695;
+	DWORD64 ofs003 = 0x0000000000BAF5E8; //bDedicated
 
 	void PrintOAddress() // Test the sigscan results
 	{

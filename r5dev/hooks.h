@@ -1,9 +1,9 @@
 #pragma once
 #include "pch.h"
-#include "iconvar.h"
-#include "concommand.h"
-#include "cvengineserver.h"
-#include "cnetchan.h"
+#include "IConVar.h"
+#include "ConCommand.h"
+#include "CVEngineServer.h"
+#include "CNetChan.h"
 #include "sqvm.h"
 #include "msgbox.h"
 #include "opcptc.h"

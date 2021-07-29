@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "iconvar.h"
+#include "IConVar.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: test each ConVar query before setting the cvar

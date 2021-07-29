@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "cvengineserver.h"
+#include "CVEngineServer.h"
 
 //-----------------------------------------------------------------------------
 // Sets the persistence var in the playerstruct to ready for each client

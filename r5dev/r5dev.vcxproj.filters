@@ -85,7 +85,7 @@
     <ClCompile Include="..\shared\utility.cpp">
       <Filter>shared</Filter>
     </ClCompile>
-    <ClCompile Include="concommand.cpp">
+    <ClCompile Include="ConCommand.cpp">
       <Filter>hooks\concommand</Filter>
     </ClCompile>
     <ClCompile Include="hooks.cpp">
@@ -94,7 +94,7 @@
     <ClCompile Include="console.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="iconvar.cpp">
+    <ClCompile Include="IConVar.cpp">
       <Filter>hooks\iconvar</Filter>
     </ClCompile>
     <ClCompile Include="overlay.cpp">
@@ -103,10 +103,10 @@
     <ClCompile Include="dllmain.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="cvengineserver.cpp">
+    <ClCompile Include="CVEngineServer.cpp">
       <Filter>hooks\cvengineserver</Filter>
     </ClCompile>
-    <ClCompile Include="cnetchan.cpp">
+    <ClCompile Include="CNetChan.cpp">
       <Filter>hooks\netchannel</Filter>
     </ClCompile>
     <ClCompile Include="msgbox.cpp">
@@ -468,7 +468,7 @@
     <ClInclude Include="..\shared\include\utility.h">
       <Filter>shared\include</Filter>
     </ClInclude>
-    <ClInclude Include="concommand.h">
+    <ClInclude Include="ConCommand.h">
       <Filter>hooks\concommand</Filter>
     </ClInclude>
     <ClInclude Include="hooks.h">
@@ -477,16 +477,16 @@
     <ClInclude Include="console.h">
       <Filter>core\include</Filter>
     </ClInclude>
-    <ClInclude Include="iconvar.h">
+    <ClInclude Include="IConVar.h">
       <Filter>hooks\iconvar</Filter>
     </ClInclude>
     <ClInclude Include="overlay.h">
       <Filter>core\include</Filter>
     </ClInclude>
-    <ClInclude Include="cvengineserver.h">
+    <ClInclude Include="CVEngineServer.h">
       <Filter>hooks\cvengineserver</Filter>
     </ClInclude>
-    <ClInclude Include="cnetchan.h">
+    <ClInclude Include="CNetChan.h">
       <Filter>hooks\netchannel</Filter>
     </ClInclude>
     <ClInclude Include="msgbox.h">

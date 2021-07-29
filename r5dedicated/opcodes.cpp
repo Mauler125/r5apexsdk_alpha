@@ -27,6 +27,10 @@ void InstallOpcodes() /* .TEXT */
 	//-------------------------------------------------------------------------
 	// JA  --> JMP | Prevent FairFight anti-cheat from initializing on the server
 	WriteProcessMemory(GameProcess, LPVOID(dst006 + 0x61), "\xE9\xED\x00\x00\x00\x00", 6, NULL);
+
+	//-------------------------------------------------------------------------
+	// JNE -- NOP | TODO: jumping over the instructions causes access violation when parsing settings layouts
+	WriteProcessMemory(GameProcess, LPVOID(dst009 + 389), "\x90\x90", 2, NULL);
 }
 
 void ToggleOpcodes() /* .TEXT */
@@ -71,4 +75,8 @@ void InstallGlobals() /* .DATA */
 	WriteProcessMemory(GameProcess, LPVOID(ofs000), "\x01", 1, NULL);
 	WriteProcessMemory(GameProcess, LPVOID(ofs001), "\x01", 1, NULL);
 	WriteProcessMemory(GameProcess, LPVOID(ofs002), "\x01", 1, NULL);
+
+	//-------------------------------------------------------------------------
+	//  00 --> 01  | Set bDedicated to true to launch in dedicated mode
+	WriteProcessMemory(GameProcess, LPVOID(ofs003), "\x01", 1, NULL);
 }

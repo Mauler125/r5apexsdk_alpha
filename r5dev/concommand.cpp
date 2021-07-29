@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "concommand.h"
+#include "ConCommand.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: test each ConCommand query before execution

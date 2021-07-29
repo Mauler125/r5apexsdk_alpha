@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "CNetChan.h"
+#include "cnetchan.h"
 
 //-----------------------------------------------------------------------------
 // Hook and log the receive datagram
