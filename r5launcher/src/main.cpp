@@ -93,7 +93,6 @@ bool LaunchR5Apex(LAUNCHMODE lMode, LAUNCHSTATE lState)
 
             ///////////////////////////////////////////////////////////////////
             // Format the file paths for the game exe and dll.
-            GetCurrentDirectory(MAX_PATH, sGameDirectory);
             snprintf(sGameExe, sizeof(sGameExe), "%s\\r5apex.exe", sGameDirectory);
             snprintf(sDevDll, sizeof(sDevDll), "%s\\r5apexvtxd64.dll", sGameDirectory);
             snprintf(sCommandLine, sizeof(sCommandDirectory), "%s\\r5apex.exe %s", sGameDirectory, sArgumentBuffer);
