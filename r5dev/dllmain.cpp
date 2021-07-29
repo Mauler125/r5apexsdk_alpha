@@ -15,7 +15,6 @@ void InitializeR5Dev()
 	SetupConsole();
     InstallHooks();
     InstallIPHooks();
-    InstallDXHooks();
     SetupDXSwapChain();
     printf("+-----------------------------------------------------------------------------+\n");
     printf("|   R5 DEVELOPER CONSOLE -- INITIALIZED -----------------------------------   |\n");

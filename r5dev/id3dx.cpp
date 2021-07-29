@@ -273,20 +273,20 @@ void CreateRenderTarget(IDXGISwapChain* pSwapChain)
 {
 	///////////////////////////////////////////////////////////////////////////////
 	DXGI_SWAP_CHAIN_DESC            sd          = { 0 };
+	D3D11_RENDER_TARGET_VIEW_DESC   rd;
 	ID3D11Texture2D*                pBackBuffer = { 0 };
-	D3D11_RENDER_TARGET_VIEW_DESC   render_target_view_desc;
 
 	///////////////////////////////////////////////////////////////////////////////
 	pSwapChain->GetDesc(&sd);
-	ZeroMemory(&render_target_view_desc, sizeof(render_target_view_desc));
+	ZeroMemory(&rd, sizeof(rd));
 
 	g_hGameWindow = sd.OutputWindow;
-	render_target_view_desc.Format        = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-	render_target_view_desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+	rd.Format            = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	rd.ViewDimension     = D3D11_RTV_DIMENSION_TEXTURE2D;
 
 	///////////////////////////////////////////////////////////////////////////////
 	pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
-	if (pBackBuffer != NULL) { g_pDevice->CreateRenderTargetView(pBackBuffer, &render_target_view_desc, &g_pRenderTargetView); }
+	if (pBackBuffer != NULL) { g_pDevice->CreateRenderTargetView(pBackBuffer, &rd, &g_pRenderTargetView); }
 	g_pDeviceContext->OMSetRenderTargets(1, &g_pRenderTargetView, NULL);
 	pBackBuffer->Release();
 }
@@ -406,7 +406,11 @@ void InstallDXHooks()
 	DetourAttach(&(LPVOID&)g_oResizeBuffers, (PBYTE)GetResizeBuffers);
 	///////////////////////////////////////////////////////////////////////////////
 	// Commit the transaction
-	DetourTransactionCommit();
+	if (DetourTransactionCommit() != NO_ERROR)
+	{
+		// Failed to hook into the process, terminate
+		TerminateProcess(GetCurrentProcess(), 0xBAD0C0DE);
+	}
 }
 
 void RemoveDXHooks()
