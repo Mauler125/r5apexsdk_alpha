@@ -1,5 +1,5 @@
 #pragma once
-#include "pch.h"
+#include "stdafx.h"
 #include "hooks.h"
 
 bool HNET_ReceiveDatagram(int sock, void* inpacket, bool raw);

@@ -1,4 +1,4 @@
-#include "pch.h"
+#include "stdafx.h"
 #include "id3dx.h"
 #include "input.h"
 #include "classes.h"

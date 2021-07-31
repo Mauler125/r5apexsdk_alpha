@@ -132,7 +132,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
     </ClCompile>
     <Link>
@@ -157,7 +157,7 @@
       <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
       <StringPooling>true</StringPooling>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
     </ClCompile>
     <Link>
@@ -186,7 +186,7 @@
     <ClCompile Include="msgbox.cpp" />
     <ClCompile Include="CNetChan.cpp" />
     <ClCompile Include="opcodes.cpp" />
-    <ClCompile Include="pch.cpp">
+    <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
@@ -298,7 +298,7 @@
     <ClInclude Include="msgbox.h" />
     <ClInclude Include="CNetChan.h" />
     <ClInclude Include="opcodes.h" />
-    <ClInclude Include="pch.h" />
+    <ClInclude Include="stdafx.h" />
     <ClInclude Include="CVEngineServer.h" />
     <ClInclude Include="sqvm.h" />
   </ItemGroup>

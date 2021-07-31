@@ -1,5 +1,5 @@
 #pragma once
-#include "pch.h"
+#include "stdafx.h"
 #include "IConVar.h"
 #include "ConCommand.h"
 #include "CVEngineServer.h"
@@ -65,11 +65,11 @@ namespace
 	void PrintHAddress() // Test the sigscan results
 	{
 		std::cout << "+--------------------------------------------------------+" << std::endl;
-		std::cout << "| CommandExecute           : " << std::hex << std::uppercase << p_CommandExecute << std::setw(20)         << " |" << std::endl;
+		std::cout << "| CommandExecute           : " << std::hex << std::uppercase << p_CommandExecute << std::setw(20)       << " |" << std::endl;
 		std::cout << "| ConVar_IsFlagSet         : " << std::hex << std::uppercase << p_IConVar_IsFlagSet << std::setw(20)    << " |" << std::endl;
 		std::cout << "| ConCommand_IsFlagSet     : " << std::hex << std::uppercase << p_ConCommand_IsFlagSet << std::setw(20) << " |" << std::endl;
 		std::cout << "+--------------------------------------------------------+" << std::endl;
-		std::cout << "| SQVM_PrintFunc           : " << std::hex << std::uppercase << p_SQVM_PrintFunc << std::setw(20)         << " |" << std::endl;
+		std::cout << "| SQVM_PrintFunc           : " << std::hex << std::uppercase << p_SQVM_PrintFunc << std::setw(20)       << " |" << std::endl;
 		std::cout << "| SQVM_LoadScript          : " << std::hex << std::uppercase << p_SQVM_LoadScript << std::setw(20)      << " |" << std::endl;
 		std::cout << "| SQVM_LoadRson            : " << std::hex << std::uppercase << p_SQVM_LoadRson << std::setw(20)        << " |" << std::endl;
 		std::cout << "+--------------------------------------------------------+" << std::endl;

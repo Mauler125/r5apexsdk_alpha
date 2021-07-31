@@ -118,7 +118,7 @@
     <ClCompile Include="sqvm.cpp">
       <Filter>hooks\squirrel</Filter>
     </ClCompile>
-    <ClCompile Include="pch.cpp">
+    <ClCompile Include="stdafx.cpp">
       <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="id3dx.cpp">
@@ -498,7 +498,7 @@
     <ClInclude Include="sqvm.h">
       <Filter>hooks\squirrel</Filter>
     </ClInclude>
-    <ClInclude Include="pch.h">
+    <ClInclude Include="stdafx.h">
       <Filter>core\include</Filter>
     </ClInclude>
     <ClInclude Include="rtech.h">

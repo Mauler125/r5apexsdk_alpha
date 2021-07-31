@@ -1,5 +1,5 @@
 #pragma once
-#include "pch.h"
+#include "stdafx.h"
 #include "hooks.h"
 
 void* HSQVM_PrintFunc(void* sqvm, char* fmt, ...);

@@ -1,5 +1,5 @@
 #pragma once
-#include "pch.h"
+#include "stdafx.h"
 #include "iconvar.h"
 #include "concommand.h"
 #include "cvengineserver.h"

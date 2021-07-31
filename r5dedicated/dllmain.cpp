@@ -1,4 +1,4 @@
-#include "pch.h"
+#include "stdafx.h"
 #include "dllmain.h"
 #include "hooks.h"
 #include "console.h"
