@@ -178,7 +178,7 @@ public:
         }
 
         ///////////////////////////////////////////////////////////////////////
-        if (ImGui::SmallButton("Developer mode"))
+        if (ImGui::SmallButton("Developer Mode"))
         {
             ToggleDevCommands();
             AddLog("+--------------------------------------------------------+\n");

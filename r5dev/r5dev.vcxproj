@@ -307,13 +307,16 @@
     <ClInclude Include="ConCommand.h" />
     <ClInclude Include="console.h" />
     <ClInclude Include="CVEngineServer.h" />
+    <ClInclude Include="EbisuSDK.h" />
     <ClInclude Include="hooks.h" />
+    <ClInclude Include="IAppSystem.h" />
     <ClInclude Include="IConVar.h" />
     <ClInclude Include="id3dx.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="msgbox.h" />
     <ClInclude Include="opcptc.h" />
     <ClInclude Include="overlay.h" />
+    <ClInclude Include="QHull.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="r5dev.h" />
     <ClInclude Include="rtech.h" />
@@ -354,13 +357,16 @@
     <ClCompile Include="console.cpp" />
     <ClCompile Include="CVEngineServer.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="EbisuSDK.cpp" />
     <ClCompile Include="hooks.cpp" />
+    <ClCompile Include="IAppSystem.cpp" />
     <ClCompile Include="IConVar.cpp" />
     <ClCompile Include="id3dx.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="msgbox.cpp" />
     <ClCompile Include="opcptc.cpp" />
     <ClCompile Include="overlay.cpp" />
+    <ClCompile Include="QHull.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>

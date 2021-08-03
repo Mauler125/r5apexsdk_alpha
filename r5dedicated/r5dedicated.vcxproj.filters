@@ -65,6 +65,9 @@
     <Filter Include="hooks\cappsystemgroup">
       <UniqueIdentifier>{69c268d0-bab8-41b2-be3b-b04b67a6c919}</UniqueIdentifier>
     </Filter>
+    <Filter Include="hooks\qhull">
+      <UniqueIdentifier>{591694f5-e4b0-46c0-b75b-b58b0b3d628c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\shared\include\utility.h">
@@ -388,6 +391,9 @@
     <ClInclude Include="IAppSystem.h">
       <Filter>hooks\cappsystemgroup</Filter>
     </ClInclude>
+    <ClInclude Include="QHull.h">
+      <Filter>hooks\qhull</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="console.cpp">
@@ -428,6 +434,9 @@
     </ClCompile>
     <ClCompile Include="IAppSystem.cpp">
       <Filter>hooks\cappsystemgroup</Filter>
+    </ClCompile>
+    <ClCompile Include="QHull.cpp">
+      <Filter>hooks\qhull</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

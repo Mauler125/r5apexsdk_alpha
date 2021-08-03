@@ -15,9 +15,11 @@ void InstallHooks()
 
 	///////////////////////////////////////////////////////////////////////////////
 	// Hook functions
+	AttachIAppSystemHooks();
 	AttachIConVarHooks();
 	AttachConCommandHooks();
 	AttachCEngineServerHooks();
+	AttachEbisuSDKHooks();
 	AttachSQVMHooks();
 	AttachMSGBoxHooks();
 
@@ -44,9 +46,11 @@ void RemoveHooks()
 
 	///////////////////////////////////////////////////////////////////////////////
 	// Unhook functions
+	DetachIAppSystemHooks();
 	DetachIConVarHooks();
 	DetachConCommandHooks();
 	DetachCEngineServerHooks();
+	DetachEbisuSDKHooks();
 	DetachSQVMHooks();
 	DetachMSGBoxHooks();
 

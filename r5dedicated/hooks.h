@@ -11,11 +11,11 @@
 namespace
 {
 	/* ==== CAPPSYSTEMGROUP ================================================================================================================================================= */
-	DWORD64 p_Main = FindPatternV2("r5apex.exe", (const unsigned char*)"\x48\x8B\xC4\x55\x41\x54\x41\x55\x41\x56\x41\x57\x48\x8B\xEC\x48\x83\xEC\x60", "xxxxxxxxxxxxxxxxxxx");
-	__int64 (*Main)(__int64 a1, __int64 a2) = (__int64(*)(__int64, __int64))p_Main; /*40 53 48 83 EC 20 80 B9 ? ? ? ? ? BB ? ? ? ?*/
-	
-	DWORD64 p_Create = FindPatternV2("r5apex.exe", (const unsigned char*)"\x40\x53\x48\x83\xEC\x20\x80\xB9\x00\x00\x00\x00\x00\xBB\x00\x00\x00\x00", "xxxxxxxx?????x????");
-	char (*Create)(__int64 a1) = (char(*)(__int64))p_Create; /*48 8B C4 55 41 54 41 55 41 56 41 57 48 8B EC 48 83 EC 60*/
+	DWORD64 p_IAppSystem_Main = FindPatternV2("r5apex.exe", (const unsigned char*)"\x48\x8B\xC4\x55\x41\x54\x41\x55\x41\x56\x41\x57\x48\x8B\xEC\x48\x83\xEC\x60", "xxxxxxxxxxxxxxxxxxx");
+	__int64 (*IAppSystem_Main)(__int64 a1, __int64 a2) = (__int64(*)(__int64, __int64))p_IAppSystem_Main; /*40 53 48 83 EC 20 80 B9 ? ? ? ? ? BB ? ? ? ?*/
+
+	DWORD64 p_IAppSystem_Create = FindPatternV2("r5apex.exe", (const unsigned char*)"\x40\x53\x48\x83\xEC\x20\x80\xB9\x00\x00\x00\x00\x00\xBB\x00\x00\x00\x00", "xxxxxxxx?????x????");
+	char (*IAppSystem_Create)(__int64 a1) = (char(*)(__int64))p_IAppSystem_Create; /*48 8B C4 55 41 54 41 55 41 56 41 57 48 8B EC 48 83 EC 60*/
 
 	/* ==== CVENGINECLIENT ================================================================================================================================================== */
 	DWORD64 p_CommandExecute = FindPatternV2("r5apex.exe", (const unsigned char*)"\x48\x89\x5C\x24\x08\x57\x48\x83\xEC\x20\x48\x8D\x0D\x27\x61\xa5\x1E\x41\x8B\xD8", "xxxx?xxxxxxxx????xxx");
@@ -55,6 +55,12 @@ namespace
 	DWORD64 p_MSG_EngineError = FindPatternV2("r5apex.exe", (const unsigned char*)"\x48\x89\x5C\x24\x08\x48\x89\x74\x24\x10\x57\x48\x81\xEC\x30\x08\x00\x00\x48\x8B\xDA\x48\x8B\xF9\xE8\x00\x00\x00\xFF\x33\xF6\x48", "xxxxxxxxxxxxxxxxxxxxxxxxx???xxxx");
 	int (*MSG_EngineError)(char* fmt, va_list args) = (int (*)(char*, va_list))p_MSG_EngineError; /*48 89 5C 24 08 48 89 74 24 10 57 48 81 EC 30 08 00 00 48 8B DA 48 8B F9 E8 ?? ?? ?? FF 33 F6 48*/
 
+	DWORD64 p_QHull_PrintError = FindPatternV2("r5apex.exe", (const unsigned char*)"\x48\x89\x4C\x24\x08\x48\x89\x54\x24\x10\x4C\x89\x44\x24\x18\x4C\x89\x4C\x24\x20\x53\xB8\x40\x27\x00\x00\x00\x00\x00\x00\x00\x48", "xxxxxxxxxxxxxxxxxxxxxxxxxx????xx");
+	int (*QHull_PrintError)(char* fmt, va_list args) = (int (*)(char*, va_list))p_QHull_PrintError; /*48 89 4C 24 08 48 89 54 24 10 4C 89 44 24 18 4C 89 4C 24 20 53 B8 40 27 00 00 ?? ?? ?? ?? 00 48*/
+
+	DWORD64 p_QHull_PrintDebug = FindPatternV2("r5apex.exe", (const unsigned char*)"\x48\x89\x54\x24\x10\x4C\x89\x44\x24\x18\x4C\x89\x4C\x24\x20\x53\x56\x57\x48\x83\xEC\x30\x48\x8B\xFA\x48\x8D\x74\x24\x60\x48\x8B", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+	int (*QHull_PrintDebug)(char* fmt, va_list args) = (int (*)(char*, va_list))p_QHull_PrintDebug; /*48 89 54 24 10 4C 89 44 24 18 4C 89 4C 24 20 53 56 57 48 83 EC 30 48 8B FA 48 8D 74 24 60 48 8B*/
+
 	/* ==== KEYVALUES ======================================================================================================================================================= */
 	// DWORD64 p_KeyValues_FindKey = /*1404744E0*/ reinterpret_cast<DWORD64>(PatternScan("r5apex.exe", "40 56 57 41 57 48 81 EC ?? ?? ?? ?? 45"));
 
@@ -63,18 +69,25 @@ namespace
 	void PrintHAddress() // Test the sigscan results
 	{
 		std::cout << "+--------------------------------------------------------+" << std::endl;
-		std::cout << "| CommandExecute           : " << std::hex << std::uppercase << p_CommandExecute << std::setw(20)       << " |" << std::endl;
-		std::cout << "| ConVar_IsFlagSet         : " << std::hex << std::uppercase << p_IConVar_IsFlagSet << std::setw(20)    << " |" << std::endl;
-		std::cout << "| ConCommand_IsFlagSet     : " << std::hex << std::uppercase << p_ConCommand_IsFlagSet << std::setw(20) << " |" << std::endl;
+		std::cout << "| IAppSystem_Main          : " << std::hex << std::uppercase << p_IAppSystem_Main         << std::setw(20) << " |" << std::endl;
+		std::cout << "| IAppSystem_Create        : " << std::hex << std::uppercase << p_IAppSystem_Create       << std::setw(20) << " |" << std::endl;
 		std::cout << "+--------------------------------------------------------+" << std::endl;
-		std::cout << "| SQVM_PrintFunc           : " << std::hex << std::uppercase << p_SQVM_PrintFunc << std::setw(20)       << " |" << std::endl;
-		std::cout << "| SQVM_LoadScript          : " << std::hex << std::uppercase << p_SQVM_LoadScript << std::setw(20)      << " |" << std::endl;
-		std::cout << "| SQVM_LoadRson            : " << std::hex << std::uppercase << p_SQVM_LoadRson << std::setw(20)        << " |" << std::endl;
+		std::cout << "| CommandExecute           : " << std::hex << std::uppercase << p_CommandExecute          << std::setw(20) << " |" << std::endl;
+		std::cout << "| ConVar_IsFlagSet         : " << std::hex << std::uppercase << p_IConVar_IsFlagSet       << std::setw(20) << " |" << std::endl;
+		std::cout << "| ConCommand_IsFlagSet     : " << std::hex << std::uppercase << p_ConCommand_IsFlagSet    << std::setw(20) << " |" << std::endl;
 		std::cout << "+--------------------------------------------------------+" << std::endl;
-		std::cout << "| NET_ReceiveDatagram      : " << std::hex << std::uppercase << p_NET_ReceiveDatagram << std::setw(20)  << " |" << std::endl;
-		std::cout << "| NET_SendDatagram         : " << std::hex << std::uppercase << p_NET_SendDatagram << std::setw(20)     << " |" << std::endl;
+		std::cout << "| Persistence_IsAvailable  : " << std::hex << std::uppercase << p_Persistence_IsAvailable << std::setw(20) << " |" << std::endl;
 		std::cout << "+--------------------------------------------------------+" << std::endl;
-		std::cout << "| MSG_EngineError          : " << std::hex << std::uppercase << p_MSG_EngineError << std::setw(20)      << " |" << std::endl;
+		std::cout << "| SQVM_PrintFunc           : " << std::hex << std::uppercase << p_SQVM_PrintFunc          << std::setw(20) << " |" << std::endl;
+		std::cout << "| SQVM_LoadScript          : " << std::hex << std::uppercase << p_SQVM_LoadScript         << std::setw(20) << " |" << std::endl;
+		std::cout << "| SQVM_LoadRson            : " << std::hex << std::uppercase << p_SQVM_LoadRson           << std::setw(20) << " |" << std::endl;
+		std::cout << "+--------------------------------------------------------+" << std::endl;
+		std::cout << "| NET_ReceiveDatagram      : " << std::hex << std::uppercase << p_NET_ReceiveDatagram     << std::setw(20) << " |" << std::endl;
+		std::cout << "| NET_SendDatagram         : " << std::hex << std::uppercase << p_NET_SendDatagram        << std::setw(20) << " |" << std::endl;
+		std::cout << "+--------------------------------------------------------+" << std::endl;
+		std::cout << "| MSG_EngineError          : " << std::hex << std::uppercase << p_MSG_EngineError         << std::setw(20) << " |" << std::endl;
+		std::cout << "| QHull_PrintError         : " << std::hex << std::uppercase << p_QHull_PrintError        << std::setw(20) << " |" << std::endl;
+		std::cout << "| QHull_PrintDebug         : " << std::hex << std::uppercase << p_QHull_PrintDebug        << std::setw(20) << " |" << std::endl;
 		std::cout << "+--------------------------------------------------------+" << std::endl;
 
 		// TODO implement error handling when sigscan fails or result is 0

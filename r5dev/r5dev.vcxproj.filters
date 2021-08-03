@@ -80,6 +80,15 @@
     <Filter Include="shared\libraries\detours\include">
       <UniqueIdentifier>{f1341f6e-5fa3-4a5a-be3a-058dd8c3be3b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="hooks\ebisu">
+      <UniqueIdentifier>{40e329ba-f4d2-49b1-98e4-db5d48cf1e02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cappsystemgroup">
+      <UniqueIdentifier>{a79fc4c3-e157-4d91-9645-121b4b8ad081}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hooks\qhull">
+      <UniqueIdentifier>{ce407f36-881a-46ac-a054-85d4f78da775}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\shared\utility.cpp">
@@ -147,6 +156,15 @@
     </ClCompile>
     <ClCompile Include="..\external\imgui\src\imgui_tables.cpp">
       <Filter>shared\libraries\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="EbisuSDK.cpp">
+      <Filter>hooks\ebisu</Filter>
+    </ClCompile>
+    <ClCompile Include="IAppSystem.cpp">
+      <Filter>cappsystemgroup</Filter>
+    </ClCompile>
+    <ClCompile Include="QHull.cpp">
+      <Filter>hooks\qhull</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -515,6 +533,15 @@
     </ClInclude>
     <ClInclude Include="classes.h">
       <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="EbisuSDK.h">
+      <Filter>hooks\ebisu</Filter>
+    </ClInclude>
+    <ClInclude Include="IAppSystem.h">
+      <Filter>cappsystemgroup</Filter>
+    </ClInclude>
+    <ClInclude Include="QHull.h">
+      <Filter>hooks\qhull</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

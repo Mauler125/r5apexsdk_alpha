@@ -72,4 +72,6 @@ void InstallGlobals() /* .DATA */
 	WriteProcessMemory(GameProcess, LPVOID(ofs000), "\x01", 1, NULL);
 	WriteProcessMemory(GameProcess, LPVOID(ofs001), "\x01", 1, NULL);
 	WriteProcessMemory(GameProcess, LPVOID(ofs002), "\x01", 1, NULL);
+	WriteProcessMemory(GameProcess, LPVOID(ofs003), "\x01", 1, NULL);
+	//WriteProcessMemory(GameProcess, LPVOID(ofs004), "\x01", 1, NULL);
 }
