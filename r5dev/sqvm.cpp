@@ -7,10 +7,14 @@
 //---------------------------------------------------------------------------------
 void* HSQVM_PrintFunc(void* sqvm, char* fmt, ...)
 {
+	char buf[1024];
 	va_list args;
 	va_start(args, fmt);
 	vprintf(fmt, args);
+	vsnprintf(buf, IM_ARRAYSIZE(buf), fmt, args);
+	buf[IM_ARRAYSIZE(buf) - 1] = 0;
 	va_end(args);
+	Items.push_back(Strdup(buf));
 	return NULL;
 }
 
