@@ -71,12 +71,6 @@ void ToggleOpcodes() /* .TEXT */
 void InstallGlobals() /* .DATA */
 {
 	//-------------------------------------------------------------------------
-	//  00 --> 01  | Set Origin globals to allow execution of restricted commands
-	WriteProcessMemory(GameProcess, LPVOID(ofs000), "\x01", 1, NULL);
-	WriteProcessMemory(GameProcess, LPVOID(ofs001), "\x01", 1, NULL);
-	WriteProcessMemory(GameProcess, LPVOID(ofs002), "\x01", 1, NULL);
-
-	//-------------------------------------------------------------------------
 	//  00 --> 01  | Set bDedicated to true to launch in dedicated mode
-	WriteProcessMemory(GameProcess, LPVOID(ofs003), "\x01", 1, NULL);
+	WriteProcessMemory(GameProcess, LPVOID(ofs000), "\x01", 1, NULL);
 }

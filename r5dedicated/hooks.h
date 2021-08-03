@@ -1,12 +1,15 @@
 #pragma once
 #include "stdafx.h"
-#include "iconvar.h"
-#include "concommand.h"
-#include "cvengineserver.h"
-#include "cnetchan.h"
+#include "IAppSystem.h"
+#include "IConVar.h"
+#include "ConCommand.h"
+#include "CVEngineServer.h"
+#include "CNetChan.h"
+#include "EbisuSDK.h"
 #include "sqvm.h"
 #include "msgbox.h"
 #include "opcodes.h"
+
 // Define the signatures or offsets to be searched and hooked
 namespace
 {
@@ -103,4 +106,3 @@ void RemoveHooks();
 
 void ToggleDevCommands();
 void ToggleNetTrace();
-

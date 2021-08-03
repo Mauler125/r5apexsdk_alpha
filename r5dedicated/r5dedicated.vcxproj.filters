@@ -68,6 +68,9 @@
     <Filter Include="hooks\qhull">
       <UniqueIdentifier>{591694f5-e4b0-46c0-b75b-b58b0b3d628c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="hooks\ebisu">
+      <UniqueIdentifier>{4c8ab2ee-d889-422c-a1b8-772a48d0e8eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\shared\include\utility.h">
@@ -394,6 +397,9 @@
     <ClInclude Include="QHull.h">
       <Filter>hooks\qhull</Filter>
     </ClInclude>
+    <ClInclude Include="EbisuSDK.h">
+      <Filter>hooks\ebisu</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="console.cpp">
@@ -437,6 +443,9 @@
     </ClCompile>
     <ClCompile Include="QHull.cpp">
       <Filter>hooks\qhull</Filter>
+    </ClCompile>
+    <ClCompile Include="EbisuSDK.cpp">
+      <Filter>hooks\ebisu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

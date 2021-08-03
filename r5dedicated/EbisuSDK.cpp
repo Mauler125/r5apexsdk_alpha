@@ -12,26 +12,12 @@ void HEbisuSDK_Init()
 	DWORD64 ofs002 = 0x1634F1695;
 	DWORD64 ofs003 = 0x1634F30D8;
 	DWORD64 ofs004 = 0x1634F31D8;
-	DWORD64 splayerName = 0x1634F35D8;
-
-	FILE* sNameCfg;
-	CHAR sNameBuf[64] = { 0 };
-	fopen_s(&sNameCfg, "platform\\cfg\\name.cfg", "r");
-
-	if (sNameCfg)
-	{
-		while (fgets(sNameBuf, sizeof(sNameBuf), sNameCfg) != NULL)
-		{
-			fclose(sNameCfg);
-		}
-	}
 
 	*(char*)(ofs000) = (char)0x1; // <- First Origin boolean check
 	*(char*)(ofs001) = (char)0x1; // <- Second Origin boolean check
 	*(char*)(ofs002) = (char)0x1; // <- Third Origin bolean check
 	*(char*)(ofs003) = (char)0x1; // <- Gets tested on listenserver for certain concommands
 	*(char*)(ofs004) = (char)0x0; // <- TODO: Enforces Necleus cvar's when not equal to 0
-	memcpy((char*)splayerName, sNameBuf, sizeof(sNameBuf));
 }
 
 void AttachEbisuSDKHooks()

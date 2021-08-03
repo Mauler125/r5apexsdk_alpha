@@ -5,7 +5,6 @@
 #include "utility.h"
 
 void InstallOpcodes();
-void InstallGlobals();
 void ToggleOpcodes();
 inline HANDLE GameProcess = GetCurrentProcess();
 
@@ -31,13 +30,6 @@ namespace
 	DWORD64 dst008 = /*0x140E3E110*/ FindPatternV2("r5apex.exe", (const unsigned char*)"\x48\x83\xEC\x78\x48\x8B\x84\x24\x00\x00\x00\x00\x4D\x8B\xD8\x00", "xxxxxxxx????xxx?");
 
 	/* -------------- ------- ----------------------------------------------------------------------------------------------------------------------------------------------- */
-
-	/* -------------- GLOBALS ----------------------------------------------------------------------------------------------------------------------------------------------- */
-	DWORD64 ofs000 = 0x00000001634F1690;
-	DWORD64 ofs001 = 0x00000001634F16B0;
-	DWORD64 ofs002 = 0x00000001634F1695;
-	DWORD64 ofs003 = 0x00000001634F30D8;
-	DWORD64 ofs004 = 0x00000001634F31D8;
 
 	void PrintOAddress() // Test the sigscan results
 	{

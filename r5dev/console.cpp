@@ -88,11 +88,8 @@ DWORD __stdcall ProcessConsoleWorker(LPVOID)
 		if (sCommand == "loading test") { g_bDebugLoading = !g_bDebugLoading; continue; }
 		///////////////////////////////////////////////////////////////////////
 		// Exec toggles
-		if (sCommand == "1") { InstallGlobals(); CommandExecute(NULL, "exec autoexec_dev"); continue; }
-		if (sCommand == "2") { InstallGlobals(); CommandExecute(NULL, "exec connect5_dev"); continue; }
-		///////////////////////////////////////////////////////////////////////
-		// Opcode toggles
-		if (sCommand == "3") { InstallGlobals(); continue; }
+		if (sCommand == "1") { CommandExecute(NULL, "exec autoexec_dev"); continue; }
+		if (sCommand == "2") { CommandExecute(NULL, "exec connect5_dev"); continue; }
 		///////////////////////////////////////////////////////////////////////
 		// Execute the command in the r5 SQVM
 		CommandExecute(NULL, sCommand.c_str());

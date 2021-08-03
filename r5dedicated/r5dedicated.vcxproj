@@ -180,6 +180,7 @@
     <ClCompile Include="ConCommand.cpp" />
     <ClCompile Include="console.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="EbisuSDK.cpp" />
     <ClCompile Include="hooks.cpp" />
     <ClCompile Include="IAppSystem.cpp" />
     <ClCompile Include="IConVar.cpp" />
@@ -293,6 +294,7 @@
     <ClInclude Include="ConCommand.h" />
     <ClInclude Include="console.h" />
     <ClInclude Include="dllmain.h" />
+    <ClInclude Include="EbisuSDK.h" />
     <ClInclude Include="hooks.h" />
     <ClInclude Include="IAppSystem.h" />
     <ClInclude Include="IConVar.h" />

@@ -64,14 +64,3 @@ void ToggleOpcodes() /* .TEXT */
 	}
 	g_nop = !g_nop;
 }
-
-void InstallGlobals() /* .DATA */
-{
-	//-------------------------------------------------------------------------
-	//  00 --> 01  | Set Origin globals to allow execution of restricted commands
-	WriteProcessMemory(GameProcess, LPVOID(ofs000), "\x01", 1, NULL);
-	WriteProcessMemory(GameProcess, LPVOID(ofs001), "\x01", 1, NULL);
-	WriteProcessMemory(GameProcess, LPVOID(ofs002), "\x01", 1, NULL);
-	WriteProcessMemory(GameProcess, LPVOID(ofs003), "\x01", 1, NULL);
-	//WriteProcessMemory(GameProcess, LPVOID(ofs004), "\x01", 1, NULL);
-}
