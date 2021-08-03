@@ -71,6 +71,9 @@
     <Filter Include="hooks\ebisu">
       <UniqueIdentifier>{4c8ab2ee-d889-422c-a1b8-772a48d0e8eb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="hooks\system">
+      <UniqueIdentifier>{dd8cd058-ead9-400e-9562-de3f7bfb8d5c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\shared\include\utility.h">
@@ -400,6 +403,9 @@
     <ClInclude Include="EbisuSDK.h">
       <Filter>hooks\ebisu</Filter>
     </ClInclude>
+    <ClInclude Include="sys.h">
+      <Filter>hooks\system</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="console.cpp">
@@ -446,6 +452,9 @@
     </ClCompile>
     <ClCompile Include="EbisuSDK.cpp">
       <Filter>hooks\ebisu</Filter>
+    </ClCompile>
+    <ClCompile Include="sys.cpp">
+      <Filter>hooks\system</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

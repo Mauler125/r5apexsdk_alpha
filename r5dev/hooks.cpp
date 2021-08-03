@@ -21,6 +21,7 @@ void InstallHooks()
 	AttachCEngineServerHooks();
 	AttachEbisuSDKHooks();
 	AttachSQVMHooks();
+	//AttachSysHooks();
 	AttachMSGBoxHooks();
 
 	///////////////////////////////////////////////////////////////////////////////
@@ -53,6 +54,7 @@ void RemoveHooks()
 	DetachCEngineServerHooks();
 	DetachEbisuSDKHooks();
 	DetachSQVMHooks();
+	//DetachSysHooks();
 	DetachMSGBoxHooks();
 
 	///////////////////////////////////////////////////////////////////////////////

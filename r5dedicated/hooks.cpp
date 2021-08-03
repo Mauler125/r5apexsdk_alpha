@@ -18,6 +18,7 @@ void InstallHooks()
 	AttachConCommandHooks();
 	AttachCEngineServerHooks();
 	AttachSQVMHooks();
+	AttachSysHooks();
 	AttachMSGBoxHooks();
 
 	///////////////////////////////////////////////////////////////////////////////
@@ -44,6 +45,7 @@ void RemoveHooks()
 	DetachConCommandHooks();
 	DetachCEngineServerHooks();
 	DetachSQVMHooks();
+	DetachSysHooks();
 	DetachMSGBoxHooks();
 
 	///////////////////////////////////////////////////////////////////////////////

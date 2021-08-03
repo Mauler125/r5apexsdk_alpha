@@ -194,6 +194,7 @@
     </ClCompile>
     <ClCompile Include="CVEngineServer.cpp" />
     <ClCompile Include="sqvm.cpp" />
+    <ClCompile Include="sys.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\external\spdlog\include\async.h" />
@@ -305,6 +306,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="CVEngineServer.h" />
     <ClInclude Include="sqvm.h" />
+    <ClInclude Include="sys.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="r5dedicated.def" />

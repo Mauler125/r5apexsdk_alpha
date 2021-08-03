@@ -83,11 +83,14 @@
     <Filter Include="hooks\ebisu">
       <UniqueIdentifier>{40e329ba-f4d2-49b1-98e4-db5d48cf1e02}</UniqueIdentifier>
     </Filter>
-    <Filter Include="cappsystemgroup">
-      <UniqueIdentifier>{a79fc4c3-e157-4d91-9645-121b4b8ad081}</UniqueIdentifier>
-    </Filter>
     <Filter Include="hooks\qhull">
       <UniqueIdentifier>{ce407f36-881a-46ac-a054-85d4f78da775}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hooks\cappsystemgroup">
+      <UniqueIdentifier>{a79fc4c3-e157-4d91-9645-121b4b8ad081}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hooks\system">
+      <UniqueIdentifier>{e355ddfd-817c-42fe-b71c-12b8aaf7184d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -161,10 +164,13 @@
       <Filter>hooks\ebisu</Filter>
     </ClCompile>
     <ClCompile Include="IAppSystem.cpp">
-      <Filter>cappsystemgroup</Filter>
+      <Filter>hooks\cappsystemgroup</Filter>
     </ClCompile>
     <ClCompile Include="QHull.cpp">
       <Filter>hooks\qhull</Filter>
+    </ClCompile>
+    <ClCompile Include="sys.cpp">
+      <Filter>hooks\system</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -538,10 +544,13 @@
       <Filter>hooks\ebisu</Filter>
     </ClInclude>
     <ClInclude Include="IAppSystem.h">
-      <Filter>cappsystemgroup</Filter>
+      <Filter>hooks\cappsystemgroup</Filter>
     </ClInclude>
     <ClInclude Include="QHull.h">
       <Filter>hooks\qhull</Filter>
+    </ClInclude>
+    <ClInclude Include="sys.h">
+      <Filter>hooks\system</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

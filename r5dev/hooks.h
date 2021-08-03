@@ -7,8 +7,10 @@
 #include "CNetChan.h"
 #include "EbisuSDK.h"
 #include "sqvm.h"
+#include "sys.h"
 #include "msgbox.h"
 #include "opcptc.h"
+
 // Define the signatures or offsets to be searched and hooked
 namespace
 {
@@ -63,6 +65,10 @@ namespace
 	DWORD64 p_QHull_PrintDebug = FindPatternV2("r5apex.exe", (const unsigned char*)"\x48\x89\x54\x24\x10\x4C\x89\x44\x24\x18\x4C\x89\x4C\x24\x20\x53\x56\x57\x48\x83\xEC\x30\x48\x8B\xFA\x48\x8D\x74\x24\x60\x48\x8B", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
 	int (*QHull_PrintDebug)(char* fmt, va_list args) = (int (*)(char*, va_list))p_QHull_PrintDebug; /*48 89 54 24 10 4C 89 44 24 18 4C 89 4C 24 20 53 56 57 48 83 EC 30 48 8B FA 48 8D 74 24 60 48 8B*/
 
+	DWORD64 p_Sys_PrintFunc = FindPatternV2("r5apex.exe", (const unsigned char*)"\x48\x89\x4C\x24\x08\x48\x89\x54\x24\x10\x4C\x89\x44\x24\x18\x4C\x89\x4C\x24\x20\x53\x55\x41\x54\x41\x56\xB8\x58\x10\x00\x00\xE8", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+	void* Sys_PrintFunc = (void*)p_Sys_PrintFunc; /*48 89 4C 24 08 48 89 54 24 10 4C 89 44 24 18 4C 89 4C 24 20 53 55 41 54 41 56 B8 58 10 00 00 E8*/
+
+
 	/* ==== KEYVALUES ======================================================================================================================================================= */
 	// DWORD64 p_KeyValues_FindKey = /*1404744E0*/ reinterpret_cast<DWORD64>(PatternScan("r5apex.exe", "40 56 57 41 57 48 81 EC ?? ?? ?? ?? 45"));
 
@@ -91,6 +97,7 @@ namespace
 		std::cout << "| MSG_EngineError          : " << std::hex << std::uppercase << p_MSG_EngineError         << std::setw(20) << " |" << std::endl;
 		std::cout << "| QHull_PrintError         : " << std::hex << std::uppercase << p_QHull_PrintError        << std::setw(20) << " |" << std::endl;
 		std::cout << "| QHull_PrintDebug         : " << std::hex << std::uppercase << p_QHull_PrintDebug        << std::setw(20) << " |" << std::endl;
+		std::cout << "| Sys_PrintFunc            : " << std::hex << std::uppercase << Sys_PrintFunc             << std::setw(20) << " |" << std::endl;
 		std::cout << "+--------------------------------------------------------+" << std::endl;
 
 		// TODO implement error handling when sigscan fails or result is 0

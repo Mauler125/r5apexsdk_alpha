@@ -6,7 +6,7 @@
 //-----------------------------------------------------------------------------
 bool HPersistence_IsAvailable(__int64 thisptr, int client)
 {
-	static bool isPersistenceVarSet[256];
+	static bool isPersistenceVarSet[128];
 
 	// TODO: Maybe not hardcode
 	std::uintptr_t playerStructBase = 0x16073B200;
