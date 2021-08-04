@@ -96,7 +96,7 @@ void ToggleDevCommands()
 
 void ToggleNetTrace()
 {
-	static bool bNet = true;
+	static bool bNet = false;
 
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
