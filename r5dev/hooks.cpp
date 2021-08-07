@@ -19,6 +19,7 @@ void InstallHooks()
 	AttachIConVarHooks();
 	AttachConCommandHooks();
 	AttachCEngineServerHooks();
+	AttachCNetChanHooks();
 	AttachEbisuSDKHooks();
 	AttachSQVMHooks();
 	//AttachSysHooks();
@@ -52,6 +53,7 @@ void RemoveHooks()
 	DetachIConVarHooks();
 	DetachConCommandHooks();
 	DetachCEngineServerHooks();
+	DetachCNetChanHooks();
 	DetachEbisuSDKHooks();
 	DetachSQVMHooks();
 	//DetachSysHooks();
@@ -112,7 +114,7 @@ void ToggleNetTrace()
 
 	if (!bNet)
 	{
-		AttachCNetChanHooks();
+		AttachCNetChanTraceHooks();
 		printf("\n");
 		printf("+--------------------------------------------------------+\n");
 		printf("|>>>>>>>>>>>>>| NETCHANNEL TRACE ACTIVATED |<<<<<<<<<<<<<|\n");
@@ -121,7 +123,7 @@ void ToggleNetTrace()
 	}
 	else
 	{
-		DetachCNetChanHooks();
+		DetachCNetChanTraceHooks();
 		printf("\n");
 		printf("+--------------------------------------------------------+\n");
 		printf("|>>>>>>>>>>>>| NETCHANNEL TRACE DEACTIVATED |<<<<<<<<<<<<|\n");

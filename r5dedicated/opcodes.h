@@ -45,7 +45,9 @@ namespace
 		std::cout << "+--------------------------------------------------------+" << std::endl;
 		std::cout << "| dst005                   : " << std::hex << std::uppercase << dst005 << std::setw(20) << " |" << std::endl;
 		std::cout << "| dst006                   : " << std::hex << std::uppercase << dst006 << std::setw(20) << " |" << std::endl;
-		std::cout << "| dst006                   : " << std::hex << std::uppercase << dst006 << std::setw(20) << " |" << std::endl;
+		std::cout << "| dst007                   : " << std::hex << std::uppercase << dst007 << std::setw(20) << " |" << std::endl;
+		std::cout << "| dst008                   : " << std::hex << std::uppercase << dst008 << std::setw(20) << " |" << std::endl;
+		std::cout << "| dst009                   : " << std::hex << std::uppercase << dst009 << std::setw(20) << " |" << std::endl;
 		std::cout << "+--------------------------------------------------------+" << std::endl;
 
 		// TODO implement error handling when sigscan fails or result is 0

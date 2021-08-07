@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "hooks.h"
 #include "id3dx.h"
-#include "overlay.h"
 #include "console.h"
+#include "CGameConsole.h"
 
 /*-----------------------------------------------------------------------------
  * _overlay.cpp
@@ -161,6 +161,9 @@ public:
     // Draw
     void Draw(const char* title, bool* p_open)
     {
+        bool copy_to_clipboard = false;
+        bool reclaim_focus     = false;
+
         if (!ThemeSet)
         {
             SetStyleVar();
@@ -172,52 +175,58 @@ public:
         ImGui::SetNextWindowSize(ImVec2(840, 600), ImGuiCond_FirstUseEver);
         ImGui::SetWindowPos(ImVec2(-1000, 50), ImGuiCond_FirstUseEver);
 
-        if (!ImGui::Begin(title, p_open)) // Passing a bool only causes problems if you Begin a new window. I would not suggest to use it.
+        if (!ImGui::Begin(title, p_open))
         {
             ImGui::End(); return;
         }
 
-        ///////////////////////////////////////////////////////////////////////
-        if (ImGui::SmallButton("Developer Mode"))
-        {
-            ToggleDevCommands();
-            AddLog("+--------------------------------------------------------+\n");
-            AddLog("|>>>>>>>>>>>>>>| DEVONLY COMMANDS TOGGLED |<<<<<<<<<<<<<<|\n");
-            AddLog("+--------------------------------------------------------+\n");
-            ProcessCommand("exec autoexec");
-        }
-        ImGui::SameLine();
-        if (ImGui::SmallButton("Netchannel Trace"))
-        {
-            ToggleNetTrace();
-            AddLog("+--------------------------------------------------------+\n");
-            AddLog("|>>>>>>>>>>>>>>| NETCHANNEL TRACE TOGGLED |<<<<<<<<<<<<<<|\n");
-            AddLog("+--------------------------------------------------------+\n");
-            ProcessCommand("exec netchan");
-        }
-        ///////////////////////////////////////////////////////////////////////
-        ImGui::SameLine();
-        if (ImGui::SmallButton("Clear"))
-        {
-            ClearLog();
-        }
-        ImGui::SameLine();
-        bool copy_to_clipboard = ImGui::SmallButton("Copy");
+        // Reserve enough left-over height and width for 1 separator + 1 input text
+        const float footer_height_to_reserve = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
+        const float footer_width_to_reserve = ImGui::GetStyle().ItemSpacing.y + ImGui::GetWindowWidth();
+
         ImGui::Separator();
         if (ImGui::BeginPopup("Options"))
         {
-            ImGui::Checkbox("Auto-scroll", &AutoScroll); ImGui::EndPopup();
+            ImGui::Checkbox("Auto-scroll", &AutoScroll);
+            if (ImGui::SmallButton("Clear"))
+            {
+                ClearLog();
+            }
+            copy_to_clipboard = ImGui::SmallButton("Copy");
+            ImGui::EndPopup();
         }
         if (ImGui::Button("Options"))
         {
             ImGui::OpenPopup("Options");
         }
         ImGui::SameLine();
-        Filter.Draw("Filter [\"-incl,-excl\"] [\"error\"]", 265);
+        if (ImGui::BeginPopup("Tools"))
+        {
+            if (ImGui::SmallButton("Developer Mode"))
+            {
+                ToggleDevCommands();
+                AddLog("+--------------------------------------------------------+\n");
+                AddLog("|>>>>>>>>>>>>>>| DEVONLY COMMANDS TOGGLED |<<<<<<<<<<<<<<|\n");
+                AddLog("+--------------------------------------------------------+\n");
+                ProcessCommand("exec autoexec");
+            }
+            if (ImGui::SmallButton("Netchannel Trace"))
+            {
+                ToggleNetTrace();
+                AddLog("+--------------------------------------------------------+\n");
+                AddLog("|>>>>>>>>>>>>>>| NETCHANNEL TRACE TOGGLED |<<<<<<<<<<<<<<|\n");
+                AddLog("+--------------------------------------------------------+\n");
+                ProcessCommand("exec netchan");
+            }
+            ImGui::EndPopup();
+        }
+        if (ImGui::Button("Tools"))
+        {
+            ImGui::OpenPopup("Tools");
+        }
+        ImGui::SameLine();
+        Filter.Draw("Filter [\"-incl,-excl\"] [\"error\"]", footer_width_to_reserve - 500);
         ImGui::Separator();
-
-        // Reserve enough left-over height for 1 separator + 1 input text
-        const float footer_height_to_reserve = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
 
         ///////////////////////////////////////////////////////////////////////
         ImGui::BeginChild("ScrollingRegion", ImVec2(0, -footer_height_to_reserve), true, ImGuiWindowFlags_AlwaysVerticalScrollbar);
@@ -246,8 +255,14 @@ public:
             if (strncmp(item, "# ", 2) == 0)    { color = ImVec4(1.00f, 0.80f, 0.60f, 1.00f); has_color = true; }
 
             ///////////////////////////////////////////////////////////////////
+            // Virtual machines
+            if (strstr(item, "Script(S):"))     { color = ImVec4(0.59f, 0.58f, 0.73f, 1.00f); has_color = true; }
+            if (strstr(item, "Script(C):"))     { color = ImVec4(0.59f, 0.58f, 0.63f, 1.00f); has_color = true; }
+            if (strstr(item, "Script(U):"))     { color = ImVec4(0.59f, 0.48f, 0.53f, 1.00f); has_color = true; }
+
+            ///////////////////////////////////////////////////////////////////
             // Callbacks
-            if (strstr(item, "CodeCallback_"))  { color = ImVec4(0.00f, 0.30f, 1.00f, 1.00f); has_color = true; }
+            //if (strstr(item, "CodeCallback_"))  { color = ImVec4(0.00f, 0.30f, 1.00f, 1.00f); has_color = true; }
 
             ///////////////////////////////////////////////////////////////////
             // Script errors
@@ -260,7 +275,7 @@ public:
             if (strstr(item, "SCRIPT COMPILE")) { color = ImVec4(1.00f, 0.00f, 0.00f, 1.00f); has_color = true; }
             if (strstr(item, ".gnut #"))        { color = ImVec4(1.00f, 0.00f, 0.00f, 1.00f); has_color = true; }
             if (strstr(item, ".nut #"))         { color = ImVec4(1.00f, 0.00f, 0.00f, 1.00f); has_color = true; }
-            if (strstr(item, " -> "))           { color = ImVec4(1.00f, 0.00f, 0.00f, 1.00f); has_color = true; }
+            if (strstr(item, "): -> "))         { color = ImVec4(1.00f, 0.00f, 0.00f, 1.00f); has_color = true; }
 
             ///////////////////////////////////////////////////////////////////
             // Script debug
@@ -273,7 +288,7 @@ public:
 
             ///////////////////////////////////////////////////////////////////
             // Filters
-            if (strstr(item, ") -> "))          { color = ImVec4(1.00f, 1.00f, 1.00f, 0.70f); has_color = true; }
+            //if (strstr(item, ") -> "))          { color = ImVec4(1.00f, 1.00f, 1.00f, 0.70f); has_color = true; }
             ///////////////////////////////////////////////////////////////////
 
             if (has_color) { ImGui::PushStyleColor(ImGuiCol_Text, color); }
@@ -292,8 +307,7 @@ public:
 
         ///////////////////////////////////////////////////////////////////////
         // Console
-        bool reclaim_focus = false;
-        ImGui::PushItemWidth(750);
+        ImGui::PushItemWidth(footer_width_to_reserve - 80);
         if (ImGui::IsWindowAppearing()) { ImGui::SetKeyboardFocusHere(); }
         ImGuiInputTextFlags input_text_flags = ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackCompletion | ImGuiInputTextFlags_CallbackHistory;
 
@@ -454,7 +468,9 @@ int Strnicmp(const char* s1, const char* s2, int n)
 }
 char* Strdup(const char* s)
 {
-    IM_ASSERT(s); size_t len = strlen(s) + 1; void* buf = malloc(len); IM_ASSERT(buf); if (buf != NULL)
+    IM_ASSERT(s); size_t len = strlen(s) + 1; void* buf = malloc(len);
+    IM_ASSERT(buf);
+    if (buf != NULL)
     {
         return (char*)memcpy(buf, (const void*)s, len);
     }

@@ -315,7 +315,7 @@
     <ClInclude Include="input.h" />
     <ClInclude Include="msgbox.h" />
     <ClInclude Include="opcptc.h" />
-    <ClInclude Include="overlay.h" />
+    <ClInclude Include="CGameConsole.h" />
     <ClInclude Include="QHull.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="r5dev.h" />
@@ -366,7 +366,7 @@
     <ClCompile Include="input.cpp" />
     <ClCompile Include="msgbox.cpp" />
     <ClCompile Include="opcptc.cpp" />
-    <ClCompile Include="overlay.cpp" />
+    <ClCompile Include="CGameConsole.cpp" />
     <ClCompile Include="QHull.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

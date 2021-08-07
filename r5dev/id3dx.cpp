@@ -3,7 +3,7 @@
 #include "input.h"
 #include "classes.h"
 #include "console.h"
-#include "overlay.h"
+#include "CGameConsole.h"
 
 #pragma comment(lib, "d3d11.lib")
 
@@ -245,8 +245,8 @@ void DrawImGui()
 {
 	bool bShowMenu = false;
 
-	ImGui_ImplWin32_NewFrame();
 	ImGui_ImplDX11_NewFrame();
+	ImGui_ImplWin32_NewFrame();
 
 	ImGui::NewFrame();
 

@@ -2,24 +2,58 @@
 #include "sqvm.h"
 
 //---------------------------------------------------------------------------------
-// Print the output of the VM.
-// TODO: separate SV CL and UI
+// Purpose: prints the output of each VM to the console
 //---------------------------------------------------------------------------------
+static std::ostringstream oss;
+static auto ostream_sink = std::make_shared<spdlog::sinks::ostream_sink_st>(oss);
 void* HSQVM_PrintFunc(void* sqvm, char* fmt, ...)
 {
-	char buf[1024];
+	int vmIdx = *(int*)((std::uintptr_t)sqvm + 0x18);
+	static bool initialized = false;
+
+	static char buf[1024];
+	static std::string vmType[3] = { "Script(S):", "Script(C):", "Script(U):" };
+
+	static auto iconsole = spdlog::stdout_logger_mt("sqvm_iconsole"); // in-game console
+	static auto wconsole = spdlog::stdout_logger_mt("sqvm_wconsole"); // windows console
+
+	std::string vmStr = vmType[vmIdx].c_str();
+
+	oss.str("");
+	oss.clear();
+
+	if (!initialized)
+	{
+		iconsole = std::make_shared<spdlog::logger>("ostream", ostream_sink);
+		iconsole->set_pattern("[%S.%e] %v");
+		iconsole->set_level(spdlog::level::debug);
+		wconsole->set_pattern("[%S.%e] %v");
+		wconsole->set_level(spdlog::level::debug);
+		initialized = true;
+	}
+
 	va_list args;
 	va_start(args, fmt);
-	vprintf(fmt, args);
-	vsnprintf(buf, IM_ARRAYSIZE(buf), fmt, args);
-	buf[IM_ARRAYSIZE(buf) - 1] = 0;
+
+	vsnprintf(buf, sizeof(buf), fmt, args);
+
+	buf[sizeof(buf) - 1] = 0;
 	va_end(args);
-	Items.push_back(Strdup(buf));
+
+	vmStr.append(buf);
+
+	iconsole->debug(vmStr);
+	wconsole->debug(vmStr);
+
+	std::string s = oss.str();
+	const char* c = s.c_str();
+
+	Items.push_back(Strdup((const char*)c));
 	return NULL;
 }
 
 //---------------------------------------------------------------------------------
-// Load the include file from the mods directory
+// Purpose: loads the include file from the mods directory
 //---------------------------------------------------------------------------------
 __int64 HSQVM_LoadRson(const char* rson_name)
 {
@@ -55,7 +89,7 @@ __int64 HSQVM_LoadRson(const char* rson_name)
 }
 
 //---------------------------------------------------------------------------------
-// Load the script file from the mods directory
+// Purpose: loads the script file from the mods directory
 //---------------------------------------------------------------------------------
 bool HSQVM_LoadScript(void* sqvm, const char* script_path, const char* script_name, int flag)
 {

@@ -2,20 +2,38 @@
 #include "sqvm.h"
 
 //---------------------------------------------------------------------------------
-// Print the output of the VM.
-// TODO: separate SV CL and UI
+// Purpose: prints the output of each VM to the console
 //---------------------------------------------------------------------------------
 void* HSQVM_PrintFunc(void* sqvm, char* fmt, ...)
 {
+	int vmIdx = *(int*)((std::uintptr_t)sqvm + 0x18);
+
+	static char buf[1024];
+	static std::string vmType[3] = { "Script(S):", "Script(C):", "Script(U):" };
+
+	static auto wconsole = spdlog::stdout_logger_mt("sqvm_wconsole"); // windows console
+
+	std::string vmStr = vmType[vmIdx].c_str();
+
+	wconsole->set_pattern("[%S.%e] %v");
+	wconsole->set_level(spdlog::level::debug);
+
 	va_list args;
 	va_start(args, fmt);
-	vprintf(fmt, args);
+
+	vsnprintf(buf, sizeof(buf), fmt, args);
+
+	buf[sizeof(buf) - 1] = 0;
 	va_end(args);
+
+	vmStr.append(buf);
+	wconsole->debug(vmStr);
+
 	return NULL;
 }
 
 //---------------------------------------------------------------------------------
-// Load the include file from the mods directory
+// Purpose: loads the include file from the mods directory
 //---------------------------------------------------------------------------------
 __int64 HSQVM_LoadRson(const char* rson_name)
 {
@@ -51,7 +69,7 @@ __int64 HSQVM_LoadRson(const char* rson_name)
 }
 
 //---------------------------------------------------------------------------------
-// Load the script file from the mods directory
+// Purpose: loads the script file from the mods directory
 //---------------------------------------------------------------------------------
 bool HSQVM_LoadScript(void* sqvm, const char* script_path, const char* script_name, int flag)
 {

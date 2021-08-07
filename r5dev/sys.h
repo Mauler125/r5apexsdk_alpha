@@ -1,6 +1,6 @@
 #pragma once
 #include "hooks.h"
-#include "overlay.h"
+#include "CGameConsole.h"
 
 void HSys_PrintFunc(char* fmt, ...);
 

@@ -4,7 +4,7 @@
 #include "hooks.h"
 
 /*-----------------------------------------------------------------------------
- * _utility.cpp
+ * _utility
  *-----------------------------------------------------------------------------*/
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -206,6 +206,9 @@ void DbgPrint(LPCSTR sFormat, ...)
 // For dumping data from a buffer to a file on the disk
 void HexDump(const char* szHeader, int nFunc, const void* pData, int nSize)
 {
+    static auto g_spddefault_logger = spdlog::basic_logger_mt("default_logger", "platform\\log\\default_r5.log");
+    static auto g_spdnetchan_logger = spdlog::basic_logger_mt("netchan_logger", "platform\\log\\netchan_r5.log");
+
     static std::atomic<int> i, j, k = 0;
     static char ascii[17] = { 0 };
     static auto logger = spdlog::get("default_logger");
@@ -222,7 +225,7 @@ void HexDump(const char* szHeader, int nFunc, const void* pData, int nSize)
 
     // Add timestamp.
     logger->set_level(spdlog::level::trace);
-    logger->set_pattern("%v [%H:%M:%S.%f]");
+    logger->set_pattern("%v [%H:%M:%S.%f]\n");
     logger->trace("---------------------------------------------------------");
 
     // Disable EOL and create block header.

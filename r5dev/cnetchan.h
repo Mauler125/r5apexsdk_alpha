@@ -4,9 +4,12 @@
 
 bool HNET_ReceiveDatagram(int sock, void* inpacket, bool raw);
 unsigned int HNET_SendDatagram(SOCKET s, const char* buf, int len, int flags);
+void HNET_PrintFunc(const char* fmt, ...);
 
 void AttachCNetChanHooks();
 void DetachCNetChanHooks();
+void AttachCNetChanTraceHooks();
+void DetachCNetChanTraceHooks();
 
 typedef unsigned __int64 QWORD;
 struct __declspec(align(8)) netpacket_t

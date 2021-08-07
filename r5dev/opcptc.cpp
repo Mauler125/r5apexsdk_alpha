@@ -23,8 +23,8 @@ void InstallOpcodes() /* .TEXT */
 	//WriteProcessMemory(GameProcess, LPVOID(dst004 + 0x637), "\xE9\xC1\x00\x00\x00", 5, NULL);
 	//-------------------------------------------------------------------------
 	// JA  --> JMP | Disable server-side accpunt and packet verification
-	WriteProcessMemory(GameProcess, LPVOID(dst005 + 0x53), "\x90\x90", 2, NULL);
-	WriteProcessMemory(GameProcess, LPVOID(dst005 + 0x284), "\x90\x90", 2, NULL);
+	//WriteProcessMemory(GameProcess, LPVOID(dst005 + 0x53), "\x90\x90", 2, NULL);
+	//WriteProcessMemory(GameProcess, LPVOID(dst005 + 0x284), "\x90\x90", 2, NULL);
 	//-------------------------------------------------------------------------
 	// JA  --> JMP | Prevent FairFight anti-cheat from initializing on the server
 	WriteProcessMemory(GameProcess, LPVOID(dst006 + 0x61), "\xE9\xED\x00\x00\x00\x00", 6, NULL);

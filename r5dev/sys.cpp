@@ -15,10 +15,10 @@ void HSys_PrintFunc(char* fmt, ...)
 
 void AttachSysHooks()
 {
-	DetourAttach((LPVOID*)&Sys_PrintFunc, &HSys_PrintFunc);
+	//DetourAttach((LPVOID*)&Sys_PrintFunc, &HSys_PrintFunc);
 }
 
 void DetachSysHooks()
 {
-	DetourDetach((LPVOID*)&Sys_PrintFunc, &HSys_PrintFunc);
+	//DetourDetach((LPVOID*)&Sys_PrintFunc, &HSys_PrintFunc);
 }

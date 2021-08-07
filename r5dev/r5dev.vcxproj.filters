@@ -22,10 +22,6 @@
     <Filter Include="shared\libraries\spdlLog">
       <UniqueIdentifier>{729f571d-afe4-46c2-9004-9b564fdd88a5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="core\resource">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="hooks">
       <UniqueIdentifier>{cb1aaed9-7fe5-4254-a094-a8f2d3a6713c}</UniqueIdentifier>
     </Filter>
@@ -92,6 +88,16 @@
     <Filter Include="hooks\system">
       <UniqueIdentifier>{e355ddfd-817c-42fe-b71c-12b8aaf7184d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="overlay">
+      <UniqueIdentifier>{9f16f4c2-a76e-47c7-b58a-1b83e633db34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="overlay\include">
+      <UniqueIdentifier>{10006923-9236-46b2-8d40-96ba6304edba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\include\resource">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\shared\utility.cpp">
@@ -108,9 +114,6 @@
     </ClCompile>
     <ClCompile Include="IConVar.cpp">
       <Filter>hooks\iconvar</Filter>
-    </ClCompile>
-    <ClCompile Include="overlay.cpp">
-      <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="dllmain.cpp">
       <Filter>core</Filter>
@@ -171,6 +174,9 @@
     </ClCompile>
     <ClCompile Include="sys.cpp">
       <Filter>hooks\system</Filter>
+    </ClCompile>
+    <ClCompile Include="CGameConsole.cpp">
+      <Filter>overlay</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -504,9 +510,6 @@
     <ClInclude Include="IConVar.h">
       <Filter>hooks\iconvar</Filter>
     </ClInclude>
-    <ClInclude Include="overlay.h">
-      <Filter>core\include</Filter>
-    </ClInclude>
     <ClInclude Include="CVEngineServer.h">
       <Filter>hooks\cvengineserver</Filter>
     </ClInclude>
@@ -552,13 +555,16 @@
     <ClInclude Include="sys.h">
       <Filter>hooks\system</Filter>
     </ClInclude>
+    <ClInclude Include="CGameConsole.h">
+      <Filter>overlay\include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="r5dev.def">
-      <Filter>core\resource</Filter>
+      <Filter>core\include\resource</Filter>
     </None>
     <None Include="cpp.hint">
-      <Filter>core\resource</Filter>
+      <Filter>core\include\resource</Filter>
     </None>
   </ItemGroup>
 </Project>
