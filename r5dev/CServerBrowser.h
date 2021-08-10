@@ -1,66 +1,81 @@
 #pragma once
-#include "imgui.h"
+#include "stdafx.h"
+#include "serverlisting.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // Initialization
-void DrawConsole(bool* bDraw);
+void DrawBrowser(bool* bDraw);
 
-///////////////////////////////////////////////////////////////////////////////
-// Globals
-inline ImVector<char*> Items;
-
-class CGameConsole
+class CServerBrowser
 {
 private:
-    ///////////////////////////////////////////////////////////////////////////
-    char                           InputBuf[256] = { 0 };
-    ImVector<const char*>          Commands;
-    ImVector<char*>                History;
-    int                            HistoryPos = -1;
-    ImGuiTextFilter                Filter;
-    bool                           AutoScroll = true;
-    bool                           ScrollToBottom = false;
-    bool                           ThemeSet = false;
-
+    bool ThemeSet = false;
 public:
-    ///////////////////////////////////////////////////////////////////////////
+    CServerBrowser();
 
-    CGameConsole();
-    ~CGameConsole();
-
-    void Draw(const char* title, bool* bDraw);
-    void ProcessCommand(const char* command_line);
-    void ExecCommand(const char* command_line);
-    int TextEditCallback(ImGuiInputTextCallbackData* data);
-
-    ///////////////////////////////////////////////////////////////////////////
-    // History
-    static int TextEditCallbackStub(ImGuiInputTextCallbackData* data)
+    ////////////////////
+    //     Enums      //
+    ////////////////////
+    enum class ESection
     {
-        CGameConsole* console = (CGameConsole*)data->UserData;
-        return console->TextEditCallback(data);
+        ServerBrowser,
+        HostServer,
+        Settings
+    } CurrentSection = ESection::ServerBrowser;
+
+    enum class EHostStatus
+    {
+        NotHosting,
+        WaitingForStateChange,
+        Hosting,
+        ConnectedToSomeoneElse
+    } HostingStatus = EHostStatus::NotHosting;
+
+    ////////////////////
+    // Server Browser //
+    ////////////////////
+    ImVector<ServerListing*> ServerList;
+    ServerListing* SelectedServer;
+    ImGuiTextFilter ServerBrowserFilter;
+    char ServerConnStringBuffer[256] = { 0 };
+
+    ////////////////////
+    //    Settings    //
+    ////////////////////
+    char MatchmakingServerStringBuffer[256] = { 0 };
+
+    ////////////////////
+    //   Host Server  //
+    ////////////////////
+    ServerListing MyServer;
+    std::vector<std::string> MapsList;
+    std::string HostRequestMessage = "";
+    std::string HostToken          = "";
+    ImVec4 HostRequestMessageColor = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
+    bool StartAsDedi               = false;
+    bool BroadCastServer           = false;
+
+    ////////////////////
+    // Private Server //
+    ////////////////////
+    std::string PrivateServerToken          = "";
+    std::string PrivateServerPassword       = "";
+    std::string PrivateServerRequestMessage = "";
+    ImVec4 PrivateServerMessageColor = ImVec4(0.00f, 1.00f, 0.00f, 1.00f);
+
+    /* Texture */
+    ID3D11ShaderResourceView* ApexLockIcon = nullptr;
+    int ApexLockIconWidth = 48;
+    int ApexLockIconHeight = 48;
+
+    void SetSection(ESection section)
+    {
+        CurrentSection = section;
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Utility
-    void ClearLog()
-    {
-        for (int i = 0; i < Items.Size; i++) { free(Items[i]); }
-        Items.clear();
-    }
-    void AddLog(const char* fmt, ...) IM_FMTARGS(2)
-    {
-        char buf[1024];
-        va_list args;
-        va_start(args, fmt);
-        vsnprintf(buf, IM_ARRAYSIZE(buf), fmt, args);
-        buf[IM_ARRAYSIZE(buf) - 1] = 0;
-        va_end(args);
-        Items.push_back(Strdup(buf));
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Style
+    ////////////////////
+    //     Style      //
+    ////////////////////
     void SetStyleVar()
     {
         ImGuiStyle& style = ImGui::GetStyle();
@@ -119,6 +134,21 @@ public:
         style.ItemSpacing       = ImVec2(4, 4);
         style.WindowPadding     = ImVec2(5, 5);
     }
+
+    void RefreshServerList();
+    void SendHostingPostRequest();
+    const nlohmann::json SendGetServerByTokenRequest(const std::string &token, const std::string &password);
+    void CompMenu();
+    void ServerBrowserSection();
+    void SettingsSection();
+    void HostServerSection();
+    void Draw(const char* title, bool* bDraw);
+    void UpdateHostingStatus();
+    void ProcessCommand(const char* command_line);
+    void ExecCommand(const char* command_line);
+
+    void ConnectToServer(const std::string &ip, const std::string &port);
+    void ConnectToServer(const std::string &connString);
 };
 
-extern CGameConsole* g_GameConsole;
+extern CServerBrowser* g_ServerBrowser;

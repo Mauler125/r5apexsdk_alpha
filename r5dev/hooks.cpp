@@ -19,6 +19,7 @@ void InstallHooks()
 	AttachIConVarHooks();
 	AttachConCommandHooks();
 	AttachCEngineServerHooks();
+	AttachCHLClientHooks();
 	AttachCNetChanHooks();
 	AttachEbisuSDKHooks();
 	AttachSQVMHooks();
@@ -53,6 +54,7 @@ void RemoveHooks()
 	DetachIConVarHooks();
 	DetachConCommandHooks();
 	DetachCEngineServerHooks();
+	DetachCHLClientHooks();
 	DetachCNetChanHooks();
 	DetachEbisuSDKHooks();
 	DetachSQVMHooks();
@@ -70,12 +72,10 @@ void RemoveHooks()
 
 void ToggleDevCommands()
 {
-	static bool bDev = true;
-
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
 
-	if (!bDev)
+	if (!g_bToggledDevFlags)
 	{
 		AttachIConVarHooks();
 		AttachConCommandHooks();
@@ -102,17 +102,15 @@ void ToggleDevCommands()
 		TerminateProcess(GetCurrentProcess(), 0xBAD0C0DE);
 	}
 
-	bDev = !bDev;
+	g_bToggledDevFlags = !g_bToggledDevFlags;
 }
 
 void ToggleNetTrace()
 {
-	static bool bNet = false;
-
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
 
-	if (!bNet)
+	if (!g_bToggledNetTrace)
 	{
 		AttachCNetChanTraceHooks();
 		printf("\n");
@@ -136,5 +134,5 @@ void ToggleNetTrace()
 		TerminateProcess(GetCurrentProcess(), 0xBAD0C0DE);
 	}
 
-	bNet = !bNet;
+	g_bToggledNetTrace = !g_bToggledNetTrace;
 }

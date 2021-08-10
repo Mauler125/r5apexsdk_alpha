@@ -4,6 +4,7 @@
 #include "classes.h"
 #include "console.h"
 #include "CGameConsole.h"
+#include "CServerBrowser.h"
 
 #pragma comment(lib, "d3d11.lib")
 
@@ -20,7 +21,8 @@ typedef BOOL(WINAPI* IPostMessageA)(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM l
 typedef BOOL(WINAPI* IPostMessageW)(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 
 ///////////////////////////////////////////////////////////////////////////////////
-extern BOOL                     g_bShowMenu                 = false;
+extern BOOL                     g_bShowConsole              = false;
+extern BOOL                     g_bShowBrowser              = false;
 static BOOL                     g_bInitMenu                 = false;
 static BOOL                     g_bInitialized              = false;
 static BOOL                     g_bPresentHooked            = false;
@@ -56,10 +58,18 @@ LRESULT CALLBACK HwndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		if (wParam == VK_OEM_3 || wParam == VK_INSERT) // For everyone without a US keyboard layout.
 		{
-			g_bShowMenu = !g_bShowMenu;
+			g_bShowConsole = !g_bShowConsole;
 		}
 	}
-	if (g_bShowMenu)
+	if (uMsg == WM_SYSKEYDOWN)
+	{
+		if (wParam == VK_F10 || wParam == VK_F12)
+		{
+			g_bShowBrowser = !g_bShowBrowser;
+		}
+	}
+
+	if (g_bShowConsole || g_bShowBrowser)
 	{//////////////////////////////////////////////////////////////////////////////
 		ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam);
 		g_bBlockInput = true;
@@ -243,7 +253,8 @@ void SetupImGui()
 
 void DrawImGui()
 {
-	bool bShowMenu = false;
+	bool bShowConsole = g_bShowConsole;
+	bool bShowBrowser = g_bShowBrowser;
 
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
@@ -252,14 +263,20 @@ void DrawImGui()
 
 	static CInputSystem* InputSystem = *reinterpret_cast<CInputSystem**>(0x14D40B380);
 
-	if (g_bShowMenu)
+	if (g_bShowConsole)
 	{
 		InputSystem->EnableInput(false); // Disable input.
-		ShowGameConsole(&bShowMenu);
+		DrawConsole(&bShowConsole);
 	}
-	else if (!g_bShowMenu)
+	if (g_bShowBrowser)
 	{
-		InputSystem->EnableInput(true); // Enable input.
+		InputSystem->EnableInput(false); // Disable input.
+		DrawBrowser(&bShowBrowser);
+	}
+
+	if (!g_bShowConsole && !g_bShowBrowser)
+	{
+		InputSystem->EnableInput(true); // Disable input.
 	}
 
 	ImGui::EndFrame();
@@ -339,7 +356,8 @@ HRESULT GetDeviceAndCtxFromSwapchain(IDXGISwapChain* pSwapChain, ID3D11Device** 
 
 HRESULT __stdcall GetResizeBuffers(IDXGISwapChain* pSwapChain, UINT nBufferCount, UINT nWidth, UINT nHeight, DXGI_FORMAT dxFormat, UINT nSwapChainFlags)
 {
-	g_bShowMenu       = false;
+	g_bShowConsole    = false;
+	g_bShowBrowser    = false;
 	g_bInitialized    = false;
 	g_bPresentHooked  = false;
 
@@ -382,6 +400,58 @@ HRESULT __stdcall Present(IDXGISwapChain* pSwapChain, UINT nSyncInterval, UINT n
 	g_bInitialized      = true;
 	///////////////////////////////////////////////////////////////////////////////
 	return g_fnIDXGISwapChainPresent(pSwapChain, nSyncInterval, nFlags);
+}
+
+bool LoadTextureBuffer(unsigned char* image_data, const int& image_width, const int& image_height, ID3D11ShaderResourceView** out_srv)
+{
+	// Load from disk into a raw RGBA buffer
+	//int image_width = 0;
+	//int image_height = 0;
+	//unsigned char* image_data = stbi_load(filename, &image_width, &image_height, NULL, 4);
+	if (image_data == NULL)
+	{
+		return false;
+	}
+
+	// Create texture
+	ID3D11Texture2D*                pTexture = NULL;
+	D3D11_TEXTURE2D_DESC            desc;
+	D3D11_SUBRESOURCE_DATA          subResource;
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+
+	ZeroMemory(&desc, sizeof(desc));
+	desc.Width                        = image_width;
+	desc.Height                       = image_height;
+	desc.MipLevels                    = 1;
+	desc.ArraySize                    = 1;
+	desc.Format                       = DXGI_FORMAT_R8G8B8A8_UNORM;
+	desc.SampleDesc.Count             = 1;
+	desc.Usage                        = D3D11_USAGE_DEFAULT;
+	desc.BindFlags                    = D3D11_BIND_SHADER_RESOURCE;
+	desc.CPUAccessFlags               = 0;
+								      
+	subResource.pSysMem               = image_data;
+	subResource.SysMemPitch           = desc.Width * 4;
+	subResource.SysMemSlicePitch      = 0;
+
+	g_pDevice->CreateTexture2D(&desc, &subResource, &pTexture);
+
+	// Create texture view
+	ZeroMemory(&srvDesc, sizeof(srvDesc));
+	srvDesc.Format                    = DXGI_FORMAT_R8G8B8A8_UNORM;
+	srvDesc.ViewDimension             = D3D11_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Texture2D.MipLevels       = desc.MipLevels;
+	srvDesc.Texture2D.MostDetailedMip = 0;
+
+	if (pTexture)
+	{
+		g_pDevice->CreateShaderResourceView(pTexture, &srvDesc, out_srv);
+	}
+	pTexture->Release();
+
+	//stbi_image_free(image_data);
+
+	return true;
 }
 
 //#################################################################################

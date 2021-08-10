@@ -98,6 +98,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="hooks\chlclient">
+      <UniqueIdentifier>{c1be0e46-773d-4136-893f-ec9400502580}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\shared\utility.cpp">
@@ -177,6 +180,24 @@
     </ClCompile>
     <ClCompile Include="CGameConsole.cpp">
       <Filter>overlay</Filter>
+    </ClCompile>
+    <ClCompile Include="CHLClient.cpp">
+      <Filter>hooks\chlclient</Filter>
+    </ClCompile>
+    <ClCompile Include="classes.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\imgui\src\imgui_utility.cpp">
+      <Filter>shared\libraries\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="CServerBrowser.cpp">
+      <Filter>overlay</Filter>
+    </ClCompile>
+    <ClCompile Include="serverlisting.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\imgui\src\imgui_stdlib.cpp">
+      <Filter>shared\libraries\imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -557,6 +578,30 @@
     </ClInclude>
     <ClInclude Include="CGameConsole.h">
       <Filter>overlay\include</Filter>
+    </ClInclude>
+    <ClInclude Include="CHLClient.h">
+      <Filter>hooks\chlclient</Filter>
+    </ClInclude>
+    <ClInclude Include="enums.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\imgui\include\imgui_utility.h">
+      <Filter>shared\libraries\imgui\include</Filter>
+    </ClInclude>
+    <ClInclude Include="CServerBrowser.h">
+      <Filter>overlay\include</Filter>
+    </ClInclude>
+    <ClInclude Include="serverlisting.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\include\httplib.h">
+      <Filter>shared\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\include\json.hpp">
+      <Filter>shared\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\imgui\include\imgui_stdlib.h">
+      <Filter>shared\libraries\imgui\include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -204,6 +204,8 @@
     <ClInclude Include="..\external\imgui\include\imgui_impl_dx11.h" />
     <ClInclude Include="..\external\imgui\include\imgui_impl_win32.h" />
     <ClInclude Include="..\external\imgui\include\imgui_internal.h" />
+    <ClInclude Include="..\external\imgui\include\imgui_stdlib.h" />
+    <ClInclude Include="..\external\imgui\include\imgui_utility.h" />
     <ClInclude Include="..\external\imgui\include\imstb_rectpack.h" />
     <ClInclude Include="..\external\imgui\include\imstb_textedit.h" />
     <ClInclude Include="..\external\imgui\include\imstb_truetype.h" />
@@ -301,13 +303,18 @@
     <ClInclude Include="..\external\spdlog\include\stopwatch.h" />
     <ClInclude Include="..\external\spdlog\include\tweakme.h" />
     <ClInclude Include="..\external\spdlog\include\version.h" />
+    <ClInclude Include="..\shared\include\httplib.h" />
+    <ClInclude Include="..\shared\include\json.hpp" />
     <ClInclude Include="..\shared\include\utility.h" />
+    <ClInclude Include="CHLClient.h" />
     <ClInclude Include="classes.h" />
     <ClInclude Include="CNetChan.h" />
     <ClInclude Include="ConCommand.h" />
     <ClInclude Include="console.h" />
+    <ClInclude Include="CServerBrowser.h" />
     <ClInclude Include="CVEngineServer.h" />
     <ClInclude Include="EbisuSDK.h" />
+    <ClInclude Include="enums.h" />
     <ClInclude Include="hooks.h" />
     <ClInclude Include="IAppSystem.h" />
     <ClInclude Include="IConVar.h" />
@@ -317,6 +324,7 @@
     <ClInclude Include="opcptc.h" />
     <ClInclude Include="CGameConsole.h" />
     <ClInclude Include="QHull.h" />
+    <ClInclude Include="serverlisting.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="r5dev.h" />
     <ClInclude Include="rtech.h" />
@@ -344,18 +352,26 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\external\imgui\src\imgui_stdlib.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\external\imgui\src\imgui_tables.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\external\imgui\src\imgui_utility.cpp" />
     <ClCompile Include="..\external\imgui\src\imgui_widgets.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\shared\utility.cpp" />
+    <ClCompile Include="CHLClient.cpp" />
+    <ClCompile Include="classes.cpp" />
     <ClCompile Include="CNetChan.cpp" />
     <ClCompile Include="ConCommand.cpp" />
     <ClCompile Include="console.cpp" />
+    <ClCompile Include="CServerBrowser.cpp" />
     <ClCompile Include="CVEngineServer.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="EbisuSDK.cpp" />
@@ -368,6 +384,7 @@
     <ClCompile Include="opcptc.cpp" />
     <ClCompile Include="CGameConsole.cpp" />
     <ClCompile Include="QHull.cpp" />
+    <ClCompile Include="serverlisting.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
