@@ -362,12 +362,11 @@ HRESULT __stdcall GetResizeBuffers(IDXGISwapChain* pSwapChain, UINT nBufferCount
 	g_bPresentHooked  = false;
 
 	///////////////////////////////////////////////////////////////////////////////
-	ImGui_ImplDX11_InvalidateDeviceObjects();
-
+	//ImGui_ImplDX11_InvalidateDeviceObjects();
 	DestroyRenderTarget();
-	CreateViewPort(nWidth, nHeight);
+	//CreateViewPort(nWidth, nHeight);
+	//ImGui_ImplDX11_CreateDeviceObjects();
 
-	ImGui_ImplDX11_CreateDeviceObjects();
 	///////////////////////////////////////////////////////////////////////////////
 	return g_oResizeBuffers(pSwapChain, nBufferCount, nWidth, nHeight, dxFormat, nSwapChainFlags);
 }

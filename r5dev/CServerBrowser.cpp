@@ -213,47 +213,48 @@ void CServerBrowser::ServerBrowserSection()
 
     const float FooterHeight = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
     ImGui::BeginChild("ServerListChild", { 0, -FooterHeight }, true, ImGuiWindowFlags_AlwaysVerticalScrollbar);
-    ImGui::BeginTable("##ServerBrowser_ServerList", 4, ImGuiTableFlags_Resizable);
     {
-        ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_WidthStretch, 35);
-        ImGui::TableSetupColumn("Map", ImGuiTableColumnFlags_WidthStretch, 25);
-        ImGui::TableSetupColumn("Port", ImGuiTableColumnFlags_WidthStretch, 10);
-        ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch, 8);
-        ImGui::TableHeadersRow();
-
-        for (ServerListing* server : ServerList)
+        if (ImGui::BeginTable("##ServerBrowser_ServerList", 4, ImGuiTableFlags_Resizable))
         {
-            const char* name = server->name.c_str();
-            const char* map = server->map.c_str();
-            const char* port = server->port.c_str();
+            ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_WidthStretch, 35);
+            ImGui::TableSetupColumn("Map", ImGuiTableColumnFlags_WidthStretch, 25);
+            ImGui::TableSetupColumn("Port", ImGuiTableColumnFlags_WidthStretch, 10);
+            ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch, 8);
+            ImGui::TableHeadersRow();
 
-            if (ServerBrowserFilter.PassFilter(name)
-                || ServerBrowserFilter.PassFilter(map)
-                || ServerBrowserFilter.PassFilter(port))
+            for (ServerListing* server : ServerList)
             {
-                ImGui::TableNextColumn();
-                ImGui::Text(name);
+                const char* name = server->name.c_str();
+                const char* map = server->map.c_str();
+                const char* port = server->port.c_str();
 
-                ImGui::TableNextColumn();
-                ImGui::Text(map);
-
-                ImGui::TableNextColumn();
-                ImGui::Text(port);
-
-                ImGui::TableNextColumn();
-                std::string selectButtonText = "Connect##";
-                selectButtonText += (server->name + server->ip + server->map);
-
-                if (ImGui::Button(selectButtonText.c_str()))
+                if (ServerBrowserFilter.PassFilter(name)
+                    || ServerBrowserFilter.PassFilter(map)
+                    || ServerBrowserFilter.PassFilter(port))
                 {
-                    SelectedServer = server;
-                    server->Select();
+                    ImGui::TableNextColumn();
+                    ImGui::Text(name);
+
+                    ImGui::TableNextColumn();
+                    ImGui::Text(map);
+
+                    ImGui::TableNextColumn();
+                    ImGui::Text(port);
+
+                    ImGui::TableNextColumn();
+                    std::string selectButtonText = "Connect##";
+                    selectButtonText += (server->name + server->ip + server->map);
+
+                    if (ImGui::Button(selectButtonText.c_str()))
+                    {
+                        SelectedServer = server;
+                        server->Select();
+                    }
                 }
             }
-
+            ImGui::EndTable();
         }
     }
-    ImGui::EndTable();
     ImGui::EndChild();
 
     ImGui::Separator();
