@@ -101,6 +101,12 @@
     <Filter Include="hooks\chlclient">
       <UniqueIdentifier>{c1be0e46-773d-4136-893f-ec9400502580}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sdk">
+      <UniqueIdentifier>{b4ae4a4a-47b6-4a31-8ad7-3e8800053635}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sdk\include">
+      <UniqueIdentifier>{cbfe2775-edd4-4993-a743-c5353a9a2bad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\shared\utility.cpp">
@@ -184,20 +190,20 @@
     <ClCompile Include="CHLClient.cpp">
       <Filter>hooks\chlclient</Filter>
     </ClCompile>
-    <ClCompile Include="classes.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
     <ClCompile Include="..\external\imgui\src\imgui_utility.cpp">
       <Filter>shared\libraries\imgui</Filter>
     </ClCompile>
     <ClCompile Include="CServerBrowser.cpp">
       <Filter>overlay</Filter>
     </ClCompile>
-    <ClCompile Include="serverlisting.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
     <ClCompile Include="..\external\imgui\src\imgui_stdlib.cpp">
       <Filter>shared\libraries\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="classes.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="serverlisting.cpp">
+      <Filter>sdk</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -555,14 +561,8 @@
     <ClInclude Include="r5dev.h">
       <Filter>core\include</Filter>
     </ClInclude>
-    <ClInclude Include="id3dx.h">
-      <Filter>core\include</Filter>
-    </ClInclude>
     <ClInclude Include="input.h">
       <Filter>hooks\winapi</Filter>
-    </ClInclude>
-    <ClInclude Include="classes.h">
-      <Filter>core\include</Filter>
     </ClInclude>
     <ClInclude Include="EbisuSDK.h">
       <Filter>hooks\ebisu</Filter>
@@ -582,17 +582,11 @@
     <ClInclude Include="CHLClient.h">
       <Filter>hooks\chlclient</Filter>
     </ClInclude>
-    <ClInclude Include="enums.h">
-      <Filter>core\include</Filter>
-    </ClInclude>
     <ClInclude Include="..\external\imgui\include\imgui_utility.h">
       <Filter>shared\libraries\imgui\include</Filter>
     </ClInclude>
     <ClInclude Include="CServerBrowser.h">
       <Filter>overlay\include</Filter>
-    </ClInclude>
-    <ClInclude Include="serverlisting.h">
-      <Filter>core\include</Filter>
     </ClInclude>
     <ClInclude Include="..\shared\include\httplib.h">
       <Filter>shared\include</Filter>
@@ -602,6 +596,18 @@
     </ClInclude>
     <ClInclude Include="..\external\imgui\include\imgui_stdlib.h">
       <Filter>shared\libraries\imgui\include</Filter>
+    </ClInclude>
+    <ClInclude Include="id3dx.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="classes.h">
+      <Filter>sdk\include</Filter>
+    </ClInclude>
+    <ClInclude Include="serverlisting.h">
+      <Filter>sdk\include</Filter>
+    </ClInclude>
+    <ClInclude Include="enums.h">
+      <Filter>sdk\include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
