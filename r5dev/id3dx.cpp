@@ -329,7 +329,7 @@ void CreateViewPort( UINT nWidth, UINT nHeight)
 
 void DestroyRenderTarget()
 {
-	if (nullptr != g_pRenderTargetView)
+	if (g_pRenderTargetView != nullptr)
 	{
 		g_pRenderTargetView->Release();
 		g_pRenderTargetView = nullptr;

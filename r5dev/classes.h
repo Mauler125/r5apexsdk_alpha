@@ -25,9 +25,9 @@ public:
 	}
 
 private:
-	char pad_0000[16]; //0x0000
+	char pad_0000[16];   //0x0000
 public:
-	bool m_bEnabled; //0x0010 IsInputEnabled variable.
+	bool m_bEnabled;     //0x0010 IsInputEnabled variable.
 	bool m_bPumpEnabled; //0x0011 EnabledMessagePump variable.
 };
 
@@ -117,20 +117,20 @@ public:
 
 	// Datatypes aren't accurate. But full fill the actual byte distance.
 public:
-	void* vtable; // 0x0000
-	__int64 m_iMaxKeyValuesSize; // 0x0008
+	void* vtable;                       // 0x0000
+	__int64 m_iMaxKeyValuesSize;        // 0x0008
 private:
-	char gap10[240]; // 0x0010
+	char gap10[240];                    // 0x0010
 public:
 	__int32 m_KvConditionalSymbolTable; // 0x0100
 private:
-	char gap104[4]; // 0x0104
+	char gap104[4];                     // 0x0104
 public:
-	__int64 field_108; // 0x0108
+	__int64 field_108;                  // 0x0108
 private:
-	char gap110[32]; // 0x0110
+	char gap110[32];                    // 0x0110
 public:
-	int m_mutex; // 0x0130
+	int m_mutex;                        // 0x0130
 };
 
 class KeyValues
@@ -202,53 +202,53 @@ public:
 	}
 
 public:
-	unsigned __int32 m_iKeyName : 24; // 0x0000
-	unsigned __int32 m_iKeyNameCaseSensitive : 8; // 0x0003
-	char* m_sValue; // 0x0008
-	wchar_t* m_wsValue; // 0x0010
-	int m_Value; // 0x0018
+	unsigned __int32 m_iKeyName : 24;             //0x0000
+	unsigned __int32 m_iKeyNameCaseSensitive : 8; //0x0003
+	char* m_sValue;                               //0x0008
+	wchar_t* m_wsValue;                           //0x0010
+	int m_Value;                                  //0x0018
 private:
-	char gap1C[12]; // 0x0020
+	char gap1C[12];                               //0x0020
 public:
-	char m_iDataType; // 0x0028
-	unsigned __int16 m_iKeyNameCaseSensitive2; // 0x002A
-	KeyValues* m_pPeer; // 0x0030
-	KeyValues* m_pSub; // 0x0038
-	KeyValues* m_pChain; // 0x0040
+	char m_iDataType;                             //0x0028
+	unsigned __int16 m_iKeyNameCaseSensitive2;    //0x002A
+	KeyValues* m_pPeer;                           //0x0030
+	KeyValues* m_pSub;                            //0x0038
+	KeyValues* m_pChain;                          //0x0040
 };
 
 struct Vector3 // Implement the proper class of this at some point.
 {
-	float x; // 0x0000
-	float y; // 0x0004
-	float z; // 0x0008
+	float x; //0x0000
+	float y; //0x0004
+	float z; //0x0008
 };
 
 struct QAngle // Implement the proper class of this at some point.
 {
 	float pitch; //0x0000
-	float yaw; // 0x0004
-	float roll; // 0x0008
+	float yaw;   //0x0004
+	float roll;  //0x0008
 };
 
 class CHostState
 {
 public:
-	__int32 m_iCurrentState; //0x0000
-	__int32 m_iNextState; //0x0004
-	Vector3 m_vecLocation; //0x0008
-	QAngle m_angLocation; //0x0014
-	char m_levelName[64]; //0x0020
-	char m_mapGroupName[256]; //0x0060
-	char m_landMarkName[256]; //0x0160
-	float m_flShortFrameTime; //0x0260
-	bool m_bActiveGame; //0x0264
-	bool m_bRememberLocation; //0x0265
-	bool m_bBackgroundLevel; //0x0266
-	bool m_bWaitingForConnection; //0x0267
-	bool m_bSplitScreenConnect; //0x0268
+	__int32 m_iCurrentState;                 //0x0000
+	__int32 m_iNextState;                    //0x0004
+	Vector3 m_vecLocation;                   //0x0008
+	QAngle m_angLocation;                    //0x0014
+	char m_levelName[64];                    //0x0020
+	char m_mapGroupName[256];                //0x0060
+	char m_landMarkName[256];                //0x0160
+	float m_flShortFrameTime;                //0x0260
+	bool m_bActiveGame;                      //0x0264
+	bool m_bRememberLocation;                //0x0265
+	bool m_bBackgroundLevel;                 //0x0266
+	bool m_bWaitingForConnection;            //0x0267
+	bool m_bSplitScreenConnect;              //0x0268
 	bool m_bGameHasShutDownAndFlushedMemory; //0x0269
-	bool m_bWorkshopMapDownloadPending; //0x026A
+	bool m_bWorkshopMapDownloadPending;      //0x026A
 };
 
 class CHLClient
@@ -265,43 +265,52 @@ class ConCommandBase
 {
 public:
 	void* m_pConCommandBaseVTable; //0x0000
-	ConCommandBase* m_pNext; //0x0008
-	bool m_bRegistered; //0x0010
+	ConCommandBase* m_pNext;       //0x0008
+	bool m_bRegistered;            //0x0010
 private:
-	char pad_0011[7]; //0x0011
+	char pad_0011[7];              //0x0011
 public:
-	const char* m_pszName; //0x0018
-	const char* m_pszHelpString; //0x0020
+	const char* m_pszName;         //0x0018
+	const char* m_pszHelpString;   //0x0020
 private:
-	char pad_0028[16]; //0x0028
+	char pad_0028[16];             //0x0028
 public:
-	__int32 m_nFlags; //0x0038
+	__int32 m_nFlags;              //0x0038
 private:
-	char pad_003C[4]; //0x003C
-}; //Size: 0x0038
+	char pad_003C[4];              //0x003C
+};                           //Size: 0x0038
 
 class ConVar
 {
 public:
-	ConCommandBase m_ConCommandBase; // 0x0000
-	void* m_pConVarVTable; //0x0040
-	ConVar* m_pParent; //0x0048
-	const char* n_pszDefaultValue; //0x0050
-	const char* m_pzsCurrentValue; //0x0058
-	__int64 m_iStringLength; //0x0060
-	float m_flValue; //0x0068
-	__int64 m_iValue; //0x006C
-	bool m_bHasMin; //0x0070
+	ConCommandBase m_ConCommandBase; //0x0000
+	void* m_pConVarVTable;           //0x0040
+	ConVar* m_pParent;               //0x0048
+	const char* n_pszDefaultValue;   //0x0050
+	const char* m_pzsCurrentValue;   //0x0058
+	__int64 m_iStringLength;         //0x0060
+	float m_flValue;                 //0x0068
+	__int64 m_iValue;                //0x006C
+	bool m_bHasMin;                  //0x0070
 private:
-	char pad_0071[3]; //0x0071
+	char pad_0071[3];                //0x0071
 public:
-	float m_flMinValue; //0x0074
-	bool m_bHasMax; //0x0078
+	float m_flMinValue;              //0x0074
+	bool m_bHasMax;                  //0x0078
 private:
-	char pad_0079[3]; //0x0079
+	char pad_0079[3];                //0x0079
 public:
-	float m_flMaxValue; //0x007C
-}; //Size: 0x0080
+	float m_flMaxValue;              //0x007C
+};                             //Size: 0x0080
+
+class CCVarIteratorInternal // Fully reversed table, just look at the virtual function table and rename the function.
+{
+public:
+	virtual void            SetFirst(void) = 0; //0
+	virtual void            Next(void)     = 0; //1
+	virtual	bool            IsValid(void)  = 0; //2
+	virtual ConCommandBase* Get(void)      = 0; //3
+};
 
 class CCVar
 {
@@ -322,6 +331,29 @@ public:
 	{
 		using OriginalFn = void* (__thiscall*)(CCVar*, const char*);
 		return (*reinterpret_cast<OriginalFn**>(this))[18](this, szCommandName);
+	}
+
+	CCVarIteratorInternal* FactoryInternalIterator() // @0x140597C10 in R5pc_r5launch_N1094_CL456479_2019_10_30_05_20_PM
+	{
+		using OriginalFn = CCVarIteratorInternal * (__thiscall*)(CCVar*);
+		return (*reinterpret_cast<OriginalFn**>(this))[41](this);
+	}
+
+	std::unordered_map<std::string, ConCommandBase*> DumpToMap()
+	{
+		std::stringstream ss;
+		CCVarIteratorInternal* itint = FactoryInternalIterator(); // Allocatd new InternalIterator.
+
+		std::unordered_map<std::string, ConCommandBase*> allConVars;
+
+		for (itint->SetFirst(); itint->IsValid(); itint->Next()) // Loop through all instances.
+		{
+			ConCommandBase* command = itint->Get();
+			const char* commandName = command->m_pszName;
+			allConVars[commandName] = command;
+		}
+
+		return allConVars;
 	}
 };
 

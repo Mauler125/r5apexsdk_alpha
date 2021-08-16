@@ -82,7 +82,7 @@ bool LaunchR5Apex(LAUNCHMODE lMode, LAUNCHSTATE lState)
         {
             ///////////////////////////////////////////////////////////////////
             // Load command line arguments from a file on the disk.
-            fopen_s(&sLaunchParams, "platform\\cfg\\startup_debug.cfg", "r");
+            fopen_s(&sLaunchParams, "platform\\cfg\\startup_retail.cfg", "r");
             if (sLaunchParams)
             {
                 while (fread(sArgumentBuffer, sizeof(sArgumentBuffer), 1, sLaunchParams) != NULL)
@@ -96,7 +96,28 @@ bool LaunchR5Apex(LAUNCHMODE lMode, LAUNCHSTATE lState)
             snprintf(sGameExe, sizeof(sGameExe), "%s\\r5apex.exe", sGameDirectory);
             snprintf(sDevDll, sizeof(sDevDll), "%s\\r5apexvtxd64.dll", sGameDirectory);
             snprintf(sCommandLine, sizeof(sCommandDirectory), "%s\\r5apex.exe %s", sGameDirectory, sArgumentBuffer);
-            printf("*** LAUNCHING GAME ***\n");
+            printf("*** LAUNCHING GAME [RETAIL] ***\n");
+            break;
+        }
+        case LAUNCHMODE::DLL_IDBG:
+        {
+            ///////////////////////////////////////////////////////////////////
+            // Load command line arguments from a file on the disk.
+            fopen_s(&sLaunchParams, "platform\\cfg\\startup_debug.cfg", "r");
+            if (sLaunchParams)
+            {
+                while (fread(sArgumentBuffer, sizeof(sArgumentBuffer), 1, sLaunchParams) != NULL)
+                {
+                    fclose(sLaunchParams);
+                }
+            }
+
+            ///////////////////////////////////////////////////////////////////
+            // Format the file paths for the game exe and dll.
+            snprintf(sGameExe, sizeof(sGameExe), "%s\\r5apex.exe", sGameDirectory);
+            snprintf(sDevDll, sizeof(sDevDll), "%s\\r5apexvtxd64d.dll", sGameDirectory);
+            snprintf(sCommandLine, sizeof(sCommandDirectory), "%s\\r5apex.exe %s", sGameDirectory, sArgumentBuffer);
+            printf("*** LAUNCHING GAME [DEBUG]***\n");
             break;
         }
         default:
