@@ -6,25 +6,24 @@
 // Input  : *cmd - flag
 // Output : true if execution is not permitted, false if permitted
 //-----------------------------------------------------------------------------
-bool HConCommand_IsFlagSet(int* cmd, int flag)
+bool HConCommand_IsFlagSet(ConCommandBase* cmd, int flag)
 {
-	int real_flags = *((cmd + (56 / sizeof(int))));
 	if (g_bDebugConsole)
 	{
 		printf("--------------------------------------------------\n");
-		printf(" Flaged: %08X\n", real_flags);
+		printf(" Flaged: %08X\n", cmd->m_nFlags);
 	}
 	// Mask off FCVAR_CHEATS and FCVAR_DEVELOPMENTONLY
-	real_flags &= 0xFFFFBFFD;
+	cmd->m_nFlags &= 0xFFFFBFFD;
 	if (g_bDebugConsole)
 	{
-		printf(" Masked: %08X\n", real_flags);
+		printf(" Masked: %08X\n", cmd->m_nFlags);
 		printf(" Verify: %08X\n", flag);
 		printf("--------------------------------------------------\n");
 	}
 	if (flag & 0x80000) { return true; }
 
-	if (!g_bReturnAllFalse) { return (real_flags & flag) != 0; }
+	if (!g_bReturnAllFalse) { return (cmd->m_nFlags & flag) != 0; }
 	else { return false; } // Returning false on all queries may cause problems
 }
 

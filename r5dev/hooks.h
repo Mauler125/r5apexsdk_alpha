@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include "classes.h"
 #include "IAppSystem.h"
 #include "IConVar.h"
 #include "ConCommand.h"
@@ -32,11 +33,11 @@ namespace
 
 	/* ==== CONCOMMAND ====================================================================================================================================================== */
 	DWORD64 p_ConCommand_IsFlagSet = FindPatternV2("r5apex.exe", (const unsigned char*)"\x85\x51\x38\x0F\x95\xC0\xC3", "xxxxxxx");
-	bool (*ConCommand_IsFlagSet)(int* cmd, int flag) = (bool (*)(int*, int))p_ConCommand_IsFlagSet; /*85 51 38 0F 95 C0 C3*/
+	bool (*ConCommand_IsFlagSet)(ConCommandBase* cmd, int flag) = (bool (*)(ConCommandBase*, int))p_ConCommand_IsFlagSet; /*85 51 38 0F 95 C0 C3*/
 
 	/* ==== ICONVAR ========================================================================================================================================================= */
 	DWORD64 p_IConVar_IsFlagSet = FindPatternV2("r5apex.exe", (const unsigned char*)"\x48\x8B\x41\x48\x85\x50\x38", "xxxxxxx");
-	bool (*IConVar_IsFlagSet)(int** cvar, int flag) = (bool (*)(int**, int))p_IConVar_IsFlagSet; /*48 8B 41 48 85 50 38*/
+	bool (*IConVar_IsFlagSet)(ConVar* cvar, int flag) = (bool (*)(ConVar*, int))p_IConVar_IsFlagSet; /*48 8B 41 48 85 50 38*/
 
 	/* ==== SQUIRREL ======================================================================================================================================================== */
 	DWORD64 p_SQVM_PrintFunc = FindPatternV2("r5apex.exe", (const unsigned char*)"\x48\x8B\xC4\x48\x89\x50\x10\x4C\x89\x40\x18\x4C\x89\x48\x20\x53\x56\x57\x48\x81\xEC\x30\x08\x00\x00\x48\x8B\xDA\x48\x8D\x70\x18\x48\x8B\xF9\xE8\x00\x00\x00\xFF\x48\x89\x74\x24\x28\x48\x8D\x54\x24\x30\x33", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx???xxxxxxxxxxxx");

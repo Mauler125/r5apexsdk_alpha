@@ -74,6 +74,12 @@
     <Filter Include="hooks\system">
       <UniqueIdentifier>{dd8cd058-ead9-400e-9562-de3f7bfb8d5c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sdk">
+      <UniqueIdentifier>{2d680d34-5f10-4285-8d15-6996603146ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sdk\include">
+      <UniqueIdentifier>{420da7ba-d359-4f60-8fe8-56a6b9b6ded3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\shared\include\utility.h">
@@ -406,6 +412,12 @@
     <ClInclude Include="sys.h">
       <Filter>hooks\system</Filter>
     </ClInclude>
+    <ClInclude Include="classes.h">
+      <Filter>sdk\include</Filter>
+    </ClInclude>
+    <ClInclude Include="enums.h">
+      <Filter>sdk\include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="console.cpp">
@@ -455,6 +467,9 @@
     </ClCompile>
     <ClCompile Include="sys.cpp">
       <Filter>hooks\system</Filter>
+    </ClCompile>
+    <ClCompile Include="classes.cpp">
+      <Filter>sdk</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
