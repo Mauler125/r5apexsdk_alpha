@@ -15,7 +15,7 @@ void HEbisuSDK_Init()
 
 	*(char*)(ofs000) = (char)0x1; // <- First Origin boolean check
 	*(char*)(ofs001) = (char)0x1; // <- Second Origin boolean check
-	*(char*)(ofs002) = (char)0x1; // <- Third Origin bolean check
+	*(char*)(ofs002) = (char)0x1; // <- Third Origin boolean check
 	*(char*)(ofs003) = (char)0x1; // <- Gets tested on listenserver for certain concommands
 	*(char*)(ofs004) = (char)0x0; // <- TODO: Enforces Necleus cvar's when not equal to 0
 }

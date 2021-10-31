@@ -412,7 +412,7 @@ bool LoadTextureBuffer(unsigned char* image_data, const int& image_width, const 
 		return false;
 	}
 
-	// Create texture
+	///////////////////////////////////////////////////////////////////////////////
 	ID3D11Texture2D*                pTexture = NULL;
 	D3D11_TEXTURE2D_DESC            desc;
 	D3D11_SUBRESOURCE_DATA          subResource;
@@ -428,7 +428,8 @@ bool LoadTextureBuffer(unsigned char* image_data, const int& image_width, const 
 	desc.Usage                        = D3D11_USAGE_DEFAULT;
 	desc.BindFlags                    = D3D11_BIND_SHADER_RESOURCE;
 	desc.CPUAccessFlags               = 0;
-								      
+
+	///////////////////////////////////////////////////////////////////////////////
 	subResource.pSysMem               = image_data;
 	subResource.SysMemPitch           = desc.Width * 4;
 	subResource.SysMemSlicePitch      = 0;

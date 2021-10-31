@@ -5,9 +5,10 @@
 //-----------------------------------------------------------------------------
 enum class LAUNCHMODE : int
 {
-    DLL_GAME, // Listen server
-    DLL_DEDI, // Dedicated server
-    DLL_IDBG  // Custom debug DLL
+    LM_NULL,
+    LM_DEBUG,   // Debug DLL
+    LM_RELEASE, // Release DLL
+    LM_DEDI     // Dedicated DLL
 };
 
 //-----------------------------------------------------------------------------
@@ -15,6 +16,7 @@ enum class LAUNCHMODE : int
 //-----------------------------------------------------------------------------
 enum class LAUNCHSTATE : int
 {
+    LS_NULL,
     LS_NOCHEATS, // Disabled cheats
     LS_CHEATS,   // Enable cheats
     LS_DEBUG     // Enable debug

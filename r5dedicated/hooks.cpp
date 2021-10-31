@@ -7,6 +7,7 @@
 
 void InstallHooks()
 {
+	GameGlobals::InitGameGlobals();
 	///////////////////////////////////////////////////////////////////////////////
 	// Begin the detour transaction, to hook the the process
 	DetourTransactionBegin();

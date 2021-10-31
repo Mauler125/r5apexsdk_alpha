@@ -2,6 +2,7 @@
 #include "hooks.h"
 #include "console.h"
 #include "iconvar.h"
+#include "opcodes.h"
 #include "concommand.h"
 
 //#############################################################################
@@ -71,8 +72,8 @@ DWORD __stdcall ProcessConsoleWorker(LPVOID)
 
 		///////////////////////////////////////////////////////////////////////
 		// Engine toggles
-		if (sCommand == "toggle net") { ToggleNetTrace(); continue; }
-		if (sCommand == "toggle dev") { ToggleDevCommands(); continue; }
+		if (sCommand == "toggle net") { HEbisuSDK_Init(); ToggleNetTrace(); continue; }
+		if (sCommand == "toggle dev") { HEbisuSDK_Init(); ToggleDevCommands(); continue; }
 		if (sCommand == "toggle fal") { g_bReturnAllFalse = !g_bReturnAllFalse; continue; }
 		///////////////////////////////////////////////////////////////////////
 		// Debug toggles
@@ -82,6 +83,7 @@ DWORD __stdcall ProcessConsoleWorker(LPVOID)
 		// Exec toggles
 		if (sCommand == "1") { CommandExecute(NULL, "exec autoexec_dev"); }
 		if (sCommand == "2") { g_bDebugLoading = !g_bDebugLoading; continue; }
+		if (sCommand == "3") { SetCHostState(); continue; }
 
 		///////////////////////////////////////////////////////////////////////
 		// Execute the command in the r5 SQVM

@@ -15,6 +15,7 @@ void InitializeR5Dedicated()
     printf("|   R5 DEDICATED SERVER ---------------------------------------------------   |\n");
     printf("+-----------------------------------------------------------------------------+\n");
     printf("\n");
+    Sleep(4000);
 }
 
 void TerminateR5Dedicated()
