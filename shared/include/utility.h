@@ -13,7 +13,7 @@ DWORD64 FindPatternV2(const char* szModule, const unsigned char* szPattern, cons
 /////////////////////////////////////////////////////////////////////////////
 // Utility
 void DbgPrint(LPCSTR sFormat, ...);
-void HexDump(const char* szHeader, int nFunc, const void* pData, int nSize);
+void HexDump(const char* szHeader, const char* szLogger, const void* pData, int nSize);
 
 /////////////////////////////////////////////////////////////////////////////
 // Loggers

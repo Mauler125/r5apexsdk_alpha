@@ -116,73 +116,6 @@ DWORD64 FindPatternV2(const char* szModule, const unsigned char* szPattern, cons
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// For finding a string pattern in memory of the process
-std::uint8_t* PatternScan(const char* module, const char* signature)
-{
-    static auto PatternToBytes = [](const char* pattern)
-    {
-        char* PatternStart = const_cast<char*>(pattern); // Cast const away and get start of pattern.
-        char* PatternEnd = PatternStart + std::strlen(pattern); // Get end of pattern.
-
-        std::vector<std::int32_t> Bytes = std::vector<std::int32_t>{ }; // Initialize byte vector.
-
-        for (char* CurrentByte = PatternStart; CurrentByte < PatternEnd; ++CurrentByte)
-        {
-            if (*CurrentByte == '?') // Is current char(byte) a wildcard?
-            {
-                ++CurrentByte; // Skip 1 character.
-
-                if (*CurrentByte == '?') // Is it a double wildcard pattern?
-                {
-                    ++CurrentByte; // If so skip the next space that will come up so we can reach the next byte.
-                }
-
-                Bytes.push_back(-1); // Push the byte back as invalid.
-            }
-            else
-            {
-                // https://stackoverflow.com/a/43860875/12541255
-                // Here we convert our string to a unsigned long integer. We pass our string then we use 16 as the base because we want it as hexadecimal.
-                // Afterwards we push the byte into our bytes vector.
-                Bytes.push_back(std::strtoul(CurrentByte, &CurrentByte, 16));
-            }
-        }
-        return Bytes;
-    };
-
-    const MODULEINFO mInfo = GetModuleInfo(module); // Get module info.
-    const DWORD64 SizeOfModule = (DWORD64)mInfo.SizeOfImage; // Grab the module size.
-    std::uint8_t* ScanBytes = reinterpret_cast<std::uint8_t*>(mInfo.lpBaseOfDll); // Get the base of the module.
-
-    const std::vector<int> PatternBytes = PatternToBytes(signature); // Convert our pattern to a byte array.
-    const std::pair BytesInfo = std::make_pair(PatternBytes.size(), PatternBytes.data()); // Get the size and data of our bytes.
-
-    for (DWORD i = 0ul; i < SizeOfModule - BytesInfo.first; ++i)
-    {
-        bool FoundAddress = true;
-
-        for (DWORD j = 0ul; j < BytesInfo.first; ++j)
-        {
-            // If either the current byte equals to the byte in our pattern or our current byte in the pattern is a wildcard
-            // our if clause will be false.
-            if (ScanBytes[i + j] != BytesInfo.second[j] && BytesInfo.second[j] != -1)
-            {
-                FoundAddress = false;
-                break;
-            }
-        }
-
-        if (FoundAddress)
-        {
-            return &ScanBytes[i];
-        }
-
-    }
-
-    return nullptr;
-}
-
-///////////////////////////////////////////////////////////////////////////////
 //
 void DbgPrint(LPCSTR sFormat, ...)
 {
@@ -202,14 +135,11 @@ void DbgPrint(LPCSTR sFormat, ...)
 
 ///////////////////////////////////////////////////////////////////////////////
 // For dumping data from a buffer to a file on the disk
-void HexDump(const char* szHeader, int nFunc, const void* pData, int nSize)
+void HexDump(const char* szHeader, const char* szLogger, const void* pData, int nSize)
 {
-    static auto g_spddefault_logger = spdlog::basic_logger_mt("default_logger", "platform\\logs\\default.log");
-    static auto g_spdnetchan_logger = spdlog::basic_logger_mt("netchan_logger", "platform\\logs\\NET_Trace.log");
-
     static std::atomic<int> i, j, k = 0;
     static char ascii[17] = { 0 };
-    static auto logger = spdlog::get("default_logger");
+    static auto logger = spdlog::get(szLogger);
     auto pattern = std::make_unique<spdlog::pattern_formatter>("%v", spdlog::pattern_time_type::local, std::string(""));
 
     // Loop until the function returned to the first caller.
@@ -217,9 +147,6 @@ void HexDump(const char* szHeader, int nFunc, const void* pData, int nSize)
 
     k = 1;
     ascii[16] = '\0';
-
-    // Add new loggers here to replace the placeholder.
-    if (nFunc == 0) { logger = g_spdnetchan_logger; }
 
     // Add timestamp.
     logger->set_level(spdlog::level::trace);

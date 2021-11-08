@@ -20,4 +20,3 @@ public:
 	std::string port;
 	std::string password;
 };
-

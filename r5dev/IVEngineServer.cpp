@@ -35,6 +35,7 @@ bool HIVEngineServer_PersistenceAvailable(__int64 thisptr, int index)
 		}
 
 		printf("\n");
+		printf("__________________________________________________\n");
 		printf("# CLIENT_INSTANCE_DETAILS ########################\n");
 		printf("] INDEX: | '#%d'\n", index);
 		printf("] NAME : | '%s'\n", clientName.c_str());

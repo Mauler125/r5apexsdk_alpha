@@ -61,7 +61,7 @@ bool HNET_ReceiveDatagram(int sock, void* inpacket, bool raw)
 		netpacket_t* pkt = (netpacket_t*)inpacket;
 
 		// Log received packet data
-		HexDump("[+] NET_ReceiveDatagram", 0, &pkt->data[i], pkt->wiresize);
+		HexDump("[+] NET_ReceiveDatagram", "netchan_logger", &pkt->data[i], pkt->wiresize);
 	}
 	return result;
 }
@@ -80,7 +80,7 @@ unsigned int HNET_SendDatagram(SOCKET s, const char* buf, int len, int flags)
 	if (result)
 	{
 		// Log transmitted packet data
-		HexDump("[+] NET_SendDatagram", 0, buf, len);
+		HexDump("[+] NET_SendDatagram", "netchan_logger", buf, len);
 	}
 	return result;
 }

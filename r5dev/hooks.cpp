@@ -33,7 +33,7 @@ void InstallHooks()
 	AttachIVEngineServerHooks();
 	AttachCEngineVGuiHooks();
 	AttachCHLClientHooks();
-	//AttachCNetChanHooks();
+	AttachCNetChanHooks();
 	AttachEbisuSDKHooks();
 	AttachSQVMHooks();
 	//AttachSysHooks();

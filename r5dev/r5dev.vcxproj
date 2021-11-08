@@ -328,7 +328,6 @@
     <ClInclude Include="CServerBrowser.h" />
     <ClInclude Include="IVEngineServer.h" />
     <ClInclude Include="EbisuSDK.h" />
-    <ClInclude Include="enums.h" />
     <ClInclude Include="hooks.h" />
     <ClInclude Include="IAppSystem.h" />
     <ClInclude Include="IConVar.h" />

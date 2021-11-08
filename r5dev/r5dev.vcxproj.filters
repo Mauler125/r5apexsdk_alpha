@@ -663,9 +663,6 @@
     <ClInclude Include="serverlisting.h">
       <Filter>sdk\include</Filter>
     </ClInclude>
-    <ClInclude Include="enums.h">
-      <Filter>sdk\include</Filter>
-    </ClInclude>
     <ClInclude Include="..\shared\include\classes.h">
       <Filter>shared\include</Filter>
     </ClInclude>
