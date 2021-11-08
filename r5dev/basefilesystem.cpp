@@ -10,7 +10,7 @@ static std::ostringstream fs_oss;
 static auto fs_ostream_sink = std::make_shared<spdlog::sinks::ostream_sink_st>(fs_oss);
 void HCBaseFileSystem_Warning(void* thisptr, FileWarningLevel_t level, const char* fmt, ...)
 {
-	if (g_pCvar == nullptr || !g_bClassInitialized) // TODO: HACK
+	if (g_pCvar == nullptr || !g_bClassInitialized) // TODO: HACK.
 	{
 		return;
 	}
@@ -22,15 +22,15 @@ void HCBaseFileSystem_Warning(void* thisptr, FileWarningLevel_t level, const cha
 	static bool initialized = false;
 	static char buf[1024];
 
-	static auto iconsole = spdlog::stdout_logger_mt("fs_iconsole"); // in-game console
-	static auto wconsole = spdlog::stdout_logger_mt("fs_wconsole"); // windows console
+	static auto iconsole = spdlog::stdout_logger_mt("fs_warn_iconsole"); // in-game console.
+	static auto wconsole = spdlog::stdout_logger_mt("fs_warn_wconsole"); // windows console.
 
 	fs_oss.str("");
 	fs_oss.clear();
 
 	if (!initialized)
 	{
-		iconsole = std::make_shared<spdlog::logger>("fs_ostream", fs_ostream_sink);
+		iconsole = std::make_shared<spdlog::logger>("fs_warn_ostream", fs_ostream_sink);
 		iconsole->set_pattern("[%S.%e] %v");
 		iconsole->set_level(spdlog::level::debug);
 		wconsole->set_pattern("[%S.%e] %v");

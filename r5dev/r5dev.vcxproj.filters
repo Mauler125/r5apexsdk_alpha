@@ -717,6 +717,9 @@
     <ClInclude Include="interfaces.h">
       <Filter>hooks\common</Filter>
     </ClInclude>
+    <ClInclude Include="logdef.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="r5dev.def">

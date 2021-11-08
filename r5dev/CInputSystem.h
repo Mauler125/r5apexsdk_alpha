@@ -30,5 +30,6 @@ public:
 	bool m_bPumpEnabled; //0x0011 EnabledMessagePump variable.
 };
 
+///////////////////////////////////////////////////////////////////////////////
 extern CInputSystem* g_pInputSystem
 ;

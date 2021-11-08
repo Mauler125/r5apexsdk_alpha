@@ -60,3 +60,6 @@ int SQVM_NativeTest(void* sqvm);
 
 void AttachSQVMHooks();
 void DetachSQVMHooks();
+
+///////////////////////////////////////////////////////////////////////////////
+extern bool g_bSQVM_WarnFuncCalled;

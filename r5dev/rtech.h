@@ -27,4 +27,5 @@ public:
 	unsigned __int64 __fastcall ToGuid(const char* pData);
 };
 
+///////////////////////////////////////////////////////////////////////////////
 extern RTech* g_pRtech;

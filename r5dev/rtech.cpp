@@ -47,4 +47,5 @@ unsigned __int64 __fastcall RTech::ToGuid(const char* pData)
     return 0x633D5F1 * v2 + ((0xFB8C4D96501i64 * (unsigned __int64)(v4 & v10)) >> 24) - 0xAE502812AA7333i64 * (unsigned int)(v3 + v9 / 8);
 }
 
+///////////////////////////////////////////////////////////////////////////////
 RTech* g_pRtech;

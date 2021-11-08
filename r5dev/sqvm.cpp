@@ -1,35 +1,38 @@
 #include "stdafx.h"
+#include "logdef.h"
 #include "sqvm.h"
-#include "CEngineVGui.h"
 #include "IConVar.h"
+#include "CEngineVGui.h"
 
-static std::ostringstream sqvm_p_oss;
-static auto sqvm_p_ostream_sink = std::make_shared<spdlog::sinks::ostream_sink_st>(sqvm_p_oss);
-static auto sqvm_p_log_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>("platform/logs/SQVM_Print.log", true);
 //---------------------------------------------------------------------------------
 // Purpose: prints the output of each VM to the console
 //---------------------------------------------------------------------------------
 void* HSQVM_PrintFunc(void* sqvm, char* fmt, ...)
 {
+	int vmIdx = *(int*)((std::uintptr_t)sqvm + 0x18);
 	static bool initialized = false;
+
 	static char buf[1024];
 	static std::string vmType[3] = { "Script(S):", "Script(C):", "Script(U):" };
 
-	int vmIdx = *(int*)((std::uintptr_t)sqvm + 0x18);
+	static auto iconsole = spdlog::stdout_logger_mt("sqvm_print_iconsole"); // in-game console.
+	static auto wconsole = spdlog::stdout_logger_mt("sqvm_print_wconsole"); // windows console.
+	static auto sqlogger = spdlog::basic_logger_mt("sqvm_print_logger", "platform\\logs\\SQVM_Print.log"); // file logger.
+
 	std::string vmStr = vmType[vmIdx].c_str();
 
-	sqvm_p_oss.str("");
-	sqvm_p_oss.clear();
-
-	static spdlog::logger logger("sqvm_print", { sqvm_p_log_sink, sqvm_p_ostream_sink });
+	g_spd_sqvm_p_oss.str("");
+	g_spd_sqvm_p_oss.clear();
 
 	if (!initialized)
 	{
-		sqvm_p_log_sink->set_level(spdlog::level::debug);
-		sqvm_p_ostream_sink->set_level(spdlog::level::debug);
-		logger.set_level(spdlog::level::debug);
-		logger.set_pattern("[%S.%e] %v");
-
+		iconsole = std::make_shared<spdlog::logger>("sqvm_print_ostream", g_spd_sqvm_p_ostream_sink);
+		iconsole->set_pattern("[%S.%e] %v");
+		iconsole->set_level(spdlog::level::debug);
+		wconsole->set_pattern("[%S.%e] %v");
+		wconsole->set_level(spdlog::level::debug);
+		sqlogger->set_pattern("[%S.%e] %v");
+		sqlogger->set_level(spdlog::level::debug);
 		initialized = true;
 	}
 
@@ -43,72 +46,79 @@ void* HSQVM_PrintFunc(void* sqvm, char* fmt, ...)
 
 	vmStr.append(buf);
 
-	spdlog::debug(vmStr);
-	logger.debug(vmStr);
+	iconsole->debug(vmStr);
+	wconsole->debug(vmStr);
+	sqlogger->debug(vmStr);
 
-	std::string s = sqvm_p_oss.str();
+	std::string s = g_spd_sqvm_p_oss.str();
 	const char* c = s.c_str();
 
-	g_LogSystem.AddLog((LogType_t)vmIdx, s);
-
-	Items.push_back(Strdup(c));
-
+	Items.push_back(Strdup((const char*)c));
 	return NULL;
 }
 
-static bool g_bSQVM_WarnFuncCalled;
-static std::ostringstream sqvm_w_oss;
-static auto ostream_sink_warning = std::make_shared<spdlog::sinks::ostream_sink_st>(sqvm_w_oss);
-static auto log_sink_warning = std::make_shared<spdlog::sinks::basic_file_sink_mt>("platform/logs/SQVM_Warning.txt", true);
 //---------------------------------------------------------------------------------
 // Purpose: prints the warning output of each VM to the console
 //---------------------------------------------------------------------------------
 __int64 HSQVM_WarningFunc(void* sqvm, int a2, int a3, int* stringSize, void** string)
 {
 	__int64 result = SQVM_WarningFunc(sqvm, a2, a3, stringSize, string);
-
-	void* retaddr = _ReturnAddress(); // Get return address.
-
 	if (g_bSQVM_WarnFuncCalled) // Check if its SQVM_Warning calling.
 	{
 		return result; // If not return.
 	}
 
 	static bool initialized = false;
-	static std::string vmType[3] = { "Script(S):WARNING: ", "Script(C):WARNING: ", "Script(U):WARNING: " };
+	static std::string vmType[3] = { "Script(S): WARNING: ", "Script(C): WARNING: ", "Script(U): WARNING: " };
+
+	static auto iconsole = spdlog::stdout_logger_mt("sqvm_warn_iconsole"); // in-game console.
+	static auto wconsole = spdlog::stdout_logger_mt("sqvm_warn_wconsole"); // windows console.
+	static auto sqlogger = spdlog::basic_logger_mt("sqvm_warn_logger", "platform\\logs\\SQVM_Warn.log"); // file logger.
 
 	int vmIdx = *(int*)((std::uintptr_t)sqvm + 0x18);
 	std::string vmStr = vmType[vmIdx].c_str();
 
-	sqvm_w_oss.str("");
-	sqvm_w_oss.clear();
+	g_spd_sqvm_w_oss.str("");
+	g_spd_sqvm_w_oss.clear();
 
-	static spdlog::logger logger("sqvm_warning", { log_sink_warning, ostream_sink_warning });
-
-	log_sink_warning->set_pattern("[%S.%e] %v\n");
-	ostream_sink_warning->set_pattern("[%S.%e] %v\n");
-	logger.set_pattern("[%S.%e] %v\n");
 	if (!initialized)
 	{
-		log_sink_warning->set_level(spdlog::level::debug);
-		log_sink_warning->set_pattern("[%S.%e] %v\n");
-		ostream_sink_warning->set_level(spdlog::level::debug);
-		ostream_sink_warning->set_pattern("[%S.%e] %v\n");
+		iconsole = std::make_shared<spdlog::logger>("sqvm_warn_ostream", g_spd_sqvm_p_ostream_sink);
+		iconsole->set_pattern("[%S.%e] %v\n");
+		iconsole->set_level(spdlog::level::debug);
+		wconsole->set_pattern("[%S.%e] %v\n");
+		wconsole->set_level(spdlog::level::debug);
+		sqlogger->set_pattern("[%S.%e] %v\n");
+		sqlogger->set_level(spdlog::level::debug);
 		initialized = true;
 	}
 
 	std::string stringConstructor((char*)*string, *stringSize); // Get string from memory via std::string constructor.
 	vmStr.append(stringConstructor);
 
-	spdlog::info(vmStr + "\n");
-	logger.debug(vmStr + "\n");
-
-	std::string s = sqvm_w_oss.str();
+	std::string s = g_spd_sqvm_w_oss.str();
 	const char* c = s.c_str();
 
-	g_LogSystem.AddLog((LogType_t)vmIdx, s);
+	if (g_bClassInitialized && g_pCvar->FindVar("sq_showvmwarning")->m_iValue > 0)
+	{
+		sqlogger->debug(vmStr); // Emit to file.
+	}
+	if (g_bClassInitialized && g_pCvar->FindVar("sq_showvmwarning")->m_iValue > 1)
+	{
+		iconsole->debug(vmStr); // Emit to in-game console.
+		wconsole->debug(vmStr); // Emit to windows console.
 
-	Items.push_back(Strdup(c));
+		std::string s = g_spd_sqvm_w_oss.str();
+		const char* c = s.c_str();
+		Items.push_back(Strdup(c));
+	}
+	if (g_bClassInitialized && g_pCvar->FindVar("sq_showvmwarning")->m_iValue > 2)
+	{
+		g_pLogSystem.AddLog((LogType_t)vmIdx, s);
+		const char* c = s.c_str();
+		Items.push_back(Strdup(c));
+	}
+
 	g_bSQVM_WarnFuncCalled = false;
 
 	return result;
@@ -145,11 +155,12 @@ __int64 HSQVM_LoadRson(const char* rson_name)
 	{
 		if (g_bClassInitialized && g_pCvar->FindVar("sq_showrsonloading")->m_iValue > 0)
 		{
-			printf("\n");
-			printf("##################################################\n");
-			printf("] '%s'\n", filepath);
-			printf("##################################################\n");
-			printf("\n");
+			spdlog::debug("\n");
+			spdlog::debug("Native(E):______________________________________________________________\n");
+			spdlog::debug("Native(E):# RSON_DISK_PATH #############################################\n");
+			spdlog::debug("Native(E):] '{}'\n", filepath);
+			spdlog::debug("Native(E):##############################################################\n");
+			spdlog::debug("\n");
 		}
 		return SQVM_LoadRson(filepath);
 	}
@@ -157,11 +168,12 @@ __int64 HSQVM_LoadRson(const char* rson_name)
 	{
 		if (g_bClassInitialized && g_pCvar->FindVar("sq_showrsonloading")->m_iValue > 0)
 		{
-			printf("\n");
-			printf("##################################################\n");
-			printf("] '%s'\n", rson_name);
-			printf("##################################################\n");
-			printf("\n");
+			spdlog::debug("\n");
+			spdlog::debug("Native(E):______________________________________________________________\n");
+			spdlog::debug("Native(E):# RSON_VPK_PATH ##############################################\n");
+			spdlog::debug("Native(E):] '{}'\n", rson_name);
+			spdlog::debug("Native(E):##############################################################\n");
+			spdlog::debug("\n");
 		}
 	}
 	return SQVM_LoadRson(rson_name);
@@ -186,7 +198,7 @@ bool HSQVM_LoadScript(void* sqvm, const char* script_path, const char* script_na
 
 	if (g_bClassInitialized && g_pCvar->FindVar("sq_showscriptloading")->m_iValue > 0)
 	{
-		printf("Native(E):Loading SQVM Script '%s'\n", filepath);
+		spdlog::debug("Native(E):Loading SQVM Script '{}'\n", filepath);
 	}
 
 	// Returns true if the script exists on the disk
@@ -197,7 +209,7 @@ bool HSQVM_LoadScript(void* sqvm, const char* script_path, const char* script_na
 
 	if (g_bClassInitialized && g_pCvar->FindVar("sq_showscriptloading")->m_iValue > 0)
 	{
-		printf("Native(E):FAILED. Try SP / VPK for '%s'\n", filepath);
+		spdlog::debug("Native(E):FAILED. Try SP / VPK for '{}'\n", filepath);
 	}
 
 	///////////////////////////////////////////////////////////////////////////////
@@ -257,3 +269,6 @@ void DetachSQVMHooks()
 	DetourDetach((LPVOID*)&SQVM_LoadRson, &HSQVM_LoadRson);
 	DetourDetach((LPVOID*)&SQVM_LoadScript, &HSQVM_LoadScript);
 }
+
+///////////////////////////////////////////////////////////////////////////////
+bool g_bSQVM_WarnFuncCalled;

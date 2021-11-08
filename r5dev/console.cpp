@@ -63,7 +63,7 @@ void SetupConsole()
 	
 	if (hThread0)
 	{
-		printf("THREAD ID: %ld\n\n", threadId0);
+		spdlog::debug("THREAD ID: {}\n\n", threadId0);
 		CloseHandle(hThread0);
 	}
 }

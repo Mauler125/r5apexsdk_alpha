@@ -1,10 +1,6 @@
 #pragma once
 #include "stdafx.h"
 
-int HCEngineVGui_Paint(void* thisptr, int mode);
-void AttachCEngineVGuiHooks();
-void DetachCEngineVGuiHooks();
-
 enum class LogType_t : int
 {
 	SCRIPT_SERVER,
@@ -45,4 +41,10 @@ namespace
 	int (*CEngineVGui_Paint)(void* thisptr, int mode) = (int (*)(void*, int))p_CEngineVGui_Paint; /*41 55 41 56 48 83 EC 78 44 8B EA*/
 }
 
-extern CLogSystem g_LogSystem;
+///////////////////////////////////////////////////////////////////////////////
+int HCEngineVGui_Paint(void* thisptr, int mode);
+void AttachCEngineVGuiHooks();
+void DetachCEngineVGuiHooks();
+
+///////////////////////////////////////////////////////////////////////////////
+extern CLogSystem g_pLogSystem;

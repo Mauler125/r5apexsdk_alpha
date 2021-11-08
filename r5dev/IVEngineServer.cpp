@@ -34,16 +34,16 @@ bool HIVEngineServer_PersistenceAvailable(__int64 thisptr, int index)
 			ipAddress = ss.str();
 		}
 
-		printf("\n");
-		printf("__________________________________________________\n");
-		printf("# CLIENT_INSTANCE_DETAILS ########################\n");
-		printf("] INDEX: | '#%d'\n", index);
-		printf("] NAME : | '%s'\n", clientName.c_str());
-		printf("] OID  : | '%lld'\n", originID);
-		printf("] UID  : | '%lld'\n", clientID);
-		printf("] IPADR: | '%s'\n", ipAddress.c_str());
-		printf("##################################################\n");
-		printf("\n");
+		spdlog::debug("\n");
+		spdlog::debug("Native(S):______________________________________________________________\n");
+		spdlog::debug("Native(S):# CLIENT_INSTANCE_DETAILS ####################################\n");
+		spdlog::debug("Native(S):] INDEX: | '#{}'\n", index);
+		spdlog::debug("Native(S):] NAME : | '{}'\n", clientName.c_str());
+		spdlog::debug("Native(S):] OID  : | '{}'\n", originID);
+		spdlog::debug("Native(S):] UID  : | '{}'\n", clientID);
+		spdlog::debug("Native(S):] IPADR: | '{}'\n", ipAddress.c_str());
+		spdlog::debug("Native(S):##############################################################\n");
+		spdlog::debug("\n");
 		isPersistenceVarSet[index] = true;
 	}
 	///////////////////////////////////////////////////////////////////////////

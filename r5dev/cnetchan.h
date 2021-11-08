@@ -42,6 +42,7 @@ namespace
 	void (*NetChan_Shutdown)(void* thisptr, const char* a0, unsigned __int8 a1, char a2) = (void (*)(void*, const char*, unsigned __int8, char))p_NetChan_Shutdown; /*48 89 6C 24 18 56 57 41 56 48 83 EC 30 83 B9 D0*/
 }
 
+///////////////////////////////////////////////////////////////////////////////
 bool HNET_ReceiveDatagram(int sock, void* inpacket, bool raw);
 unsigned int HNET_SendDatagram(SOCKET s, const char* buf, int len, int flags);
 void HNET_PrintFunc(const char* fmt, ...);
@@ -50,4 +51,5 @@ void NET_DisconnectClient(CClient* client, const char* reason, unsigned __int8 u
 void AttachCNetChanHooks();
 void DetachCNetChanHooks();
 
+///////////////////////////////////////////////////////////////////////////////
 extern bool g_bTraceNetChannel;

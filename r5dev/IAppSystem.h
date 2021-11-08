@@ -2,12 +2,6 @@
 #include "stdafx.h"
 #include "basetypes.h"
 
-__int64 HIAppSystem_Main(__int64 a1, __int64 a2);
-__int64 HIAppSystem_Create(__int64 a1);
-
-void AttachIAppSystemHooks();
-void DetachIAppSystemHooks();
-
 namespace
 {
 #if defined (GAMEDLL_S1) || defined (GAMEDLL_S1)
@@ -21,3 +15,10 @@ namespace
 	char (*IAppSystem_Create)(__int64 a1) = (char(*)(__int64))p_IAppSystem_Create; /*40 53 48 83 EC 20 80 B9 ?? ?? ?? ?? ?? BB ?? ?? ?? ??*/
 #endif
 }
+
+///////////////////////////////////////////////////////////////////////////////
+__int64 HIAppSystem_Main(__int64 a1, __int64 a2);
+__int64 HIAppSystem_Create(__int64 a1);
+
+void AttachIAppSystemHooks();
+void DetachIAppSystemHooks();

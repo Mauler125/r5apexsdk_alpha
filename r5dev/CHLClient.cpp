@@ -9,7 +9,7 @@ void __fastcall HFrameStageNotify(CHLClient* rcx, ClientFrameStage_t curStage)
 {
 	switch (curStage)
 	{
-		case FRAME_START: // FrameStageNotify gets called every frame by CEngine::Frame with the stage being FRAME_START. We can use this to check/set global variables.
+		case ClientFrameStage_t::FRAME_START: // FrameStageNotify gets called every frame by CEngine::Frame with the stage being FRAME_START. We can use this to check/set global variables.
 		{
 			if (!g_bClassInitialized)
 			{
@@ -21,7 +21,7 @@ void __fastcall HFrameStageNotify(CHLClient* rcx, ClientFrameStage_t curStage)
 			}
 			break;
 		}
-		case FRAME_NET_UPDATE_POSTDATAUPDATE_END:
+		case ClientFrameStage_t::FRAME_NET_UPDATE_POSTDATAUPDATE_END:
 		{
 			if (g_pBanSystem->IsRefuseListValid())
 			{
@@ -61,7 +61,7 @@ void __fastcall HFrameStageNotify(CHLClient* rcx, ClientFrameStage_t curStage)
 		}
 	}
 
-	FrameStageNotify(rcx, curStage);
+	FrameStageNotify(rcx, (int)curStage);
 }
 
 void PatchNetVarConVar()

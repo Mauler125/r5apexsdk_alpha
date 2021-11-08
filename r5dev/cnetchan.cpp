@@ -1,29 +1,28 @@
 #include "stdafx.h"
+#include "logdef.h"
 #include "CNetChan.h"
 #include "CGameConsole.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: hook and log the client's signonstate to the console
 //-----------------------------------------------------------------------------
-static std::ostringstream net_oss;
-static auto net_ostream_sink = std::make_shared<spdlog::sinks::ostream_sink_st>(net_oss);
 void HNET_PrintFunc(const char* fmt, ...)
 {
 	static bool initialized = false;
 	static char buf[1024];
 
-	static auto iconsole = spdlog::stdout_logger_mt("net_iconsole"); // in-game console
-	static auto wconsole = spdlog::stdout_logger_mt("net_wconsole"); // windows console
+	static auto iconsole = spdlog::stdout_logger_mt("net_print_iconsole"); // in-game console
+	static auto wconsole = spdlog::stdout_logger_mt("net_print_wconsole"); // windows console
 
-	net_oss.str("");
-	net_oss.clear();
+	g_spd_net_p_oss.str("");
+	g_spd_net_p_oss.clear();
 
 	if (!initialized)
 	{
-		iconsole = std::make_shared<spdlog::logger>("ostream", net_ostream_sink);
-		iconsole->set_pattern("[%S.%e] %v\n");
+		iconsole = std::make_shared<spdlog::logger>("net_print_ostream", g_spd_net_p_ostream_sink);
+		iconsole->set_pattern("[%S.%e] Native(C):%v\n");
 		iconsole->set_level(spdlog::level::debug);
-		wconsole->set_pattern("[%S.%e] %v\n");
+		wconsole->set_pattern("[%S.%e] Native(C):%v\n");
 		wconsole->set_level(spdlog::level::debug);
 	}
 
@@ -38,7 +37,7 @@ void HNET_PrintFunc(const char* fmt, ...)
 	iconsole->debug(buf);
 	wconsole->debug(buf);
 
-	std::string s = net_oss.str();
+	std::string s = g_spd_net_p_oss.str();
 	const char* c = s.c_str();
 
 	Items.push_back(Strdup((const char*)c));

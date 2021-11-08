@@ -20,5 +20,6 @@ namespace
 	void (*CBaseFileSystem_Warning)(void* thisptr, FileWarningLevel_t level, const char* fmt, ...) = (void (*)(void*, FileWarningLevel_t, const char*, ...))p_CBaseFileSystem_Warning; /*4C 89 4C 24 20 C3 ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? 48*/
 }
 
+///////////////////////////////////////////////////////////////////////////////
 void AttachCBaseFileSystemHooks();
 void DetachCBaseFileSystemHooks();

@@ -212,5 +212,6 @@ public:
 	KeyValues*       m_pChain;                     // 0x0040
 };
 
+///////////////////////////////////////////////////////////////////////////////
 extern CKeyValuesSystem* g_pKeyValuesSystem;
 extern KeyValues** g_pPlaylistKeyValues;

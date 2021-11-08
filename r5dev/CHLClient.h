@@ -3,7 +3,7 @@
 #include "utility.h"
 #include "classes.h"
 
-enum ClientFrameStage_t
+enum class ClientFrameStage_t : int
 {
 	FRAME_UNDEFINED = -1, // (haven't run any frames yet)
 	FRAME_START,
@@ -42,6 +42,7 @@ namespace
 	void (*FrameStageNotify)(void* rcx, int curStage) = (void(*)(void*, int))p_FrameStageNotify; /*48 83 EC 28 89 15 ?? ?? ?? ??*/
 }
 
+///////////////////////////////////////////////////////////////////////////////
 void __fastcall HFrameStageNotify(CHLClient* rcx, ClientFrameStage_t curStage);
 void PatchNetVarConVar();
 

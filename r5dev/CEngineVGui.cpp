@@ -18,7 +18,7 @@ int HCEngineVGui_Paint(void* thisptr, int mode)
 	{
 		fnRenderStart(pCMatSystemSurface);
 
-		g_LogSystem.Update();
+		g_pLogSystem.Update();
 
 		fnRenderEnd();
 	}
@@ -115,4 +115,4 @@ void DetachCEngineVGuiHooks()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-CLogSystem g_LogSystem;
+CLogSystem g_pLogSystem;
