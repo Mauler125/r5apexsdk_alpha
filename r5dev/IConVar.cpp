@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "hooks.h"
 #include "IConVar.h"
+#include "sys_utils.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: test each ConVar query before setting the cvar

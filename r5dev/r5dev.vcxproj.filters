@@ -34,9 +34,6 @@
     <Filter Include="hooks\iconvar">
       <UniqueIdentifier>{e43e352b-3b39-4b42-aa0f-a402c313d351}</UniqueIdentifier>
     </Filter>
-    <Filter Include="hooks\other">
-      <UniqueIdentifier>{08ee0080-878a-4283-b128-8f548628c11b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="hooks\squirrel">
       <UniqueIdentifier>{b6baffa1-eb5f-4e85-876e-4dd446715d2d}</UniqueIdentifier>
     </Filter>
@@ -160,12 +157,6 @@
     <ClCompile Include="CNetChan.cpp">
       <Filter>hooks\cnetchan</Filter>
     </ClCompile>
-    <ClCompile Include="msgbox.cpp">
-      <Filter>hooks\other</Filter>
-    </ClCompile>
-    <ClCompile Include="opcptc.cpp">
-      <Filter>hooks\other</Filter>
-    </ClCompile>
     <ClCompile Include="sqvm.cpp">
       <Filter>hooks\squirrel</Filter>
     </ClCompile>
@@ -208,7 +199,7 @@
     <ClCompile Include="QHull.cpp">
       <Filter>hooks\qhull</Filter>
     </ClCompile>
-    <ClCompile Include="sys.cpp">
+    <ClCompile Include="sys_utils.cpp">
       <Filter>hooks\system</Filter>
     </ClCompile>
     <ClCompile Include="CGameConsole.cpp">
@@ -264,6 +255,12 @@
     </ClCompile>
     <ClCompile Include="rtech.cpp">
       <Filter>hooks\rtech</Filter>
+    </ClCompile>
+    <ClCompile Include="opcptc.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="sys_dll.cpp">
+      <Filter>hooks\system</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -603,12 +600,6 @@
     <ClInclude Include="CNetChan.h">
       <Filter>hooks\cnetchan</Filter>
     </ClInclude>
-    <ClInclude Include="msgbox.h">
-      <Filter>hooks\other</Filter>
-    </ClInclude>
-    <ClInclude Include="opcptc.h">
-      <Filter>hooks\other</Filter>
-    </ClInclude>
     <ClInclude Include="sqvm.h">
       <Filter>hooks\squirrel</Filter>
     </ClInclude>
@@ -633,7 +624,7 @@
     <ClInclude Include="QHull.h">
       <Filter>hooks\qhull</Filter>
     </ClInclude>
-    <ClInclude Include="sys.h">
+    <ClInclude Include="sys_utils.h">
       <Filter>hooks\system</Filter>
     </ClInclude>
     <ClInclude Include="CGameConsole.h">
@@ -719,6 +710,12 @@
     </ClInclude>
     <ClInclude Include="logdef.h">
       <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="opcptc.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="sys_dll.h">
+      <Filter>hooks\system</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

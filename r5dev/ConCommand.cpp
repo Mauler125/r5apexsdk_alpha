@@ -3,6 +3,7 @@
 #include "ConCommand.h"
 #include "CClient.h"
 #include "ConCommandCallback.h"
+#include "sys_utils.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: test each ConCommand query before execution

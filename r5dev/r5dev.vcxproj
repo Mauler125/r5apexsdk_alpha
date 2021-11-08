@@ -335,7 +335,6 @@
     <ClInclude Include="input.h" />
     <ClInclude Include="interfaces.h" />
     <ClInclude Include="mathlib.h" />
-    <ClInclude Include="msgbox.h" />
     <ClInclude Include="opcptc.h" />
     <ClInclude Include="CGameConsole.h" />
     <ClInclude Include="protocol.h" />
@@ -346,7 +345,8 @@
     <ClInclude Include="r5dev.h" />
     <ClInclude Include="rtech.h" />
     <ClInclude Include="sqvm.h" />
-    <ClInclude Include="sys.h" />
+    <ClInclude Include="sys_dll.h" />
+    <ClInclude Include="sys_utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\external\imgui\src\imgui.cpp">
@@ -407,7 +407,6 @@
     <ClCompile Include="IConVar.cpp" />
     <ClCompile Include="id3dx.cpp" />
     <ClCompile Include="input.cpp" />
-    <ClCompile Include="msgbox.cpp" />
     <ClCompile Include="opcptc.cpp" />
     <ClCompile Include="CGameConsole.cpp" />
     <ClCompile Include="QHull.cpp" />
@@ -418,7 +417,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="sqvm.cpp" />
-    <ClCompile Include="sys.cpp" />
+    <ClCompile Include="sys_dll.cpp" />
+    <ClCompile Include="sys_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />

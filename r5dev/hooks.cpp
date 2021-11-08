@@ -11,8 +11,11 @@
 #include "CNetChan.h"
 #include "EbisuSDK.h"
 #include "basefilesystem.h"
+#include "QHull.h"
+#include "rtech.h"
 #include "sqvm.h"
-#include "sys.h"
+#include "sys_dll.h"
+#include "sys_utils.h"
 
 //#################################################################################
 // MANAGEMENT
@@ -36,10 +39,8 @@ void InstallHooks()
 	AttachCNetChanHooks();
 	AttachEbisuSDKHooks();
 	AttachSQVMHooks();
-	//AttachSysHooks();
-	AttachMSGBoxHooks();
-
-
+	AttachSysUtilsHooks();
+	AttachSysDllHooks();
 	AttachCBaseFileSystemHooks();
 
 	///////////////////////////////////////////////////////////////////////////////
@@ -75,9 +76,8 @@ void RemoveHooks()
 	DetachCNetChanHooks();
 	DetachEbisuSDKHooks();
 	DetachSQVMHooks();
-	//DetachSysHooks();
-	DetachMSGBoxHooks();
-
+	DetachSysUtilsHooks();
+	DetachSysDllHooks();
 	DetachCBaseFileSystemHooks();
 
 	///////////////////////////////////////////////////////////////////////////////
@@ -114,8 +114,8 @@ void PrintHAddress() // Test the sigscan results
 	std::cout << "| QHull_PrintError                     : " << std::hex << std::uppercase << p_QHull_PrintError                    << std::setw(8) << " |" << std::endl;
 	std::cout << "| QHull_PrintDebug                     : " << std::hex << std::uppercase << p_QHull_PrintDebug                    << std::setw(8) << " |" << std::endl;
 	std::cout << "+--------------------------------------------------------+" << std::endl;
-	std::cout << "| MSG_EngineError                      : " << std::hex << std::uppercase << p_MSG_EngineError                     << std::setw(8) << " |" << std::endl;
-	std::cout << "| Sys_PrintFunc                        : " << std::hex << std::uppercase << p_Sys_PrintFunc                       << std::setw(8) << " |" << std::endl;
+	std::cout << "| Sys_Error_Internal                   : " << std::hex << std::uppercase << p_Sys_Error_Internal                  << std::setw(8) << " |" << std::endl;
+	std::cout << "| Sys_Error                            : " << std::hex << std::uppercase << p_Sys_Error                           << std::setw(8) << " |" << std::endl;
 	std::cout << "+--------------------------------------------------------+" << std::endl;
 
 	// TODO implement error handling when sigscan fails or result is 0

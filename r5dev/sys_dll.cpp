@@ -1,25 +1,26 @@
 #include "stdafx.h"
-#include "hooks.h"
+#include "sys_dll.h"
 
 //-----------------------------------------------------------------------------
-// Purpose: Engine Error message box
+//	Sys_Error_Internal
+//
 //-----------------------------------------------------------------------------
-int HMSG_EngineError(char* fmt, va_list args)
+int HSys_Error_Internal(char* fmt, va_list args)
 {
 	printf("\n_____________________________________________________________\n");
 	printf("ENGINE ERROR ##################################################\n");
 	vprintf(fmt, args);
 
 	///////////////////////////////////////////////////////////////////////////
-	return MSG_EngineError(fmt, args);
+	return Sys_Error_Internal(fmt, args);
 }
 
-void AttachMSGBoxHooks()
+void AttachSysDllHooks()
 {
-	DetourAttach((LPVOID*)&MSG_EngineError, &HMSG_EngineError);
+	DetourAttach((LPVOID*)&Sys_Error_Internal, &HSys_Error_Internal);
 }
 
-void DetachMSGBoxHooks()
+void DetachSysDllHooks()
 {
-	DetourDetach((LPVOID*)&MSG_EngineError, &HMSG_EngineError);
+	DetourDetach((LPVOID*)&Sys_Error_Internal, &HSys_Error_Internal);
 }

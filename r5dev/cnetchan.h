@@ -40,6 +40,9 @@ namespace
 
 	DWORD64 p_NetChan_Shutdown = FindPatternV2("r5apex.exe", (const unsigned char*)"\x48\x89\x6C\x24\x18\x56\x57\x41\x56\x48\x83\xEC\x30\x83\xB9\xD0", "xxxxxxxxxxxxxxxx");
 	void (*NetChan_Shutdown)(void* thisptr, const char* a0, unsigned __int8 a1, char a2) = (void (*)(void*, const char*, unsigned __int8, char))p_NetChan_Shutdown; /*48 89 6C 24 18 56 57 41 56 48 83 EC 30 83 B9 D0*/
+
+	DWORD64 p_NET_PrintFunc = FindPatternV2("r5apex.exe", (const unsigned char*)"\x48\x89\x54\x24\x10\x4C\x89\x44\x24\x18\x4C\x89\x4C\x24\x20\xC3\x48", "xxxxxxxxxxxxxxxxx");
+	void (*NET_PrintFunc)(const char* a1) = (void(*)(const char*))p_NET_PrintFunc; /*48 89 54 24 10 4C 89 44 24 18 4C 89 4C 24 20 C3 48*/
 }
 
 ///////////////////////////////////////////////////////////////////////////////
