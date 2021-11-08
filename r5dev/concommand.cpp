@@ -26,7 +26,7 @@ bool HConCommand_IsFlagSet(ConCommandBase* cmd, int flag)
 	}
 	if (flag & 0x80000 && g_bClassInitialized && g_pCvar->FindVar("cm_return_false_cmdquery_all")->m_iValue <= 0)
 	{
-		return ConCommand_IsFlagSet;
+		return ConCommand_IsFlagSet(cmd, flag);
 	}
 	if (g_bClassInitialized && g_pCvar->FindVar("cm_return_false_cmdquery_all")->m_iValue > 0)
 	{
@@ -39,7 +39,7 @@ bool HConCommand_IsFlagSet(ConCommandBase* cmd, int flag)
 		return (cmd->m_nFlags & flag) != 0;
 	}
 	// Default behaviour.
-	return ConCommand_IsFlagSet;
+	return ConCommand_IsFlagSet(cmd, flag);
 }
 
 //-----------------------------------------------------------------------------
@@ -83,7 +83,6 @@ void* ConCommand_RegisterCommand(const char* name, const char* helpString, int f
 //-----------------------------------------------------------------------------
 void ConCommand_InitConCommand()
 {
-	printf("Native(E): ConCommand::InitConCommand();\n");
 	//-------------------------------------------------------------------------
 	// CLIENT DLL                                                             |
 	void* gameConsoleCommand   = ConCommand_RegisterCommand("cl_showconsole", "Opens the game console.", 0, CGameConsole_Callback, nullptr);

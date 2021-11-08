@@ -130,11 +130,13 @@ namespace
 	bool (*IConVar_IsFlagSet)(ConVar* cvar, int flag) = (bool (*)(ConVar*, int))p_IConVar_IsFlagSet; /*48 8B 41 48 85 50 38*/
 }
 
-extern CCVar* g_pCvar;
-
+///////////////////////////////////////////////////////////////////////////////
 bool HIConVar_IsFlagSet(ConVar* cvar, int flag);
 void IConVar_InitConVar();
 void IConVar_ClearHostNames();
 
 void AttachIConVarHooks();
 void DetachIConVarHooks();
+
+///////////////////////////////////////////////////////////////////////////////
+extern CCVar* g_pCvar;

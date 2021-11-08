@@ -24,7 +24,7 @@ bool HIConVar_IsFlagSet(ConVar* cvar, int flag)
 	}
 	if (flag & 0x80000 && g_bClassInitialized && g_pCvar->FindVar("cm_return_false_cmdquery_all")->m_iValue > 0)
 	{
-		return IConVar_IsFlagSet;
+		return IConVar_IsFlagSet(cvar, flag);
 	}
 	if (g_bClassInitialized && g_pCvar->FindVar("cm_return_false_cmdquery_all")->m_iValue > 0)
 	{
@@ -37,7 +37,7 @@ bool HIConVar_IsFlagSet(ConVar* cvar, int flag)
 		return (cvar->m_ConCommandBase.m_nFlags & flag) != 0;
 	}
 	// Default behaviour.
-	return IConVar_IsFlagSet;
+	return IConVar_IsFlagSet(cvar, flag);
 }
 
 //-----------------------------------------------------------------------------
@@ -89,7 +89,7 @@ void IConVar_InitConVar()
 	ConVar* squirrelShowRsonLoading   = IConVar_RegisterConVar("sq_showrsonloading", "1", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Logs all 'rson' files loaded by the SQVM.", false, 0.f, false, 0.f, nullptr, nullptr);
 	ConVar* squirrelShowScriptLoading = IConVar_RegisterConVar("sq_showscriptloading", "0", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Logs all scripts loaded by the SQVM to be pre-compiled.", false, 0.f, false, 0.f, nullptr, nullptr);
 	ConVar* squirrelShowVMOutput      = IConVar_RegisterConVar("sq_showvmoutput", "1", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Prints the VM output to the console.", false, 0.f, false, 0.f, nullptr, nullptr);
-	ConVar* squirrelShowVMWarning     = IConVar_RegisterConVar("sq_showvmwarning", "2", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Prints the VM warning output to the console.", false, 0.f, false, 0.f, nullptr, nullptr);
+	ConVar* squirrelShowVMWarning     = IConVar_RegisterConVar("sq_showvmwarning", "1", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Prints the VM warning output to the console. 1 = Log to file. 2 = 1 + log to console. 3 = 1 + 2 + log to overhead console.", false, 0.f, false, 0.f, nullptr, nullptr);
 }
 
 //-----------------------------------------------------------------------------

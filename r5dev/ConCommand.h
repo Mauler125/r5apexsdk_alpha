@@ -89,8 +89,12 @@ namespace
 	bool (*ConCommand_IsFlagSet)(ConCommandBase* cmd, int flag) = (bool (*)(ConCommandBase*, int))p_ConCommand_IsFlagSet; /*85 51 38 0F 95 C0 C3*/
 }
 
+///////////////////////////////////////////////////////////////////////////////
 bool HConCommand_IsFlagSet(ConCommandBase* cmd, int flag);
 void ConCommand_InitConCommand();
 
 void AttachConCommandHooks();
 void DetachConCommandHooks();
+
+///////////////////////////////////////////////////////////////////////////////
+
