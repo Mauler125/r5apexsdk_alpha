@@ -94,7 +94,7 @@
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(SolutionDir)external\detours\include;$(SolutionDir)external\imgui\include;$(SolutionDir)external\spdlog\include;$(SolutionDir)shared\include;$(SolutionDir)r5dev\;$(IncludePath);$(DXSDK_DIR)Include</IncludePath>
     <LibraryPath>$(SolutionDir)external\detours\libs;$(LibraryPath);$(DXSDK_DIR)Lib\x64</LibraryPath>
-    <TargetName>r5apexvtxd</TargetName>
+    <TargetName>r5apexsdkd</TargetName>
     <ReferencePath>$(VC_ReferencesPath_x64);</ReferencePath>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\$(ProjectName)\$(Configuration)\</IntDir>
@@ -192,7 +192,7 @@
       <AdditionalDependencies>detours.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(TargetPath)" "..\..\..\$(TargetFileName)" &amp;&amp; del "..\..\..\r5apexvtxd64.dll" &amp;&amp; rename "..\..\..\$(TargetFileName)" "r5apexvtxd64.dll"</Command>
+      <Command>copy /Y "$(TargetPath)" "..\..\..\$(TargetFileName)" &amp;&amp; del "..\..\..\r5apexsdkd64.dll" &amp;&amp; rename "..\..\..\$(TargetFileName)" "r5apexsdkd64.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
