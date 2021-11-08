@@ -7,7 +7,6 @@
 
 void InstallHooks()
 {
-	GameGlobals::InitGameGlobals();
 	///////////////////////////////////////////////////////////////////////////////
 	// Begin the detour transaction, to hook the the process
 	DetourTransactionBegin();
@@ -15,6 +14,8 @@ void InstallHooks()
 
 	///////////////////////////////////////////////////////////////////////////////
 	// Hook functions
+	AttachIAppSystemHooks();
+	AttachEbisuSDKHooks();
 	AttachIConVarHooks();
 	AttachConCommandHooks();
 	AttachCEngineServerHooks();
@@ -42,6 +43,8 @@ void RemoveHooks()
 
 	///////////////////////////////////////////////////////////////////////////////
 	// Unhook functions
+	AttachIAppSystemHooks();
+	DetachEbisuSDKHooks();
 	DetachIConVarHooks();
 	DetachConCommandHooks();
 	DetachCEngineServerHooks();
@@ -52,79 +55,4 @@ void RemoveHooks()
 	///////////////////////////////////////////////////////////////////////////////
 	// Commit the transaction
 	DetourTransactionCommit();
-}
-
-//#################################################################################
-// TOGGLES
-//#################################################################################
-
-void ToggleDevCommands()
-{
-	static bool bDev = true;
-
-	DetourTransactionBegin();
-	DetourUpdateThread(GetCurrentThread());
-
-	if (!bDev)
-	{
-		AttachIConVarHooks();
-		AttachConCommandHooks();
-		printf("\n");
-		printf("+--------------------------------------------------------+\n");
-		printf("|>>>>>>>>>>>>>| DEVONLY COMMANDS ACTIVATED |<<<<<<<<<<<<<|\n");
-		printf("+--------------------------------------------------------+\n");
-		printf("\n");
-
-	}
-	else
-	{
-		DetachIConVarHooks();
-		DetachConCommandHooks();
-		printf("\n");
-		printf("+--------------------------------------------------------+\n");
-		printf("|>>>>>>>>>>>>| DEVONLY COMMANDS DEACTIVATED |<<<<<<<<<<<<|\n");
-		printf("+--------------------------------------------------------+\n");
-		printf("\n");
-	}
-
-	if (DetourTransactionCommit() != NO_ERROR)
-	{
-		TerminateProcess(GetCurrentProcess(), 0xBAD0C0DE);
-	}
-
-	bDev = !bDev;
-}
-
-void ToggleNetTrace()
-{
-	static bool bNet = false;
-
-	DetourTransactionBegin();
-	DetourUpdateThread(GetCurrentThread());
-
-	if (!bNet)
-	{
-		AttachCNetChanHooks();
-		printf("\n");
-		printf("+--------------------------------------------------------+\n");
-		printf("|>>>>>>>>>>>>>| NETCHANNEL TRACE ACTIVATED |<<<<<<<<<<<<<|\n");
-		printf("+--------------------------------------------------------+\n");
-		printf("\n");
-	}
-	else
-	{
-		DetachCNetChanHooks();
-		printf("\n");
-		printf("+--------------------------------------------------------+\n");
-		printf("|>>>>>>>>>>>>| NETCHANNEL TRACE DEACTIVATED |<<<<<<<<<<<<|\n");
-		printf("+--------------------------------------------------------+\n");
-		printf("\n");
-	}
-
-	if (DetourTransactionCommit() != NO_ERROR)
-	{
-		TerminateProcess(GetCurrentProcess(), 0xBAD0C0DE);
-	}
-
-	bNet = !bNet;
 }

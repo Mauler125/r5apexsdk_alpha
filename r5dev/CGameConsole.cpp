@@ -3,6 +3,7 @@
 #include "id3dx.h"
 #include "console.h"
 #include "CGameConsole.h"
+#include "IVEngineClient.h"
 CGameConsole* g_GameConsole = nullptr;
 
 /*-----------------------------------------------------------------------------
@@ -87,27 +88,6 @@ void CGameConsole::Draw(const char* title, bool* bDraw)
     ImGui::SameLine();
     if (ImGui::BeginPopup("Tools"))
     {
-        g_bToggledDevFlags ? ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0, 255, 0, 255)) : ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(255, 0, 0, 255));
-        if (ImGui::SmallButton("Developer Mode"))
-        {
-            ToggleDevCommands();
-            AddLog("+--------------------------------------------------------+\n");
-            AddLog("|>>>>>>>>>>>>>>| DEVONLY COMMANDS TOGGLED |<<<<<<<<<<<<<<|\n");
-            AddLog("+--------------------------------------------------------+\n");
-            ProcessCommand("exec autoexec");
-        }
-        ImGui::PopStyleColor(); // Pop color override.
-        g_bToggledNetTrace ? ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0, 255, 0, 255)) : ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(255, 0, 0, 255));
-        if (ImGui::SmallButton("Netchannel Trace"))
-        {
-            ToggleNetTrace();
-            AddLog("+--------------------------------------------------------+\n");
-            AddLog("|>>>>>>>>>>>>>>| NETCHANNEL TRACE TOGGLED |<<<<<<<<<<<<<<|\n");
-            AddLog("+--------------------------------------------------------+\n");
-            ProcessCommand("exec netchan");
-        }
-        ImGui::PopStyleColor(); // Pop color override.
-        ImGui::EndPopup();
     }
     if (ImGui::Button("Tools"))
     {
@@ -282,7 +262,7 @@ void CGameConsole::ProcessCommand(const char* command_line)
 
 void CGameConsole::ExecCommand(const char* command_line)
 {
-    CommandExecute(NULL, command_line);
+    IVEngineClient_CommandExecute(NULL, command_line);
 }
 
 ///////////////////////////////////////////////////////////////////////////

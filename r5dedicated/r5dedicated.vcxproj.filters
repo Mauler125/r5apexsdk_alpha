@@ -430,6 +430,9 @@
     <ClInclude Include="..\shared\include\json.hpp">
       <Filter>shared\include</Filter>
     </ClInclude>
+    <ClInclude Include="..\shared\include\classes.h">
+      <Filter>shared\include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="console.cpp">

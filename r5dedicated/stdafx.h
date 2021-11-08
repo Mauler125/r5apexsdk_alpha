@@ -21,17 +21,15 @@
 
 
 // Our headers
-
 #include "spdlog.h"
 #include "sinks/basic_file_sink.h"
 #include "sinks/stdout_sinks.h"
 #include "sinks/ostream_sink.h"
 #include "utility.h"
-//#include "httplib.h"
-//#include "json.hpp"
-/*
+#include "httplib.h"
+#include "json.hpp"
 #include "address.h"
-
+/*
 #pragma once
 
 #define FUNC_AT_ADDRESS(name, funcbody, addr) \

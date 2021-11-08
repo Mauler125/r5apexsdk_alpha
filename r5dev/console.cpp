@@ -1,9 +1,12 @@
 #include "stdafx.h"
 
+#include "rtech.h"
 #include "id3dx.h"
 #include "hooks.h"
 #include "opcptc.h"
 #include "console.h"
+
+#include "IVEngineClient.h"
 
 //#############################################################################
 // INITIALIZATION
@@ -50,6 +53,13 @@ void SetupConsole()
 	DWORD threadId0;
 	DWORD __stdcall ProcessConsoleWorker(LPVOID);
 	HANDLE hThread0 = CreateThread(NULL, 0, ProcessConsoleWorker, NULL, 0, &threadId0);
+
+	// Initialize global spdlog.
+	auto console = spdlog::stdout_logger_mt("console");
+	console->set_pattern("[%S.%e] %v"); // Set pattern.
+	spdlog::set_level(spdlog::level::trace);
+	spdlog::set_default_logger(console); // Set as default.
+	spdlog::flush_every(std::chrono::seconds(5)); // Flush buffers every 5 seconds for every logger.
 	
 	if (hThread0)
 	{
@@ -76,23 +86,18 @@ DWORD __stdcall ProcessConsoleWorker(LPVOID)
 
 		///////////////////////////////////////////////////////////////////////
 		// Engine toggles
-		if (sCommand == "toggle net") { ToggleNetTrace(); CommandExecute(NULL, "exec autoexec_dev"); continue; }
-		if (sCommand == "toggle dev") { ToggleDevCommands(); continue; }
-		if (sCommand == "toggle rep") { g_bReturnAllFalse = !g_bReturnAllFalse; continue; }
 		if (sCommand == "toggle opc") { ToggleOpcodes(); }
 		///////////////////////////////////////////////////////////////////////
 		// Debug toggles
 		if (sCommand == "pattern test") { PrintHAddress(); PrintOAddress(); continue; }
 		if (sCommand == "directx test") { PrintDXAddress(); continue; }
-		if (sCommand == "console test") { g_bDebugConsole = !g_bDebugConsole; continue; }
-		if (sCommand == "loading test") { g_bDebugLoading = !g_bDebugLoading; continue; }
 		///////////////////////////////////////////////////////////////////////
 		// Exec toggles
-		if (sCommand == "1") { CommandExecute(NULL, "exec autoexec_dev"); continue; }
-		if (sCommand == "2") { CommandExecute(NULL, "exec connect5_dev"); continue; }
+		if (sCommand == "1") { IVEngineClient_CommandExecute(NULL, "exec autoexec_dev"); continue; }
+		if (sCommand == "2") { IVEngineClient_CommandExecute(NULL, "exec connect5_dev"); continue; }
 		///////////////////////////////////////////////////////////////////////
 		// Execute the command in the r5 SQVM
-		CommandExecute(NULL, sCommand.c_str());
+		IVEngineClient_CommandExecute(NULL, sCommand.c_str());
 		sCommand.clear();
 
 		///////////////////////////////////////////////////////////////////////

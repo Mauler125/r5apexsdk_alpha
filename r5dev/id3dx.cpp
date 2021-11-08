@@ -3,6 +3,7 @@
 #include "input.h"
 #include "classes.h"
 #include "console.h"
+#include "CInputSystem.h"
 #include "CGameConsole.h"
 #include "CServerBrowser.h"
 
@@ -211,16 +212,16 @@ void GetPresent()
 	}
 
 	///////////////////////////////////////////////////////////////////////////////
-	DWORD_PTR* pSwapChainVtable		        = nullptr;
-	DWORD_PTR* pContextVTable		        = nullptr;
-	DWORD_PTR* pDeviceVTable		        = nullptr;
+	DWORD_PTR* pSwapChainVtable             = nullptr;
+	DWORD_PTR* pContextVTable               = nullptr;
+	DWORD_PTR* pDeviceVTable                = nullptr;
 
-	pSwapChainVtable		  = (DWORD_PTR*)pSwapChain;
-	pSwapChainVtable		  = (DWORD_PTR*)pSwapChainVtable[0];
-	pContextVTable			  = (DWORD_PTR*)pContext;
-	pContextVTable			  = (DWORD_PTR*)pContextVTable[0];
-	pDeviceVTable			  = (DWORD_PTR*)pDevice;
-	pDeviceVTable			  = (DWORD_PTR*)pDeviceVTable[0];
+	pSwapChainVtable          = (DWORD_PTR*)pSwapChain;
+	pSwapChainVtable          = (DWORD_PTR*)pSwapChainVtable[0];
+	pContextVTable            = (DWORD_PTR*)pContext;
+	pContextVTable            = (DWORD_PTR*)pContextVTable[0];
+	pDeviceVTable             = (DWORD_PTR*)pDevice;
+	pDeviceVTable             = (DWORD_PTR*)pDeviceVTable[0];
 
 	int pIDX                  = (int)DXGISwapChainVTbl::Present;
 	int rIDX                  = (int)DXGISwapChainVTbl::ResizeBuffers;
@@ -265,18 +266,17 @@ void DrawImGui()
 
 	if (g_bShowConsole)
 	{
-		InputSystem->EnableInput(false); // Disable input.
+		InputSystem->EnableInput(false); // Disable input to game when console is drawn.
 		DrawConsole(&bShowConsole);
 	}
 	if (g_bShowBrowser)
 	{
-		InputSystem->EnableInput(false); // Disable input.
+		InputSystem->EnableInput(false); // Disable input to game when browser is drawn.
 		DrawBrowser(&bShowBrowser);
 	}
-
 	if (!g_bShowConsole && !g_bShowBrowser)
 	{
-		InputSystem->EnableInput(true); // Disable input.
+		InputSystem->EnableInput(true); // Enable input to game when both are not drawn.
 	}
 
 	ImGui::EndFrame();
@@ -297,7 +297,7 @@ void CreateRenderTarget(IDXGISwapChain* pSwapChain)
 	pSwapChain->GetDesc(&sd);
 	ZeroMemory(&rd, sizeof(rd));
 
-	g_hGameWindow = sd.OutputWindow;
+	g_hGameWindow        = sd.OutputWindow;
 	rd.Format            = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 	rd.ViewDimension     = D3D11_RTV_DIMENSION_TEXTURE2D;
 

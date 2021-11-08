@@ -1,6 +1,6 @@
 #pragma once
 
-class MemoryAddress
+class Address
 {
 public:
 
@@ -15,9 +15,9 @@ public:
 		return ptr;
 	}
 	
-	MemoryAddress() = default;
-	MemoryAddress(std::uintptr_t ptr) : ptr(ptr) {}
-	MemoryAddress(void* ptr) : ptr(std::uintptr_t(ptr)) {}
+	Address() = default;
+	Address(std::uintptr_t ptr) : ptr(ptr) {}
+	Address(void* ptr) : ptr(std::uintptr_t(ptr)) {}
 
 	operator std::uintptr_t() const
 	{
@@ -34,12 +34,12 @@ public:
 		return ptr != NULL;
 	}
 
-	bool operator!= (const MemoryAddress& addr) const
+	bool operator!= (const Address& addr) const
 	{
 		return ptr != addr.ptr;
 	}
 
-	bool operator== (const MemoryAddress& addr) const
+	bool operator== (const Address& addr) const
 	{
 		return ptr == addr.ptr;
 	}
@@ -64,18 +64,18 @@ public:
 		return *reinterpret_cast<T*>(ptr);
 	}
 
-	MemoryAddress Offset(std::ptrdiff_t offset)
+	Address Offset(std::ptrdiff_t offset)
 	{
-		return MemoryAddress(ptr + offset);
+		return Address(ptr + offset);
 	}
 
-	MemoryAddress OffsetSelf(std::ptrdiff_t offset)
+	Address OffsetSelf(std::ptrdiff_t offset)
 	{
 		ptr += offset;
 		return *this;
 	}
 
-	MemoryAddress Deref(int deref = 1)
+	Address Deref(int deref = 1)
 	{
 		std::uintptr_t reference = ptr;
 
@@ -85,10 +85,10 @@ public:
 				reference = *reinterpret_cast<std::uintptr_t*>(reference);
 		}
 
-		return MemoryAddress(reference);
+		return Address(reference);
 	}
 
-	MemoryAddress DerefSelf(int deref = 1)
+	Address DerefSelf(int deref = 1)
 	{
 		while (deref--)
 		{
@@ -105,7 +105,7 @@ public:
 
 		for (auto [byteAtCurrentAddress, i] = std::tuple{ std::uint8_t(), (std::size_t)0 }; i < opcodeArray.size(); i++, reference++) // Loop forward in the ptr class member.
 		{
-			byteAtCurrentAddress = *reinterpret_cast<std::uint8_t*>(reference); // Get byte at current address.
+			byteAtCurrentAddress = *reinterpret_cast<std::uint8_t*>(reference); // Get byte at current Address.
 
 			if (byteAtCurrentAddress != opcodeArray[i]) // If byte at ptr doesn't equal in the byte array return false.
 				return false;
@@ -128,14 +128,14 @@ public:
 
 		for (int i = 0; i < opcodes.size(); i++)
 		{
-			*(std::uint8_t*)(ptr + i) = opcodes[i]; // Write opcodes to address.
+			*(std::uint8_t*)(ptr + i) = opcodes[i]; // Write opcodes to Address.
 		}
 
 		dwSize = opcodes.size();
 		VirtualProtect((void*)ptr, dwSize, oldProt, &oldProt); // Restore protection.
 	}
 
-	MemoryAddress FindPatternSelf(const std::string pattern, const Direction searchDirect, const int opCodesToScan = 100, const std::ptrdiff_t occurence = 1)
+	Address FindPatternSelf(const std::string pattern, const Direction searchDirect, const int opCodesToScan = 100, const std::ptrdiff_t occurence = 1)
 	{
 		static auto PatternToBytes = [](const std::string pattern)
 		{
@@ -206,7 +206,7 @@ public:
 		return *this;
 	}
 
-	MemoryAddress FindPattern(const std::string pattern, const Direction searchDirect, const int opCodesToScan = 100, const std::ptrdiff_t occurence = 1)
+	Address FindPattern(const std::string pattern, const Direction searchDirect, const int opCodesToScan = 100, const std::ptrdiff_t occurence = 1)
 	{
 		static auto PatternToBytes = [](const std::string pattern)
 		{
@@ -266,53 +266,53 @@ public:
 				occurences++;
 				if (occurence == occurences)
 				{
-					return MemoryAddress(&*(ScanBytes + memOffset));
+					return Address(&*(ScanBytes + memOffset));
 				}
 			}
 		}
 
-		return MemoryAddress();
+		return Address();
 	}
 
-	MemoryAddress FollowNearCall(std::ptrdiff_t opcodeOffset = 0x1, std::ptrdiff_t nextInstructionOffset = 0x5)
+	Address FollowNearCall(std::ptrdiff_t opcodeOffset = 0x1, std::ptrdiff_t nextInstructionOffset = 0x5)
 	{
 		return ResolveRelativeAddress(opcodeOffset, nextInstructionOffset);
 	}
 
-	MemoryAddress FollowNearCallSelf(std::ptrdiff_t opcodeOffset = 0x1, std::ptrdiff_t nextInstructionOffset = 0x5)
+	Address FollowNearCallSelf(std::ptrdiff_t opcodeOffset = 0x1, std::ptrdiff_t nextInstructionOffset = 0x5)
 	{
 		return ResolveRelativeAddressSelf(opcodeOffset, nextInstructionOffset);
 	}
 
-	MemoryAddress ResolveRelativeAddressSelf(std::ptrdiff_t registerOffset = 0x0, std::ptrdiff_t nextInstructionOffset = 0x4)
+	Address ResolveRelativeAddressSelf(std::ptrdiff_t registerOffset = 0x0, std::ptrdiff_t nextInstructionOffset = 0x4)
 	{
 		// Skip register.
 		std::uintptr_t skipRegister = ptr + registerOffset;
 
-		// Get 4-byte long relative address.
+		// Get 4-byte long relative Address.
 		std::int32_t relativeAddress = *reinterpret_cast<std::int32_t*>(skipRegister);
 
 		// Get location of next instruction.
 		std::uintptr_t nextInstruction = ptr + nextInstructionOffset;
 
-		// Get function location via adding relative address to next instruction.
+		// Get function location via adding relative Address to next instruction.
 		ptr = nextInstruction + relativeAddress;
 		return *this;
 	}
 
-	MemoryAddress ResolveRelativeAddress(std::ptrdiff_t registerOffset = 0x0, std::ptrdiff_t nextInstructionOffset = 0x4)
+	Address ResolveRelativeAddress(std::ptrdiff_t registerOffset = 0x0, std::ptrdiff_t nextInstructionOffset = 0x4)
 	{
 		// Skip register.
 		std::uintptr_t skipRegister = ptr + registerOffset;
 
-		// Get 4-byte long relative address.
+		// Get 4-byte long relative Address.
 		std::int32_t relativeAddress = *reinterpret_cast<std::int32_t*>(skipRegister);
 
 		// Get location of next instruction.
 		std::uintptr_t nextInstruction = ptr + nextInstructionOffset;
 
-		// Get function location via adding relative address to next instruction.
-		return MemoryAddress(nextInstruction + relativeAddress);
+		// Get function location via adding relative Address to next instruction.
+		return Address(nextInstruction + relativeAddress);
 	}
 
 private:
@@ -334,7 +334,7 @@ public:
 		}
 
 		std::string sectionName = std::string(); // Name of section.
-		std::uintptr_t sectionStartAddress = 0; // Start memory address of section.
+		std::uintptr_t sectionStartAddress = 0; // Start memory Address of section.
 		DWORD sectionSize = 0; // Size of section.
 	};
 
@@ -368,7 +368,7 @@ public:
 		}
 	}
 
-	MemoryAddress PatternSearch(const std::string pattern, const std::ptrdiff_t patternOccurence = 1)
+	Address PatternSearch(const std::string pattern, const std::ptrdiff_t patternOccurence = 1)
 	{
 		static auto PatternToBytes = [](const std::string pattern)
 		{
@@ -401,7 +401,7 @@ public:
 
 		ModuleSections textSection = GetSectionByName(".text"); // Get the .text section.
 		if (!textSection.IsSectionValid())
-			return MemoryAddress();
+			return Address();
 
 		const std::vector<std::int32_t> PatternBytes = PatternToBytes(pattern); // Convert our pattern to a byte array.
 		const std::pair BytesInfo = std::make_pair(PatternBytes.size(), PatternBytes.data()); // Get the size and data of our bytes.
@@ -430,62 +430,62 @@ public:
 			{
 				occurencesFound++; // Increment occurences found counter.
 				if (patternOccurence == occurencesFound) // Is it the occurence we want?
-					return MemoryAddress(&StartOfCodeSection[i]); // If yes return it.
+					return Address(&StartOfCodeSection[i]); // If yes return it.
 
 				latestOccurence = &StartOfCodeSection[i]; // Stash latest occurence.
 			}
 		}
 
-		return MemoryAddress(latestOccurence);
+		return Address(latestOccurence);
 	}
 
-	MemoryAddress GetExportedFunction(const std::string functionName)
+	Address GetExportedFunction(const std::string functionName)
 	{
 		if (!dosHeader || dosHeader->e_magic != IMAGE_DOS_SIGNATURE) // Is dosHeader valid?
-			return MemoryAddress();
+			return Address();
 
 		if (!ntHeaders || ntHeaders->Signature != IMAGE_NT_SIGNATURE) // Is ntHeader valid?
-			return MemoryAddress();
+			return Address();
 
-		// Get the location of IMAGE_EXPORT_DIRECTORY for this module by adding the IMAGE_DIRECTORY_ENTRY_EXPORT relative virtual address onto our module base address.
+		// Get the location of IMAGE_EXPORT_DIRECTORY for this module by adding the IMAGE_DIRECTORY_ENTRY_EXPORT relative virtual Address onto our module base Address.
 		IMAGE_EXPORT_DIRECTORY* ImageExportDirectory = reinterpret_cast<IMAGE_EXPORT_DIRECTORY*>(moduleBase + ntHeaders->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress);
 		if (!ImageExportDirectory)
-			return MemoryAddress();
+			return Address();
 
 		// Are there any exported functions?
 		if (!ImageExportDirectory->NumberOfFunctions)
-			return MemoryAddress();
+			return Address();
 
-		// Get the location of the functions via adding the relative virtual address from the struct into our module base address.
+		// Get the location of the functions via adding the relative virtual Address from the struct into our module base Address.
 		DWORD* AddressOfFunctionsPtr = reinterpret_cast<DWORD*>(moduleBase + ImageExportDirectory->AddressOfFunctions);
 		if (!AddressOfFunctionsPtr)
-			return MemoryAddress();
+			return Address();
 
-		// Get the names of the functions via adding the relative virtual address from the struct into our module base address.
+		// Get the names of the functions via adding the relative virtual Address from the struct into our module base Address.
 		DWORD* AddressOfNamePtr = reinterpret_cast<DWORD*>(moduleBase + ImageExportDirectory->AddressOfNames);
 		if (!AddressOfNamePtr)
-			return MemoryAddress();
+			return Address();
 
-		// Get the ordinals of the functions via adding the relative virtual address from the struct into our module base address.
+		// Get the ordinals of the functions via adding the relative virtual Address from the struct into our module base Address.
 		DWORD* AddressOfOrdinalsPtr = reinterpret_cast<DWORD*>(moduleBase + ImageExportDirectory->AddressOfNameOrdinals);
 		if (!AddressOfOrdinalsPtr)
-			return MemoryAddress();
+			return Address();
 
 		for (std::size_t i = 0; i < ImageExportDirectory->NumberOfFunctions; i++) // Iterate through all the functions.
 		{
-			// Get virtual relative address of the function name. Then add module base address to get the actual location.
+			// Get virtual relative Address of the function name. Then add module base Address to get the actual location.
 			std::string ExportFunctionName = reinterpret_cast<char*>(reinterpret_cast<DWORD*>(moduleBase + AddressOfNamePtr[i]));
 
 			if (ExportFunctionName.compare(functionName) == 0) // Is this our wanted exported function?
 			{
-				// Get the function ordinal. Then grab the relative virtual address of our wanted function. Then add module base address so we get the actual location.
-				return MemoryAddress(moduleBase + AddressOfFunctionsPtr[reinterpret_cast<WORD*>(AddressOfOrdinalsPtr)[i]]); // Return as MemoryAddress class.
+				// Get the function ordinal. Then grab the relative virtual Address of our wanted function. Then add module base Address so we get the actual location.
+				return Address(moduleBase + AddressOfFunctionsPtr[reinterpret_cast<WORD*>(AddressOfOrdinalsPtr)[i]]); // Return as Address class.
 			}
 		}
-		return MemoryAddress();
+		return Address();
 	}
 	
-	MemoryAddress FindAddressForString(const std::string string, bool nullTerminator)
+	Address FindAddressForString(const std::string string, bool nullTerminator)
 	{
 		static auto StringToBytes = [](const std::string string, bool nullTerminator)
 		{
@@ -507,7 +507,7 @@ public:
 
 		ModuleSections rdataSection = GetSectionByName(".rdata"); // .Get rdata section, we only loop through here because most important strings are in the .rdata section.
 		if (!rdataSection.IsSectionValid())
-			return MemoryAddress();
+			return Address();
 
 		std::vector<std::int32_t> stringBytes = StringToBytes(string, nullTerminator); // Convert our string to a byte array.
 		const std::pair BytesInfo = std::make_pair(stringBytes.size(), stringBytes.data()); // Get the size and data of our bytes.
@@ -531,14 +531,14 @@ public:
 
 			if (FoundAddress)
 			{
-				return MemoryAddress(&StartOfRdata[i]);
+				return Address(&StartOfRdata[i]);
 			}
 		}
 
-		return MemoryAddress();
+		return Address();
 	}
 
-	MemoryAddress StringSearch(const std::string string, const std::ptrdiff_t occurence = 1, bool nullTerminator = false)
+	Address StringSearch(const std::string string, const std::ptrdiff_t occurence = 1, bool nullTerminator = false)
 	{
 		static auto PatternToBytes = [](const std::string pattern)
 		{
@@ -571,11 +571,11 @@ public:
 
 		ModuleSections textSection = GetSectionByName(".text"); // Get the .text section.
 		if (!textSection.IsSectionValid())
-			return MemoryAddress();
+			return Address();
 
-		MemoryAddress stringAddress = FindAddressForString(string, nullTerminator); // Get address for the string in the .rdata section.
+		Address stringAddress = FindAddressForString(string, nullTerminator); // Get Address for the string in the .rdata section.
 		if (!stringAddress)
-			return MemoryAddress();
+			return Address();
 
 		std::uint8_t* latestOccurence = nullptr;
 		std::ptrdiff_t occurencesFound = 0;
@@ -587,25 +587,25 @@ public:
 			byte byte = StartOfCodeSection[i];
 			if (byte == 0x8D) // is it a LEA instruction?
 			{
-				MemoryAddress skipOpCode = MemoryAddress((std::uintptr_t)&StartOfCodeSection[i]).OffsetSelf(0x2); // Skip next 2 opcodes, those being the instruction and then the register.
+				Address skipOpCode = Address((std::uintptr_t)&StartOfCodeSection[i]).OffsetSelf(0x2); // Skip next 2 opcodes, those being the instruction and then the register.
 
-				std::int32_t relativeAddress = skipOpCode.GetValue<std::int32_t>(); // Get 4-byte long string relative address
+				std::int32_t relativeAddress = skipOpCode.GetValue<std::int32_t>(); // Get 4-byte long string relative Address
 
 				std::uintptr_t nextInstruction = skipOpCode.Offset(0x4).GetPtr(); // Get location of next instruction.
 
-				MemoryAddress potentialLocation = MemoryAddress(nextInstruction + relativeAddress); // Get potential string location.
+				Address potentialLocation = Address(nextInstruction + relativeAddress); // Get potential string location.
 
 				if (potentialLocation == stringAddress)
 				{
 					occurencesFound++; // Increment occurences found counter.
 					if (occurence == occurencesFound) // Is it the occurence we want?
-						return MemoryAddress(&StartOfCodeSection[i]); // If yes return it.
+						return Address(&StartOfCodeSection[i]); // If yes return it.
 
 					latestOccurence = &StartOfCodeSection[i]; // Stash latest occurence.
 				}
 			}
 		}
-		return MemoryAddress(latestOccurence);
+		return Address(latestOccurence);
 	}
 
 	std::uintptr_t GetModuleBase()

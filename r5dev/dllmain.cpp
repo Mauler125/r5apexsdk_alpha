@@ -4,6 +4,7 @@
 #include "id3dx.h"
 #include "input.h"
 #include "hooks.h"
+#include "classes.h"
 #include "console.h"
 
 //#############################################################################
@@ -12,20 +13,23 @@
 
 void InitializeR5Dev()
 {
-	SetupConsole();
+    SetupConsole();
     InstallHooks();
     InstallIPHooks();
     SetupDXSwapChain();
-    printf("+-----------------------------------------------------------------------------+\n");
-    printf("|   R5 DEVELOPER CONSOLE -- INITIALIZED -----------------------------------   |\n");
-    printf("+-----------------------------------------------------------------------------+\n");
+
+    spdlog::get("console")->set_pattern("%v");
+    spdlog::info("+-----------------------------------------------------------------------------+\n");
+    spdlog::info("|   R5 DEVELOPER CONSOLE -- INITIALIZED -----------------------------------   |\n");
+    spdlog::info("+-----------------------------------------------------------------------------+\n");
+    spdlog::get("console")->set_pattern("[%S.%e] %v");
 }
 
 void TerminateR5Dev()
 {
     RemoveIPHooks();
     RemoveDXHooks();
-	FreeConsole();
+    FreeConsole();
 }
 
 //#############################################################################

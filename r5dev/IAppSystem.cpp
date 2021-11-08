@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "IAppSystem.h"
+#include "EbisuSDK.h"
+#include "classes.h"
 
 //-----------------------------------------------------------------------------
 // Purpose:

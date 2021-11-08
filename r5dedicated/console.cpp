@@ -13,7 +13,7 @@ void SetupConsole()
 {
 	///////////////////////////////////////////////////////////////////////////
 	// Create the console window
-	if (AllocConsole() == FALSE)
+	if (!AllocConsole())
 	{
 		OutputDebugString("Failed to create console window!\n");
 		return;
@@ -72,9 +72,7 @@ DWORD __stdcall ProcessConsoleWorker(LPVOID)
 
 		///////////////////////////////////////////////////////////////////////
 		// Engine toggles
-		if (sCommand == "toggle net") { HEbisuSDK_Init(); ToggleNetTrace(); continue; }
 		if (sCommand == "toggle dev") { HEbisuSDK_Init(); ToggleDevCommands(); continue; }
-		if (sCommand == "toggle fal") { g_bReturnAllFalse = !g_bReturnAllFalse; continue; }
 		///////////////////////////////////////////////////////////////////////
 		// Debug toggles
 		if (sCommand == "pattern test") { PrintHAddress(); /*PrintOAddress();*/ continue; }

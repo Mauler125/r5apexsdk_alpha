@@ -1,6 +1,18 @@
 #include "stdafx.h"
 #include "hooks.h"
 #include "opcptc.h"
+#include "IAppSystem.h"
+#include "IConVar.h"
+#include "ConCommand.h"
+#include "IVEngineServer.h"
+#include "IVEngineClient.h"
+#include "CEngineVGui.h"
+#include "CHLClient.h"
+#include "CNetChan.h"
+#include "EbisuSDK.h"
+#include "basefilesystem.h"
+#include "sqvm.h"
+#include "sys.h"
 
 //#################################################################################
 // MANAGEMENT
@@ -18,13 +30,17 @@ void InstallHooks()
 	AttachIAppSystemHooks();
 	AttachIConVarHooks();
 	AttachConCommandHooks();
-	AttachCEngineServerHooks();
+	AttachIVEngineServerHooks();
+	AttachCEngineVGuiHooks();
 	AttachCHLClientHooks();
-	AttachCNetChanHooks();
+	//AttachCNetChanHooks();
 	AttachEbisuSDKHooks();
 	AttachSQVMHooks();
 	//AttachSysHooks();
 	AttachMSGBoxHooks();
+
+
+	AttachCBaseFileSystemHooks();
 
 	///////////////////////////////////////////////////////////////////////////////
 	// Patch instructions
@@ -53,7 +69,8 @@ void RemoveHooks()
 	DetachIAppSystemHooks();
 	DetachIConVarHooks();
 	DetachConCommandHooks();
-	DetachCEngineServerHooks();
+	DetachIVEngineServerHooks();
+	DetachCEngineVGuiHooks();
 	DetachCHLClientHooks();
 	DetachCNetChanHooks();
 	DetachEbisuSDKHooks();
@@ -61,78 +78,45 @@ void RemoveHooks()
 	//DetachSysHooks();
 	DetachMSGBoxHooks();
 
+	DetachCBaseFileSystemHooks();
+
 	///////////////////////////////////////////////////////////////////////////////
 	// Commit the transaction
 	DetourTransactionCommit();
 }
 
-//#################################################################################
-// TOGGLES
-//#################################################################################
-
-void ToggleDevCommands()
+void PrintHAddress() // Test the sigscan results
 {
-	DetourTransactionBegin();
-	DetourUpdateThread(GetCurrentThread());
+	std::cout << "+--------------------------------------------------------+" << std::endl;
+	std::cout << "| IAppSystem::Main                     : " << std::hex << std::uppercase << p_IAppSystem_Main                     << std::setw(8) << " |" << std::endl;
+	std::cout << "| IAppSystem::Create                   : " << std::hex << std::uppercase << p_IAppSystem_Create                   << std::setw(8) << " |" << std::endl;
+	std::cout << "+--------------------------------------------------------+" << std::endl;
+	std::cout << "| IVEngineServer::PersistenceAvailable : " << std::hex << std::uppercase << p_IVEngineServer_PersistenceAvailable << std::setw(8) << " |" << std::endl;
+	std::cout << "+--------------------------------------------------------+" << std::endl;
+	std::cout << "| IVEngineClient::CommandExecute       : " << std::hex << std::uppercase << p_IVEngineClient_CommandExecute       << std::setw(8) << " |" << std::endl;
+	std::cout << "+--------------------------------------------------------+" << std::endl;
+	std::cout << "| CHLClient::FrameStageNotify          : " << std::hex << std::uppercase << p_FrameStageNotify                    << std::setw(8) << " |" << std::endl;
+	std::cout << "+--------------------------------------------------------+" << std::endl;
+	std::cout << "| ConVar::IsFlagSet                    : " << std::hex << std::uppercase << p_IConVar_IsFlagSet                   << std::setw(8) << " |" << std::endl;
+	std::cout << "+--------------------------------------------------------+" << std::endl;
+	std::cout << "| ConCommand::IsFlagSet                : " << std::hex << std::uppercase << p_ConCommand_IsFlagSet                << std::setw(8) << " |" << std::endl;
+	std::cout << "+--------------------------------------------------------+" << std::endl;
+	std::cout << "| SQVM_PrintFunc                       : " << std::hex << std::uppercase << p_SQVM_PrintFunc                      << std::setw(8) << " |" << std::endl;
+	std::cout << "| SQVM_LoadScript                      : " << std::hex << std::uppercase << p_SQVM_LoadScript                     << std::setw(8) << " |" << std::endl;
+	std::cout << "| SQVM_LoadRson                        : " << std::hex << std::uppercase << p_SQVM_LoadRson                       << std::setw(8) << " |" << std::endl;
+	std::cout << "+--------------------------------------------------------+" << std::endl;
+	std::cout << "| NET_ReceiveDatagram                  : " << std::hex << std::uppercase << p_NET_ReceiveDatagram                 << std::setw(8) << " |" << std::endl;
+	std::cout << "| NET_SendDatagram                     : " << std::hex << std::uppercase << p_NET_SendDatagram                    << std::setw(8) << " |" << std::endl;
+	std::cout << "| NET_PrintFunc                        : " << std::hex << std::uppercase << p_NET_PrintFunc                       << std::setw(8) << " |" << std::endl;
+	std::cout << "+--------------------------------------------------------+" << std::endl;
+	std::cout << "| CBaseFileSystem::Warning             : " << std::hex << std::uppercase << p_CBaseFileSystem_Warning             << std::setw(8) << " |" << std::endl;
+	std::cout << "+--------------------------------------------------------+" << std::endl;
+	std::cout << "| QHull_PrintError                     : " << std::hex << std::uppercase << p_QHull_PrintError                    << std::setw(8) << " |" << std::endl;
+	std::cout << "| QHull_PrintDebug                     : " << std::hex << std::uppercase << p_QHull_PrintDebug                    << std::setw(8) << " |" << std::endl;
+	std::cout << "+--------------------------------------------------------+" << std::endl;
+	std::cout << "| MSG_EngineError                      : " << std::hex << std::uppercase << p_MSG_EngineError                     << std::setw(8) << " |" << std::endl;
+	std::cout << "| Sys_PrintFunc                        : " << std::hex << std::uppercase << p_Sys_PrintFunc                       << std::setw(8) << " |" << std::endl;
+	std::cout << "+--------------------------------------------------------+" << std::endl;
 
-	if (!g_bToggledDevFlags)
-	{
-		AttachIConVarHooks();
-		AttachConCommandHooks();
-		printf("\n");
-		printf("+--------------------------------------------------------+\n");
-		printf("|>>>>>>>>>>>>>| DEVONLY COMMANDS ACTIVATED |<<<<<<<<<<<<<|\n");
-		printf("+--------------------------------------------------------+\n");
-		printf("\n");
-
-	}
-	else
-	{
-		DetachIConVarHooks();
-		DetachConCommandHooks();
-		printf("\n");
-		printf("+--------------------------------------------------------+\n");
-		printf("|>>>>>>>>>>>>| DEVONLY COMMANDS DEACTIVATED |<<<<<<<<<<<<|\n");
-		printf("+--------------------------------------------------------+\n");
-		printf("\n");
-	}
-
-	if (DetourTransactionCommit() != NO_ERROR)
-	{
-		TerminateProcess(GetCurrentProcess(), 0xBAD0C0DE);
-	}
-
-	g_bToggledDevFlags = !g_bToggledDevFlags;
-}
-
-void ToggleNetTrace()
-{
-	DetourTransactionBegin();
-	DetourUpdateThread(GetCurrentThread());
-
-	if (!g_bToggledNetTrace)
-	{
-		AttachCNetChanTraceHooks();
-		printf("\n");
-		printf("+--------------------------------------------------------+\n");
-		printf("|>>>>>>>>>>>>>| NETCHANNEL TRACE ACTIVATED |<<<<<<<<<<<<<|\n");
-		printf("+--------------------------------------------------------+\n");
-		printf("\n");
-	}
-	else
-	{
-		DetachCNetChanTraceHooks();
-		printf("\n");
-		printf("+--------------------------------------------------------+\n");
-		printf("|>>>>>>>>>>>>| NETCHANNEL TRACE DEACTIVATED |<<<<<<<<<<<<|\n");
-		printf("+--------------------------------------------------------+\n");
-		printf("\n");
-	}
-
-	if (DetourTransactionCommit() != NO_ERROR)
-	{
-		TerminateProcess(GetCurrentProcess(), 0xBAD0C0DE);
-	}
-
-	g_bToggledNetTrace = !g_bToggledNetTrace;
+	// TODO implement error handling when sigscan fails or result is 0
 }

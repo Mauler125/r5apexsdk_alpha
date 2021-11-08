@@ -9,12 +9,15 @@ __int64 HIAppSystem_Main(__int64 a1, __int64 a2)
 	HEbisuSDK_Init();
 	return IAppSystem_Main(a1, a2);
 }
+auto g_bIsDedicated = (uint8_t*)0x162C61208;
 
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
 __int64 HIAppSystem_Create(__int64 a1)
 {
+	*g_bIsDedicated = 1; // HAS TO BE HERE!!!
+	HEbisuSDK_Init();
 	return IAppSystem_Create(a1);
 }
 

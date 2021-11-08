@@ -26,11 +26,11 @@ void HEbisuSDK_Init()
 		}
 	}
 
-	*(char*)(ofs000) = (char)0x1; // <- First Origin boolean check
-	*(char*)(ofs001) = (char)0x1; // <- Second Origin boolean check
-	*(char*)(ofs002) = (char)0x1; // <- Third Origin bolean check
+	*(char*)(ofs000) = (char)0x1; // <- 1st Origin boolean check
+	*(char*)(ofs001) = (char)0x1; // <- 2nd Origin boolean check
+	*(char*)(ofs002) = (char)0x1; // <- 3rd Origin bolean check
 	*(char*)(ofs003) = (char)0x1; // <- Gets tested on listenserver for certain concommands
-	*(char*)(ofs004) = (char)0x0; // <- TODO: Enforces Necleus cvar's when not equal to 0
+	*(char*)(ofs004) = (char)0x0; // <- TODO: Enforces Necleus cvar's when not equal to NULL
 	memcpy((char*)splayerName, sNameBuf, sizeof(sNameBuf));
 }
 

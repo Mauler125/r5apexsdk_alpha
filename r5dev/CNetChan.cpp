@@ -1,11 +1,12 @@
 #include "stdafx.h"
 #include "CNetChan.h"
+#include "CGameConsole.h"
 
 //-----------------------------------------------------------------------------
-// Purpose: log the clients signonstate to the console
+// Purpose: hook and log the client's signonstate to the console
 //-----------------------------------------------------------------------------
-static std::ostringstream oss;
-static auto ostream_sink = std::make_shared<spdlog::sinks::ostream_sink_st>(oss);
+static std::ostringstream net_oss;
+static auto net_ostream_sink = std::make_shared<spdlog::sinks::ostream_sink_st>(net_oss);
 void HNET_PrintFunc(const char* fmt, ...)
 {
 	static bool initialized = false;
@@ -14,12 +15,12 @@ void HNET_PrintFunc(const char* fmt, ...)
 	static auto iconsole = spdlog::stdout_logger_mt("net_iconsole"); // in-game console
 	static auto wconsole = spdlog::stdout_logger_mt("net_wconsole"); // windows console
 
-	oss.str("");
-	oss.clear();
+	net_oss.str("");
+	net_oss.clear();
 
 	if (!initialized)
 	{
-		iconsole = std::make_shared<spdlog::logger>("ostream", ostream_sink);
+		iconsole = std::make_shared<spdlog::logger>("ostream", net_ostream_sink);
 		iconsole->set_pattern("[%S.%e] %v\n");
 		iconsole->set_level(spdlog::level::debug);
 		wconsole->set_pattern("[%S.%e] %v\n");
@@ -37,12 +38,11 @@ void HNET_PrintFunc(const char* fmt, ...)
 	iconsole->debug(buf);
 	wconsole->debug(buf);
 
-	std::string s = oss.str();
+	std::string s = net_oss.str();
 	const char* c = s.c_str();
 
 	Items.push_back(Strdup((const char*)c));
 }
-
 
 //-----------------------------------------------------------------------------
 // Purpose: hook and log the receive datagram
@@ -50,6 +50,11 @@ void HNET_PrintFunc(const char* fmt, ...)
 bool HNET_ReceiveDatagram(int sock, void* inpacket, bool raw)
 {
 	bool result = NET_ReceiveDatagram(sock, inpacket, raw);
+	if (!g_bTraceNetChannel)
+	{
+		return result;
+	}
+
 	if (result)
 	{
 		int i = NULL;
@@ -67,6 +72,11 @@ bool HNET_ReceiveDatagram(int sock, void* inpacket, bool raw)
 unsigned int HNET_SendDatagram(SOCKET s, const char* buf, int len, int flags)
 {
 	unsigned int result = NET_SendDatagram(s, buf, len, flags);
+	if (!g_bTraceNetChannel)
+	{
+		return result;
+	}
+
 	if (result)
 	{
 		// Log transmitted packet data
@@ -75,25 +85,42 @@ unsigned int HNET_SendDatagram(SOCKET s, const char* buf, int len, int flags)
 	return result;
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: disconnect the client and shutdown netchannel
+//-----------------------------------------------------------------------------
+void NET_DisconnectClient(CClient* client, const char* reason, unsigned __int8 unk1, char unk2)
+{
+	if (!client) //	Client valid?
+	{
+		return;
+	}
+	if (std::strlen(reason) == NULL) // Is reason null?
+	{
+		return;
+	}
+	if (!client->GetNetChan())
+	{
+		return;
+	}
+
+	NetChan_Shutdown(client->GetNetChan(), reason, unk1, unk2); // Shutdown netchan.
+	client->GetNetChan() = nullptr;                             // Null netchan.
+	Address(0x140302FD0).RCast<void(*)(CClient*)>()(client);    // Reset CClient instance for client.
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 void AttachCNetChanHooks()
 {
 	DetourAttach((LPVOID*)&NET_PrintFunc, &HNET_PrintFunc);
+	DetourAttach((LPVOID*)&NET_ReceiveDatagram, &HNET_ReceiveDatagram);
+	DetourAttach((LPVOID*)&NET_SendDatagram, &HNET_SendDatagram);
 }
 
 void DetachCNetChanHooks()
 {
 	DetourDetach((LPVOID*)&NET_PrintFunc, &HNET_PrintFunc);
-}
-
-void AttachCNetChanTraceHooks()
-{
-	DetourAttach((LPVOID*)&NET_ReceiveDatagram, &HNET_ReceiveDatagram);
-	DetourAttach((LPVOID*)&NET_SendDatagram, &HNET_SendDatagram);
-}
-
-void DetachCNetChanTraceHooks()
-{
 	DetourDetach((LPVOID*)&NET_ReceiveDatagram, &HNET_ReceiveDatagram);
 	DetourDetach((LPVOID*)&NET_SendDatagram, &HNET_SendDatagram);
 }
+
+bool g_bTraceNetChannel;

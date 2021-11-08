@@ -95,8 +95,8 @@ bool LaunchR5Apex(LAUNCHMODE lMode, LAUNCHSTATE lState)
             if (cfgFile.good() && cfgFile)  // Does the cfg file exist?
             {
                 std::stringstream ss;
-                ss << cfgFile.rdbuf();            // Read ifstream buffer into stringstream.
-                CommandLineArguments = ss.str();  // Get all the contents of the cfg file.
+                ss << cfgFile.rdbuf();           // Read ifstream buffer into stringstream.
+                CommandLineArguments = ss.str(); // Get all the contents of the cfg file.
             }
             else
             {
