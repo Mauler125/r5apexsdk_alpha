@@ -16,6 +16,7 @@
 #include "sqvm.h"
 #include "sys_dll.h"
 #include "sys_utils.h"
+#include "CBaseClient.h"
 
 //#################################################################################
 // MANAGEMENT
@@ -42,6 +43,7 @@ void InstallHooks()
 	AttachSysUtilsHooks();
 	AttachSysDllHooks();
 	AttachCBaseFileSystemHooks();
+	AttachCBaseClientHooks();
 
 	///////////////////////////////////////////////////////////////////////////////
 	// Patch instructions
@@ -79,6 +81,7 @@ void RemoveHooks()
 	DetachSysUtilsHooks();
 	DetachSysDllHooks();
 	DetachCBaseFileSystemHooks();
+	DetachCBaseClientHooks();
 
 	///////////////////////////////////////////////////////////////////////////////
 	// Commit the transaction

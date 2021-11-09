@@ -131,6 +131,9 @@
     <Filter Include="hooks\ivengineserver">
       <UniqueIdentifier>{b6637f11-aadd-4197-9c7b-663c4c0a0df6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="hooks\cbaseclient">
+      <UniqueIdentifier>{4b4bc688-32f5-42e3-b7de-93ac27c2c142}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\shared\utility.cpp">
@@ -261,6 +264,9 @@
     </ClCompile>
     <ClCompile Include="classes.cpp">
       <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="CBaseClient.cpp">
+      <Filter>hooks\cbaseclient</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -716,6 +722,9 @@
     </ClInclude>
     <ClInclude Include="classes.h">
       <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="CBaseClient.h">
+      <Filter>hooks\cbaseclient</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

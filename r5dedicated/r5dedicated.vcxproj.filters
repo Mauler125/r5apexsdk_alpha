@@ -98,6 +98,9 @@
     <Filter Include="hooks\rtech">
       <UniqueIdentifier>{b73d3995-6d27-4595-a268-14fd6c43c437}</UniqueIdentifier>
     </Filter>
+    <Filter Include="hooks\cbaseclient">
+      <UniqueIdentifier>{9f51f1bd-ae36-4143-88b7-c9a5680e13d8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\shared\include\utility.h">
@@ -484,6 +487,9 @@
     <ClInclude Include="classes.h">
       <Filter>core\include</Filter>
     </ClInclude>
+    <ClInclude Include="CBaseClient.h">
+      <Filter>hooks\cbaseclient</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="console.cpp">
@@ -560,6 +566,9 @@
     </ClCompile>
     <ClCompile Include="classes.cpp">
       <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="CBaseClient.cpp">
+      <Filter>hooks\cbaseclient</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

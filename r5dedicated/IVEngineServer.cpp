@@ -8,14 +8,12 @@
 //-----------------------------------------------------------------------------
 bool HIVEngineServer_PersistenceAvailable(__int64 thisptr, int index)
 {
-	static bool isPersistenceVarSet[128];
-
 	CClient* client = g_pClient->GetClientInstance(index); // Get client instance.
 	std::uintptr_t targetInstance = (std::uintptr_t)client;
 	std::uintptr_t persistenceVar = 0x5BC;                 // TODO: Add to CClient struct.
 	*(char*)(targetInstance + persistenceVar) = (char)0x5; // Set the client instance to 'ready'.
 
-	if (!isPersistenceVarSet[index])
+	if (!g_bIsPersistenceVarSet[index])
 	{
 		void* clientNamePtr = (void**)(((std::uintptr_t)client->GetNetChan()) + 0x1A8D); // Get client name from netchan.
 		std::string clientName((char*)clientNamePtr, 32);                                // Get full name.
@@ -45,7 +43,7 @@ bool HIVEngineServer_PersistenceAvailable(__int64 thisptr, int index)
 		Sys_Print(SYS_DLL::SERVER, "] IPADR: | '%s'\n", ipAddress.c_str());
 		Sys_Print(SYS_DLL::SERVER, "##############################################################\n");
 		Sys_Print(SYS_DLL::SERVER, "\n");
-		isPersistenceVarSet[index] = true;
+		g_bIsPersistenceVarSet[index] = true;
 	}
 	///////////////////////////////////////////////////////////////////////////
 	return IVEngineServer_PersistenceAvailable(thisptr, index);
@@ -60,3 +58,6 @@ void DetachIVEngineServerHooks()
 {
 	DetourDetach((LPVOID*)&IVEngineServer_PersistenceAvailable, &HIVEngineServer_PersistenceAvailable);
 }
+
+///////////////////////////////////////////////////////////////////////////////
+bool g_bIsPersistenceVarSet[128];

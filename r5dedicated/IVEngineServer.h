@@ -15,3 +15,4 @@ void AttachIVEngineServerHooks();
 void DetachIVEngineServerHooks();
 
 ///////////////////////////////////////////////////////////////////////////////
+extern bool g_bIsPersistenceVarSet[128];

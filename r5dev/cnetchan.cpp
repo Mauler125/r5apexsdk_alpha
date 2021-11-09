@@ -1,8 +1,10 @@
 #include "stdafx.h"
 #include "logdef.h"
-#include "CNetChan.h"
-#include "CGameConsole.h"
 #include "sys_utils.h"
+#include "CNetChan.h"
+#include "CBaseClient.h"
+#include "CGameConsole.h"
+#include "IVEngineServer.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: hook and log the receive datagram
@@ -48,7 +50,7 @@ unsigned int HNET_SendDatagram(SOCKET s, const char* buf, int len, int flags)
 //-----------------------------------------------------------------------------
 // Purpose: disconnect the client and shutdown netchannel
 //-----------------------------------------------------------------------------
-void NET_DisconnectClient(CClient* client, const char* reason, unsigned __int8 unk1, char unk2)
+void NET_DisconnectClient(CClient* client, int index, const char* reason, unsigned __int8 unk1, char unk2)
 {
 	if (!client) //	Client valid?
 	{
@@ -65,7 +67,8 @@ void NET_DisconnectClient(CClient* client, const char* reason, unsigned __int8 u
 
 	NetChan_Shutdown(client->GetNetChan(), reason, unk1, unk2); // Shutdown netchan.
 	client->GetNetChan() = nullptr;                             // Null netchan.
-	Address(0x140302FD0).RCast<void(*)(CClient*)>()(client);    // Reset CClient instance for client.
+	CBaseClient_Clear((__int64)client);                         // Reset CClient instance for client.
+	g_bIsPersistenceVarSet[index] = false;                      // Reset Persistence var.
 }
 
 //-----------------------------------------------------------------------------

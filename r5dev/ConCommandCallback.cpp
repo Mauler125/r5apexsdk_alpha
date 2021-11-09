@@ -56,7 +56,7 @@ void Kick_Callback(CCommand* cmd)
 			continue;
 		}
 
-		NET_DisconnectClient(client, "Kicked from Server", 0, 1); // Disconnect client.
+		NET_DisconnectClient(client, i, "Kicked from Server", 0, 1); // Disconnect client.
 	}
 }
 
@@ -132,7 +132,7 @@ void KickID_Callback(CCommand* cmd)
 					}
 				}
 
-				NET_DisconnectClient(client, "Kicked from Server", 0, 1); // Disconnect client.
+				NET_DisconnectClient(client, i, "Kicked from Server", 0, 1); // Disconnect client.
 			}
 			else
 			{
@@ -141,7 +141,7 @@ void KickID_Callback(CCommand* cmd)
 					continue;
 				}
 
-				NET_DisconnectClient(client, "Kicked from Server", 0, 1); // Disconnect client.
+				NET_DisconnectClient(client, i, "Kicked from Server", 0, 1); // Disconnect client.
 			}
 		}
 	}
@@ -204,7 +204,7 @@ void Ban_Callback(CCommand* cmd)
 
 		g_pBanSystem->AddEntry(finalIPAddress, client->m_iOriginID); // Add ban entry.
 		g_pBanSystem->Save(); // Save ban list.
-		NET_DisconnectClient(client, "Banned from Server", 0, 1); // Disconnect client.
+		NET_DisconnectClient(client, i, "Banned from Server", 0, 1); // Disconnect client.
 	}
 }
 
@@ -282,7 +282,7 @@ void BanID_Callback(CCommand* cmd)
 
 				g_pBanSystem->AddEntry(finalIPAddress, client->m_iOriginID); // Add ban entry.
 				g_pBanSystem->Save(); // Save ban list.
-				NET_DisconnectClient(client, "Banned from Server", 0, 1); // Disconnect client.
+				NET_DisconnectClient(client, i, "Banned from Server", 0, 1); // Disconnect client.
 			}
 			else
 			{
@@ -293,7 +293,7 @@ void BanID_Callback(CCommand* cmd)
 
 				g_pBanSystem->AddEntry(finalIPAddress, client->m_iOriginID); // Add ban entry.
 				g_pBanSystem->Save(); // Save ban list.
-				NET_DisconnectClient(client, "Banned from Server", 0, 1); // Disconnect client.
+				NET_DisconnectClient(client, i, "Banned from Server", 0, 1); // Disconnect client.
 			}
 		}
 	}

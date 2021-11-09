@@ -46,7 +46,7 @@ void __fastcall HFrameStageNotify(CHLClient* rcx, ClientFrameStage_t curStage)
 							continue;
 						}
 
-						NET_DisconnectClient(g_pClient, g_pBanSystem->refuseList[i].first.c_str(), 0, 1);
+						NET_DisconnectClient(g_pClient, c, g_pBanSystem->refuseList[i].first.c_str(), 0, 1);
 						g_pBanSystem->DeleteConnectionRefuse(clientID);
 						break;
 					}

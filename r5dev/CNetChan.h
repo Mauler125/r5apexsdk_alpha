@@ -48,7 +48,7 @@ namespace
 ///////////////////////////////////////////////////////////////////////////////
 bool HNET_ReceiveDatagram(int sock, void* inpacket, bool raw);
 unsigned int HNET_SendDatagram(SOCKET s, const char* buf, int len, int flags);
-void NET_DisconnectClient(CClient* client, const char* reason, unsigned __int8 unk1, char unk2);
+void NET_DisconnectClient(CClient* client, int index, const char* reason, unsigned __int8 unk1, char unk2);
 void HNET_PrintFunc(const char* fmt, ...);
 
 void AttachCNetChanHooks();

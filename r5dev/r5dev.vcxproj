@@ -312,6 +312,7 @@
     <ClInclude Include="basefilesystem.h" />
     <ClInclude Include="basetypes.h" />
     <ClInclude Include="ButtonCode.h" />
+    <ClInclude Include="CBaseClient.h" />
     <ClInclude Include="CClient.h" />
     <ClInclude Include="classes.h" />
     <ClInclude Include="IVEngineClient.h" />
@@ -385,6 +386,7 @@
     <ClCompile Include="..\shared\bansystem.cpp" />
     <ClCompile Include="..\shared\utility.cpp" />
     <ClCompile Include="basefilesystem.cpp" />
+    <ClCompile Include="CBaseClient.cpp" />
     <ClCompile Include="CClient.cpp" />
     <ClCompile Include="classes.cpp" />
     <ClCompile Include="IVEngineClient.cpp" />
