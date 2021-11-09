@@ -268,6 +268,9 @@
     <ClCompile Include="CBaseClient.cpp">
       <Filter>hooks\cbaseclient</Filter>
     </ClCompile>
+    <ClCompile Include="sqapi.cpp">
+      <Filter>hooks\squirrel</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\external\detours\include\detours.h">
@@ -669,9 +672,6 @@
     <ClInclude Include="CEngineVGui.h">
       <Filter>hooks\cenginevgui</Filter>
     </ClInclude>
-    <ClInclude Include="..\shared\include\squirrel.h">
-      <Filter>shared\include</Filter>
-    </ClInclude>
     <ClInclude Include="CInputSystem.h">
       <Filter>hooks\cinputsystem</Filter>
     </ClInclude>
@@ -725,6 +725,9 @@
     </ClInclude>
     <ClInclude Include="CBaseClient.h">
       <Filter>hooks\cbaseclient</Filter>
+    </ClInclude>
+    <ClInclude Include="sqapi.h">
+      <Filter>hooks\squirrel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

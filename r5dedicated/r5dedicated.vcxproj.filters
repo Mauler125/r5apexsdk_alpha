@@ -490,6 +490,9 @@
     <ClInclude Include="CBaseClient.h">
       <Filter>hooks\cbaseclient</Filter>
     </ClInclude>
+    <ClInclude Include="sqapi.h">
+      <Filter>hooks\squirrel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="console.cpp">
@@ -569,6 +572,9 @@
     </ClCompile>
     <ClCompile Include="CBaseClient.cpp">
       <Filter>hooks\cbaseclient</Filter>
+    </ClCompile>
+    <ClCompile Include="sqapi.cpp">
+      <Filter>hooks\squirrel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

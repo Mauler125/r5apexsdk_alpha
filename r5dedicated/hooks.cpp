@@ -12,6 +12,7 @@
 #include "QHull.h"
 #include "rtech.h"
 #include "sqvm.h"
+#include "sqapi.h"
 #include "sys_dll.h"
 #include "sys_utils.h"
 
@@ -36,6 +37,7 @@ void InstallHooks()
 	AttachEbisuSDKHooks();
 	AttachCHostStateHooks();
 	AttachSQVMHooks();
+	AttachSQAPIHooks();
 	AttachSysUtilsHooks();
 	AttachSysDllHooks();
 	AttachCBaseFileSystemHooks();
@@ -72,6 +74,7 @@ void RemoveHooks()
 	DetachEbisuSDKHooks();
 	DetachCHostStateHooks();
 	DetachSQVMHooks();
+	DetachSQAPIHooks();
 	DetachSysUtilsHooks();
 	DetachSysDllHooks();
 	DetachCBaseFileSystemHooks();

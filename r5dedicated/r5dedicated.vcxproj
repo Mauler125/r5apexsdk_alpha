@@ -202,6 +202,7 @@
     <ClCompile Include="opcodes.cpp" />
     <ClCompile Include="QHull.cpp" />
     <ClCompile Include="rtech.cpp" />
+    <ClCompile Include="sqapi.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -336,6 +337,7 @@
     <ClInclude Include="protocol.h" />
     <ClInclude Include="QHull.h" />
     <ClInclude Include="rtech.h" />
+    <ClInclude Include="sqapi.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="sqvm.h" />
     <ClInclude Include="sys_dll.h" />
