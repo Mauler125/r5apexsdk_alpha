@@ -1,7 +1,6 @@
 #pragma once
 
 void InstallOpcodes();
-void SetCHostState();
 inline HANDLE GameProcess = GetCurrentProcess();
 
 namespace

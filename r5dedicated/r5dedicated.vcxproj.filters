@@ -7,9 +7,6 @@
     <Filter Include="shared">
       <UniqueIdentifier>{ef65ed91-551f-4f5d-b2a9-efc26e1af0f6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="hooks">
-      <UniqueIdentifier>{22b58a18-d1d7-4e3e-b5de-d9338f3177d3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="core\include">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
@@ -17,26 +14,8 @@
     <Filter Include="shared\include">
       <UniqueIdentifier>{a0165b58-06b1-4b6a-b5d1-5d643517ad14}</UniqueIdentifier>
     </Filter>
-    <Filter Include="hooks\iconvar">
-      <UniqueIdentifier>{06affed3-5a59-4b95-88ca-72d92c91909b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="hooks\concommand">
-      <UniqueIdentifier>{0742106d-702f-499e-99f1-e43f2a6ae561}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="hooks\cvengineserver">
-      <UniqueIdentifier>{338a4fb7-7519-4628-9206-679d33824965}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="hooks\other">
-      <UniqueIdentifier>{cc424eef-0c7a-4fb0-9d84-30bf8db2e253}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="hooks\squirrel">
-      <UniqueIdentifier>{74afa89f-72af-4e13-aa90-70f7a1957154}</UniqueIdentifier>
-    </Filter>
     <Filter Include="core\resource">
       <UniqueIdentifier>{35b40ed1-12bd-4bcf-9c05-5a42a0096619}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="hooks\netchannel">
-      <UniqueIdentifier>{05e6e9a7-801b-49b0-9c5a-21c4868befb7}</UniqueIdentifier>
     </Filter>
     <Filter Include="shared\libraries">
       <UniqueIdentifier>{a7199092-e8a9-49fa-97e1-b2d0ea21001b}</UniqueIdentifier>
@@ -62,6 +41,27 @@
     <Filter Include="shared\libraries\spdlog\include\sinks">
       <UniqueIdentifier>{eaefe9b7-d14d-48b6-878a-53a5ada7454b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sdk">
+      <UniqueIdentifier>{2d680d34-5f10-4285-8d15-6996603146ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sdk\include">
+      <UniqueIdentifier>{420da7ba-d359-4f60-8fe8-56a6b9b6ded3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hooks">
+      <UniqueIdentifier>{22b58a18-d1d7-4e3e-b5de-d9338f3177d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hooks\iconvar">
+      <UniqueIdentifier>{06affed3-5a59-4b95-88ca-72d92c91909b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hooks\concommand">
+      <UniqueIdentifier>{0742106d-702f-499e-99f1-e43f2a6ae561}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hooks\squirrel">
+      <UniqueIdentifier>{74afa89f-72af-4e13-aa90-70f7a1957154}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hooks\netchannel">
+      <UniqueIdentifier>{05e6e9a7-801b-49b0-9c5a-21c4868befb7}</UniqueIdentifier>
+    </Filter>
     <Filter Include="hooks\cappsystemgroup">
       <UniqueIdentifier>{69c268d0-bab8-41b2-be3b-b04b67a6c919}</UniqueIdentifier>
     </Filter>
@@ -74,11 +74,29 @@
     <Filter Include="hooks\system">
       <UniqueIdentifier>{dd8cd058-ead9-400e-9562-de3f7bfb8d5c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sdk">
-      <UniqueIdentifier>{2d680d34-5f10-4285-8d15-6996603146ab}</UniqueIdentifier>
+    <Filter Include="hooks\common">
+      <UniqueIdentifier>{386716f7-befe-401c-915c-adaed0bb8e2d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sdk\include">
-      <UniqueIdentifier>{420da7ba-d359-4f60-8fe8-56a6b9b6ded3}</UniqueIdentifier>
+    <Filter Include="hooks\cbasefilesystem">
+      <UniqueIdentifier>{87488282-861b-4a01-a379-10b340037394}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hooks\cclient">
+      <UniqueIdentifier>{57140607-800c-4369-b63b-f4d923e66aa3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hooks\choststate">
+      <UniqueIdentifier>{051efbf5-bdbf-450c-a0c2-7e5a4ad4222f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hooks\ckeyvaluessystem">
+      <UniqueIdentifier>{df6e26f7-e0e7-4a44-af86-700bdd78cb41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hooks\ivengineserver">
+      <UniqueIdentifier>{338a4fb7-7519-4628-9206-679d33824965}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hooks\ivengineclient">
+      <UniqueIdentifier>{d1c7ccba-2509-40fb-a43e-1281bc4d20a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hooks\rtech">
+      <UniqueIdentifier>{b73d3995-6d27-4595-a268-14fd6c43c437}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -97,23 +115,14 @@
     <ClInclude Include="ConCommand.h">
       <Filter>hooks\concommand</Filter>
     </ClInclude>
-    <ClInclude Include="CVEngineServer.h">
-      <Filter>hooks\cvengineserver</Filter>
-    </ClInclude>
     <ClInclude Include="sqvm.h">
       <Filter>hooks\squirrel</Filter>
-    </ClInclude>
-    <ClInclude Include="msgbox.h">
-      <Filter>hooks\other</Filter>
     </ClInclude>
     <ClInclude Include="hooks.h">
       <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="dllmain.h">
       <Filter>core\include</Filter>
-    </ClInclude>
-    <ClInclude Include="opcodes.h">
-      <Filter>hooks\other</Filter>
     </ClInclude>
     <ClInclude Include="IConVar.h">
       <Filter>hooks\iconvar</Filter>
@@ -409,15 +418,6 @@
     <ClInclude Include="EbisuSDK.h">
       <Filter>hooks\ebisu</Filter>
     </ClInclude>
-    <ClInclude Include="sys.h">
-      <Filter>hooks\system</Filter>
-    </ClInclude>
-    <ClInclude Include="classes.h">
-      <Filter>sdk\include</Filter>
-    </ClInclude>
-    <ClInclude Include="enums.h">
-      <Filter>sdk\include</Filter>
-    </ClInclude>
     <ClInclude Include="..\shared\include\address.h">
       <Filter>shared\include</Filter>
     </ClInclude>
@@ -430,8 +430,59 @@
     <ClInclude Include="..\shared\include\json.hpp">
       <Filter>shared\include</Filter>
     </ClInclude>
-    <ClInclude Include="..\shared\include\classes.h">
+    <ClInclude Include="mathlib.h">
+      <Filter>hooks\common</Filter>
+    </ClInclude>
+    <ClInclude Include="protocol.h">
+      <Filter>hooks\common</Filter>
+    </ClInclude>
+    <ClInclude Include="basetypes.h">
+      <Filter>hooks\common</Filter>
+    </ClInclude>
+    <ClInclude Include="interfaces.h">
+      <Filter>hooks\common</Filter>
+    </ClInclude>
+    <ClInclude Include="basefilesystem.h">
+      <Filter>hooks\cbasefilesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="CClient.h">
+      <Filter>hooks\cclient</Filter>
+    </ClInclude>
+    <ClInclude Include="CHostState.h">
+      <Filter>hooks\choststate</Filter>
+    </ClInclude>
+    <ClInclude Include="CKeyValuesSystem.h">
+      <Filter>hooks\ckeyvaluessystem</Filter>
+    </ClInclude>
+    <ClInclude Include="IVEngineServer.h">
+      <Filter>hooks\ivengineserver</Filter>
+    </ClInclude>
+    <ClInclude Include="IVEngineClient.h">
+      <Filter>hooks\ivengineclient</Filter>
+    </ClInclude>
+    <ClInclude Include="rtech.h">
+      <Filter>hooks\rtech</Filter>
+    </ClInclude>
+    <ClInclude Include="opcodes.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="sys_dll.h">
+      <Filter>hooks\system</Filter>
+    </ClInclude>
+    <ClInclude Include="sys_utils.h">
+      <Filter>hooks\system</Filter>
+    </ClInclude>
+    <ClInclude Include="ConCommandCallback.h">
+      <Filter>hooks\concommand</Filter>
+    </ClInclude>
+    <ClInclude Include="logdef.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\include\bansystem.h">
       <Filter>shared\include</Filter>
+    </ClInclude>
+    <ClInclude Include="classes.h">
+      <Filter>core\include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -453,17 +504,8 @@
     <ClCompile Include="ConCommand.cpp">
       <Filter>hooks\concommand</Filter>
     </ClCompile>
-    <ClCompile Include="CVEngineServer.cpp">
-      <Filter>hooks\cvengineserver</Filter>
-    </ClCompile>
     <ClCompile Include="sqvm.cpp">
       <Filter>hooks\squirrel</Filter>
-    </ClCompile>
-    <ClCompile Include="msgbox.cpp">
-      <Filter>hooks\other</Filter>
-    </ClCompile>
-    <ClCompile Include="opcodes.cpp">
-      <Filter>hooks\other</Filter>
     </ClCompile>
     <ClCompile Include="IConVar.cpp">
       <Filter>hooks\iconvar</Filter>
@@ -480,11 +522,44 @@
     <ClCompile Include="EbisuSDK.cpp">
       <Filter>hooks\ebisu</Filter>
     </ClCompile>
-    <ClCompile Include="sys.cpp">
+    <ClCompile Include="basefilesystem.cpp">
+      <Filter>hooks\cbasefilesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="CClient.cpp">
+      <Filter>hooks\cclient</Filter>
+    </ClCompile>
+    <ClCompile Include="CHostState.cpp">
+      <Filter>hooks\choststate</Filter>
+    </ClCompile>
+    <ClCompile Include="CKeyValuesSystem.cpp">
+      <Filter>hooks\ckeyvaluessystem</Filter>
+    </ClCompile>
+    <ClCompile Include="IVEngineServer.cpp">
+      <Filter>hooks\ivengineserver</Filter>
+    </ClCompile>
+    <ClCompile Include="IVEngineClient.cpp">
+      <Filter>hooks\ivengineclient</Filter>
+    </ClCompile>
+    <ClCompile Include="rtech.cpp">
+      <Filter>hooks\rtech</Filter>
+    </ClCompile>
+    <ClCompile Include="opcodes.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="sys_utils.cpp">
       <Filter>hooks\system</Filter>
     </ClCompile>
+    <ClCompile Include="sys_dll.cpp">
+      <Filter>hooks\system</Filter>
+    </ClCompile>
+    <ClCompile Include="ConCommandCallback.cpp">
+      <Filter>hooks\concommand</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\bansystem.cpp">
+      <Filter>shared</Filter>
+    </ClCompile>
     <ClCompile Include="classes.cpp">
-      <Filter>sdk</Filter>
+      <Filter>core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

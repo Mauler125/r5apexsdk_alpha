@@ -10,8 +10,11 @@ namespace
 	int (*QHull_PrintDebug)(char* fmt, va_list args) = (int (*)(char*, va_list))p_QHull_PrintDebug; /*48 89 54 24 10 4C 89 44 24 18 4C 89 4C 24 20 53 56 57 48 83 EC 30 48 8B FA 48 8D 74 24 60 48 8B*/
 }
 
+///////////////////////////////////////////////////////////////////////////////
 int HQHull_PrintError(char* fmt, va_list args);
 int HQHull_PrintDebug(char* fmt, va_list args);
 
 void AttachQHullHooks();
 void DetachQHullHooks();
+
+///////////////////////////////////////////////////////////////////////////////

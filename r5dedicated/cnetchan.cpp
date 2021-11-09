@@ -1,8 +1,9 @@
 #include "stdafx.h"
-#include "cnetchan.h"
+#include "logdef.h"
+#include "CNetChan.h"
 
 //-----------------------------------------------------------------------------
-// Hook and log the receive datagram
+// Purpose: hook and log the receive datagram
 //-----------------------------------------------------------------------------
 bool HNET_ReceiveDatagram(int sock, void* inpacket, bool raw)
 {
@@ -12,24 +13,51 @@ bool HNET_ReceiveDatagram(int sock, void* inpacket, bool raw)
 		int i = NULL;
 		netpacket_t* pkt = (netpacket_t*)inpacket;
 
+		///////////////////////////////////////////////////////////////////////
 		// Log received packet data
 		HexDump("[+] NET_ReceiveDatagram", 0, &pkt->data[i], pkt->wiresize);
 	}
+
 	return result;
 }
 
 //-----------------------------------------------------------------------------
-// Hook and log send datagram
+// Purpose: hook and log the send datagram
 //-----------------------------------------------------------------------------
 unsigned int HNET_SendDatagram(SOCKET s, const char* buf, int len, int flags)
 {
 	unsigned int result = NET_SendDatagram(s, buf, len, flags);
 	if (result)
 	{
+		///////////////////////////////////////////////////////////////////////
 		// Log transmitted packet data
 		HexDump("[+] NET_SendDatagram", 0, buf, len);
 	}
+
 	return result;
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: disconnect the client and shutdown netchannel
+//-----------------------------------------------------------------------------
+void NET_DisconnectClient(CClient* client, const char* reason, unsigned __int8 unk1, char unk2)
+{
+	if (!client) //	Client valid?
+	{
+		return;
+	}
+	if (std::strlen(reason) == NULL) // Is reason null?
+	{
+		return;
+	}
+	if (!client->GetNetChan())
+	{
+		return;
+	}
+
+	NetChan_Shutdown(client->GetNetChan(), reason, unk1, unk2); // Shutdown netchan.
+	client->GetNetChan() = nullptr;                             // Null netchan.
+	Address(0x140302FD0).RCast<void(*)(CClient*)>()(client);    // Reset CClient instance for client.
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -44,3 +72,5 @@ void DetachCNetChanHooks()
 	DetourDetach((LPVOID*)&NET_ReceiveDatagram, &HNET_ReceiveDatagram);
 	DetourDetach((LPVOID*)&NET_SendDatagram, &HNET_SendDatagram);
 }
+
+bool g_bTraceNetChannel;

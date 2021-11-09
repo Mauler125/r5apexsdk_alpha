@@ -1,9 +1,11 @@
 #include "stdafx.h"
+
+#include "rtech.h"
 #include "hooks.h"
-#include "console.h"
-#include "iconvar.h"
 #include "opcodes.h"
-#include "concommand.h"
+#include "console.h"
+
+#include "IVEngineClient.h"
 
 //#############################################################################
 // INITIALIZATION
@@ -13,7 +15,7 @@ void SetupConsole()
 {
 	///////////////////////////////////////////////////////////////////////////
 	// Create the console window
-	if (!AllocConsole())
+	if (AllocConsole() == FALSE)
 	{
 		OutputDebugString("Failed to create console window!\n");
 		return;
@@ -23,8 +25,12 @@ void SetupConsole()
 	// Set the window title
 	FILE* sBuildTxt;
 	CHAR sBuildBuf[1024] = { 0 };
-
+#ifdef NDEBUG
 	fopen_s(&sBuildTxt, "build.txt", "r");
+#elif _DEBUG
+	fopen_s(&sBuildTxt, "..\\build.txt", "r");
+#endif
+
 	if (sBuildTxt)
 	{
 		while (fgets(sBuildBuf, sizeof(sBuildBuf), sBuildTxt) != NULL)
@@ -37,7 +43,7 @@ void SetupConsole()
 	///////////////////////////////////////////////////////////////////////////
 	// Open input/output streams
 	FILE* fDummy;
-	freopen_s(&fDummy, "CONIN$",  "r",  stdin);
+	freopen_s(&fDummy, "CONIN$", "r", stdin);
 	freopen_s(&fDummy, "CONOUT$", "w", stdout);
 	freopen_s(&fDummy, "CONOUT$", "w", stderr);
 
@@ -47,9 +53,16 @@ void SetupConsole()
 	DWORD __stdcall ProcessConsoleWorker(LPVOID);
 	HANDLE hThread0 = CreateThread(NULL, 0, ProcessConsoleWorker, NULL, 0, &threadId0);
 
+	// Initialize global spdlog.
+	auto console = spdlog::stdout_logger_mt("console");
+	console->set_pattern("[%S.%e] %v"); // Set pattern.
+	spdlog::set_level(spdlog::level::trace);
+	spdlog::set_default_logger(console); // Set as default.
+	spdlog::flush_every(std::chrono::seconds(5)); // Flush buffers every 5 seconds for every logger.
+	
 	if (hThread0)
 	{
-		printf("THREAD ID: %ld\n\n", threadId0);
+		spdlog::debug("THREAD ID: {}\n\n", threadId0);
 		CloseHandle(hThread0);
 	}
 }
@@ -71,21 +84,15 @@ DWORD __stdcall ProcessConsoleWorker(LPVOID)
 		std::getline(std::cin, sCommand);
 
 		///////////////////////////////////////////////////////////////////////
-		// Engine toggles
-		if (sCommand == "toggle dev") { HEbisuSDK_Init(); ToggleDevCommands(); continue; }
-		///////////////////////////////////////////////////////////////////////
 		// Debug toggles
-		if (sCommand == "pattern test") { PrintHAddress(); /*PrintOAddress();*/ continue; }
-		if (sCommand == "console test") { g_bDebugConsole = !g_bDebugConsole; continue; }
+		if (sCommand == "pattern test") { PrintHAddress(); PrintOAddress(); continue; }
 		///////////////////////////////////////////////////////////////////////
 		// Exec toggles
-		if (sCommand == "1") { CommandExecute(NULL, "exec autoexec_dev"); }
-		if (sCommand == "2") { g_bDebugLoading = !g_bDebugLoading; continue; }
-		if (sCommand == "3") { SetCHostState(); continue; }
-
+		if (sCommand == "1") { IVEngineClient_CommandExecute(NULL, "exec autoexec_dev"); continue; }
+		if (sCommand == "2") { IVEngineClient_CommandExecute(NULL, "exec connect5_dev"); continue; }
 		///////////////////////////////////////////////////////////////////////
 		// Execute the command in the r5 SQVM
-		CommandExecute(NULL, sCommand.c_str());
+		IVEngineClient_CommandExecute(NULL, sCommand.c_str());
 		sCommand.clear();
 
 		///////////////////////////////////////////////////////////////////////

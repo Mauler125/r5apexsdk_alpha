@@ -305,7 +305,6 @@
     <ClInclude Include="..\external\spdlog\include\version.h" />
     <ClInclude Include="..\shared\include\address.h" />
     <ClInclude Include="..\shared\include\bansystem.h" />
-    <ClInclude Include="..\shared\include\classes.h" />
     <ClInclude Include="..\shared\include\httplib.h" />
     <ClInclude Include="..\shared\include\json.hpp" />
     <ClInclude Include="..\shared\include\squirrel.h" />
@@ -314,6 +313,7 @@
     <ClInclude Include="basetypes.h" />
     <ClInclude Include="ButtonCode.h" />
     <ClInclude Include="CClient.h" />
+    <ClInclude Include="classes.h" />
     <ClInclude Include="IVEngineClient.h" />
     <ClInclude Include="CEngineVGui.h" />
     <ClInclude Include="CHLClient.h" />
@@ -383,10 +383,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\shared\bansystem.cpp" />
-    <ClCompile Include="..\shared\classes.cpp" />
     <ClCompile Include="..\shared\utility.cpp" />
     <ClCompile Include="basefilesystem.cpp" />
     <ClCompile Include="CClient.cpp" />
+    <ClCompile Include="classes.cpp" />
     <ClCompile Include="IVEngineClient.cpp" />
     <ClCompile Include="CEngineVGui.cpp" />
     <ClCompile Include="CHLClient.cpp" />

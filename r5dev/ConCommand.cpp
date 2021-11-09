@@ -101,7 +101,7 @@ void ConCommand_InitConCommand()
 	void* rTechToHashCommand   = ConCommand_RegisterCommand("rtech_tohash", "Calculates the GUID from input data.", 0, ToHash_Callback, nullptr);
 	//-------------------------------------------------------------------------
 	// NETCHANNEL                                                             |
-	void* netTraceCommand = ConCommand_RegisterCommand("net_tracechannel", "Logs the sending and receiving datagram to a file on the disk.", 0, NET_TraceNetChan, nullptr);
+	void* netTraceCommand = ConCommand_RegisterCommand("net_toggletrace", "Logs the sending and receiving datagram to a file on the disk.", 0, NET_TraceNetChan, nullptr);
 }
 
 void AttachConCommandHooks()

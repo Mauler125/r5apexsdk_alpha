@@ -3,6 +3,7 @@
 #include "sqvm.h"
 #include "IConVar.h"
 #include "CEngineVGui.h"
+#include "CGameConsole.h"
 
 //---------------------------------------------------------------------------------
 // Purpose: prints the output of each VM to the console
@@ -17,7 +18,7 @@ void* HSQVM_PrintFunc(void* sqvm, char* fmt, ...)
 
 	static auto iconsole = spdlog::stdout_logger_mt("sqvm_print_iconsole"); // in-game console.
 	static auto wconsole = spdlog::stdout_logger_mt("sqvm_print_wconsole"); // windows console.
-	static auto sqlogger = spdlog::basic_logger_mt("sqvm_print_logger", "platform\\logs\\SQVM_Print.log"); // file logger.
+	static auto sqlogger = spdlog::basic_logger_mt("sqvm_print_logger", "platform\\logs\\sqvm_print.log"); // file logger.
 
 	std::string vmStr = vmType[vmIdx].c_str();
 
@@ -73,7 +74,7 @@ __int64 HSQVM_WarningFunc(void* sqvm, int a2, int a3, int* stringSize, void** st
 
 	static auto iconsole = spdlog::stdout_logger_mt("sqvm_warn_iconsole"); // in-game console.
 	static auto wconsole = spdlog::stdout_logger_mt("sqvm_warn_wconsole"); // windows console.
-	static auto sqlogger = spdlog::basic_logger_mt("sqvm_warn_logger", "platform\\logs\\SQVM_Warn.log"); // file logger.
+	static auto sqlogger = spdlog::basic_logger_mt("sqvm_warn_logger", "platform\\logs\\sqvm_warn.log"); // file logger.
 
 	int vmIdx = *(int*)((std::uintptr_t)sqvm + 0x18);
 	std::string vmStr = vmType[vmIdx].c_str();

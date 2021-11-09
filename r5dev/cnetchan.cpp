@@ -2,46 +2,7 @@
 #include "logdef.h"
 #include "CNetChan.h"
 #include "CGameConsole.h"
-
-//-----------------------------------------------------------------------------
-// Purpose: hook and log the client's signonstate to the console
-//-----------------------------------------------------------------------------
-void HNET_PrintFunc(const char* fmt, ...)
-{
-	static bool initialized = false;
-	static char buf[1024];
-
-	static auto iconsole = spdlog::stdout_logger_mt("net_print_iconsole"); // in-game console
-	static auto wconsole = spdlog::stdout_logger_mt("net_print_wconsole"); // windows console
-
-	g_spd_net_p_oss.str("");
-	g_spd_net_p_oss.clear();
-
-	if (!initialized)
-	{
-		iconsole = std::make_shared<spdlog::logger>("net_print_ostream", g_spd_net_p_ostream_sink);
-		iconsole->set_pattern("[%S.%e] Native(C):%v\n");
-		iconsole->set_level(spdlog::level::debug);
-		wconsole->set_pattern("[%S.%e] Native(C):%v\n");
-		wconsole->set_level(spdlog::level::debug);
-	}
-
-	va_list args;
-	va_start(args, fmt);
-
-	vsnprintf(buf, sizeof(buf), fmt, args);
-
-	buf[sizeof(buf) - 1] = 0;
-	va_end(args);
-
-	iconsole->debug(buf);
-	wconsole->debug(buf);
-
-	std::string s = g_spd_net_p_oss.str();
-	const char* c = s.c_str();
-
-	Items.push_back(Strdup((const char*)c));
-}
+#include "sys_utils.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: hook and log the receive datagram
@@ -60,7 +21,7 @@ bool HNET_ReceiveDatagram(int sock, void* inpacket, bool raw)
 		netpacket_t* pkt = (netpacket_t*)inpacket;
 
 		// Log received packet data
-		HexDump("[+] NET_ReceiveDatagram", "netchan_logger", &pkt->data[i], pkt->wiresize);
+		HexDump("[+] NET_ReceiveDatagram", 0, &pkt->data[i], pkt->wiresize);
 	}
 	return result;
 }
@@ -79,7 +40,7 @@ unsigned int HNET_SendDatagram(SOCKET s, const char* buf, int len, int flags)
 	if (result)
 	{
 		// Log transmitted packet data
-		HexDump("[+] NET_SendDatagram", "netchan_logger", buf, len);
+		HexDump("[+] NET_SendDatagram", 0, buf, len);
 	}
 	return result;
 }
@@ -105,6 +66,24 @@ void NET_DisconnectClient(CClient* client, const char* reason, unsigned __int8 u
 	NetChan_Shutdown(client->GetNetChan(), reason, unk1, unk2); // Shutdown netchan.
 	client->GetNetChan() = nullptr;                             // Null netchan.
 	Address(0x140302FD0).RCast<void(*)(CClient*)>()(client);    // Reset CClient instance for client.
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: hook and log the client's signonstate to the console
+//-----------------------------------------------------------------------------
+void HNET_PrintFunc(const char* fmt, ...)
+{
+	static char buf[1024];
+
+	va_list args;
+	va_start(args, fmt);
+
+	vsnprintf(buf, sizeof(buf), fmt, args);
+
+	buf[sizeof(buf) -1] = 0;
+	va_end(args);
+
+	Sys_Print(SYS_DLL::CLIENT, "%s\n", buf);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -235,9 +235,6 @@
     <ClCompile Include="CClient.cpp">
       <Filter>hooks\cclient</Filter>
     </ClCompile>
-    <ClCompile Include="..\shared\classes.cpp">
-      <Filter>shared</Filter>
-    </ClCompile>
     <ClCompile Include="ConCommandCallback.cpp">
       <Filter>hooks\concommand</Filter>
     </ClCompile>
@@ -261,6 +258,9 @@
     </ClCompile>
     <ClCompile Include="sys_dll.cpp">
       <Filter>hooks\system</Filter>
+    </ClCompile>
+    <ClCompile Include="classes.cpp">
+      <Filter>core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -654,9 +654,6 @@
     <ClInclude Include="serverlisting.h">
       <Filter>sdk\include</Filter>
     </ClInclude>
-    <ClInclude Include="..\shared\include\classes.h">
-      <Filter>shared\include</Filter>
-    </ClInclude>
     <ClInclude Include="..\shared\include\bansystem.h">
       <Filter>shared\include</Filter>
     </ClInclude>
@@ -716,6 +713,9 @@
     </ClInclude>
     <ClInclude Include="sys_dll.h">
       <Filter>hooks\system</Filter>
+    </ClInclude>
+    <ClInclude Include="classes.h">
+      <Filter>core\include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

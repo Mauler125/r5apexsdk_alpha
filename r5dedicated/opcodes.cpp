@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "hooks.h"
-#include "enums.h"
 #include "opcodes.h"
 #include "classes.h"
 
@@ -185,13 +184,4 @@ void InstallOpcodes()
 	//-------------------------------------------------------------------------
 	// END RUNTIME BLOCK
 	//-------------------------------------------------------------------------
-}
-
-// TEST
-void SetCHostState()
-{
-	static std::string ServerMap = std::string();
-	ServerMap = "mp_rr_canyonlands_64k_x_64k";
-	strncpy_s(GameGlobals::HostState->m_levelName, ServerMap.c_str(), 64); // Copy new map into hoststate levelname. 64 is size of m_levelname.
-	GameGlobals::HostState->m_iNextState = HostStates_t::HS_NEW_GAME; // Force CHostState::FrameUpdate to start a server.
 }

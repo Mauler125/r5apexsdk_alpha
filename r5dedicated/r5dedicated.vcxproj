@@ -133,8 +133,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <LanguageStandard_C>Default</LanguageStandard_C>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
@@ -154,8 +154,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <LanguageStandard_C>Default</LanguageStandard_C>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
@@ -177,29 +177,37 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\shared\bansystem.cpp" />
     <ClCompile Include="..\shared\utility.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="basefilesystem.cpp" />
+    <ClCompile Include="CClient.cpp" />
+    <ClCompile Include="CHostState.cpp" />
+    <ClCompile Include="CKeyValuesSystem.cpp" />
     <ClCompile Include="classes.cpp" />
     <ClCompile Include="ConCommand.cpp" />
+    <ClCompile Include="ConCommandCallback.cpp" />
     <ClCompile Include="console.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="EbisuSDK.cpp" />
     <ClCompile Include="hooks.cpp" />
     <ClCompile Include="IAppSystem.cpp" />
     <ClCompile Include="IConVar.cpp" />
-    <ClCompile Include="msgbox.cpp" />
+    <ClCompile Include="IVEngineClient.cpp" />
+    <ClCompile Include="IVEngineServer.cpp" />
     <ClCompile Include="CNetChan.cpp" />
     <ClCompile Include="opcodes.cpp" />
     <ClCompile Include="QHull.cpp" />
+    <ClCompile Include="rtech.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="CVEngineServer.cpp" />
     <ClCompile Include="sqvm.cpp" />
-    <ClCompile Include="sys.cpp" />
+    <ClCompile Include="sys_dll.cpp" />
+    <ClCompile Include="sys_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\external\spdlog\include\async.h" />
@@ -298,27 +306,38 @@
     <ClInclude Include="..\external\spdlog\include\version.h" />
     <ClInclude Include="..\shared\include\address.h" />
     <ClInclude Include="..\shared\include\banlist.h" />
-    <ClInclude Include="..\shared\include\classes.h" />
+    <ClInclude Include="..\shared\include\bansystem.h" />
     <ClInclude Include="..\shared\include\httplib.h" />
     <ClInclude Include="..\shared\include\json.hpp" />
     <ClInclude Include="..\shared\include\utility.h" />
+    <ClInclude Include="basefilesystem.h" />
+    <ClInclude Include="basetypes.h" />
+    <ClInclude Include="CClient.h" />
+    <ClInclude Include="CHostState.h" />
+    <ClInclude Include="CKeyValuesSystem.h" />
     <ClInclude Include="classes.h" />
     <ClInclude Include="ConCommand.h" />
+    <ClInclude Include="ConCommandCallback.h" />
     <ClInclude Include="console.h" />
     <ClInclude Include="dllmain.h" />
     <ClInclude Include="EbisuSDK.h" />
-    <ClInclude Include="enums.h" />
     <ClInclude Include="hooks.h" />
     <ClInclude Include="IAppSystem.h" />
     <ClInclude Include="IConVar.h" />
-    <ClInclude Include="msgbox.h" />
+    <ClInclude Include="interfaces.h" />
+    <ClInclude Include="IVEngineClient.h" />
+    <ClInclude Include="IVEngineServer.h" />
+    <ClInclude Include="logdef.h" />
+    <ClInclude Include="mathlib.h" />
     <ClInclude Include="CNetChan.h" />
     <ClInclude Include="opcodes.h" />
+    <ClInclude Include="protocol.h" />
     <ClInclude Include="QHull.h" />
+    <ClInclude Include="rtech.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="CVEngineServer.h" />
     <ClInclude Include="sqvm.h" />
-    <ClInclude Include="sys.h" />
+    <ClInclude Include="sys_dll.h" />
+    <ClInclude Include="sys_utils.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="r5dedicated.def" />

@@ -7,6 +7,7 @@
 #include "IConVar.h"
 #include "CGameConsole.h"
 #include "ConCommandCallback.h"
+#include "sys_utils.h"
 
 void CGameConsole_Callback(const CCommand& cmd)
 {
@@ -146,8 +147,7 @@ void KickID_Callback(CCommand* cmd)
 	}
 	catch (std::exception& e)
 	{
-		spdlog::critical("sv_kickid requires a UserID or OriginID. You can get the UserID with the 'status' command. Error: {}\n", e.what());
-		g_GameConsole->AddLog("sv_kickid requires a UserID or OriginID. You can get the UserID with the 'status' command. Error: %s", e.what());
+		Sys_Print(SYS_DLL::SERVER, "sv_kickid requires a UserID or OriginID. You can get the UserID with the 'status' command. Error: %s", e.what());
 		return;
 	}
 }
@@ -299,8 +299,7 @@ void BanID_Callback(CCommand* cmd)
 	}
 	catch (std::exception& e)
 	{
-		spdlog::critical("Banid Error: {}\n", e.what());
-		g_GameConsole->AddLog("Banid Error: %s", e.what());
+		Sys_Print(SYS_DLL::SERVER, "Banid Error: %s", e.what());
 		return;
 	}
 }
@@ -343,8 +342,7 @@ void Unban_Callback(CCommand* cmd)
 	}
 	catch (std::exception& e)
 	{
-		spdlog::critical("Unban Error: {}\n", e.what());
-		//g_GameConsole->AddLog("Unban Error: %s", e.what());
+		Sys_Print(SYS_DLL::SERVER, "Unban Error: %s", e.what());
 		return;
 	}
 }
@@ -359,31 +357,32 @@ void ToHash_Callback(CCommand* cmd)
 	CCommand& cmdReference = *cmd; // Get reference.
 	const char* firstArg = cmdReference[1]; // Get first arg.
 	unsigned long long guid = g_pRtech->ToGuid(firstArg);
-	printf("##############################################################\n");
-	printf("GUID: 0x%llX\n", guid);
+	Sys_Print(SYS_DLL::ENGINE, "______________________________________________________________\n");
+	Sys_Print(SYS_DLL::ENGINE, "# RTECH_HASH #################################################\n");
+	Sys_Print(SYS_DLL::ENGINE, "GUID: 0x%llX\n", guid);
 }
 
 void NET_TraceNetChan(CCommand* cmd)
 {
 	if (!g_bTraceNetChannel)
 	{
-		if (g_pCvar->FindVar("net_usesocketsforloopback")->m_iValue <= 0)
+		if (g_pCvar->FindVar("net_usesocketsforloopback")->m_iValue != 1)
 		{
 			g_pCvar->FindVar("net_usesocketsforloopback")->m_iValue = 1;
 		}
-		printf("\n");
-		printf("+--------------------------------------------------------+\n");
-		printf("|>>>>>>>>>>>>>| NETCHANNEL TRACE ACTIVATED |<<<<<<<<<<<<<|\n");
-		printf("+--------------------------------------------------------+\n");
-		printf("\n");
+		Sys_Print(SYS_DLL::ENGINE, "\n");
+		Sys_Print(SYS_DLL::ENGINE, "+--------------------------------------------------------+\n");
+		Sys_Print(SYS_DLL::ENGINE, "|>>>>>>>>>>>>>| NETCHANNEL TRACE ACTIVATED |<<<<<<<<<<<<<|\n");
+		Sys_Print(SYS_DLL::ENGINE, "+--------------------------------------------------------+\n");
+		Sys_Print(SYS_DLL::ENGINE, "\n");
 	}
 	else
 	{
-		printf("\n");
-		printf("+--------------------------------------------------------+\n");
-		printf("|>>>>>>>>>>>>| NETCHANNEL TRACE DEACTIVATED |<<<<<<<<<<<<|\n");
-		printf("+--------------------------------------------------------+\n");
-		printf("\n");
+		Sys_Print(SYS_DLL::ENGINE, "\n");
+		Sys_Print(SYS_DLL::ENGINE, "+--------------------------------------------------------+\n");
+		Sys_Print(SYS_DLL::ENGINE, "|>>>>>>>>>>>>| NETCHANNEL TRACE DEACTIVATED |<<<<<<<<<<<<|\n");
+		Sys_Print(SYS_DLL::ENGINE, "+--------------------------------------------------------+\n");
+		Sys_Print(SYS_DLL::ENGINE, "\n");
 	}
 	g_bTraceNetChannel = !g_bTraceNetChannel;
 }

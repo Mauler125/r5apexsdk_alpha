@@ -1,7 +1,6 @@
 #pragma once
 #include "stdafx.h"
 #include "hooks.h"
-#include "CGameConsole.h"
 
 struct SQFuncRegistration
 {
