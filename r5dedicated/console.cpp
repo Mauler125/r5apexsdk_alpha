@@ -87,10 +87,6 @@ DWORD __stdcall ProcessConsoleWorker(LPVOID)
 		// Debug toggles
 		if (sCommand == "pattern test") { PrintHAddress(); PrintOAddress(); continue; }
 		///////////////////////////////////////////////////////////////////////
-		// Exec toggles
-		if (sCommand == "1") { IVEngineClient_CommandExecute(NULL, "exec autoexec_dev"); continue; }
-		if (sCommand == "2") { IVEngineClient_CommandExecute(NULL, "exec connect5_dev"); continue; }
-		///////////////////////////////////////////////////////////////////////
 		// Execute the command in the r5 SQVM
 		IVEngineClient_CommandExecute(NULL, sCommand.c_str());
 		sCommand.clear();

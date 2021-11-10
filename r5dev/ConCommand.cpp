@@ -2,6 +2,7 @@
 #include "hooks.h"
 #include "ConCommand.h"
 #include "CClient.h"
+#include "IConVar.h"
 #include "ConCommandCallback.h"
 #include "sys_utils.h"
 
@@ -12,29 +13,29 @@
 //-----------------------------------------------------------------------------
 bool HConCommand_IsFlagSet(ConCommandBase* cmd, int flag)
 {
-	if (g_bClassInitialized && g_pCvar->FindVar("cm_debug_cmdquery")->m_iValue > 0)
+	if (g_cm_debug_cmdquery > 0)
 	{
 		printf("--------------------------------------------------\n");
 		printf(" Flaged: %08X\n", cmd->m_nFlags);
 	}
 	// Mask off FCVAR_CHEATS and FCVAR_DEVELOPMENTONLY
 	cmd->m_nFlags &= 0xFFFFBFFD;
-	if (g_bClassInitialized && g_pCvar->FindVar("cm_debug_cmdquery")->m_iValue > 0)
+	if (g_cm_debug_cmdquery > 0)
 	{
 		printf(" Masked: %08X\n", cmd->m_nFlags);
 		printf(" Verify: %08X\n", flag);
 		printf("--------------------------------------------------\n");
 	}
-	if (flag & 0x80000 && g_bClassInitialized && g_pCvar->FindVar("cm_return_false_cmdquery_all")->m_iValue <= 0)
+	if (flag & 0x80000 && g_cm_return_false_cmdquery_all <= 0)
 	{
 		return ConCommand_IsFlagSet(cmd, flag);
 	}
-	if (g_bClassInitialized && g_pCvar->FindVar("cm_return_false_cmdquery_all")->m_iValue > 0)
+	if (g_cm_return_false_cmdquery_all > 0)
 	{
 		// Returning false on all queries may cause problems.
 		return false;
 	}
-	if (g_bClassInitialized && g_pCvar->FindVar("cm_return_false_cmdquery_dev_cheat")->m_iValue > 0)
+	if (g_cm_return_false_cmdquery_dev_cheat > 0)
 	{
 		// Return false on every FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT query.
 		return (cmd->m_nFlags & flag) != 0;

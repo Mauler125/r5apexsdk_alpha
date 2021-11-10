@@ -271,6 +271,9 @@
     <ClCompile Include="sqapi.cpp">
       <Filter>hooks\squirrel</Filter>
     </ClCompile>
+    <ClCompile Include="IConVarCallback.cpp">
+      <Filter>hooks\iconvar</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\external\detours\include\detours.h">
@@ -728,6 +731,9 @@
     </ClInclude>
     <ClInclude Include="sqapi.h">
       <Filter>hooks\squirrel</Filter>
+    </ClInclude>
+    <ClInclude Include="IConVarCallback.h">
+      <Filter>hooks\iconvar</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

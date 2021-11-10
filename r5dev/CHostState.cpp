@@ -2,7 +2,9 @@
 #include "classes.h"
 #include "sys_utils.h"
 #include "CHostState.h"
+#include "CNetChan.h"
 #include "IConVar.h"
+#include "IVEngineClient.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
@@ -31,11 +33,26 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 
 	if (!g_bClassInitialized)
 	{
-		ClassInit();
-		IConVar_ClearHostNames();
-		ConCommand_InitConCommand();
-		IConVar_InitConVar();
-		g_bClassInitialized = true;
+		if (!g_bClassInitialized)
+		{
+			ClassInit();
+			IConVar_ClearHostNames();
+			ConCommand_InitConCommand();
+			IConVar_InitConVar();
+
+			IVEngineClient_CommandExecute(NULL, "exec autoexec.cfg");
+			IVEngineClient_CommandExecute(NULL, "exec autoexec_server.cfg");
+			IVEngineClient_CommandExecute(NULL, "exec autoexec_client.cfg");
+
+			if (g_pCvar->FindVar("net_userandomkey")->m_iValue == 1)
+			{
+				HNET_GenerateKey();
+			}
+
+			g_pCvar->FindVar("net_usesocketsforloopback")->m_iValue = 1;
+
+			g_bClassInitialized = true;
+		}
 	}
 
 	HostStates_t oldState;

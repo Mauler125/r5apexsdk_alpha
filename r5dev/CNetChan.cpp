@@ -4,6 +4,7 @@
 #include "CNetChan.h"
 #include "CBaseClient.h"
 #include "CGameConsole.h"
+#include "IConVar.h"
 #include "IVEngineServer.h"
 
 //-----------------------------------------------------------------------------
@@ -53,6 +54,8 @@ unsigned int HNET_SendDatagram(SOCKET s, const char* buf, int len, int flags)
 void HNET_SetKey(std::string key)
 {
 	uintptr_t netkey_ptr = 0x160686DC0; // TODO: GLOBALIZE
+
+	g_szNetKey.clear();
 	g_szNetKey = key;
 
 	NET_SetKey(netkey_ptr, g_szNetKey.c_str());
@@ -64,6 +67,9 @@ void HNET_SetKey(std::string key)
 void HNET_GenerateKey()
 {
 	uintptr_t netkey_ptr = 0x160686DC0; // TODO: GLOBALIZE
+
+	g_szNetKey.clear();
+	g_pCvar->FindVar("net_userandomkey")->m_iValue = 1;
 
 	BCRYPT_ALG_HANDLE hAlgorithm;
 	if (BCryptOpenAlgorithmProvider(&hAlgorithm, L"RNG", 0, 0) < 0)
@@ -145,4 +151,4 @@ void DetachCNetChanHooks()
 
 ///////////////////////////////////////////////////////////////////////////////
 bool g_bTraceNetChannel;
-std::string g_szNetKey;
+std::string g_szNetKey = "WDNWLmJYQ2ZlM0VoTid3Yg==";

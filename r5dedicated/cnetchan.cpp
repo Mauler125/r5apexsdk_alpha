@@ -3,6 +3,7 @@
 #include "sys_utils.h"
 #include "CNetChan.h"
 #include "CBaseClient.h"
+#include "IConVar.h"
 #include "IVEngineServer.h"
 
 //-----------------------------------------------------------------------------
@@ -56,6 +57,8 @@ unsigned int HNET_SendDatagram(SOCKET s, const char* buf, int len, int flags)
 void HNET_SetKey(std::string key)
 {
 	uintptr_t netkey_ptr = 0x160686DC0; // TODO: GLOBALIZE
+
+	g_szNetKey.clear();
 	g_szNetKey = key;
 
 	Sys_Print(SYS_DLL::ENGINE, "______________________________________________________________\n");
@@ -71,8 +74,11 @@ void HNET_SetKey(std::string key)
 void HNET_GenerateKey()
 {
 	uintptr_t netkey_ptr = 0x160686DC0; // TODO: GLOBALIZE
-
 	BCRYPT_ALG_HANDLE hAlgorithm;
+
+	g_szNetKey.clear();
+	g_pCvar->FindVar("net_userandomkey")->m_iValue = 1;
+
 	if (BCryptOpenAlgorithmProvider(&hAlgorithm, L"RNG", 0, 0) < 0)
 	{
 		Sys_Print(SYS_DLL::ENGINE, "Failed to open rng algorithm\n");
@@ -136,4 +142,4 @@ void DetachCNetChanHooks()
 
 ///////////////////////////////////////////////////////////////////////////////
 bool g_bTraceNetChannel;
-std::string g_szNetKey;
+std::string g_szNetKey = "WDNWLmJYQ2ZlM0VoTid3Yg==";

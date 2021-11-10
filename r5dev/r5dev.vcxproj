@@ -314,6 +314,7 @@
     <ClInclude Include="CBaseClient.h" />
     <ClInclude Include="CClient.h" />
     <ClInclude Include="classes.h" />
+    <ClInclude Include="IConVarCallback.h" />
     <ClInclude Include="IVEngineClient.h" />
     <ClInclude Include="CEngineVGui.h" />
     <ClInclude Include="CHLClient.h" />
@@ -389,6 +390,7 @@
     <ClCompile Include="CBaseClient.cpp" />
     <ClCompile Include="CClient.cpp" />
     <ClCompile Include="classes.cpp" />
+    <ClCompile Include="IConVarCallback.cpp" />
     <ClCompile Include="IVEngineClient.cpp" />
     <ClCompile Include="CEngineVGui.cpp" />
     <ClCompile Include="CHLClient.cpp" />

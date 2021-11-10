@@ -196,6 +196,7 @@
     <ClCompile Include="hooks.cpp" />
     <ClCompile Include="IAppSystem.cpp" />
     <ClCompile Include="IConVar.cpp" />
+    <ClCompile Include="IConVarCallback.cpp" />
     <ClCompile Include="IVEngineClient.cpp" />
     <ClCompile Include="IVEngineServer.cpp" />
     <ClCompile Include="CNetChan.cpp" />
@@ -327,6 +328,7 @@
     <ClInclude Include="hooks.h" />
     <ClInclude Include="IAppSystem.h" />
     <ClInclude Include="IConVar.h" />
+    <ClInclude Include="IConVarCallback.h" />
     <ClInclude Include="interfaces.h" />
     <ClInclude Include="IVEngineClient.h" />
     <ClInclude Include="IVEngineServer.h" />

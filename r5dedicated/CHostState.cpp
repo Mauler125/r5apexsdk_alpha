@@ -37,10 +37,16 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 		IConVar_ClearHostNames();
 		ConCommand_InitConCommand();
 		IConVar_InitConVar();
-		HNET_GenerateKey();
-		g_pCvar->FindVar("net_usesocketsforloopback")->m_iValue = 1;
+
 		IVEngineClient_CommandExecute(NULL, "exec autoexec.cfg");
 		IVEngineClient_CommandExecute(NULL, "exec autoexec_server.cfg");
+
+		if (g_pCvar->FindVar("net_userandomkey")->m_iValue == 1)
+		{
+			HNET_GenerateKey();
+		}
+
+		g_pCvar->FindVar("net_usesocketsforloopback")->m_iValue = 1;
 
 		g_bClassInitialized = true;
 	}

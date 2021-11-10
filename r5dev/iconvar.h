@@ -140,3 +140,7 @@ void DetachIConVarHooks();
 
 ///////////////////////////////////////////////////////////////////////////////
 extern CCVar* g_pCvar;
+
+extern int g_cm_debug_cmdquery;
+extern int g_cm_return_false_cmdquery_all;
+extern int g_cm_return_false_cmdquery_dev_cheat;
