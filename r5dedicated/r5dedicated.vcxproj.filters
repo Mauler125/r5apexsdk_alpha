@@ -59,9 +59,6 @@
     <Filter Include="hooks\squirrel">
       <UniqueIdentifier>{74afa89f-72af-4e13-aa90-70f7a1957154}</UniqueIdentifier>
     </Filter>
-    <Filter Include="hooks\netchannel">
-      <UniqueIdentifier>{05e6e9a7-801b-49b0-9c5a-21c4868befb7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="hooks\cappsystemgroup">
       <UniqueIdentifier>{69c268d0-bab8-41b2-be3b-b04b67a6c919}</UniqueIdentifier>
     </Filter>
@@ -101,6 +98,9 @@
     <Filter Include="hooks\cbaseclient">
       <UniqueIdentifier>{9f51f1bd-ae36-4143-88b7-c9a5680e13d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="hooks\cnetchan">
+      <UniqueIdentifier>{05e6e9a7-801b-49b0-9c5a-21c4868befb7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\shared\include\utility.h">
@@ -110,7 +110,7 @@
       <Filter>core\include</Filter>
     </ClInclude>
     <ClInclude Include="CNetChan.h">
-      <Filter>hooks\netchannel</Filter>
+      <Filter>hooks\cnetchan</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>core\include</Filter>
@@ -508,7 +508,7 @@
       <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="CNetChan.cpp">
-      <Filter>hooks\netchannel</Filter>
+      <Filter>hooks\cnetchan</Filter>
     </ClCompile>
     <ClCompile Include="ConCommand.cpp">
       <Filter>hooks\concommand</Filter>

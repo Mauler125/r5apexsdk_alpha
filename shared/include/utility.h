@@ -14,5 +14,7 @@ DWORD64 FindPatternV2(const char* szModule, const unsigned char* szPattern, cons
 // Utility
 void DbgPrint(LPCSTR sFormat, ...);
 void HexDump(const char* szHeader, int nFunc, const void* pData, int nSize);
+std::string base64_encode(const std::string& in);
+std::string base64_decode(const std::string& in);
 
 /////////////////////////////////////////////////////////////////////////////

@@ -16,5 +16,7 @@ void Unban_Callback(CCommand* cmd);
 void ReloadBanList_Callback(CCommand* cmd);
 void ToHash_Callback(CCommand* cmd);
 void NET_TraceNetChan(CCommand* cmd);
+void NET_SetKey_Callback(CCommand* cmd);
+void NET_GenerateKey_Callback(CCommand* cmd);
 
 ///////////////////////////////////////////////////////////////////////////////

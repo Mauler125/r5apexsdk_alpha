@@ -99,7 +99,9 @@ void ConCommand_InitConCommand()
 	void* rTechToHashCommand   = ConCommand_RegisterCommand("rtech_tohash", "Calculates the GUID from input data.", 0, ToHash_Callback, nullptr);
 	//-------------------------------------------------------------------------
 	// NETCHANNEL                                                             |
-	void* netTraceCommand = ConCommand_RegisterCommand("net_toggletrace", "Logs the sending and receiving datagram to a file on the disk.", 0, NET_TraceNetChan, nullptr);
+	void* netTraceCommand  = ConCommand_RegisterCommand("net_toggletrace", "Logs the sending and receiving datagram to a file on the disk.", 0, NET_TraceNetChan_Callback, nullptr);
+	void* netSetKeyCommand = ConCommand_RegisterCommand("net_setkey", "Sets user specified base64 net key.", 0, NET_SetKey_Callback, nullptr);
+	void* netGenKeyCommand = ConCommand_RegisterCommand("net_generatekey", "Generates and sets a random base64 net key.", 0, NET_GenerateKey_Callback, nullptr);
 }
 
 void AttachConCommandHooks()

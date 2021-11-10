@@ -9,6 +9,8 @@
 #include "ConCommandCallback.h"
 #include "sys_utils.h"
 
+#pragma comment(lib, "bcrypt.lib")
+
 void CGameConsole_Callback(const CCommand& cmd)
 {
 	g_bShowConsole = !g_bShowConsole;
@@ -357,19 +359,24 @@ void ToHash_Callback(CCommand* cmd)
 	CCommand& cmdReference = *cmd; // Get reference.
 	const char* firstArg = cmdReference[1]; // Get first arg.
 	unsigned long long guid = g_pRtech->ToGuid(firstArg);
+
+	std::int32_t argSize = *(std::int32_t*)((std::uintptr_t)cmd + 0x4);
+
+	if (argSize < 1) // Do we atleast have 1 argument?
+	{
+		return;
+	}
+
 	Sys_Print(SYS_DLL::ENGINE, "______________________________________________________________\n");
 	Sys_Print(SYS_DLL::ENGINE, "# RTECH_HASH #################################################\n");
-	Sys_Print(SYS_DLL::ENGINE, "GUID: 0x%llX\n", guid);
+	Sys_Print(SYS_DLL::ENGINE, "] GUID: '0x%llX'\n", guid);
 }
 
 void NET_TraceNetChan(CCommand* cmd)
 {
 	if (!g_bTraceNetChannel)
 	{
-		if (g_pCvar->FindVar("net_usesocketsforloopback")->m_iValue != 1)
-		{
-			g_pCvar->FindVar("net_usesocketsforloopback")->m_iValue = 1;
-		}
+		g_pCvar->FindVar("net_usesocketsforloopback")->m_iValue = 1;
 		Sys_Print(SYS_DLL::ENGINE, "\n");
 		Sys_Print(SYS_DLL::ENGINE, "+--------------------------------------------------------+\n");
 		Sys_Print(SYS_DLL::ENGINE, "|>>>>>>>>>>>>>| NETCHANNEL TRACE ACTIVATED |<<<<<<<<<<<<<|\n");
@@ -385,4 +392,25 @@ void NET_TraceNetChan(CCommand* cmd)
 		Sys_Print(SYS_DLL::ENGINE, "\n");
 	}
 	g_bTraceNetChannel = !g_bTraceNetChannel;
+}
+
+void NET_SetKey_Callback(CCommand* cmd)
+{
+	CCommand& cmdReference = *cmd; // Get reference.
+	const char* firstArg = cmdReference[1]; // Get first arg.
+	unsigned long long guid = g_pRtech->ToGuid(firstArg);
+
+	std::int32_t argSize = *(std::int32_t*)((std::uintptr_t)cmd + 0x4);
+
+	if (argSize < 1) // Do we atleast have 1 argument?
+	{
+		return;
+	}
+
+	HNET_SetKey(firstArg);
+}
+
+void NET_GenerateKey_Callback(CCommand* cmd)
+{
+	HNET_GenerateKey();
 }

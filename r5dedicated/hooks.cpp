@@ -1,18 +1,19 @@
 #include "stdafx.h"
 #include "hooks.h"
+#include "opcodes.h"
 #include "IAppSystem.h"
-#include "IConVar.h"
+#include "CBaseClient.h"
+#include "basefilesystem.h"
+#include "CHostState.h"
+#include "CKeyValuesSystem.h"
+#include "CNetChan.h"
 #include "ConCommand.h"
+#include "IConVar.h"
 #include "IVEngineServer.h"
 #include "IVEngineClient.h"
-#include "CNetChan.h"
-#include "CHostState.h"
-#include "EbisuSDK.h"
-#include "basefilesystem.h"
 #include "QHull.h"
-#include "rtech.h"
-#include "sqvm.h"
 #include "sqapi.h"
+#include "sqvm.h"
 #include "sys_dll.h"
 #include "sys_utils.h"
 
@@ -30,17 +31,17 @@ void InstallHooks()
 	///////////////////////////////////////////////////////////////////////////////
 	// Hook functions
 	AttachIAppSystemHooks();
-	AttachIConVarHooks();
-	AttachConCommandHooks();
-	AttachIVEngineServerHooks();
-	AttachCNetChanHooks();
-	AttachEbisuSDKHooks();
-	AttachCHostStateHooks();
-	AttachSQVMHooks();
-	AttachSQAPIHooks();
-	AttachSysUtilsHooks();
-	AttachSysDllHooks();
+	AttachCBaseClientHooks();
 	AttachCBaseFileSystemHooks();
+	AttachCHostStateHooks();
+	AttachCNetChanHooks();
+	AttachConCommandHooks();
+	AttachIConVarHooks();
+	AttachIVEngineServerHooks();
+	AttachSQAPIHooks();
+	AttachSQVMHooks();
+	AttachSysDllHooks();
+	AttachSysUtilsHooks();
 
 	///////////////////////////////////////////////////////////////////////////////
 	// Patch instructions
@@ -67,17 +68,17 @@ void RemoveHooks()
 	///////////////////////////////////////////////////////////////////////////////
 	// Unhook functions
 	DetachIAppSystemHooks();
-	DetachIConVarHooks();
-	DetachConCommandHooks();
-	DetachIVEngineServerHooks();
-	DetachCNetChanHooks();
-	DetachEbisuSDKHooks();
-	DetachCHostStateHooks();
-	DetachSQVMHooks();
-	DetachSQAPIHooks();
-	DetachSysUtilsHooks();
-	DetachSysDllHooks();
+	DetachCBaseClientHooks();
 	DetachCBaseFileSystemHooks();
+	DetachCHostStateHooks();
+	DetachCNetChanHooks();
+	DetachConCommandHooks();
+	DetachIConVarHooks();
+	DetachIVEngineServerHooks();
+	DetachSQAPIHooks();
+	DetachSQVMHooks();
+	DetachSysDllHooks();
+	DetachSysUtilsHooks();
 
 	///////////////////////////////////////////////////////////////////////////////
 	// Commit the transaction
@@ -90,29 +91,47 @@ void PrintHAddress() // Test the sigscan results
 	std::cout << "| IAppSystem::Main                     : " << std::hex << std::uppercase << p_IAppSystem_Main                     << std::setw(8) << " |" << std::endl;
 	std::cout << "| IAppSystem::Create                   : " << std::hex << std::uppercase << p_IAppSystem_Create                   << std::setw(8) << " |" << std::endl;
 	std::cout << "+--------------------------------------------------------+" << std::endl;
+	std::cout << "| CBaseClient::Clear                   : " << std::hex << std::uppercase << p_CBaseClient_Clear                   << std::setw(8) << " |" << std::endl;
+	std::cout << "+--------------------------------------------------------+" << std::endl;
+	std::cout << "| CBaseFileSystem::Warning             : " << std::hex << std::uppercase << p_CBaseFileSystem_Warning             << std::setw(8) << " |" << std::endl;
+	std::cout << "+--------------------------------------------------------+" << std::endl;
+	std::cout << "| CHostState::FrameUpdate              : " << std::hex << std::uppercase << p_CHostState_FrameUpdate              << std::setw(8) << " |" << std::endl;
+	std::cout << "+--------------------------------------------------------+" << std::endl;
+	std::cout << "| KeyValues::FindKey                   : " << std::hex << std::uppercase << p_KeyValues_FindKey                   << std::setw(8) << " |" << std::endl;
+	std::cout << "+--------------------------------------------------------+" << std::endl;
+	std::cout << "+--------------------------------------------------------+" << std::endl;
+	std::cout << "| NET_Init                             : " << std::hex << std::uppercase << p_NET_Init                            << std::setw(8) << " |" << std::endl;
+	std::cout << "| NET_SetKey                           : " << std::hex << std::uppercase << p_NET_SetKey                          << std::setw(8) << " |" << std::endl;
+	std::cout << "| NET_Shutdown                         : " << std::hex << std::uppercase << p_NET_Shutdown                        << std::setw(8) << " |" << std::endl;
+	std::cout << "| NET_ReceiveDatagram                  : " << std::hex << std::uppercase << p_NET_ReceiveDatagram                 << std::setw(8) << " |" << std::endl;
+	std::cout << "| NET_SendDatagram                     : " << std::hex << std::uppercase << p_NET_SendDatagram                    << std::setw(8) << " |" << std::endl;
+	std::cout << "+--------------------------------------------------------+" << std::endl;
+	std::cout << "| ConCommand::IsFlagSet                : " << std::hex << std::uppercase << p_ConCommand_IsFlagSet                << std::setw(8) << " |" << std::endl;
+	std::cout << "+--------------------------------------------------------+" << std::endl;
+	std::cout << "| ConVar::IsFlagSet                    : " << std::hex << std::uppercase << p_IConVar_IsFlagSet                   << std::setw(8) << " |" << std::endl;
+	std::cout << "+--------------------------------------------------------+" << std::endl;
 	std::cout << "| IVEngineServer::PersistenceAvailable : " << std::hex << std::uppercase << p_IVEngineServer_PersistenceAvailable << std::setw(8) << " |" << std::endl;
 	std::cout << "+--------------------------------------------------------+" << std::endl;
 	std::cout << "| IVEngineClient::CommandExecute       : " << std::hex << std::uppercase << p_IVEngineClient_CommandExecute       << std::setw(8) << " |" << std::endl;
 	std::cout << "+--------------------------------------------------------+" << std::endl;
-	std::cout << "| ConVar::IsFlagSet                    : " << std::hex << std::uppercase << p_IConVar_IsFlagSet                   << std::setw(8) << " |" << std::endl;
+	std::cout << "| QHull_PrintError                     : " << std::hex << std::uppercase << p_QHull_PrintError                    << std::setw(8) << " |" << std::endl;
+	std::cout << "| QHull_PrintDebug                     : " << std::hex << std::uppercase << p_QHull_PrintDebug                    << std::setw(8) << " |" << std::endl;
 	std::cout << "+--------------------------------------------------------+" << std::endl;
-	std::cout << "| ConCommand::IsFlagSet                : " << std::hex << std::uppercase << p_ConCommand_IsFlagSet                << std::setw(8) << " |" << std::endl;
+	std::cout << "| sq_pushbool                          : " << std::hex << std::uppercase << p_sq_pushbool                         << std::setw(8) << " |" << std::endl;
+	std::cout << "| sq_pushstring                        : " << std::hex << std::uppercase << p_sq_pushstring                       << std::setw(8) << " |" << std::endl;
+	std::cout << "| sq_pushinteger                       : " << std::hex << std::uppercase << p_sq_pushinteger                      << std::setw(8) << " |" << std::endl;
+	std::cout << "| sq_newarray                          : " << std::hex << std::uppercase << p_sq_newarray                         << std::setw(8) << " |" << std::endl;
+	std::cout << "| sq_arrayappend                       : " << std::hex << std::uppercase << p_sq_arrayappend                      << std::setw(8) << " |" << std::endl;
+	std::cout << "| sq_newtable                          : " << std::hex << std::uppercase << p_sq_newtable                         << std::setw(8) << " |" << std::endl;
+	std::cout << "| sq_newslot                           : " << std::hex << std::uppercase << p_sq_newslot                          << std::setw(8) << " |" << std::endl;
 	std::cout << "+--------------------------------------------------------+" << std::endl;
 	std::cout << "| SQVM_PrintFunc                       : " << std::hex << std::uppercase << p_SQVM_PrintFunc                      << std::setw(8) << " |" << std::endl;
 	std::cout << "| SQVM_LoadScript                      : " << std::hex << std::uppercase << p_SQVM_LoadScript                     << std::setw(8) << " |" << std::endl;
 	std::cout << "| SQVM_LoadRson                        : " << std::hex << std::uppercase << p_SQVM_LoadRson                       << std::setw(8) << " |" << std::endl;
 	std::cout << "+--------------------------------------------------------+" << std::endl;
-	std::cout << "| NET_ReceiveDatagram                  : " << std::hex << std::uppercase << p_NET_ReceiveDatagram                 << std::setw(8) << " |" << std::endl;
-	std::cout << "| NET_SendDatagram                     : " << std::hex << std::uppercase << p_NET_SendDatagram                    << std::setw(8) << " |" << std::endl;
-	std::cout << "+--------------------------------------------------------+" << std::endl;
-	std::cout << "| CBaseFileSystem::Warning             : " << std::hex << std::uppercase << p_CBaseFileSystem_Warning             << std::setw(8) << " |" << std::endl;
-	std::cout << "+--------------------------------------------------------+" << std::endl;
-	std::cout << "| QHull_PrintError                     : " << std::hex << std::uppercase << p_QHull_PrintError                    << std::setw(8) << " |" << std::endl;
-	std::cout << "| QHull_PrintDebug                     : " << std::hex << std::uppercase << p_QHull_PrintDebug                    << std::setw(8) << " |" << std::endl;
-	std::cout << "+--------------------------------------------------------+" << std::endl;
 	std::cout << "| Sys_Error_Internal                   : " << std::hex << std::uppercase << p_Sys_Error_Internal                  << std::setw(8) << " |" << std::endl;
-	std::cout << "| Sys_Error                            : " << std::hex << std::uppercase << p_Sys_Error                           << std::setw(8) << " |" << std::endl;
 	std::cout << "+--------------------------------------------------------+" << std::endl;
-
-	// TODO implement error handling when sigscan fails or result is 0
+	std::cout << "| Sys_Error                            : " << std::hex << std::uppercase << p_Sys_Error                           << std::setw(8) << " |" << std::endl;
+	std::cout << "| MemAlloc_Wrapper                     : " << std::hex << std::uppercase << p_MemAlloc_Wrapper                    << std::setw(8) << " |" << std::endl;
+	std::cout << "+--------------------------------------------------------+" << std::endl;
 }

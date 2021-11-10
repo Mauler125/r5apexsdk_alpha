@@ -1,12 +1,12 @@
 #include "stdafx.h"
 #include "classes.h"
+#include "sys_utils.h"
 #include "CHostState.h"
+#include "CNetChan.h"
 #include "IConVar.h"
+#include "IVEngineClient.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-
-// 48 89 5C 24 08 48 89 6C 24 20 F3 0F 11 54 24 18 // S3
-
 void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 {
 	static auto setjmpFn            = Address(0x141205460).RCast<__int64(*)(jmp_buf, void*)>();
@@ -33,11 +33,15 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 
 	if (!g_bClassInitialized)
 	{
-		printf("CHostState_FrameUpdate\n");
 		ClassInit();
 		IConVar_ClearHostNames();
 		ConCommand_InitConCommand();
 		IConVar_InitConVar();
+		HNET_GenerateKey();
+		g_pCvar->FindVar("net_usesocketsforloopback")->m_iValue = 1;
+		IVEngineClient_CommandExecute(NULL, "exec autoexec.cfg");
+		IVEngineClient_CommandExecute(NULL, "exec autoexec_server.cfg");
+
 		g_bClassInitialized = true;
 	}
 
@@ -60,7 +64,8 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 			{
 			case HostStates_t::HS_NEW_GAME:
 			{
-				spdlog::debug("[+CHostState::FrameUpdate+] Starting new game now with level: {}\n", g_pHostState->m_levelName);
+				Sys_Print(SYS_DLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_NEW_GAME | Loading level: '%s'\n", g_pHostState->m_levelName);
+
 				// Inlined CHostState::State_NewGame
 				g_pHostState->m_bSplitScreenConnect = false;
 				if (!g_ServerGameClients) // Init Game if it ain't valid.
@@ -71,7 +76,7 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 				if (!CModelLoader_Map_IsValidFn(g_CModelLoader, g_pHostState->m_levelName) // Check if map is valid and if we can start a new game.
 					|| !Host_NewGameFn(g_pHostState->m_levelName, nullptr, g_pHostState->m_bBackgroundLevel, g_pHostState->m_bSplitScreenConnect, nullptr) || !g_ServerGameClients)
 				{
-					spdlog::info("[+CHostState::FrameUpdate+] Fatal map error 1.\n");
+					Sys_Print(SYS_DLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_NEW_GAME | Error: Map not valid.\n");
 					// Inlined SCR_EndLoadingPlaque
 					if (*src_drawloading)
 					{
@@ -113,7 +118,7 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 			{
 				g_pHostState->m_flShortFrameTime = 1.5; // Set frame time.
 
-				spdlog::debug("[+CHostState::FrameUpdate+] Changing singleplayer level to: {}.\n", g_pHostState->m_levelName);
+				Sys_Print(SYS_DLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_CHANGE_LEVEL_SP | Changing singleplayer level to: '%s'\n", g_pHostState->m_levelName);
 
 				if (CModelLoader_Map_IsValidFn(g_CModelLoader, g_pHostState->m_levelName)) // Check if map is valid and if we can start a new game.
 				{
@@ -121,7 +126,7 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 				}
 				else
 				{
-					spdlog::info("[+CHostState::FrameUpdate+] Server unable to change level, because unable to find map {}.\n", g_pHostState->m_levelName);
+					Sys_Print(SYS_DLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_CHANGE_LEVEL_SP | Error: Unable to find map: '%s'\n", g_pHostState->m_levelName);
 				}
 
 				//	Seems useless so nope.
@@ -142,7 +147,7 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 				using LevelShutdownFn = void(__thiscall*)(void*);
 				(*reinterpret_cast<LevelShutdownFn**>(*g_ServerDLL))[8](g_ServerDLL); // (*(void (__fastcall **)(void *))(*(_QWORD *)server_dll_var + 64i64))(server_dll_var);// LevelShutdown
 
-				spdlog::debug("[+CHostState::FrameUpdate+] Changing multiplayer level to: {}.\n", g_pHostState->m_levelName);
+				Sys_Print(SYS_DLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_CHANGE_LEVEL_MP | Changing multiplayer level to: '%s'\n", g_pHostState->m_levelName);
 
 				if (CModelLoader_Map_IsValidFn(g_CModelLoader, g_pHostState->m_levelName)) // Check if map is valid and if we can start a new game.
 				{
@@ -152,7 +157,7 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 				}
 				else
 				{
-					spdlog::info("[+CHostState::FrameUpdate+] Server unable to change level, because unable to find map {}.\n", g_pHostState->m_levelName);
+					Sys_Print(SYS_DLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_CHANGE_LEVEL_MP | Error: Unable to find map: '%s'\n", g_pHostState->m_levelName);
 				}
 
 				//	Seems useless so nope.
@@ -174,13 +179,13 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 			}
 			case HostStates_t::HS_GAME_SHUTDOWN:
 			{
-				spdlog::debug("[+CHostState::FrameUpdate+] Shutting game down now.\n");
+				Sys_Print(SYS_DLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_GAME_SHUTDOWN | Shutdown game\n");
 				Host_Game_ShutdownFn(g_pHostState);
 				break;
 			}
 			case HostStates_t::HS_RESTART:
 			{
-				spdlog::debug("[+CHostState::FrameUpdate+] Restarting client.\n");
+				Sys_Print(SYS_DLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_RESTART | Restarting client\n");
 				CL_EndMovieFn();
 				SendOfflineRequestToStryderFn(); // We have hostnames nulled anyway.
 				*(std::int32_t*)((std::uintptr_t)CEngine + 0xC) = 3; //g_CEngine.vtable->SetNextState(&g_CEngine, DLL_RESTART);
@@ -188,7 +193,7 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 			}
 			case HostStates_t::HS_SHUTDOWN:
 			{
-				spdlog::debug("[+CHostState::FrameUpdate+] Shutting client down.\n");
+				Sys_Print(SYS_DLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_SHUTDOWN | Shutdown client\n");
 				CL_EndMovieFn();
 				SendOfflineRequestToStryderFn(); // We have hostnames nulled anyway.
 				*(std::int32_t*)((std::uintptr_t)CEngine + 0xC) = 2; //g_CEngine.vtable->SetNextState(&g_CEngine, DLL_CLOSE);

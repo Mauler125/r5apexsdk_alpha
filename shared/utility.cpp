@@ -17,7 +17,7 @@ BOOL FileExists(LPCTSTR szPath)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// For getting information about the executing module
+// For getting information about the executing module.
 MODULEINFO GetModuleInfo(const char* szModule)
 {
     MODULEINFO modinfo = { 0 };
@@ -31,7 +31,7 @@ MODULEINFO GetModuleInfo(const char* szModule)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// For finding a byte pattern in memory of the process
+// For finding a byte pattern in memory of the process.
 BOOL Compare(const unsigned char* pData, const unsigned char* szPattern, const char* szMask)
 {
     for (; *szMask; ++szMask, ++pData, ++szPattern)
@@ -61,7 +61,7 @@ DWORD64 FindPatternV1(const char* szModule, const unsigned char* szPattern, cons
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// For finding a pattern in memory of the process with SIMD
+// For finding a pattern in memory of the process with SIMD.
 DWORD64 FindPatternV2(const char* szModule, const unsigned char* szPattern, const char* szMask)
 {
     MODULEINFO mInfo = GetModuleInfo(szModule);
@@ -73,7 +73,7 @@ DWORD64 FindPatternV2(const char* szModule, const unsigned char* szPattern, cons
 
     const unsigned char* end = pData + length - strlen(szMask);
     int num_masks = (int)ceil((float)strlen(szMask) / (float)16);
-    int masks[32]; // 32*16 = enough masks for 512 bytes
+    int masks[32]; // 32*16 = enough masks for 512 bytes.
     memset(masks, 0, num_masks * sizeof(int));
     for (__int64 i = 0; i < num_masks; ++i)
     {
@@ -143,26 +143,26 @@ void HexDump(const char* szHeader, int nFunc, const void* pData, int nSize)
     static auto logger = spdlog::get("default_logger");
     auto pattern = std::make_unique<spdlog::pattern_formatter>("%v", spdlog::pattern_time_type::local, std::string(""));
 
-    // Loop until the function returned to the first caller
+    // Loop until the function returned to the first caller.
     while (k == 1) { /*Sleep(75);*/ }
 
     k = 1;
     ascii[16] = '\0';
 
-    // Add new loggers here to replace the placeholder
+    // Add new loggers here to replace the placeholder.
     if (nFunc == 0) { logger = g_spd_netchan_logger; }
 
-    // Add timestamp
+    // Add timestamp.
     logger->set_level(spdlog::level::trace);
     logger->set_pattern("%v [%H:%M:%S.%f]\n");
     logger->trace("---------------------------------------------------------");
 
-    // Disable EOL and create block header
+    // Disable EOL and create block header.
     logger->set_formatter(std::move(pattern));
     logger->trace("{:s} ---- LEN BYTES: {}\n:\n", szHeader, nSize);
     logger->trace("--------  0  1  2  3  4  5  6  7   8  9  A  B  C  D  E  F  0123456789ABCDEF\n");
 
-    // Output the buffer to the file
+    // Output the buffer to the file.
     for (i = 0; i < nSize; i++)
     {
         if (i % nSize == 0) { logger->trace(" 0x{:04X}  ", i); }
@@ -209,4 +209,62 @@ void HexDump(const char* szHeader, int nFunc, const void* pData, int nSize)
     }
     k = 0;
     ///////////////////////////////////////////////////////////////////////////
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// For encoding data in base64.
+std::string base64_encode(const std::string& in)
+{
+    std::string out;
+    int val = 0, valb = -6;
+
+    for (unsigned char c : in)
+    {
+        val = (val << 8) + c;
+        valb += 8;
+        while (valb >= 0)
+        {
+            out.push_back("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"[(val >> valb) & 0x3F]);
+            valb -= 6;
+        }
+    }
+    if (valb > -6)
+    {
+        out.push_back("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"[((val << 8) >> (valb + 8)) & 0x3F]);
+    }
+    while (out.size() % 4)
+    {
+        out.push_back('=');
+    }
+    return out;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// For decoding data in base64.
+std::string base64_decode(const std::string& in)
+{
+    std::string out;
+    int val = 0, valb = -8;
+
+    std::vector<int> T(256, -1);
+    for (int i = 0; i < 64; i++)
+    {
+        T["ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"[i]] = i;
+    }
+
+    for (unsigned char c : in)
+    {
+        if (T[c] == -1)
+        {
+            break;
+        }
+        val = (val << 6) + T[c];
+        valb += 6;
+        if (valb >= 0)
+        {
+            out.push_back(char((val >> valb) & 0xFF));
+            valb -= 8;
+        }
+    }
+    return out;
 }

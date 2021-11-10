@@ -69,8 +69,6 @@ ConVar* IConVar_RegisterConVar(const char* name, const char* defaultValue, int f
 //-----------------------------------------------------------------------------
 void IConVar_InitConVar()
 {
-	spdlog::debug("Native(E):IConVar::InitConVar();\n");
-
 	//-------------------------------------------------------------------------
 	// ENGINE DLL                                                             |
 	ConVar* engineDebugCmdQuery = IConVar_RegisterConVar("cm_debug_cmdquery", "0", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Prints the flags of each ConVar/ConCommand query to the console ( !slower! ).", false, 0.f, false, 0.f, nullptr, nullptr);
