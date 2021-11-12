@@ -342,22 +342,123 @@ void ReloadBanList_Callback(CCommand* cmd)
 	g_pBanSystem->Load(); // Reload banlist.
 }
 
-void ToHash_Callback(CCommand* cmd)
+void RTech_GenerateGUID_Callback(CCommand* cmd)
 {
-	CCommand& cmdReference = *cmd; // Get reference.
-	const char* firstArg = cmdReference[1]; // Get first arg.
-	unsigned long long guid = g_pRtech->ToGuid(firstArg);
-
 	std::int32_t argSize = *(std::int32_t*)((std::uintptr_t)cmd + 0x4);
 
-	if (argSize < 1) // Do we atleast have 1 argument?
+	if (argSize < 2) // Do we atleast have 2 arguments?
 	{
 		return;
 	}
 
+	CCommand& cmdReference = *cmd; // Get reference.
+	const char* firstArg = cmdReference[1]; // Get first arg.
+	unsigned long long guid = g_pRtech->StringToGuid(firstArg);
+
 	Sys_Print(SYS_DLL::ENGINE, "______________________________________________________________\n");
-	Sys_Print(SYS_DLL::ENGINE, "# RTECH_HASH #################################################\n");
+	Sys_Print(SYS_DLL::ENGINE, "# RTECH_HASH |#################################################\n");
 	Sys_Print(SYS_DLL::ENGINE, "] GUID: '0x%llX'\n", guid);
+}
+
+void RTech_DecompRpak_Callback(CCommand* cmd)
+{
+	std::int32_t argSize = *(std::int32_t*)((std::uintptr_t)cmd + 0x4);
+
+	if (argSize < 2) // Do we atleast have 2 arguments?
+	{
+		return;
+	}
+
+	CCommand& cmdReference = *cmd; // Get reference.
+	const char* firstArg = cmdReference[1]; // Get first arg.
+	const char* secondArg = cmdReference[2]; // Get second arg.
+
+	Sys_Print(SYS_DLL::ENGINE, "______________________________________________________________\n");
+	Sys_Print(SYS_DLL::ENGINE, "] RTECH_DECOMPRESS |##########################################\n");
+	Sys_Print(SYS_DLL::ENGINE, "] Processing: '%s'\n", firstArg);
+
+	const std::string mod_dir = "paks\\Win32\\";
+	const std::string base_dir = "paks\\Win64\\";
+	const std::string pak_name_out = mod_dir + firstArg;
+	const std::string pak_name_in = base_dir + firstArg;
+
+	std::vector<uint8_t> upak; // Compressed region.
+	std::ifstream ipak(pak_name_in, std::fstream::binary);
+
+	ipak.seekg(0, std::fstream::end);
+	upak.resize(ipak.tellg());
+	ipak.seekg(0, std::fstream::beg);
+	ipak.read((char*)upak.data(), upak.size());
+
+	//std::vector<uint8_t>::iterator it = std::next(upak.begin(), PAK_HEADER_SIZE);
+	//std::move(upak.begin(), it, std::back_inserter(uheader));
+
+	auto rheader = (rpak_h*)upak.data();
+
+	if (rheader->m_nMagic != 'kaPR')
+	{
+		Sys_Print(SYS_DLL::ENGINE, "] Error: pak file '%s' has invalid magic!\n", pak_name_in.c_str());
+		return;
+	}
+	if ((rheader->m_bCompressed & 1) != 1)
+	{
+		Sys_Print(SYS_DLL::ENGINE, "] Error: pak file '%s' already decompressed!\n", pak_name_in.c_str());
+		return;
+	}
+	if (rheader->m_nSizeComp != upak.size())
+	{
+		Sys_Print(SYS_DLL::ENGINE, "] Error: pak file '%s' decompressed size '%u' doesn't match expected value '%u'!\n", pak_name_in.c_str(), upak.size(), rheader->m_nSizeDecomp);
+		return;
+	}
+
+	Sys_Print(SYS_DLL::ENGINE, "______________________________________________________________\n");
+	Sys_Print(SYS_DLL::ENGINE, "] HEADER_DETAILS |############################################\n");
+	Sys_Print(SYS_DLL::ENGINE, "] Magic    : '%08X'\n", rheader->m_nMagic);
+	Sys_Print(SYS_DLL::ENGINE, "] Version  : '%u'\n", (rheader->m_nVersion));
+	Sys_Print(SYS_DLL::ENGINE, "] Flags    : '%u'\n", (rheader->m_nFlag));
+	Sys_Print(SYS_DLL::ENGINE, "] Type     : '%llu'\n", rheader->m_nType);
+	Sys_Print(SYS_DLL::ENGINE, "] Entries  : '%zu'\n", rheader->m_nEntry);
+	Sys_Print(SYS_DLL::ENGINE, "______________________________________________________________\n");
+	Sys_Print(SYS_DLL::ENGINE, "] COMPRESSION_DETAILS |#######################################\n");
+	Sys_Print(SYS_DLL::ENGINE, "] Size disk: '%lld'\n", rheader->m_nSizeComp);
+	Sys_Print(SYS_DLL::ENGINE, "] Size decp: '%lld'\n", rheader->m_nSizeDecomp);
+	Sys_Print(SYS_DLL::ENGINE, "] Ratio    : '%.02f'\n", (rheader->m_nSizeComp * 100.f) / rheader->m_nSizeDecomp);
+
+
+	int64_t parameters[18];
+	uint32_t dsize = g_pRtech->DecompressedSize((int64_t)(parameters), upak.data(), upak.size(), 0, PAK_HEADER_SIZE);
+	if (dsize == rheader->m_nSizeComp)
+	{
+		Sys_Print(SYS_DLL::ENGINE, "] Error: calculated size: '%zu' expected: '%zu'!\n", dsize, rheader->m_nSizeDecomp);
+		return;
+	}
+	else
+	{
+		Sys_Print(SYS_DLL::ENGINE, "] Calculated size: '%zu'\n", dsize);
+	}
+
+	std::vector<uint8_t> decompress_buffer(rheader->m_nSizeDecomp, 0); //(0x400000, 0);
+
+	parameters[1] = int64_t(decompress_buffer.data());
+	parameters[3] = -1i64;
+	auto dret = g_pRtech->Decompress(parameters, upak.size(), decompress_buffer.size());
+	if (dret != 1)
+	{
+		Sys_Print(SYS_DLL::ENGINE, "] Error: decompression failed for '%s' return value: '%d'!\n", pak_name_in.c_str(), +dret);
+		return;
+	}
+
+	rheader->m_bCompressed = false; // Set compressed to false for the decompressed pak file
+	rheader->m_nSizeComp = rheader->m_nSizeDecomp; // Equal compressed size with decompressed
+
+	std::ofstream out_block(pak_name_out, std::fstream::binary);
+	std::ofstream out_header(pak_name_out, std::fstream::binary);
+
+	out_block.write((char*)decompress_buffer.data(), parameters[5]);
+	//out_header.write((char*)uheader.data(), uheader.size());
+	out_header.write((char*)rheader, PAK_HEADER_SIZE);
+
+	Sys_Print(SYS_DLL::ENGINE, "] Wrote unpacked file to '%s'\n", pak_name_out.c_str());
 }
 
 void NET_TraceNetChan_Callback(CCommand* cmd)
@@ -386,7 +487,6 @@ void NET_SetKey_Callback(CCommand* cmd)
 {
 	CCommand& cmdReference = *cmd; // Get reference.
 	const char* firstArg = cmdReference[1]; // Get first arg.
-	unsigned long long guid = g_pRtech->ToGuid(firstArg);
 
 	std::int32_t argSize = *(std::int32_t*)((std::uintptr_t)cmd + 0x4);
 

@@ -96,7 +96,8 @@ void ConCommand_InitConCommand()
 	void* reloadBanListCommand = ConCommand_RegisterCommand("sv_reloadbanlist", "Reloads the ban list from the disk.", 0, ReloadBanList_Callback, nullptr);
 	//-------------------------------------------------------------------------
 	// RTECH API                                                              |
-	void* rTechToHashCommand   = ConCommand_RegisterCommand("rtech_tohash", "Calculates the GUID from input data.", 0, ToHash_Callback, nullptr);
+	void* rTechGenerateGuidCommand = ConCommand_RegisterCommand("rtech_generateguid", "Calculates the GUID from input data.", 0, RTech_GenerateGUID_Callback, nullptr);
+	void* rTechDecompressCommand   = ConCommand_RegisterCommand("rtech_decompress", "Decompresses user specified 'RPak' file.", 0, RTech_DecompRpak_Callback, nullptr);
 	//-------------------------------------------------------------------------
 	// NETCHANNEL                                                             |
 	void* netTraceCommand  = ConCommand_RegisterCommand("net_toggletrace", "Logs the sending and receiving datagram to a file on the disk.", 0, NET_TraceNetChan_Callback, nullptr);
