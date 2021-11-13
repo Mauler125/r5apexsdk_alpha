@@ -146,6 +146,7 @@ void PrintHAddress() // Test the sigscan results
 	std::cout << "| Sys_Error_Internal                   : " << std::hex << std::uppercase << p_Sys_Error_Internal                  << std::setw(8) << " |" << std::endl;
 	std::cout << "+--------------------------------------------------------+" << std::endl;
 	std::cout << "| Sys_Error                            : " << std::hex << std::uppercase << p_Sys_Error                           << std::setw(8) << " |" << std::endl;
+	std::cout << "| Sys_LoadAsset                        : " << std::hex << std::uppercase << p_Sys_LoadAsset                       << std::setw(8) << " |" << std::endl;
 	std::cout << "| MemAlloc_Wrapper                     : " << std::hex << std::uppercase << p_MemAlloc_Wrapper                    << std::setw(8) << " |" << std::endl;
 	std::cout << "+--------------------------------------------------------+" << std::endl;
 }
