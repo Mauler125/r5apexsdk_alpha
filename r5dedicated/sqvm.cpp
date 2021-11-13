@@ -142,7 +142,7 @@ __int64 HSQVM_LoadRson(const char* rson_name)
 		{
 			spdlog::debug("\n");
 			spdlog::debug("Native(E):______________________________________________________________\n");
-			spdlog::debug("Native(E):# RSON_DISK_PATH #############################################\n");
+			spdlog::debug("Native(E):] RSON_DISK_PATH #############################################\n");
 			spdlog::debug("Native(E):] '{}'\n", filepath);
 			spdlog::debug("Native(E):##############################################################\n");
 			spdlog::debug("\n");
@@ -155,7 +155,7 @@ __int64 HSQVM_LoadRson(const char* rson_name)
 		{
 			spdlog::debug("\n");
 			spdlog::debug("Native(E):______________________________________________________________\n");
-			spdlog::debug("Native(E):# RSON_VPK_PATH ##############################################\n");
+			spdlog::debug("Native(E):] RSON_VPK_PATH ##############################################\n");
 			spdlog::debug("Native(E):] '{}'\n", rson_name);
 			spdlog::debug("Native(E):##############################################################\n");
 			spdlog::debug("\n");
