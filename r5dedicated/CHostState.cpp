@@ -115,7 +115,9 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 
 				// If our next state isn't a shutdown or its a forced shutdown then set next state to run.
 				if (g_pHostState->m_iNextState != HostStates_t::HS_SHUTDOWN || !g_pCvar->FindVar("host_hasIrreversibleShutdown")->m_iValue)
+				{
 					g_pHostState->m_iNextState = HostStates_t::HS_RUN;
+				}
 
 				// End Inline CHostState::State_NewGame
 				break;
@@ -143,7 +145,9 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 
 				// If our next state isn't a shutdown or its a forced shutdown then set next state to run.
 				if (g_pHostState->m_iNextState != HostStates_t::HS_SHUTDOWN || !g_pCvar->FindVar("host_hasIrreversibleShutdown")->m_iValue)
+				{
 					g_pHostState->m_iNextState = HostStates_t::HS_RUN;
+				}
 
 				break;
 			}
@@ -174,7 +178,9 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 
 				// If our next state isn't a shutdown or its a forced shutdown then set next state to run.
 				if (g_pHostState->m_iNextState != HostStates_t::HS_SHUTDOWN || !g_pCvar->FindVar("host_hasIrreversibleShutdown")->m_iValue)
+				{
 					g_pHostState->m_iNextState = HostStates_t::HS_RUN;
+				}
 
 				break;
 			}

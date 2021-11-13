@@ -32,7 +32,7 @@ void Sys_Print(SYS_DLL idx, const char* fmt, ...)
 	static bool initialized = false;
 	static char buf[1024];
 
-	static std::string vmType[4] = { "Native(S):", "Native(C):", "Native(U):", "Native(E):" };
+	static std::string vmType[7] = { "Native(S):", "Native(C):", "Native(U):", "Native(E):", "Native(F):", "Native(R):", "Native(M):" };
 
 	static auto iconsole = spdlog::stdout_logger_mt("sys_print_iconsole"); // in-game console.
 	static auto wconsole = spdlog::stdout_logger_mt("sys_print_wconsole"); // windows console.
@@ -75,12 +75,44 @@ void Sys_Print(SYS_DLL idx, const char* fmt, ...)
 	Items.push_back(Strdup((const char*)c));
 }
 
+//-----------------------------------------------------------------------------
+//	Sys_LoadAsset
+//
+//-----------------------------------------------------------------------------
+int64_t HSys_LoadAsset(const CHAR* lpFileName, int64_t a2, LARGE_INTEGER* a3)
+{
+	std::string mod_file;
+	std::string base_file = lpFileName;
+	const std::string mod_dir = "paks\\Win32\\";
+	const std::string base_dir = "paks\\Win64\\";
+
+	if (strstr(lpFileName, base_dir.c_str()))
+	{
+		base_file.erase(0, 11); // Erase 'base_dir'.
+		mod_file = mod_dir + base_file; // Prepend 'mod_dir'.
+
+		if (FileExists(mod_file.c_str()))
+		{
+			// Load decompressed pak files from 'mod_dir'.
+			Sys_Print(SYS_DLL::RTECH, "Loading pak: '%s'\n", mod_file.c_str());
+			return Sys_LoadAsset(mod_file.c_str(), a2, a3);
+		}
+	}
+	if (strstr(lpFileName, base_dir.c_str()))
+	{
+		Sys_Print(SYS_DLL::RTECH, "Loading pak: '%s'\n", lpFileName);
+	}
+	return Sys_LoadAsset(lpFileName, a2, a3);
+}
+
 void AttachSysUtilsHooks()
 {
 	DetourAttach((LPVOID*)&Sys_Error, &HSys_Error);
+	DetourAttach((LPVOID*)&Sys_LoadAsset, &HSys_LoadAsset);
 }
 
 void DetachSysUtilsHooks()
 {
 	DetourDetach((LPVOID*)&Sys_Error, &HSys_Error);
+	DetourDetach((LPVOID*)&Sys_LoadAsset, &HSys_LoadAsset);
 }

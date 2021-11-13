@@ -1,12 +1,13 @@
 #include "stdafx.h"
 #include "rtech.h"
+#include "sys_utils.h"
 
 /*-----------------------------------------------------------------------------
  * _rtech
  *-----------------------------------------------------------------------------*/
 
 //-----------------------------------------------------------------------------
-// Purpose: calculate GUID from input data
+// Purpose: calculate 'GUID' from input data
 //-----------------------------------------------------------------------------
 uint64_t __fastcall RTech::StringToGuid(const char* pData)
 {
@@ -48,7 +49,7 @@ uint64_t __fastcall RTech::StringToGuid(const char* pData)
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: calculate 'decompressed' size
+// Purpose: calculate 'decompressed' size and commit parameters
 //-----------------------------------------------------------------------------
 uint32_t __fastcall RTech::DecompressedSize(int64_t param_buf, uint8_t* file_buf, int64_t file_size, int64_t off_no_header, int64_t header_size)
 {

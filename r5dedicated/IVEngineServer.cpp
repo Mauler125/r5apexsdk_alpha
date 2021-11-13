@@ -35,7 +35,7 @@ bool HIVEngineServer_PersistenceAvailable(__int64 thisptr, int index)
 
 		Sys_Print(SYS_DLL::SERVER, "\n");
 		Sys_Print(SYS_DLL::SERVER, "______________________________________________________________\n");
-		Sys_Print(SYS_DLL::SERVER, "# CLIENT_INSTANCE_DETAILS ####################################\n");
+		Sys_Print(SYS_DLL::SERVER, "] CLIENT_INSTANCE_DETAILS ####################################\n");
 		Sys_Print(SYS_DLL::SERVER, "] INDEX: | '#%d'\n", index);
 		Sys_Print(SYS_DLL::SERVER, "] NAME : | '%s'\n", clientName.c_str());
 		Sys_Print(SYS_DLL::SERVER, "] OID  : | '%lld'\n", originID);

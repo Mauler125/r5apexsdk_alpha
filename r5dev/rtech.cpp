@@ -1,27 +1,28 @@
 #include "stdafx.h"
 #include "rtech.h"
+#include "sys_utils.h"
 
 /*-----------------------------------------------------------------------------
  * _rtech
  *-----------------------------------------------------------------------------*/
 
 //-----------------------------------------------------------------------------
-// Purpose: calculate the GUID from input data
+// Purpose: calculate 'GUID' from input data
 //-----------------------------------------------------------------------------
-unsigned __int64 __fastcall RTech::ToGuid(const char* pData)
+uint64_t __fastcall RTech::StringToGuid(const char* pData)
 {
-    DWORD*           v1; // r8
-    unsigned __int64 v2; // r10
+    uint32_t*        v1; // r8
+    uint64_t         v2; // r10
     int              v3; // er11
-    unsigned int     v4; // er9
-    unsigned int      i; // edx
-    __int64          v6; // rcx
+    uint32_t         v4; // er9
+    uint32_t          i; // edx
+    uint64_t         v6; // rcx
     int              v7; // er9
     int              v8; // edx
     int              v9; // eax
-    unsigned int    v10; // er8
+    uint32_t        v10; // er8
     int             v12; // ecx
-    DWORD* a1 = (DWORD*)pData;
+    uint32_t* a1 = (uint32_t*)pData;
 
     v1 = a1;
     v2 = 0i64;
@@ -33,7 +34,7 @@ unsigned __int64 __fastcall RTech::ToGuid(const char* pData)
         v7 = v1[1];
         ++v1;
         v3 += 4;
-        v2 = ((((unsigned __int64)(0xFB8C4D96501i64 * v6) >> 24) + 0x633D5F1 * v2) >> 61) ^ (((unsigned __int64)(0xFB8C4D96501i64 * v6) >> 24)
+        v2 = ((((uint64_t)(0xFB8C4D96501i64 * v6) >> 24) + 0x633D5F1 * v2) >> 61) ^ (((uint64_t)(0xFB8C4D96501i64 * v6) >> 24)
             + 0x633D5F1 * v2);
         v8 = ~v7 & (v7 - 0x1010101);
         v4 = (v7 - 45 * ((~(v7 ^ 0x5C5C5C5Cu) >> 7) & (((v7 ^ 0x5C5C5C5Cu) - 0x1010101) >> 7) & 0x1010101)) & 0xDFDFDFDF;
@@ -44,388 +45,443 @@ unsigned __int64 __fastcall RTech::ToGuid(const char* pData)
     {
         v9 = v12;
     }
-    return 0x633D5F1 * v2 + ((0xFB8C4D96501i64 * (unsigned __int64)(v4 & v10)) >> 24) - 0xAE502812AA7333i64 * (unsigned int)(v3 + v9 / 8);
+    return 0x633D5F1 * v2 + ((0xFB8C4D96501i64 * (uint64_t)(v4 & v10)) >> 24) - 0xAE502812AA7333i64 * (uint32_t)(v3 + v9 / 8);
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: calculate 'decompressed' size and commit parameters
+//-----------------------------------------------------------------------------
+uint32_t __fastcall RTech::DecompressedSize(int64_t param_buf, uint8_t* file_buf, int64_t file_size, int64_t off_no_header, int64_t header_size)
+{
+    int64_t       v8;    // r9
+    uint64_t      v9;    // r11
+    char         v10;    // r8
+    int          v11;    // er8
+    int64_t      v12;    // rbx
+    unsigned int v13;    // ebp
+    uint64_t     v14;    // rbx
+    int64_t      v15;    // rax
+    unsigned int v16;    // er9
+    uint64_t     v17;    // r12
+    uint64_t     v18;    // r11
+    uint64_t     v19;    // r10
+    uint64_t     v20;    // rax
+    int          v21;    // ebp
+    uint64_t     v22;    // r10
+    unsigned int v23;    // er9
+    int64_t      v24;    // rax
+    int64_t      v25;    // rsi
+    int64_t      v26;    // rdx
+    int64_t      result; // rax
+    int64_t      v28;    // rdx
+    int64_t      v29;    // [rsp+48h] [rbp+18h]
+
+    v29 = 0xFFFFFFi64;
+    *(uint64_t*)param_buf = (uint64_t)file_buf;
+    *(uint64_t*)(param_buf + 32) = off_no_header + file_size;
+    *(uint64_t*)(param_buf + 8) = 0i64;
+    *(uint64_t*)(param_buf + 24) = 0i64;
+    *(uint32_t*)(param_buf + 68) = 0;
+    *(uint64_t*)(param_buf + 16) = -1i64;
+    v8 = off_no_header + header_size + 8;
+    v9 = *(uint64_t*)((0xFFFFFFi64 & (off_no_header + header_size)) + file_buf);
+    *(uint64_t*)(param_buf + 80) = header_size;
+    *(uint64_t*)(param_buf + 72) = v8;
+    v10 = v9;
+    v9 >>= 6;
+    v11 = v10 & 0x3F;
+    *(uint64_t*)(param_buf + 40) = (1i64 << v11) | v9 & ((1i64 << v11) - 1);
+    v12 = *(uint64_t*)((0xFFFFFFi64 & v8) + file_buf) << (64 - ((uint8_t)v11 + 6));
+    *(uint64_t*)(param_buf + 72) = v8 + ((uint8_t)(unsigned int)(v11 + 6) >> 3);
+    v13 = ((v11 + 6) & 7) + 13;
+    v14 = (0xFFFFFFFFFFFFFFFFui64 >> ((v11 + 6) & 7)) & ((v9 >> v11) | v12);
+    v15 = v29 & *(uint64_t*)(param_buf + 72);
+    v16 = (((uint8_t)v14 - 1) & 0x3F) + 1;
+    v17 = 0xFFFFFFFFFFFFFFFFui64 >> (64 - (uint8_t)v16);
+    *(uint64_t*)(param_buf + 48) = v17;
+    v18 = 0xFFFFFFFFFFFFFFFFui64 >> (64 - ((((v14 >> 6) - 1) & 0x3F) + 1));
+    *(uint64_t*)(param_buf + 56) = v18;
+    v19 = (v14 >> 13) | (*(uint64_t*)(v15 + file_buf) << (64 - (uint8_t)v13));
+    v20 = v13;
+    v21 = v13 & 7;
+    *(uint64_t*)(param_buf + 72) += v20 >> 3;
+    v22 = (0xFFFFFFFFFFFFFFFFui64 >> v21) & v19;
+    if (v17 == -1i64)
+    {
+        *(uint32_t*)(param_buf + 64) = 0;
+        *(uint64_t*)(param_buf + 88) = file_size;
+    }
+    else
+    {
+        v23 = v16 >> 3;
+        v24 = v29 & *(uint64_t*)(param_buf + 72);
+        *(uint32_t*)(param_buf + 64) = v23 + 1;
+        v25 = *(uint64_t*)(v24 + file_buf) & ((1i64 << (8 * ((uint8_t)v23 + 1))) - 1);
+        *(uint64_t*)(param_buf + 72) += v23 + 1;
+        *(uint64_t*)(param_buf + 88) = v25;
+    }
+    *(uint64_t*)(param_buf + 88) += off_no_header;
+    v26 = *(uint64_t*)(param_buf + 88);
+    *(uint64_t*)(param_buf + 96) = v22;
+    *(uint32_t*)(param_buf + 104) = v21;
+    *(uint64_t*)(param_buf + 112) = v17 + off_no_header - 6;
+    result = *(uint64_t*)(param_buf + 40);
+    *(uint32_t*)(param_buf + 108) = 0;
+    *(uint64_t*)(param_buf + 120) = v26;
+    *(uint64_t*)(param_buf + 128) = result;
+    if ((((uint8_t)(v14 >> 6) - 1) & 0x3F) != -1i64 && result - 1 > v18)
+    {
+        v28 = v26 - *(unsigned int*)(param_buf + 64);
+        *(uint64_t*)(param_buf + 128) = v18 + 1;
+        *(uint64_t*)(param_buf + 120) = v28;
+    }
+    return result;
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: decompress input data
 //-----------------------------------------------------------------------------
-int RTech::Decompress(long long* param_1, unsigned long long param_2, unsigned long long param_3)
+uint8_t __fastcall RTech::Decompress(int64_t* param_buffer, uint64_t file_size, uint64_t buf_size)
 {
-    long long* plVar1;
-    unsigned char* puVar2;
-    unsigned short uVar3;
-    unsigned int uVar4;
-    long long lVar5;
-    long long lVar6;
-    unsigned long long uVar7;
-    unsigned int uVar8;
-    unsigned long long in_RAX;
-    unsigned long long uVar9;
-    unsigned long long uVar10;
-    unsigned int uVar11;
-    unsigned int uVar12;
-    long long* plVar13;
-    unsigned char* puVar14;
-    unsigned int uVar15;
-    int iVar16;
-    long long lVar17;
-    unsigned long long* puVar18;
-    unsigned long long* puVar19;
-    unsigned long long uVar20;
-    unsigned long long uVar21;
-    unsigned long long uVar22;
-    unsigned long long* puVar23;
-    unsigned long long uVar24;
-    long long* plVar25;
-    unsigned char bVar26;
-    int iVar27;
-    int iVar28;
-    long long* plVar29;
-    unsigned int uVar30;
-    unsigned long long uVar31;
-    unsigned long long uVar32;
-    unsigned long long uVar33;
+    char   result; // al
+    int64_t    v5; // r15
+    int64_t    v6; // r11
+    uint32_t   v7; // ebp
+    uint64_t   v8; // rsi
+    uint64_t   v9; // rdi
+    uint64_t  v10; // r12
+    int64_t   v11; // r13
+    uint32_t  v12; // ecx
+    uint64_t  v13; // rsi
+    uint64_t    i; // rax
+    uint64_t  v15; // r8
+    int64_t   v16; // r9
+    int       v17; // ecx
+    uint64_t  v18; // rax
+    uint64_t  v19; // rsi
+    int64_t   v20; // r14
+    int       v21; // ecx
+    uint64_t  v22; // r11
+    int       v23; // edx
+    int64_t   v24; // rax
+    int       v25; // er8
+    uint32_t  v26; // er13
+    int64_t   v27; // r10
+    int64_t   v28; // rax
+    uint64_t* v29; // r10
+    uint64_t  v30; // r9
+    uint64_t  v31; // r10
+    uint64_t  v32; // r8
+    uint64_t  v33; // rax
+    uint64_t  v34; // rax
+    uint64_t  v35; // rax
+    uint64_t  v36; // rcx
+    uint64_t  v37; // rdx
+    uint64_t  v38; // r14
+    uint64_t  v39; // r11
+    char      v40; // cl
+    uint64_t  v41; // rsi
+    uint64_t  v42; // rcx
+    uint64_t  v43; // r8
+    int       v44; // er11
+    uint8_t   v45; // r9
+    uint64_t  v46; // rcx
+    uint64_t  v47; // rcx
+    uint64_t  v48; // r9
+    uint64_t    l; // r8
+    uint32_t  v50; // er9
+    uint64_t  v51; // r8
+    uint64_t  v52; // rdx
+    uint64_t    k; // r8
+    char*     v54; // r10
+    uint64_t  v55; // rdx
+    uint32_t  v56; // er14
+    uint64_t* v57; // rdx
+    uint64_t* v58; // r8
+    char      v59; // al
+    uint64_t  v60; // rsi
+    uint64_t  v61; // rax
+    uint64_t  v62; // r9
+    int       v63; // er10
+    uint8_t   v64; // cl
+    uint64_t  v65; // rax
+    uint32_t  v66; // er14
+    uint32_t    j; // ecx
+    uint64_t  v68; // rax
+    uint64_t  v69; // rcx
+    uint64_t  v70; // [rsp+0h] [rbp-58h]
+    int       v71; // [rsp+60h] [rbp+8h]
+    uint64_t  v74; // [rsp+78h] [rbp+20h]
 
-    if ((unsigned long long)param_1[0xb] <= param_2) {
-        uVar33 = param_1[10];
-        in_RAX = (~param_1[7] & uVar33) + 1 + param_1[7];
-        if ((in_RAX <= param_3) || ((unsigned long long)param_1[5] <= param_3)) {
-            lVar5 = *param_1;
-            lVar6 = param_1[1];
-            uVar15 = *(unsigned int*)((long long)param_1 + 0x6c);
-            uVar12 = *(unsigned int*)(param_1 + 0xd);
-            uVar21 = param_1[0xc];
-            uVar22 = param_1[9];
-            uVar32 = param_1[0xf];
-            // not checked yet
-            if ((unsigned long long)param_1[0xe] <= uVar32) {
-                uVar32 = param_1[0xe];
+    if (file_size < param_buffer[11])
+    {
+        return 0;
+    }
+    v5 = param_buffer[10];
+    if (buf_size < param_buffer[7] + (v5 & (uint64_t)~param_buffer[7]) + 1 && buf_size < param_buffer[5])
+    {
+        return 0;
+    }
+    v6 = param_buffer[1];
+    v7 = *((uint32_t*)param_buffer + 26);
+    v8 = param_buffer[12];
+    v9 = param_buffer[9];
+    v10 = param_buffer[14];
+    v11 = *param_buffer;
+    if (param_buffer[15] < v10)
+    {
+        v10 = param_buffer[15];
+    }
+    v12 = *((uint32_t*)param_buffer + 27);
+    v74 = v11;
+    v70 = v6;
+    v71 = v12;
+    if (!v7)
+    {
+        goto LABEL_11;
+    }
+    v13 = (*(uint64_t*)((v9 & param_buffer[2]) + v11) << (64 - (uint8_t)v7)) | v8;
+    for (i = v7; ; i = v7)
+    {
+        v7 &= 7u;
+        v9 += i >> 3;
+        v12 = v71;
+        v8 = (0xFFFFFFFFFFFFFFFFui64 >> v7) & v13;
+    LABEL_11:
+        v15 = (uint64_t)v12 << 8;
+        v16 = v12;
+        v17 = *((uint8_t*)&LUT_0 + (uint8_t)v8 + v15 + 512);
+        v18 = (uint8_t)v8 + v15;
+        v7 += v17;
+        v19 = v8 >> v17;
+        v20 = (uint32_t)*((char*)&LUT_0 + v18);
+        if (*((char*)&LUT_0 + v18) < 0)
+        {
+            v56 = -(int)v20;
+            v57 = (uint64_t*)(v11 + (v9 & param_buffer[2]));
+            v71 = 1;
+            v58 = (uint64_t*)(v6 + (v5 & param_buffer[3]));
+            if (v56 == *((uint8_t*)&LUT_0 + v16 + 1248))
+            {
+                if ((~v9 & param_buffer[6]) < 0xF || (param_buffer[7] & (uint64_t)~v5) < 0xF || (uint64_t)(param_buffer[5] - v5) < 0x10)
+                {
+                    v56 = 1;
+                }
+                v59 = v19;
+                v60 = v19 >> 3;
+                v61 = v59 & 7;
+                v62 = v60;
+                if (v61)
+                {
+                    v63 = *((uint8_t*)&LUT_0 + v61 + 1232);
+                    v64 = *((uint8_t*)&LUT_0 + v61 + 1240);
+                }
+                else
+                {
+                    v62 = v60 >> 4;
+                    v65 = v60 & 0xF;
+                    v7 += 4;
+                    v63 = *((uint32_t*)&LUT_0 + v65 + 288);
+                    v64 = *((uint8_t*)&LUT_0 + v65 + 1216);
+                }
+                v7 += v64 + 3;
+                v19 = v62 >> v64;
+                v66 = v63 + (v62 & ((1 << v64) - 1)) + v56;
+                for (j = v66 >> 3; j; --j)
+                {
+                    v68 = *v57++;
+                    *v58++ = v68;
+                }
+                if ((v66 & 4) != 0)
+                {
+                    *(uint32_t*)v58 = *(uint32_t*)v57;
+                    v58 = (uint64_t*)((char*)v58 + 4);
+                    v57 = (uint64_t*)((char*)v57 + 4);
+                }
+                if ((v66 & 2) != 0)
+                {
+                    *(uint16_t*)v58 = *(uint16_t*)v57;
+                    v58 = (uint64_t*)((char*)v58 + 2);
+                    v57 = (uint64_t*)((char*)v57 + 2);
+                }
+                if ((v66 & 1) != 0)
+                {
+                    *(uint8_t*)v58 = *(uint8_t*)v57;
+                }
+                v9 += v66;
+                v5 += v66;
             }
-            unsigned int i = 0;
-            do {
-                i++;
-                /*if (!(i % 500)) {
-                    FILE* decomp_progress_file = fopen("C:\\Users\\user\\Desktop\\progress", "wb");
-                    if (fwrite(param_1[1], 1, 0x400000, decomp_progress_file) != 0x400000) {
-                        printf("");
-                    }
-                    fclose(decomp_progress_file);
-                }*/
-                lVar17 = (uVar21 & 0xff) + (unsigned long long)uVar15 * 0x100;
-                uVar8 = (unsigned int)((int)((char)(LUT_1)[lVar17]));
-                uVar21 >>= ((LUT_2)[lVar17] & 0x3f);
-                uVar12 = (unsigned char)(LUT_2)[lVar17] + uVar12;
-                uVar10 = (unsigned long long)uVar12;
-                if ((char)(LUT_1)[lVar17] < '\0') {
-                    uVar11 = uVar15 + 0x4e0;
-                    puVar23 = (unsigned long long*)((param_1[2] & uVar22) + lVar5);
-                    uVar8 = -uVar8;
-                    puVar18 = (unsigned long long*)((uVar33 & param_1[3]) + lVar6);
-                    uVar15 = 1;
-                    if (uVar8 == (unsigned char)(LUT_1)[uVar11]) {
-                        // not checked yet
-                        if ((((param_1[6] & ~uVar22) < 0xf) || ((~uVar33 & param_1[7]) < 0xf)) ||
-                            (param_1[5] - uVar33 < 0x10)) {
-                            uVar8 = 1;
-                        }
-                        uVar9 = uVar21 >> 3;
-                        uVar11 = (int)(char)uVar21 & 7;
-                        if (uVar11 == 0) {
-                            uVar10 = (unsigned long long)((unsigned int)uVar9 & 0xf);
-                            uVar9 = uVar21 >> 7;
-                            uVar12 = uVar12 + 4;
-                            uVar30 = ((unsigned int*)&LUT_3)[uVar10];
-                            bVar26 = (LUT_4)[uVar10];
-                        }
-                        else {
-                            uVar30 = (unsigned int)(unsigned char)((LUT_5)[uVar11]);
-                            bVar26 = (LUT_6)[uVar11];
-                        }
-                        uVar10 = (unsigned long long)(uVar12 + 3 + (unsigned int)bVar26);
-                        uVar21 = uVar9 >> (bVar26 & 0x3f);
-                        uVar8 = (((1 << (bVar26 & 0x1f)) - 1U) & (unsigned int)uVar9) + uVar30 + uVar8;
-                        uVar12 = uVar8 >> 3;
-                        while (uVar12 != 0) {
-                            uVar7 = *puVar23;
-                            puVar23 = puVar23 + 1;
-                            *puVar18 = uVar7;
-                            uVar12 = uVar12 - 1;
-                            puVar18 = puVar18 + 1;
-                        }
-                        puVar19 = puVar18;
-                        if ((uVar8 & 4) != 0) {
-                            uVar4 = *(unsigned int*)puVar23;
-                            puVar19 = (unsigned long long*)((long long)puVar18 + 4);
-                            puVar23 = (unsigned long long*)((long long)puVar23 + 4);
-                            *(unsigned int*)puVar18 = uVar4;
-                        }
-                        puVar18 = puVar19;
-                        if ((uVar8 & 2) != 0) {
-                            uVar3 = *(unsigned short*)puVar23;
-                            puVar18 = (unsigned long long*)((long long)puVar19 + 2);
-                            puVar23 = (unsigned long long*)((long long)puVar23 + 2);
-                            *(unsigned short*)puVar19 = uVar3;
-                        }
-                        if ((uVar8 & 1) != 0) {
-                            *(unsigned char*)puVar18 = *(unsigned char*)puVar23;
-                        }
-                        uVar22 = uVar22 + uVar8;
-                        uVar33 = uVar33 + uVar8;
-                    }
-                    else {
-                        *puVar18 = *puVar23;
-                        puVar18[1] = puVar23[1];
-                        uVar22 = uVar22 + uVar8;
-                        uVar33 = uVar33 + uVar8;
-                        uVar15 = 1;
+            else
+            {
+                *v58 = *v57;
+                v58[1] = v57[1];
+                v9 += v56;
+                v5 += v56;
+            }
+        }
+        else
+        {
+            v21 = v19 & 0xF;
+            v71 = 0;
+            v22 = ((uint64_t)(uint32_t)v19 >> (((uint32_t)(v21 - 31) >> 3) & 6)) & 0x3F;
+            v23 = 1 << (v21 + ((v19 >> 4) & ((24 * (((uint32_t)(v21 - 31) >> 3) & 2)) >> 4)));
+            v7 += (((uint32_t)(v21 - 31) >> 3) & 6) + *((uint8_t*)&LUT_0 + v22 + 1088) + v21 + ((v19 >> 4) & ((24 * (((uint32_t)(v21 - 31) >> 3) & 2)) >> 4));
+            v24 = param_buffer[3];
+            v25 = 16 * (v23 + ((v23 - 1) & (v19 >> ((((uint32_t)(v21 - 31) >> 3) & 6) + *((uint8_t*)&LUT_0 + v22 + 1088)))));
+            v19 >>= (((uint32_t)(v21 - 31) >> 3) & 6) + *((uint8_t*)&LUT_0 + v22 + 1088) + v21 + ((v19 >> 4) & ((24 * (((uint32_t)(v21 - 31) >> 3) & 2)) >> 4));
+            v26 = v25 + *((uint8_t*)&LUT_0 + v22 + 1024) - 16;
+            v27 = v24 & (v5 - v26);
+            v28 = v70 + (v5 & v24);
+            v29 = (uint64_t*)(v70 + v27);
+            if ((uint32_t)v20 == 17)
+            {
+                v40 = v19;
+                v41 = v19 >> 3;
+                v42 = v40 & 7;
+                v43 = v41;
+                if (v42)
+                {
+                    v44 = *((uint8_t*)&LUT_0 + v42 + 1232);
+                    v45 = *((uint8_t*)&LUT_0 + v42 + 1240);
+                }
+                else
+                {
+                    v7 += 4;
+                    v46 = v41 & 0xF;
+                    v43 = v41 >> 4;
+                    v44 = *((uint32_t*)&LUT_0 + v46 + 288);
+                    v45 = *((uint8_t*)&LUT_0 + v46 + 1216);
+                    if (v74 && v7 + v45 >= 0x3D)
+                    {
+                        v47 = v9++ & param_buffer[2];
+                        v43 |= (uint64_t)*(uint8_t*)(v47 + v74) << (61 - (uint8_t)v7);
+                        v7 -= 8;
                     }
                 }
-                else {
-                    uVar30 = (unsigned int)uVar21 & 0xf;
-                    uVar11 = ((uVar30 - 0x1f) >> 3) & 6;
-                    uVar9 = (unsigned long long)((unsigned int)((uVar21 & 0xffffffff) >> (char)uVar11) & 0x3f);
-                    uVar15 = (((uVar30 + 1) >> 3) & 2) * 0x18 >> 4;
-                    iVar28 = (uVar15 & (unsigned int)(uVar21 >> 4)) + uVar30;
-                    iVar27 = (unsigned char)(LUT_7)[uVar9] + uVar11;
-                    iVar16 = 1 << (((unsigned char)uVar15 & (unsigned char)(uVar21 >> 4)) + (char)uVar30);
-                    bVar26 = (unsigned char)iVar27;
-                    uVar24 = uVar21 >> (bVar26 & 0x3f);
-                    uVar21 = uVar21 >> (bVar26 + (char)iVar28 & 0x3f);
-                    uVar12 = uVar12 + iVar28 + iVar27;
-                    uVar10 = (unsigned long long)uVar12;
-                    uVar15 = (unsigned int)(unsigned char)(LUT_8)[uVar9] +
-                        (((unsigned int)uVar24 & (iVar16 - 1U)) + iVar16) * 0x10 + -0x10;
-                    plVar29 = (long long*)((param_1[3] & uVar33) + lVar6);
-                    plVar25 = (long long*)(((uVar33 - uVar15) & param_1[3]) + lVar6);
-                    if (uVar8 == 0x11) {
-                        uVar9 = uVar21 >> 3;
-                        uVar8 = (int)(char)uVar21 & 7;
-                        if (uVar8 == 0) {
-                            uVar10 = (unsigned long long)((unsigned int)uVar9 & 0xf);
-                            uVar9 = uVar21 >> 7;
-                            uVar8 = uVar12 + 4;
-                            uVar11 = ((unsigned int*)(&LUT_3))[uVar10];
-                            uVar30 = (unsigned int)(unsigned char)(LUT_4)[uVar10];
-                            // not checked yet
-                            if ((lVar5 != 0) && (0x3c < uVar8 + (unsigned char)(LUT_4)[uVar10])) {
-                                uVar21 = param_1[2] & uVar22;
-                                uVar22 = uVar22 + 1;
-                                // check this
-                                uVar9 = uVar9 | ((unsigned long long) * (unsigned char*)(uVar21 + lVar5) << ((0x3dU - (char)uVar8) & 0x3f))
-                                    ;
-                                uVar8 = uVar12 - 4;
-                            }
-                        }
-                        else {
-                            uVar11 = (unsigned int)(unsigned char)(LUT_5)[uVar8];
-                            uVar30 = (unsigned int)(unsigned char)(LUT_6)[uVar8];
-                            uVar8 = uVar12;
-                        }
-                        uVar10 = (unsigned long long)(uVar8 + 3 + uVar30);
-                        uVar21 = uVar9 >> ((unsigned char)uVar30 & 0x3f);
-                        uVar11 = ((((1 << ((unsigned char)uVar30 & 0x1f)) - 1U) & (unsigned int)uVar9)) + 0x11 + uVar11;
-                        uVar33 = uVar33 + uVar11;
-                        if (uVar15 < 8) {
-                            uVar12 = uVar11 - 0xd;
-                            uVar33 = uVar33 - 0xd;
-                            if (uVar15 == 1) {
-                                uVar15 = 0;
-                                if (uVar12 != 0) {
-                                    bVar26 = *(unsigned char*)plVar25;
-                                    uVar12 = ((uVar11 - 0xe) >> 3) + 1;
-                                    uVar9 = (unsigned long long)uVar12;
-                                    uVar15 = 0;
-                                    if (uVar12 != 0) {
-                                        while (uVar15 = 0, uVar9 != 0) {
-                                            uVar9 = uVar9 - 1;
-                                            *plVar29 = (unsigned long long)bVar26 * 0x101010101010101;
-                                            plVar29 = plVar29 + 1;
-                                        }
-                                    }
-                                }
-                                goto LAB_7ff75294416d;
-                            }
-                            // not checked yet
-                            if (uVar12 != 0) {
-                                uVar9 = (unsigned long long)uVar12;
-                                puVar14 = (unsigned char*)((long long)plVar29 + -1);
-                                do {
-                                    puVar2 = puVar14 + (long long)plVar25 + (1 - (long long)plVar29);
-                                    puVar14 = puVar14 + 1;
-                                    *puVar14 = *puVar2;
-                                    uVar9 = uVar9 - 1;
-                                } while (uVar9 != 0);
-                            }
-                        }
-                        else {
-                            if (uVar11 != 0) {
-                                plVar13 = plVar29 + -1;
-                                uVar9 = (unsigned long long)(((uVar11 - 1) >> 3) + 1);
-                                do {
-                                    plVar1 = (long long*)
-                                        ((long long)plVar25 + (8 - (long long)plVar29) + (long long)plVar13);
-                                    plVar13 = plVar13 + 1;
-                                    *plVar13 = *plVar1;
-                                    uVar9 = uVar9 - 1;
-                                } while (uVar9 != 0);
-                            }
+                v7 += v45 + 3;
+                v19 = v43 >> v45;
+                v48 = ((uint32_t)v43 & ((1 << v45) - 1)) + v44 + 17;
+                v5 += v48;
+                if (v26 < 8)
+                {
+                    v50 = v48 - 13;
+                    v5 -= 13i64;
+                    if (v26 == 1)
+                    {
+                        v51 = *(uint8_t*)v29;
+                        v52 = 0i64;
+                        for (k = 0x101010101010101i64 * v51; (uint32_t)v52 < v50; v52 = (uint32_t)(v52 + 8))
+                        {
+                            *(uint64_t*)(v52 + v28) = k;
                         }
                     }
-                    else {
-                        uVar33 = uVar33 + uVar8;
-                        *plVar29 = *plVar25;
-                        plVar29[1] = plVar25[1];
-                    }
-                    uVar15 = 0;
-                }
-            LAB_7ff75294416d:
-                // not checked yet
-                if (uVar32 <= uVar22) {
-                    if (uVar33 == param_1[0x10]) {
-                        uVar32 = param_1[5];
-                        if (uVar33 == uVar32) {
-                            bVar26 = 1;
-                            goto LAB_7ff752944353;
+                    else
+                    {
+                        if (v50)
+                        {
+                            v54 = (char*)v29 - v28;
+                            v55 = v50;
+                            do
+                            {
+                                *(uint8_t*)v28 = v54[v28];
+                                ++v28;
+                                --v55;
+                            }                 while (v55);
                         }
-                        uVar9 = param_1[6];
-                        uVar24 = (unsigned long long) * (unsigned int*)(param_1 + 8);
-                        uVar21 = uVar21 >> 1;
-                        uVar12 = (int)uVar10 + 1;
-                        uVar10 = (unsigned long long)uVar12;
-                        if ((-uVar22 & uVar9) < uVar24) {
-                            uVar22 = uVar22 + (-uVar22 & uVar9);
-                            if ((unsigned long long)param_1[0xe] < uVar22) {
-                                param_1[0xe] = param_1[0xe] + 1U + uVar9;
-                            }
-                        }
-                        uVar20 = param_1[2] & uVar22;
-                        uVar22 = uVar22 + uVar24;
-                        uVar20 = ((1 << ((unsigned char)((*(unsigned int*)(param_1 + 8) & 0xff) << 3) & 0x3f)) - 1U) &
-                            *(unsigned long long*)(uVar20 + lVar5);
-                        uVar31 = param_1[0xb] + uVar20;
-                        lVar17 = param_1[0xf] + uVar20;
-                        param_1[0xb] = uVar31;
-                        uVar20 = param_1[7] + 1 + uVar33;
-                        param_1[0xf] = lVar17;
-                        if (uVar32 <= uVar20) {
-                            param_1[0xf] = lVar17 + uVar24;
-                            uVar20 = uVar32;
-                        }
-                        param_1[0x10] = uVar20;
-                        if ((param_2 < uVar31) || (param_3 < uVar20)) {
-                            if ((unsigned long long)param_1[0xe] <= uVar22) {
-                                uVar22 = (uVar22 + 7) & ~uVar9;
-                                param_1[0xe] = param_1[0xe] + 1U + uVar9;
-                            }
-                            bVar26 = 0;
-                            lVar5 = *(long long*)(lVar5 + (param_1[2] & uVar22));
-                            uVar22 = uVar22 + (uVar12 >> 3);
-                            *(unsigned int*)((long long)param_1 + 0x6c) = uVar15;
-                            *(unsigned int*)(param_1 + 0xd) = uVar12 & 7;
-                            // check this
-                            param_1[0xc] = (lVar5 << (0x40U - (char)uVar12 & 0x3f) | uVar21) &
-                                (0xffffffffffffffffU >> (char)(uVar12 & 7));
-                        LAB_7ff752944353:
-                            param_1[9] = uVar22;
-                            param_1[10] = uVar33;
-                            return (unsigned long long)bVar26;
-                        }
-                    }
-                    uVar32 = param_1[0xe];
-                    if (uVar32 <= uVar22) {
-                        uVar22 = (uVar22 + 7) & ~param_1[6];
-                        uVar32 = uVar32 + 1 + param_1[6];
-                        param_1[0xe] = uVar32;
-                    }
-                    if ((unsigned long long)param_1[0xf] < uVar32) {
-                        uVar32 = param_1[0xf];
                     }
                 }
-                uVar9 = param_1[2] & uVar22;
-                uVar12 = (unsigned int)uVar10 & 7;
-                uVar22 = uVar22 + (uVar10 >> 3);
-                uVar21 = (0xffffffffffffffffU >> (char)uVar12) &
-                    (*(long long*)(uVar9 + lVar5) << ((0x40U - (char)uVar10) & 0x3f) | uVar21);
-            } while (true);
+                else
+                {
+                    for (l = 0i64; (uint32_t)l < (uint32_t)v48; l = (uint32_t)(l + 8))
+                    {
+                        *(uint64_t*)(l + v28) = *(uint64_t*)((char*)v29 + l);
+                    }
+                }
+            }
+            else
+            {
+                v5 += v20;
+                *(uint64_t*)v28 = *v29;
+                *(uint64_t*)(v28 + 8) = v29[1];
+            }
+            v11 = v74;
+        }
+        if (v9 >= v10)
+        {
+            break;
+        }
+    LABEL_29:
+        v6 = v70;
+        v13 = (*(uint64_t*)((v9 & param_buffer[2]) + v11) << (64 - (uint8_t)v7)) | v19;
+    }
+    if (v5 != param_buffer[16])
+    {
+        goto LABEL_25;
+    }
+    v30 = param_buffer[5];
+    if (v5 == v30)
+    {
+        result = 1;
+        goto LABEL_69;
+    }
+    v31 = param_buffer[6];
+    v32 = *((uint32_t*)param_buffer + 16);
+    v33 = v31 & -(int64_t)v9;
+    v19 >>= 1;
+    ++v7;
+    if (v32 > v33)
+    {
+        v9 += v33;
+        v34 = param_buffer[14];
+        if (v9 > v34)
+        {
+            param_buffer[14] = v31 + v34 + 1;
         }
     }
-    //return in_RAX & 0xffffffffffffff00;
+    v35 = v9 & param_buffer[2];
+    v9 += v32;
+    v36 = v5 + param_buffer[7] + 1;
+    v37 = *(uint32_t*)(v35 + v11) & ((1i64 << (8 * (uint8_t)v32)) - 1);
+    v38 = v37 + param_buffer[11];
+    v39 = v37 + param_buffer[15];
+    param_buffer[11] = v38;
+    param_buffer[15] = v39;
+    if (v36 >= v30)
+    {
+        v36 = v30;
+        param_buffer[15] = v32 + v39;
+    }
+    param_buffer[16] = v36;
+    if (file_size >= v38 && buf_size >= v36)
+    {
+    LABEL_25:
+        v10 = param_buffer[14];
+        if (v9 >= v10)
+        {
+            v9 = ~param_buffer[6] & (v9 + 7);
+            v10 += param_buffer[6] + 1;
+            param_buffer[14] = v10;
+        }
+        if (param_buffer[15] < v10)
+        {
+            v10 = param_buffer[15];
+        }
+        goto LABEL_29;
+    }
+    v69 = param_buffer[14];
+    if (v9 >= v69)
+    {
+        v9 = ~v31 & (v9 + 7);
+        param_buffer[14] = v69 + v31 + 1;
+    }
+    *((uint32_t*)param_buffer + 27) = v71;
+    result = 0;
+    param_buffer[12] = v19;
+    *((uint32_t*)param_buffer + 26) = v7;
+LABEL_69:
+    param_buffer[10] = v5;
+    param_buffer[9] = v9;
+    return result;
 }
-
-//-----------------------------------------------------------------------------
-// Purpose: returns the decompressed size
-//-----------------------------------------------------------------------------
-unsigned long long RTech::DecompressedSize(long long* param_1, long long param_2, unsigned long long param_3, unsigned long long param_4, unsigned long long param_5, unsigned long long param_6)
-{
-    long long lVar1;
-    char sVar2;
-    unsigned int uVar3;
-    unsigned long long uVar4;
-    unsigned int uVar5;
-    unsigned int uVar6;
-    unsigned long long uVar7;
-    unsigned long long uVar8;
-    unsigned long long uVar9;
-    unsigned long long uVar10;
-
-    *param_1 = param_2;
-    param_1[5] = param_6;
-    param_1[1] = 0;
-    param_1[3] = 0;
-    *(unsigned int*)((long long)param_1 + 0x44) = 0;
-    param_1[10] = param_6;
-    param_1[4] = param_4;
-    param_1[2] = param_3;
-    uVar4 = param_6 + 8;
-    uVar7 = *(unsigned long long*)((param_3 & param_6) + param_2);
-    param_1[9] = uVar4;
-    uVar6 = (int)(char)uVar7 & 0x3f;
-    uVar7 = uVar7 >> 6;
-    sVar2 = (char)uVar6;
-    uVar3 = (uVar6 - 2 & 7) + 0xd;
-    uVar10 = (1 << sVar2) - 1U & uVar7 | 1 << sVar2;
-    param_1[5] = uVar10;
-    lVar1 = *(long long*)((uVar4 & param_3) + param_2);
-    uVar4 = (uVar6 + 6 >> 3) + uVar4;
-    param_1[9] = uVar4;
-    uVar7 = 0xffffffffffffffffU >> ((unsigned char)(uVar6 + 6) & 7) &
-        (uVar7 >> sVar2 | lVar1 << (0x3aU - sVar2 & 0x3f));
-    uVar6 = (((unsigned int)uVar7 & 0xff) - 1 & 0x3f) + 1;
-    uVar9 = 0xffffffffffffffff >> (-(char)uVar6 & 0x3fU);
-    param_1[6] = uVar9;
-    uVar8 = 0xffffffffffffffff >> (0x3f - ((char)(uVar7 >> 6) - 1U & 0x3f) & 0x3f);
-    param_1[7] = uVar8;
-    lVar1 = *(long long*)((uVar4 & param_3) + param_2);
-    uVar4 = (uVar3 >> 3) + uVar4;
-    param_1[9] = uVar4;
-    if (uVar9 == 0xffffffffffffffff) {
-        *(unsigned int*)(param_1 + 8) = 0;
-        uVar5 = 0;
-    }
-    else {
-        uVar6 = uVar6 >> 3;
-        uVar5 = uVar6 + 1;
-        *(unsigned int*)(param_1 + 8) = uVar5;
-        param_4 = (1 << ((char)uVar6 * '\b' + 8U & 0x3f)) - 1U &
-            *(unsigned long long*)((uVar4 & param_3) + param_2);
-        param_1[9] = uVar5 + uVar4;
-    }
-    param_1[0xb] = param_4;
-    param_1[0xe] = uVar9 - 6;
-    param_1[0xc] = 0xffffffffffffffffU >> (char)(uVar3 & 7) &
-        (lVar1 << (0x40U - (char)uVar3 & 0x3f) | uVar7 >> 0xd);
-    *(unsigned int*)(param_1 + 0xd) = uVar3 & 7;
-    *(unsigned int*)((long long)param_1 + 0x6c) = 0;
-    param_1[0xf] = param_4;
-    param_1[0x10] = uVar10;
-    param_1[3] = 0x3fffff;
-    if (uVar8 < uVar10 - 1) {
-        param_1[0x10] = uVar8 + 1;
-        param_1[0xf] = param_4 - uVar5;
-    }
-    return uVar10;
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 RTech* g_pRtech;

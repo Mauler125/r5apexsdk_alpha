@@ -67,7 +67,7 @@ void* ConCommand_RegisterCommand(const char* name, const char* helpString, int f
 	*(void**)(commandPtr + 0x50) = callback;               // 0x50 has function callback.
 	*(std::int32_t*)(commandPtr + 0x60) = 2;               // 0x60 Set to use callback and newcommand callback.
 
-	if (callbackAfterExecution) // Do we want to have a callback after execution?
+	if (callbackAfterExecution) // callback after execution desired?
 	{
 		*(void**)(commandPtr + 0x58) = callbackAfterExecution; // 0x58 to our callback after execution.
 	}
@@ -96,8 +96,8 @@ void ConCommand_InitConCommand()
 	void* reloadBanListCommand = ConCommand_RegisterCommand("sv_reloadbanlist", "Reloads the ban list from the disk.", 0, ReloadBanList_Callback, nullptr);
 	//-------------------------------------------------------------------------
 	// RTECH API                                                              |
-	void* rTechGenerateGuidCommand = ConCommand_RegisterCommand("rtech_generateguid", "Calculates the GUID from input data.", 0, RTech_GenerateGUID_Callback, nullptr);
-	void* rTechDecompressCommand   = ConCommand_RegisterCommand("rtech_decompress", "Decompresses user specified 'RPak' file.", 0, RTech_DecompRpak_Callback, nullptr);
+	void* rTechGenerateGuidCommand = ConCommand_RegisterCommand("rtech_toguid", "Calculates the GUID from input data.", 0, RTech_GenerateGUID_Callback, nullptr);
+	void* rTechDecompressCommand   = ConCommand_RegisterCommand("rtech_decompress", "Decompresses user specified 'RPak' file.", 0, RTech_Decompress_Callback, nullptr);
 	//-------------------------------------------------------------------------
 	// NETCHANNEL                                                             |
 	void* netTraceCommand  = ConCommand_RegisterCommand("net_toggletrace", "Logs the sending and receiving datagram to a file on the disk.", 0, NET_TraceNetChan_Callback, nullptr);

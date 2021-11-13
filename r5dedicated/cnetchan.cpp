@@ -61,9 +61,9 @@ void HNET_SetKey(std::string key)
 	g_szNetKey.clear();
 	g_szNetKey = key;
 
-	Sys_Print(SYS_DLL::ENGINE, "______________________________________________________________\n");
-	Sys_Print(SYS_DLL::ENGINE, "# NET_KEY ####################################################\n");
-	Sys_Print(SYS_DLL::ENGINE, "] BASE64 NET_KEY: '%s'\n", g_szNetKey.c_str());
+	Sys_Print(SYS_DLL::ENGINE, "] NET_KEY ----------------------------------------------------\n");
+	Sys_Print(SYS_DLL::ENGINE, "] BASE64: '%s'\n", g_szNetKey.c_str());
+	Sys_Print(SYS_DLL::ENGINE, "--------------------------------------------------------------\n");
 
 	NET_SetKey(netkey_ptr, g_szNetKey.c_str());
 }
@@ -96,9 +96,9 @@ void HNET_GenerateKey()
 
 	g_szNetKey = base64_encode(g_szNetKey);
 
-	Sys_Print(SYS_DLL::ENGINE, "______________________________________________________________\n");
-	Sys_Print(SYS_DLL::ENGINE, "# NET_KEY ####################################################\n");
-	Sys_Print(SYS_DLL::ENGINE, "] BASE64 NET_KEY: '%s'\n", g_szNetKey.c_str());
+	Sys_Print(SYS_DLL::ENGINE, "] NET_KEY ----------------------------------------------------\n");
+	Sys_Print(SYS_DLL::ENGINE, "] BASE64: '%s'\n", g_szNetKey.c_str());
+	Sys_Print(SYS_DLL::ENGINE, "--------------------------------------------------------------\n");
 
 	NET_SetKey(netkey_ptr, g_szNetKey.c_str());
 }

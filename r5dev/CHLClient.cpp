@@ -4,6 +4,7 @@
 #include "CNetChan.h"
 #include "IConVar.h"
 #include "basetypes.h"
+#include "IVEngineClient.h"
 
 void __fastcall HFrameStageNotify(CHLClient* rcx, ClientFrameStage_t curStage)
 {
@@ -17,6 +18,18 @@ void __fastcall HFrameStageNotify(CHLClient* rcx, ClientFrameStage_t curStage)
 				IConVar_ClearHostNames();
 				ConCommand_InitConCommand();
 				IConVar_InitConVar();
+
+				IVEngineClient_CommandExecute(NULL, "exec autoexec.cfg");
+				IVEngineClient_CommandExecute(NULL, "exec autoexec_server.cfg");
+				IVEngineClient_CommandExecute(NULL, "exec autoexec_client.cfg");
+
+				if (g_pCvar->FindVar("net_userandomkey")->m_iValue == 1)
+				{
+					HNET_GenerateKey();
+				}
+
+				g_pCvar->FindVar("net_usesocketsforloopback")->m_iValue = 1;
+
 				g_bClassInitialized = true;
 			}
 			break;
