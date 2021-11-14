@@ -19,7 +19,6 @@
 #include <Psapi.h>
 #include <vector>
 
-
 // Our headers
 #include "spdlog.h"
 #include "sinks/basic_file_sink.h"
@@ -29,6 +28,11 @@
 #include "httplib.h"
 #include "json.hpp"
 #include "address.h"
+
+namespace
+{
+	Module g_mGameDll = Module("r5apex.exe");
+}
 /*
 #pragma once
 

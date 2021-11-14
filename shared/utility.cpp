@@ -1,6 +1,6 @@
 #include "stdafx.h"
-#include "utility.h"
 #include "logdef.h"
+#include "utility.h"
 
 /*-----------------------------------------------------------------------------
  * _utility

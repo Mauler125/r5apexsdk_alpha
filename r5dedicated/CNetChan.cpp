@@ -52,8 +52,6 @@ std::int64_t HNET_SendDatagram(SOCKET s, const char* buf, int len, int flags)
 //-----------------------------------------------------------------------------
 void HNET_SetKey(std::string key)
 {
-	std::uintptr_t netkey_ptr = 0x160686DC0; // TODO: GLOBALIZE
-
 	g_szNetKey.clear();
 	g_szNetKey = key;
 
@@ -61,7 +59,7 @@ void HNET_SetKey(std::string key)
 	Sys_Print(SYS_DLL::ENGINE, "] BASE64: '%s'\n", g_szNetKey.c_str());
 	Sys_Print(SYS_DLL::ENGINE, "--------------------------------------------------------------\n");
 
-	NET_SetKey(netkey_ptr, g_szNetKey.c_str());
+	NET_SetKey(g_uNetKeyPtr, g_szNetKey.c_str());
 }
 
 //-----------------------------------------------------------------------------
@@ -69,7 +67,6 @@ void HNET_SetKey(std::string key)
 //-----------------------------------------------------------------------------
 void HNET_GenerateKey()
 {
-	std::uintptr_t netkey_ptr = 0x160686DC0; // TODO: GLOBALIZE
 	BCRYPT_ALG_HANDLE hAlgorithm;
 
 	g_szNetKey.clear();
@@ -96,7 +93,7 @@ void HNET_GenerateKey()
 	Sys_Print(SYS_DLL::ENGINE, "] BASE64: '%s'\n", g_szNetKey.c_str());
 	Sys_Print(SYS_DLL::ENGINE, "--------------------------------------------------------------\n");
 
-	NET_SetKey(netkey_ptr, g_szNetKey.c_str());
+	NET_SetKey(g_uNetKeyPtr, g_szNetKey.c_str());
 }
 
 //-----------------------------------------------------------------------------
@@ -139,3 +136,4 @@ void DetachCNetChanHooks()
 ///////////////////////////////////////////////////////////////////////////////
 bool g_bTraceNetChannel;
 std::string g_szNetKey = "WDNWLmJYQ2ZlM0VoTid3Yg==";
+std::uintptr_t g_uNetKeyPtr = g_mGameDll.StringSearch("client:NetEncryption_NewKey").FindPatternSelf("48 8D ? ? ? ? ? 48 3B", Address::Direction::UP, 150).ResolveRelativeAddressSelf(0x3, 0x7).GetPtr();

@@ -23,7 +23,6 @@
 #include <cmath>
 
 // Our headers
-
 #include "imgui.h"
 #include "imgui_utility.h"
 #include "imgui_stdlib.h"
@@ -38,6 +37,11 @@
 #include "classes.h"
 #include "httplib.h"
 #include "json.hpp"
+
+namespace
+{
+	Module g_mGameDll = Module("r5apex.exe");
+}
 
 //#include "address.h"
 /*
