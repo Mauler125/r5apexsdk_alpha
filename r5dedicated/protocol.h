@@ -5,7 +5,7 @@
  * _protocol.h
  *-----------------------------------------------------------------------------*/
 
-enum SIGNONSTATE
+enum class SIGNONSTATE : int
 {
 	SIGNONSTATE_NONE         = 0, // no state yet; about to connect
 	SIGNONSTATE_CHALLENGE    = 1, // client challenging server; all OOB packets

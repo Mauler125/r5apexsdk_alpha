@@ -89,7 +89,7 @@ public:
 	// GetMemPool return a global variable called m_pMemPool it gets modified by AllocKeyValuesMemory and FreeKeyValuesMemory above you can see where the find it in FreeKeyValuesMemory.
 	void* GetMemPool() // @0x1413AA228 in R5pc_r5launch_N1094_CL456479_2019_10_30_05_20_PM
 	{
-		return reinterpret_cast<void*>(0x14D412768); // May need to dereference is once more not sure right now.
+		return reinterpret_cast<void*>(0x14D412768); // May need to dereference this once more not sure right now.
 	}
 
 	void SetKeyValuesExpressionSymbol(const char* name, bool bValue) // @0x1413AA230 in R5pc_r5launch_N1094_CL456479_2019_10_30_05_20_PM
@@ -187,19 +187,19 @@ public:
 	// Compiler makes it so m_Value shares the offset spot with m_flValue that why we cast it like this.
 	float& m_flValue()
 	{
-		static __int32 offset = 0x18;
+		static std::int32_t offset = 0x18;
 		return *(float*)((std::uintptr_t)this + offset);
 	}
 
 	int& m_iValue()
 	{
-		static __int32 offset = 0x18;
+		static std::int32_t offset = 0x18;
 		return *(int*)((std::uintptr_t)this + offset);
 	}
 
 public:
-	unsigned __int32 m_iKeyName              : 24; // 0x0000
-	unsigned __int32 m_iKeyNameCaseSensitive : 8;  // 0x0003
+	std::uint32_t    m_iKeyName              : 24; // 0x0000
+	std::uint32_t    m_iKeyNameCaseSensitive : 8;  // 0x0003
 	char*            m_sValue;                     // 0x0008
 	wchar_t*         m_wsValue;                    // 0x0010
 	int              m_Value;                      // 0x0018
@@ -207,7 +207,7 @@ private:
 	char             gap1C[12];                    // 0x0020
 public:
 	char             m_iDataType;                  // 0x0028
-	unsigned __int16 m_iKeyNameCaseSensitive2;     // 0x002A
+	std::uint16_t    m_iKeyNameCaseSensitive2;     // 0x002A
 	KeyValues*       m_pPeer;                      // 0x0030
 	KeyValues*       m_pSub;                       // 0x0038
 	KeyValues*       m_pChain;                     // 0x0040

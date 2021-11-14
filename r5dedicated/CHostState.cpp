@@ -15,7 +15,7 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 	static auto g_ServerAbortServer = Address(0x14B37CA22).RCast<char*>();
 	static auto State_RunFn         = Address(0x14023E870).RCast<void(*)(HostStates_t*, void*, float)>();
 	static auto Cbuf_ExecuteFn      = Address(0x14020D5C0).RCast<void(*)()>();
-	static auto g_ServerGameClients = Address(0x14B383428).RCast<__int64*>();
+	static auto g_ServerGameClients = Address(0x14B383428).RCast<std::int64_t*>();
 	static auto SV_InitGameDLLFn    = Address(0x140308B90).RCast<void(*)()>();
 	static auto g_CModelLoader      = Address(0x14173B210).RCast<void*>();
 	static auto CModelLoader_Map_IsValidFn = Address(0x1402562F0).RCast<bool(*)(void*, const char*)>();
@@ -107,10 +107,6 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 					// End Inline CHostState::GameShutdown
 				}
 
-				//	Seems useless so nope.
-				//	if (g_CHLClient)
-				//		(*(void(__fastcall**)(__int64, _QWORD))(*(_QWORD*)g_CHLClient + 1000i64))(g_CHLClient, 0i64);
-
 				g_pHostState->m_iCurrentState = HostStates_t::HS_RUN; // Set current state to run.
 
 				// If our next state isn't a shutdown or its a forced shutdown then set next state to run.
@@ -136,10 +132,6 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 				{
 					Sys_Print(SYS_DLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_CHANGE_LEVEL_SP | Error: Unable to find map: '%s'\n", g_pHostState->m_levelName);
 				}
-
-				//	Seems useless so nope.
-				// 	if (g_CHLClient)
-				//		(*(void(__fastcall**)(__int64, _QWORD))(*(_QWORD*)g_CHLClient + 1000i64))(g_CHLClient, 0i64);
 
 				g_pHostState->m_iCurrentState = HostStates_t::HS_RUN; // Set current state to run.
 
@@ -169,10 +161,6 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 				{
 					Sys_Print(SYS_DLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_CHANGE_LEVEL_MP | Error: Unable to find map: '%s'\n", g_pHostState->m_levelName);
 				}
-
-				//	Seems useless so nope.
-				// // 	if (g_CHLClient)
-				//		(*(void(__fastcall**)(__int64, _QWORD))(*(_QWORD*)g_CHLClient + 1000i64))(g_CHLClient, 0i64);
 
 				g_pHostState->m_iCurrentState = HostStates_t::HS_RUN; // Set current state to run.
 

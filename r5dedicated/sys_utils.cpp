@@ -35,7 +35,7 @@ void Sys_Print(SYS_DLL idx, const char* fmt, ...)
 
 	static auto iconsole = spdlog::stdout_logger_mt("sys_print_iconsole"); // in-game console.
 	static auto wconsole = spdlog::stdout_logger_mt("sys_print_wconsole"); // windows console.
-	static auto sqlogger = spdlog::basic_logger_mt("sys_print_logger", "platform\\logs\\SYS_Print.log"); // file logger.
+	static auto sqlogger = spdlog::basic_logger_mt("sys_print_logger", "platform\\logs\\sys_print.log"); // file logger.
 
 	std::string vmStr = vmType[vmIdx].c_str();
 
@@ -73,7 +73,7 @@ void Sys_Print(SYS_DLL idx, const char* fmt, ...)
 //	Sys_LoadAsset
 //
 //-----------------------------------------------------------------------------
-int64_t HSys_LoadAsset(const CHAR* lpFileName, int64_t a2, LARGE_INTEGER* a3)
+int64_t HSys_LoadAsset(const CHAR* lpFileName, std::int64_t a2, LARGE_INTEGER* a3)
 {
 	std::string mod_file;
 	std::string base_file = lpFileName;

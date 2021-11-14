@@ -56,7 +56,7 @@ unsigned int HNET_SendDatagram(SOCKET s, const char* buf, int len, int flags)
 //-----------------------------------------------------------------------------
 void HNET_SetKey(std::string key)
 {
-	uintptr_t netkey_ptr = 0x160686DC0; // TODO: GLOBALIZE
+	std::uintptr_t netkey_ptr = 0x160686DC0; // TODO: GLOBALIZE
 
 	g_szNetKey.clear();
 	g_szNetKey = key;
@@ -73,7 +73,7 @@ void HNET_SetKey(std::string key)
 //-----------------------------------------------------------------------------
 void HNET_GenerateKey()
 {
-	uintptr_t netkey_ptr = 0x160686DC0; // TODO: GLOBALIZE
+	std::uintptr_t netkey_ptr = 0x160686DC0; // TODO: GLOBALIZE
 	BCRYPT_ALG_HANDLE hAlgorithm;
 
 	g_szNetKey.clear();
@@ -106,7 +106,7 @@ void HNET_GenerateKey()
 //-----------------------------------------------------------------------------
 // Purpose: disconnect the client and shutdown netchannel
 //-----------------------------------------------------------------------------
-void NET_DisconnectClient(CClient* client, int index, const char* reason, unsigned __int8 unk1, char unk2)
+void NET_DisconnectClient(CClient* client, int index, const char* reason, std::uint8_t unk1, char unk2)
 {
 	if (!client) //	Client valid?
 	{
@@ -123,7 +123,7 @@ void NET_DisconnectClient(CClient* client, int index, const char* reason, unsign
 
 	NET_Shutdown(client->GetNetChan(), reason, unk1, unk2); // Shutdown netchan.
 	client->GetNetChan() = nullptr;                         // Null netchan.
-	CBaseClient_Clear((__int64)client);                     // Reset CClient instance for client.
+	CBaseClient_Clear((std::int64_t)client);                // Reset CClient instance for client.
 	g_bIsPersistenceVarSet[index] = false;                  // Reset Persistence var.
 }
 
