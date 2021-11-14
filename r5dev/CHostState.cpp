@@ -9,13 +9,13 @@
 ///////////////////////////////////////////////////////////////////////////////
 void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 {
-	static auto setjmpFn            = Address(0x141205460).RCast<__int64(*)(jmp_buf, void*)>();
+	static auto setjmpFn            = Address(0x141205460).RCast<std::int64_t(*)(jmp_buf, void*)>();
 	static auto host_abortserver    = Address(0x14B37C700).RCast<jmp_buf*>();
 	static auto CHostState_InitFn   = Address(0x14023E7D0).RCast<void(*)(CHostState*)>();
 	static auto g_ServerAbortServer = Address(0x14B37CA22).RCast<char*>();
 	static auto State_RunFn         = Address(0x14023E870).RCast<void(*)(HostStates_t*, void*, float)>();
 	static auto Cbuf_ExecuteFn      = Address(0x14020D5C0).RCast<void(*)()>();
-	static auto g_ServerGameClients = Address(0x14B383428).RCast<__int64*>();
+	static auto g_ServerGameClients = Address(0x14B383428).RCast<std::int64_t*>();
 	static auto SV_InitGameDLLFn    = Address(0x140308B90).RCast<void(*)()>();
 	static auto g_CModelLoader      = Address(0x14173B210).RCast<void*>();
 	static auto CModelLoader_Map_IsValidFn = Address(0x1402562F0).RCast<bool(*)(void*, const char*)>();

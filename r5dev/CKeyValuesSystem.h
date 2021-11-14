@@ -186,13 +186,13 @@ public:
 	// Compiler makes it so m_Value shares the offset spot with m_flValue that why we cast it like this.
 	float& m_flValue()
 	{
-		static __int32 offset = 0x18;
+		static std::int32_t offset = 0x18;
 		return *(float*)((std::uintptr_t)this + offset);
 	}
 
 	int& m_iValue()
 	{
-		static __int32 offset = 0x18;
+		static std::int32_t offset = 0x18;
 		return *(int*)((std::uintptr_t)this + offset);
 	}
 

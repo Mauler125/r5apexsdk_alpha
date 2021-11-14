@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "logdef.h"
+#include "sys_utils.h"
 #include "sqvm.h"
 #include "classes.h"
 #include "IConVar.h"
@@ -55,9 +56,9 @@ void* HSQVM_PrintFunc(void* sqvm, char* fmt, ...)
 //---------------------------------------------------------------------------------
 // Purpose: prints the warning output of each VM to the console
 //---------------------------------------------------------------------------------
-__int64 HSQVM_WarningFunc(void* sqvm, int a2, int a3, int* stringSize, void** string)
+std::int64_t HSQVM_WarningFunc(void* sqvm, int a2, int a3, int* stringSize, void** string)
 {
-	__int64 result = SQVM_WarningFunc(sqvm, a2, a3, stringSize, string);
+	std::int64_t result = SQVM_WarningFunc(sqvm, a2, a3, stringSize, string);
 	if (g_bSQVM_WarnFuncCalled) // Check if its SQVM_Warning calling.
 	{
 		return result; // If not return.
@@ -112,7 +113,7 @@ __int64 HSQVM_WarningFunc(void* sqvm, int a2, int a3, int* stringSize, void** st
 //---------------------------------------------------------------------------------
 // Purpose:
 //---------------------------------------------------------------------------------
-__int64 HSQVM_WarningCmd(int a1, int a2)
+std::int64_t HSQVM_WarningCmd(int a1, int a2)
 {
 	g_bSQVM_WarnFuncCalled = true;
 	return SQVM_WarningCmd(a1, a2);
@@ -121,7 +122,7 @@ __int64 HSQVM_WarningCmd(int a1, int a2)
 //---------------------------------------------------------------------------------
 // Purpose: loads the include file from the mods directory
 //---------------------------------------------------------------------------------
-__int64 HSQVM_LoadRson(const char* rson_name)
+std::int64_t HSQVM_LoadRson(const char* rson_name)
 {
 	char filepath[MAX_PATH] = { 0 };
 	sprintf_s(filepath, MAX_PATH, "platform\\%s", rson_name);
@@ -140,12 +141,12 @@ __int64 HSQVM_LoadRson(const char* rson_name)
 	{
 		if (g_bClassInitialized && g_pCvar->FindVar("sq_showrsonloading")->m_iValue > 0)
 		{
-			spdlog::debug("\n");
-			spdlog::debug("Native(E):______________________________________________________________\n");
-			spdlog::debug("Native(E):] RSON_DISK_PATH #############################################\n");
-			spdlog::debug("Native(E):] '{}'\n", filepath);
-			spdlog::debug("Native(E):##############################################################\n");
-			spdlog::debug("\n");
+			Sys_Print(SYS_DLL::ENGINE, "\n");
+			Sys_Print(SYS_DLL::ENGINE, ":______________________________________________________________\n");
+			Sys_Print(SYS_DLL::ENGINE, ":] RSON_DISK_PATH ---------------------------------------------\n");
+			Sys_Print(SYS_DLL::ENGINE, ":] '%s'\n", filepath);
+			Sys_Print(SYS_DLL::ENGINE, ":--------------------------------------------------------------\n");
+			Sys_Print(SYS_DLL::ENGINE, "\n");
 		}
 		return SQVM_LoadRson(filepath);
 	}
@@ -153,12 +154,12 @@ __int64 HSQVM_LoadRson(const char* rson_name)
 	{
 		if (g_bClassInitialized && g_pCvar->FindVar("sq_showrsonloading")->m_iValue > 0)
 		{
-			spdlog::debug("\n");
-			spdlog::debug("Native(E):______________________________________________________________\n");
-			spdlog::debug("Native(E):] RSON_VPK_PATH ##############################################\n");
-			spdlog::debug("Native(E):] '{}'\n", rson_name);
-			spdlog::debug("Native(E):##############################################################\n");
-			spdlog::debug("\n");
+			Sys_Print(SYS_DLL::ENGINE, "\n");
+			Sys_Print(SYS_DLL::ENGINE, "______________________________________________________________\n");
+			Sys_Print(SYS_DLL::ENGINE, "] RSON_VPK_PATH ----------------------------------------------\n");
+			Sys_Print(SYS_DLL::ENGINE, "] '%s'\n", rson_name);
+			Sys_Print(SYS_DLL::ENGINE, "--------------------------------------------------------------\n");
+			Sys_Print(SYS_DLL::ENGINE, "\n");
 		}
 	}
 	return SQVM_LoadRson(rson_name);
