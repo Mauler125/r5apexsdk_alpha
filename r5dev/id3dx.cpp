@@ -3,11 +3,10 @@
 #include "input.h"
 #include "classes.h"
 #include "console.h"
+#include "sys_utils.h"
 #include "CInputSystem.h"
 #include "CGameConsole.h"
 #include "CServerBrowser.h"
-
-#pragma comment(lib, "d3d11.lib")
 
 /*---------------------------------------------------------------------------------
  * _id3dx.cpp
@@ -34,15 +33,17 @@ static HWND                     g_hGameWindow               = NULL;
 extern DWORD                    g_dThreadId                 = NULL;
 
 ///////////////////////////////////////////////////////////////////////////////////
-static IDXGISwapChainPresent    g_fnIDXGISwapChainPresent   = nullptr;
+static IDXGIResizeBuffers       g_oResizeBuffers            = NULL;
+static IDXGISwapChainPresent    g_fnIDXGISwapChainPresent   = NULL;
 static IDXGISwapChain*          g_pSwapChain                = nullptr;
-static IDXGIResizeBuffers       g_oResizeBuffers            = nullptr;
 static ID3D11DeviceContext*     g_pDeviceContext            = nullptr;
 static ID3D11Device*            g_pDevice                   = nullptr;
 static ID3D11RenderTargetView*  g_pRenderTargetView         = nullptr;
 static ID3D11DepthStencilView*  g_pDepthStencilView         = nullptr;
-static IPostMessageA            g_oPostMessageA             = nullptr;
-static IPostMessageW            g_oPostMessageW             = nullptr;
+
+///////////////////////////////////////////////////////////////////////////////////
+static IPostMessageA            g_oPostMessageA             = NULL;
+static IPostMessageW            g_oPostMessageW             = NULL;
 
 //#################################################################################
 // WINDOW PROCEDURE
@@ -204,9 +205,9 @@ void GetPresent()
 		&nFeatureLevelsSupported,
 		&pContext)))
 	{
-		std::cout << "+--------------------------------------------------------+" << std::endl;
-		std::cout << "| >>>>>>>>>| VIRTUAL METHOD TABLE HOOK FAILED |<<<<<<<<< |" << std::endl;
-		std::cout << "+--------------------------------------------------------+" << std::endl;
+		Sys_Print(SYS_DLL::MS, "+--------------------------------------------------------+\n");
+		Sys_Print(SYS_DLL::MS, "| >>>>>>>>>| VIRTUAL METHOD TABLE HOOK FAILED |<<<<<<<<< |\n");
+		Sys_Print(SYS_DLL::MS, "+--------------------------------------------------------+\n");
 		RemoveDXHooks();
 		return;
 	}
@@ -289,9 +290,9 @@ void DrawImGui()
 void CreateRenderTarget(IDXGISwapChain* pSwapChain)
 {
 	///////////////////////////////////////////////////////////////////////////////
-	DXGI_SWAP_CHAIN_DESC            sd          = { 0 };
-	D3D11_RENDER_TARGET_VIEW_DESC   rd;
-	ID3D11Texture2D*                pBackBuffer = { 0 };
+	DXGI_SWAP_CHAIN_DESC            sd                 {};
+	D3D11_RENDER_TARGET_VIEW_DESC   rd                 {};
+	ID3D11Texture2D*                pBackBuffer = nullptr;
 
 	///////////////////////////////////////////////////////////////////////////////
 	pSwapChain->GetDesc(&sd);
@@ -313,7 +314,7 @@ void CreateViewPort( UINT nWidth, UINT nHeight)
 	float width  = *(float*)(&nWidth);
 	float height = *(float*)(&nHeight);
 
-	D3D11_VIEWPORT vp;
+	D3D11_VIEWPORT vp{};
 
 	///////////////////////////////////////////////////////////////////////////////
 	vp.Width             = width;
@@ -334,9 +335,9 @@ void DestroyRenderTarget()
 		g_pRenderTargetView->Release();
 		g_pRenderTargetView = nullptr;
 		g_pDeviceContext->OMSetRenderTargets(0, 0, 0);
-		std::cout << "+--------------------------------------------------------+" << std::endl;
-		std::cout << "| >>>>>>>>>>>>>>| RENDER TARGET DESTROYED |<<<<<<<<<<<<< |" << std::endl;
-		std::cout << "+--------------------------------------------------------+" << std::endl;
+		Sys_Print(SYS_DLL::MS, "+--------------------------------------------------------+\n");
+		Sys_Print(SYS_DLL::MS, "| >>>>>>>>>>>>>>| RENDER TARGET DESTROYED |<<<<<<<<<<<<< |\n");
+		Sys_Print(SYS_DLL::MS, "+--------------------------------------------------------+\n");
 	}
 }
 
@@ -378,9 +379,9 @@ HRESULT __stdcall Present(IDXGISwapChain* pSwapChain, UINT nSyncInterval, UINT n
 		if (FAILED(GetDeviceAndCtxFromSwapchain(pSwapChain, &g_pDevice, &g_pDeviceContext)))
 		{
 			return g_fnIDXGISwapChainPresent(pSwapChain, nSyncInterval, nFlags);
-			std::cout << "+--------------------------------------------------------+" << std::endl;
-			std::cout << "| >>>>>>>>>>| GET DVS AND CTX FROM SCP FAILED |<<<<<<<<< |" << std::endl;
-			std::cout << "+--------------------------------------------------------+" << std::endl;
+			Sys_Print(SYS_DLL::MS, "+--------------------------------------------------------+");
+			Sys_Print(SYS_DLL::MS, "| >>>>>>>>>>| GET DVS AND CTX FROM SCP FAILED |<<<<<<<<< |");
+			Sys_Print(SYS_DLL::MS, "+--------------------------------------------------------+");
 		}
 
 		CreateRenderTarget(pSwapChain);

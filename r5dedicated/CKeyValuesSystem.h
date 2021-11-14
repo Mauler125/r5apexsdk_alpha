@@ -24,8 +24,8 @@ enum KeyValuesTypes
 namespace
 {
 	/* ==== KEYVALUES ======================================================================================================================================================= */
-	DWORD64 p_KeyValues_FindKey = FindPatternV2("r5apex.exe", (const unsigned char*)"\x40\x56\x57\x41\x57\x48\x81\xEC\x00\x00\x00\x00\x45", "xxxxxxxx????x");
-	void* (*KeyValues_FindKey)(void* a1, const char* a2, bool a3) = (void* (*)(void*, const char*, bool))p_KeyValues_FindKey; /*40 56 57 41 57 48 81 EC 30 01 00 00 45 0F B6 F8*/
+	ADDRESS p_KeyValues_FindKey = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x40\x56\x57\x41\x57\x48\x81\xEC\x00\x00\x00\x00\x45", "xxxxxxxx????x");
+	void* (*KeyValues_FindKey)(void* a1, const char* a2, bool a3) = (void* (*)(void*, const char*, bool))p_KeyValues_FindKey.GetPtr(); /*40 56 57 41 57 48 81 EC 30 01 00 00 45 0F B6 F8*/
 }
 
 class CKeyValuesSystem // VTABLE @ 0x1413AA1E8 in R5pc_r5launch_N1094_CL456479_2019_10_30_05_20_PM

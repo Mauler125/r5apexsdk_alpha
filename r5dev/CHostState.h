@@ -37,8 +37,8 @@ public:
 namespace
 {
 	/* ==== CHOSTSTATE ====================================================================================================================================================== */
-	DWORD64 p_CHostState_FrameUpdate = FindPatternV2("r5apex.exe", (const unsigned char*)"\x48\x89\x5C\x24\x08\x48\x89\x6C\x24\x20\xF3\x0F\x11\x54\x24\x18", "xxxxxxxxxxxxxxxx");
-	void (*CHostState_FrameUpdate)(void* rcx, void* rdx, float time) = (void(*)(void*, void*, float))p_CHostState_FrameUpdate; /*48 89 5C 24 08 48 89 6C 24 20 F3 0F 11 54 24 18*/
+	ADDRESS p_CHostState_FrameUpdate = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x48\x89\x5C\x24\x08\x48\x89\x6C\x24\x20\xF3\x0F\x11\x54\x24\x18", "xxxxxxxxxxxxxxxx");
+	void (*CHostState_FrameUpdate)(void* rcx, void* rdx, float time) = (void(*)(void*, void*, float))p_CHostState_FrameUpdate.GetPtr(); /*48 89 5C 24 08 48 89 6C 24 20 F3 0F 11 54 24 18*/
 }
 
 ///////////////////////////////////////////////////////////////////////////////

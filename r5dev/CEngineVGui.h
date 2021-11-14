@@ -37,8 +37,8 @@ private:
 namespace
 {
 	/* ==== CENGINEVGUI ===================================================================================================================================================== */
-	DWORD64 p_CEngineVGui_Paint = FindPatternV2("r5apex.exe", (const unsigned char*)"\x41\x55\x41\x56\x48\x83\xEC\x78\x44\x8B\xEA", "xxxxxxxxxxx");
-	int (*CEngineVGui_Paint)(void* thisptr, int mode) = (int (*)(void*, int))p_CEngineVGui_Paint; /*41 55 41 56 48 83 EC 78 44 8B EA*/
+	ADDRESS p_CEngineVGui_Paint = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x41\x55\x41\x56\x48\x83\xEC\x78\x44\x8B\xEA", "xxxxxxxxxxx");
+	int (*CEngineVGui_Paint)(void* thisptr, int mode) = (int (*)(void*, int))p_CEngineVGui_Paint.GetPtr(); /*41 55 41 56 48 83 EC 78 44 8B EA*/
 }
 
 ///////////////////////////////////////////////////////////////////////////////

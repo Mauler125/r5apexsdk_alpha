@@ -32,21 +32,21 @@ struct SQFuncRegistration
 namespace
 {
 	/* ==== SQUIRREL ======================================================================================================================================================== */
-	DWORD64 p_SQVM_PrintFunc = FindPatternV2("r5apex.exe", (const unsigned char*)"\x48\x8B\xC4\x48\x89\x50\x10\x4C\x89\x40\x18\x4C\x89\x48\x20\x53\x56\x57\x48\x81\xEC\x30\x08\x00\x00\x48\x8B\xDA\x48\x8D\x70\x18\x48\x8B\xF9\xE8\x00\x00\x00\xFF\x48\x89\x74\x24\x28\x48\x8D\x54\x24\x30\x33", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx???xxxxxxxxxxxx");
-	void* SQVM_PrintFunc = (void*)p_SQVM_PrintFunc; /*48 8B C4 48 89 50 10 4C 89 40 18 4C 89 48 20 53 56 57 48 81 EC 30 08 00 00 48 8B DA 48 8D 70 18 48 8B F9 E8 ?? ?? ?? FF 48 89 74 24 28 48 8D 54 24 30 33*/
+	ADDRESS p_SQVM_PrintFunc = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x48\x8B\xC4\x48\x89\x50\x10\x4C\x89\x40\x18\x4C\x89\x48\x20\x53\x56\x57\x48\x81\xEC\x30\x08\x00\x00\x48\x8B\xDA\x48\x8D\x70\x18\x48\x8B\xF9\xE8\x00\x00\x00\xFF\x48\x89\x74\x24\x28\x48\x8D\x54\x24\x30\x33", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx???xxxxxxxxxxxx");
+	void* SQVM_PrintFunc = (void*)p_SQVM_PrintFunc.GetPtr(); /*48 8B C4 48 89 50 10 4C 89 40 18 4C 89 48 20 53 56 57 48 81 EC 30 08 00 00 48 8B DA 48 8D 70 18 48 8B F9 E8 ?? ?? ?? FF 48 89 74 24 28 48 8D 54 24 30 33*/
 
-	DWORD64 p_SQVM_WarningFunc = FindPatternV2("r5apex.exe", (const unsigned char*)"\x4C\x89\x4C\x24\x20\x44\x89\x44\x24\x18\x89\x54\x24\x10\x53\x55\x56\x57\x41\x54\x41\x55\x41\x56\x41\x57\x48\x83\xEC\x00\x48\x8B", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx?xx");
-	std::int64_t(*SQVM_WarningFunc)(void* sqvm, int a2, int a3, int* stringSize, void** string) = (std::int64_t(*)(void*, int, int, int*, void**))p_SQVM_WarningFunc; /*4C 89 4C 24 20 44 89 44 24 18 89 54 24 10 53 55 56 57 41 54 41 55 41 56 41 57 48 83 EC ?? 48 8B*/
+	ADDRESS p_SQVM_WarningFunc = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x4C\x89\x4C\x24\x20\x44\x89\x44\x24\x18\x89\x54\x24\x10\x53\x55\x56\x57\x41\x54\x41\x55\x41\x56\x41\x57\x48\x83\xEC\x00\x48\x8B", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx?xx");
+	std::int64_t(*SQVM_WarningFunc)(void* sqvm, int a2, int a3, int* stringSize, void** string) = (std::int64_t(*)(void*, int, int, int*, void**))p_SQVM_WarningFunc.GetPtr(); /*4C 89 4C 24 20 44 89 44 24 18 89 54 24 10 53 55 56 57 41 54 41 55 41 56 41 57 48 83 EC ?? 48 8B*/
 
-	DWORD64 p_SQVM_WarningCmd = FindPatternV2("r5apex.exe", (const unsigned char*)"\x40\x53\x48\x83\xEC\x30\x33\xDB\x48\x8D\x44\x24\x00\x4C\x8D\x4C\x24\x00", "xxxxxxxxxxxx?xxxx?");
-	std::int64_t(*SQVM_WarningCmd)(int a1, int a2) = (std::int64_t(*)(int, int))p_SQVM_WarningCmd; /*40 53 48 83 EC 30 33 DB 48 8D 44 24 ?? 4C 8D 4C 24 ??*/
+	ADDRESS p_SQVM_WarningCmd = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x40\x53\x48\x83\xEC\x30\x33\xDB\x48\x8D\x44\x24\x00\x4C\x8D\x4C\x24\x00", "xxxxxxxxxxxx?xxxx?");
+	std::int64_t(*SQVM_WarningCmd)(int a1, int a2) = (std::int64_t(*)(int, int))p_SQVM_WarningCmd.GetPtr(); /*40 53 48 83 EC 30 33 DB 48 8D 44 24 ?? 4C 8D 4C 24 ??*/
 
-	//DWORD64 p_SQVM_LoadScript = FindPatternV2("r5apex.exe", (const unsigned char*)"\x48\x89\x5C\x24\x10\x48\x89\x74\x24\x18\x48\x89\x7C\x24\x20\x48\x89\x4C\x24\x08\x55\x41\x54\x41\x55\x41\x56\x41\x57\x48\x8D\x6C", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"); // For S0 and S1
-	DWORD64 p_SQVM_LoadScript = FindPatternV2("r5apex.exe", (const unsigned char*)"\x48\x8B\xC4\x48\x89\x48\x08\x55\x41\x56\x48\x8D\x68", "xxxxxxxxxxxxx"); // For anything S2 and above (current S8)
-	bool (*SQVM_LoadScript)(void* sqvm, const char* script_path, const char* script_name, int flag) = (bool (*)(void*, const char*, const char*, int))p_SQVM_LoadScript; /*E8 ?? ?? ?? ?? 84 C0 74 1C 41 B9 ?? ?? ?? ??*/
+	//ADDRESS p_SQVM_LoadScript = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x48\x89\x5C\x24\x10\x48\x89\x74\x24\x18\x48\x89\x7C\x24\x20\x48\x89\x4C\x24\x08\x55\x41\x54\x41\x55\x41\x56\x41\x57\x48\x8D\x6C", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"); // For S0 and S1
+	ADDRESS p_SQVM_LoadScript = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x48\x8B\xC4\x48\x89\x48\x08\x55\x41\x56\x48\x8D\x68", "xxxxxxxxxxxxx"); // For anything S2 and above (current S8)
+	bool (*SQVM_LoadScript)(void* sqvm, const char* script_path, const char* script_name, int flag) = (bool (*)(void*, const char*, const char*, int))p_SQVM_LoadScript.GetPtr(); /*E8 ?? ?? ?? ?? 84 C0 74 1C 41 B9 ?? ?? ?? ??*/
 
-	DWORD64 p_SQVM_LoadRson = FindPatternV2("r5apex.exe", (const unsigned char*)"\x4C\x8B\xDC\x49\x89\x5B\x08\x57\x48\x81\xEC\xA0\x00\x00\x00\x33", "xxxxxxxxxxxxxxxx");
-	int (*SQVM_LoadRson)(const char* rson_name) = (int (*)(const char*))p_SQVM_LoadRson; /*4C 8B DC 49 89 5B 08 57 48 81 EC A0 00 00 00 33*/
+	ADDRESS p_SQVM_LoadRson = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x4C\x8B\xDC\x49\x89\x5B\x08\x57\x48\x81\xEC\xA0\x00\x00\x00\x33", "xxxxxxxxxxxxxxxx");
+	int (*SQVM_LoadRson)(const char* rson_name) = (int (*)(const char*))p_SQVM_LoadRson.GetPtr(); /*4C 8B DC 49 89 5B 08 57 48 81 EC A0 00 00 00 33*/
 }
 
 void* HSQVM_PrintFunc(void* sqvm, char* fmt, ...);

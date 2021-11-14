@@ -149,12 +149,12 @@ struct rpak_h
 
 namespace
 {
-	/* ==== RTECH =========================================================================================================================================================== */
-	//DWORD64 p_RTech_Decompress = FindPatternV2("r5apex.exe", (const unsigned char*)"\x4C\x89\x44\x24\x18\x48\x89\x54\x24\x10\x53\x48\x83\xEC\x50\x48", "xxxxxxxxxxxxxxxx");
-	//char (*RTech_Decompress)(int64_t* parameter, std::uint64_t input, std::uint64_t output) = (char (*)(std::int64_t*, std::uint64_t, std::uint64_t))p_RTech_Decompress; /*4C 89 44 24 18 48 89 54 24 10 53 48 83 EC 50 48*/
+	///* ==== RTECH =========================================================================================================================================================== */
+	//ADDRESS p_RTech_Decompress = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x4C\x89\x44\x24\x18\x48\x89\x54\x24\x10\x53\x48\x83\xEC\x50\x48", "xxxxxxxxxxxxxxxx");
+	//char (*RTech_Decompress)(int64_t* parameter, std::uint64_t input, std::uint64_t output) = (char (*)(std::int64_t*, std::uint64_t, std::uint64_t))p_RTech_Decompress.GetPtr(); /*4C 89 44 24 18 48 89 54 24 10 53 48 83 EC 50 48*/
 
-	//DWORD64 p_RTech_DecompressedSize = FindPatternV2("r5apex.exe", (const unsigned char*)"\x48\x89\x5C\x24\x08\x48\x89\x6C\x24\x18\x48\x89\x74\x24\x20\x48\x89\x54\x24\x10\x57\x41\x54\x41\x55\x41\x56\x41\x57\x4C\x8B\x74", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-	//std::int64_t (*RTech_DecompressedSize)(std::int64_t parameter, std::uint8_t* input, std::int64_t magic, std::int64_t a4, std::int64_t a5) = (std::int64_t (*)(std::int64_t, std::uint8_t*, std::int64_t, std::int64_t, std::int64_t))p_RTech_DecompressedSize; /*48 89 5C 24 08 48 89 6C 24 18 48 89 74 24 20 48 89 54 24 10 57 41 54 41 55 41 56 41 57 4C 8B 74*/
+	//ADDRESS p_RTech_DecompressedSize = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x48\x89\x5C\x24\x08\x48\x89\x6C\x24\x18\x48\x89\x74\x24\x20\x48\x89\x54\x24\x10\x57\x41\x54\x41\x55\x41\x56\x41\x57\x4C\x8B\x74", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+	//std::int64_t (*RTech_DecompressedSize)(std::int64_t parameter, std::uint8_t* input, std::int64_t magic, std::int64_t a4, std::int64_t a5) = (std::int64_t (*)(std::int64_t, std::uint8_t*, std::int64_t, std::int64_t, std::int64_t))p_RTech_DecompressedSize.GetPtr(); /*48 89 5C 24 08 48 89 6C 24 18 48 89 74 24 20 48 89 54 24 10 57 41 54 41 55 41 56 41 57 4C 8B 74*/
 }
 
 class RTech

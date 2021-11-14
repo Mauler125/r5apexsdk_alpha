@@ -21,7 +21,7 @@ bool HIVEngineServer_PersistenceAvailable(std::int64_t thisptr, int index)
 		std::int64_t clientID = static_cast<std::int64_t>(client->m_iUserID + 1);
 
 		std::string ipAddress = "null"; // If this stays null they modified the packet somehow.
-		Address ipAddressField = Address(((std::uintptr_t)client->GetNetChan()) + 0x1AC0); // Get client ip from netchan.
+		ADDRESS ipAddressField = ADDRESS(((std::uintptr_t)client->GetNetChan()) + 0x1AC0); // Get client ip from netchan.
 		if (ipAddressField)
 		{
 			std::stringstream ss;

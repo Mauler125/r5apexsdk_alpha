@@ -162,24 +162,24 @@ void InstallOpcodes()
 	gShaderDispatch.Offset(0x62).Patch({ 0x90, 0x90, 0x90, 0x90, 0x90 }); // CAL --> NOP | Prevent memory allocation and population for shader assets.
 
 	// UNKNOWN ----------------------------------------------------------------
-	Address t8 = 0x00000001403C0480;
+	ADDRESS t8 = 0x00000001403C0480;
 	t8.Patch({ 0xC3 }); // Return from unknown call during ChangeLevel. [LATE]
-	Address t9 = 0x00000001403EE420;
+	ADDRESS t9 = 0x00000001403EE420;
 	t9.Patch({ 0xC3 }); // Return from unknown call during ChangeLevel. [EARLY]
 	//-------------------------------------------------------------------------
 	// RUNTIME BLOCK
 	//-------------------------------------------------------------------------
-	Address t0 = 0x00000001401D71E0;
+	ADDRESS t0 = 0x00000001401D71E0;
 	t0.Patch({ 0xC3 });
-	Address t1 = 0x0000000140456B50;
+	ADDRESS t1 = 0x0000000140456B50;
 	t1.Offset(0x292).Patch({ 0xE9, 0xEE, 0x00, 0x00, 0x00 });
-	Address t2 = 0x0000000140238DA0;
+	ADDRESS t2 = 0x0000000140238DA0;
 	t2.Offset(0x4E0).Patch({ 0x90, 0x90, 0x90, 0x90, 0x90 });
-	Address t3 = 0x0000000140312D80;
+	ADDRESS t3 = 0x0000000140312D80;
 	//t3.Offset(0xB3).Patch({ 0x90, 0x90, 0x90, 0x90, 0x90 });
-	Address t4 = 0x0000000140312D80; // Patch Additional shader preloading.
+	ADDRESS t4 = 0x0000000140312D80; // Patch Additional shader preloading.
 	//t4.Offset(0xB3).Patch({ 0x90, 0x90, 0x90, 0x90, 0x90 });
-	Address t5 = 0x00000001403BBFD0;
+	ADDRESS t5 = 0x00000001403BBFD0;
 	t5.Offset(0x7D8).Patch({ 0x90, 0x90, 0x90, 0x90, 0x90 });
 	//-------------------------------------------------------------------------
 	// END RUNTIME BLOCK

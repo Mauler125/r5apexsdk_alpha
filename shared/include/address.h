@@ -1,6 +1,6 @@
 #pragma once
 
-class Address
+class ADDRESS
 {
 public:
 
@@ -15,9 +15,9 @@ public:
 		return ptr;
 	}
 	
-	Address() = default;
-	Address(std::uintptr_t ptr) : ptr(ptr) {}
-	Address(void* ptr) : ptr(std::uintptr_t(ptr)) {}
+	ADDRESS() = default;
+	ADDRESS(std::uintptr_t ptr) : ptr(ptr) {}
+	ADDRESS(void* ptr) : ptr(std::uintptr_t(ptr)) {}
 
 	operator std::uintptr_t() const
 	{
@@ -34,12 +34,12 @@ public:
 		return ptr != NULL;
 	}
 
-	bool operator!= (const Address& addr) const
+	bool operator!= (const ADDRESS& addr) const
 	{
 		return ptr != addr.ptr;
 	}
 
-	bool operator== (const Address& addr) const
+	bool operator== (const ADDRESS& addr) const
 	{
 		return ptr == addr.ptr;
 	}
@@ -64,18 +64,18 @@ public:
 		return *reinterpret_cast<T*>(ptr);
 	}
 
-	Address Offset(std::ptrdiff_t offset)
+	ADDRESS Offset(std::ptrdiff_t offset)
 	{
-		return Address(ptr + offset);
+		return ADDRESS(ptr + offset);
 	}
 
-	Address OffsetSelf(std::ptrdiff_t offset)
+	ADDRESS OffsetSelf(std::ptrdiff_t offset)
 	{
 		ptr += offset;
 		return *this;
 	}
 
-	Address Deref(int deref = 1)
+	ADDRESS Deref(int deref = 1)
 	{
 		std::uintptr_t reference = ptr;
 
@@ -85,10 +85,10 @@ public:
 				reference = *reinterpret_cast<std::uintptr_t*>(reference);
 		}
 
-		return Address(reference);
+		return ADDRESS(reference);
 	}
 
-	Address DerefSelf(int deref = 1)
+	ADDRESS DerefSelf(int deref = 1)
 	{
 		while (deref--)
 		{
@@ -135,7 +135,7 @@ public:
 		VirtualProtect((void*)ptr, dwSize, oldProt, &oldProt); // Restore protection.
 	}
 
-	Address FindPatternSelf(const std::string pattern, const Direction searchDirect, const int opCodesToScan = 100, const std::ptrdiff_t occurence = 1)
+	ADDRESS FindPatternSelf(const std::string pattern, const Direction searchDirect, const int opCodesToScan = 100, const std::ptrdiff_t occurence = 1)
 	{
 		static auto PatternToBytes = [](const std::string pattern)
 		{
@@ -206,7 +206,7 @@ public:
 		return *this;
 	}
 
-	Address FindPattern(const std::string pattern, const Direction searchDirect, const int opCodesToScan = 100, const std::ptrdiff_t occurence = 1)
+	ADDRESS FindPattern(const std::string pattern, const Direction searchDirect, const int opCodesToScan = 100, const std::ptrdiff_t occurence = 1)
 	{
 		static auto PatternToBytes = [](const std::string pattern)
 		{
@@ -266,25 +266,25 @@ public:
 				occurences++;
 				if (occurence == occurences)
 				{
-					return Address(&*(ScanBytes + memOffset));
+					return ADDRESS(&*(ScanBytes + memOffset));
 				}
 			}
 		}
 
-		return Address();
+		return ADDRESS();
 	}
 
-	Address FollowNearCall(std::ptrdiff_t opcodeOffset = 0x1, std::ptrdiff_t nextInstructionOffset = 0x5)
+	ADDRESS FollowNearCall(std::ptrdiff_t opcodeOffset = 0x1, std::ptrdiff_t nextInstructionOffset = 0x5)
 	{
 		return ResolveRelativeAddress(opcodeOffset, nextInstructionOffset);
 	}
 
-	Address FollowNearCallSelf(std::ptrdiff_t opcodeOffset = 0x1, std::ptrdiff_t nextInstructionOffset = 0x5)
+	ADDRESS FollowNearCallSelf(std::ptrdiff_t opcodeOffset = 0x1, std::ptrdiff_t nextInstructionOffset = 0x5)
 	{
 		return ResolveRelativeAddressSelf(opcodeOffset, nextInstructionOffset);
 	}
 
-	Address ResolveRelativeAddressSelf(std::ptrdiff_t registerOffset = 0x0, std::ptrdiff_t nextInstructionOffset = 0x4)
+	ADDRESS ResolveRelativeAddressSelf(std::ptrdiff_t registerOffset = 0x0, std::ptrdiff_t nextInstructionOffset = 0x4)
 	{
 		// Skip register.
 		std::uintptr_t skipRegister = ptr + registerOffset;
@@ -300,7 +300,7 @@ public:
 		return *this;
 	}
 
-	Address ResolveRelativeAddress(std::ptrdiff_t registerOffset = 0x0, std::ptrdiff_t nextInstructionOffset = 0x4)
+	ADDRESS ResolveRelativeAddress(std::ptrdiff_t registerOffset = 0x0, std::ptrdiff_t nextInstructionOffset = 0x4)
 	{
 		// Skip register.
 		std::uintptr_t skipRegister = ptr + registerOffset;
@@ -312,7 +312,7 @@ public:
 		std::uintptr_t nextInstruction = ptr + nextInstructionOffset;
 
 		// Get function location via adding relative Address to next instruction.
-		return Address(nextInstruction + relativeAddress);
+		return ADDRESS(nextInstruction + relativeAddress);
 	}
 
 private:
@@ -368,7 +368,7 @@ public:
 		}
 	}
 
-	Address PatternSearch(const std::string pattern, const std::ptrdiff_t patternOccurence = 1)
+	ADDRESS PatternSearch(const std::string pattern, const std::ptrdiff_t patternOccurence = 1)
 	{
 		static auto PatternToBytes = [](const std::string pattern)
 		{
@@ -401,7 +401,7 @@ public:
 
 		ModuleSections textSection = GetSectionByName(".text"); // Get the .text section.
 		if (!textSection.IsSectionValid())
-			return Address();
+			return ADDRESS();
 
 		const std::vector<std::int32_t> PatternBytes = PatternToBytes(pattern); // Convert our pattern to a byte array.
 		const std::pair BytesInfo = std::make_pair(PatternBytes.size(), PatternBytes.data()); // Get the size and data of our bytes.
@@ -430,46 +430,103 @@ public:
 			{
 				occurencesFound++; // Increment occurences found counter.
 				if (patternOccurence == occurencesFound) // Is it the occurence we want?
-					return Address(&StartOfCodeSection[i]); // If yes return it.
+					return ADDRESS(&StartOfCodeSection[i]); // If yes return it.
 
 				latestOccurence = &StartOfCodeSection[i]; // Stash latest occurence.
 			}
 		}
 
-		return Address(latestOccurence);
+		return ADDRESS(latestOccurence);
 	}
 
-	Address GetExportedFunction(const std::string functionName)
+	ADDRESS FindPatternSIMD(std::uint8_t* szPattern, const char* szMask)
+	{
+
+		ModuleSections mInfo = GetSectionByName(".text"); // Get the .text section.
+		if (!mInfo.IsSectionValid()) { return ADDRESS(); }
+
+		DWORD64 base = (DWORD64)mInfo.sectionStartAddress;
+		DWORD64 size = (DWORD64)mInfo.sectionSize;
+
+		unsigned char* pData = (unsigned char*)base;
+		unsigned int length = (unsigned int)size;
+
+		const unsigned char* end = pData + length - strlen(szMask);
+		int num_masks = (int)ceil((float)strlen(szMask) / (float)16);
+		int masks[32]; // 32*16 = enough masks for 512 bytes.
+		memset(masks, 0, num_masks * sizeof(int));
+		for (int64_t i = 0; i < num_masks; ++i)
+		{
+			for (int64_t j = strnlen(szMask + i * 16, 16) - 1; j >= 0; --j)
+			{
+				if (szMask[i * 16 + j] == 'x')
+				{
+					masks[i] |= 1 << j;
+				}
+			}
+		}
+		__m128i xmm1 = _mm_loadu_si128((const __m128i*) szPattern);
+		__m128i xmm2, xmm3, msks;
+		for (; pData != end; _mm_prefetch((const char*)(++pData + 64), _MM_HINT_NTA))
+		{
+			if (szPattern[0] == pData[0])
+			{
+				xmm2 = _mm_loadu_si128((const __m128i*) pData);
+				msks = _mm_cmpeq_epi8(xmm1, xmm2);
+				if ((_mm_movemask_epi8(msks) & masks[0]) == masks[0])
+				{
+					for (DWORD64 i = 1; i < num_masks; ++i)
+					{
+						xmm2 = _mm_loadu_si128((const __m128i*) (pData + i * 16));
+						xmm3 = _mm_loadu_si128((const __m128i*) (szPattern + i * 16));
+						msks = _mm_cmpeq_epi8(xmm2, xmm3);
+						if ((_mm_movemask_epi8(msks) & masks[i]) == masks[i])
+						{
+							if ((i + 1) == num_masks)
+							{
+								return (ADDRESS)pData;
+							}
+						}
+						else goto cont;
+					}
+					return (ADDRESS)(&*(pData));
+				}
+			}cont:;
+		}
+		return ADDRESS();
+	}
+
+	ADDRESS GetExportedFunction(const std::string functionName)
 	{
 		if (!dosHeader || dosHeader->e_magic != IMAGE_DOS_SIGNATURE) // Is dosHeader valid?
-			return Address();
+			return ADDRESS();
 
 		if (!ntHeaders || ntHeaders->Signature != IMAGE_NT_SIGNATURE) // Is ntHeader valid?
-			return Address();
+			return ADDRESS();
 
 		// Get the location of IMAGE_EXPORT_DIRECTORY for this module by adding the IMAGE_DIRECTORY_ENTRY_EXPORT relative virtual Address onto our module base Address.
 		IMAGE_EXPORT_DIRECTORY* ImageExportDirectory = reinterpret_cast<IMAGE_EXPORT_DIRECTORY*>(moduleBase + ntHeaders->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress);
 		if (!ImageExportDirectory)
-			return Address();
+			return ADDRESS();
 
 		// Are there any exported functions?
 		if (!ImageExportDirectory->NumberOfFunctions)
-			return Address();
+			return ADDRESS();
 
 		// Get the location of the functions via adding the relative virtual Address from the struct into our module base Address.
 		DWORD* AddressOfFunctionsPtr = reinterpret_cast<DWORD*>(moduleBase + ImageExportDirectory->AddressOfFunctions);
 		if (!AddressOfFunctionsPtr)
-			return Address();
+			return ADDRESS();
 
 		// Get the names of the functions via adding the relative virtual Address from the struct into our module base Address.
 		DWORD* AddressOfNamePtr = reinterpret_cast<DWORD*>(moduleBase + ImageExportDirectory->AddressOfNames);
 		if (!AddressOfNamePtr)
-			return Address();
+			return ADDRESS();
 
 		// Get the ordinals of the functions via adding the relative virtual Address from the struct into our module base Address.
 		DWORD* AddressOfOrdinalsPtr = reinterpret_cast<DWORD*>(moduleBase + ImageExportDirectory->AddressOfNameOrdinals);
 		if (!AddressOfOrdinalsPtr)
-			return Address();
+			return ADDRESS();
 
 		for (std::size_t i = 0; i < ImageExportDirectory->NumberOfFunctions; i++) // Iterate through all the functions.
 		{
@@ -479,13 +536,13 @@ public:
 			if (ExportFunctionName.compare(functionName) == 0) // Is this our wanted exported function?
 			{
 				// Get the function ordinal. Then grab the relative virtual Address of our wanted function. Then add module base Address so we get the actual location.
-				return Address(moduleBase + AddressOfFunctionsPtr[reinterpret_cast<WORD*>(AddressOfOrdinalsPtr)[i]]); // Return as Address class.
+				return ADDRESS(moduleBase + AddressOfFunctionsPtr[reinterpret_cast<WORD*>(AddressOfOrdinalsPtr)[i]]); // Return as Address class.
 			}
 		}
-		return Address();
+		return ADDRESS();
 	}
 	
-	Address FindAddressForString(const std::string string, bool nullTerminator)
+	ADDRESS FindAddressForString(const std::string string, bool nullTerminator)
 	{
 		static auto StringToBytes = [](const std::string string, bool nullTerminator)
 		{
@@ -507,7 +564,7 @@ public:
 
 		ModuleSections rdataSection = GetSectionByName(".rdata"); // .Get rdata section, we only loop through here because most important strings are in the .rdata section.
 		if (!rdataSection.IsSectionValid())
-			return Address();
+			return ADDRESS();
 
 		std::vector<std::int32_t> stringBytes = StringToBytes(string, nullTerminator); // Convert our string to a byte array.
 		const std::pair BytesInfo = std::make_pair(stringBytes.size(), stringBytes.data()); // Get the size and data of our bytes.
@@ -531,14 +588,14 @@ public:
 
 			if (FoundAddress)
 			{
-				return Address(&StartOfRdata[i]);
+				return ADDRESS(&StartOfRdata[i]);
 			}
 		}
 
-		return Address();
+		return ADDRESS();
 	}
 
-	Address StringSearch(const std::string string, const std::ptrdiff_t occurence = 1, bool nullTerminator = false)
+	ADDRESS StringSearch(const std::string string, const std::ptrdiff_t occurence = 1, bool nullTerminator = false)
 	{
 		static auto PatternToBytes = [](const std::string pattern)
 		{
@@ -571,11 +628,11 @@ public:
 
 		ModuleSections textSection = GetSectionByName(".text"); // Get the .text section.
 		if (!textSection.IsSectionValid())
-			return Address();
+			return ADDRESS();
 
-		Address stringAddress = FindAddressForString(string, nullTerminator); // Get Address for the string in the .rdata section.
+		ADDRESS stringAddress = FindAddressForString(string, nullTerminator); // Get Address for the string in the .rdata section.
 		if (!stringAddress)
-			return Address();
+			return ADDRESS();
 
 		std::uint8_t* latestOccurence = nullptr;
 		std::ptrdiff_t occurencesFound = 0;
@@ -587,25 +644,25 @@ public:
 			byte byte = StartOfCodeSection[i];
 			if (byte == 0x8D) // is it a LEA instruction?
 			{
-				Address skipOpCode = Address((std::uintptr_t)&StartOfCodeSection[i]).OffsetSelf(0x2); // Skip next 2 opcodes, those being the instruction and then the register.
+				ADDRESS skipOpCode = ADDRESS((std::uintptr_t)&StartOfCodeSection[i]).OffsetSelf(0x2); // Skip next 2 opcodes, those being the instruction and then the register.
 
 				std::int32_t relativeAddress = skipOpCode.GetValue<std::int32_t>(); // Get 4-byte long string relative Address
 
 				std::uintptr_t nextInstruction = skipOpCode.Offset(0x4).GetPtr(); // Get location of next instruction.
 
-				Address potentialLocation = Address(nextInstruction + relativeAddress); // Get potential string location.
+				ADDRESS potentialLocation = ADDRESS(nextInstruction + relativeAddress); // Get potential string location.
 
 				if (potentialLocation == stringAddress)
 				{
 					occurencesFound++; // Increment occurences found counter.
 					if (occurence == occurencesFound) // Is it the occurence we want?
-						return Address(&StartOfCodeSection[i]); // If yes return it.
+						return ADDRESS(&StartOfCodeSection[i]); // If yes return it.
 
 					latestOccurence = &StartOfCodeSection[i]; // Stash latest occurence.
 				}
 			}
 		}
-		return Address(latestOccurence);
+		return ADDRESS(latestOccurence);
 	}
 
 	std::uintptr_t GetModuleBase()

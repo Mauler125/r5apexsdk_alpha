@@ -9,27 +9,27 @@
 ///////////////////////////////////////////////////////////////////////////////
 void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 {
-	static auto setjmpFn            = Address(0x141205460).RCast<std::int64_t(*)(jmp_buf, void*)>();
-	static auto host_abortserver    = Address(0x14B37C700).RCast<jmp_buf*>();
-	static auto CHostState_InitFn   = Address(0x14023E7D0).RCast<void(*)(CHostState*)>();
-	static auto g_ServerAbortServer = Address(0x14B37CA22).RCast<char*>();
-	static auto State_RunFn         = Address(0x14023E870).RCast<void(*)(HostStates_t*, void*, float)>();
-	static auto Cbuf_ExecuteFn      = Address(0x14020D5C0).RCast<void(*)()>();
-	static auto g_ServerGameClients = Address(0x14B383428).RCast<std::int64_t*>();
-	static auto SV_InitGameDLLFn    = Address(0x140308B90).RCast<void(*)()>();
-	static auto g_CModelLoader      = Address(0x14173B210).RCast<void*>();
-	static auto CModelLoader_Map_IsValidFn = Address(0x1402562F0).RCast<bool(*)(void*, const char*)>();
-	static auto Host_NewGameFn             = Address(0x140238DA0).RCast<bool(*)(char*, char*, bool, bool, void*)>();
-	static auto Host_Game_ShutdownFn       = Address(0x14023EDA0).RCast<void(*)(CHostState*)>();
-	static auto src_drawloading            = Address(0x14B37D96B).RCast<char*>();
-	static auto scr_engineevent_loadingstarted = Address(0x1666ED024).RCast<char*>();
-	static auto gfExtendedError                = Address(0x14B383391).RCast<char*>();
-	static auto g_CEngineVGui                  = Address(0x141741310).RCast<void*>();
-	static auto g_ServerDLL                    = Address(0x141732048).RCast<void**>();
-	static auto Host_ChangelevelFn             = Address(0x1402387B0).RCast<void(*)(bool, const char*, const char*)>();
-	static auto CL_EndMovieFn                  = Address(0x1402C03D0).RCast<void(*)()>();
-	static auto SendOfflineRequestToStryderFn  = Address(0x14033D380).RCast<void(*)()>();
-	static auto CEngine                        = Address(0X141741BA0).RCast<void*>();
+	static auto setjmpFn            = ADDRESS(0x141205460).RCast<std::int64_t(*)(jmp_buf, void*)>();
+	static auto host_abortserver    = ADDRESS(0x14B37C700).RCast<jmp_buf*>();
+	static auto CHostState_InitFn   = ADDRESS(0x14023E7D0).RCast<void(*)(CHostState*)>();
+	static auto g_ServerAbortServer = ADDRESS(0x14B37CA22).RCast<char*>();
+	static auto State_RunFn         = ADDRESS(0x14023E870).RCast<void(*)(HostStates_t*, void*, float)>();
+	static auto Cbuf_ExecuteFn      = ADDRESS(0x14020D5C0).RCast<void(*)()>();
+	static auto g_ServerGameClients = ADDRESS(0x14B383428).RCast<std::int64_t*>();
+	static auto SV_InitGameDLLFn    = ADDRESS(0x140308B90).RCast<void(*)()>();
+	static auto g_CModelLoader      = ADDRESS(0x14173B210).RCast<void*>();
+	static auto CModelLoader_Map_IsValidFn = ADDRESS(0x1402562F0).RCast<bool(*)(void*, const char*)>();
+	static auto Host_NewGameFn             = ADDRESS(0x140238DA0).RCast<bool(*)(char*, char*, bool, bool, void*)>();
+	static auto Host_Game_ShutdownFn       = ADDRESS(0x14023EDA0).RCast<void(*)(CHostState*)>();
+	static auto src_drawloading            = ADDRESS(0x14B37D96B).RCast<char*>();
+	static auto scr_engineevent_loadingstarted = ADDRESS(0x1666ED024).RCast<char*>();
+	static auto gfExtendedError                = ADDRESS(0x14B383391).RCast<char*>();
+	static auto g_CEngineVGui                  = ADDRESS(0x141741310).RCast<void*>();
+	static auto g_ServerDLL                    = ADDRESS(0x141732048).RCast<void**>();
+	static auto Host_ChangelevelFn             = ADDRESS(0x1402387B0).RCast<void(*)(bool, const char*, const char*)>();
+	static auto CL_EndMovieFn                  = ADDRESS(0x1402C03D0).RCast<void(*)()>();
+	static auto SendOfflineRequestToStryderFn  = ADDRESS(0x14033D380).RCast<void(*)()>();
+	static auto CEngine                        = ADDRESS(0X141741BA0).RCast<void*>();
 
 	if (!g_bClassInitialized)
 	{

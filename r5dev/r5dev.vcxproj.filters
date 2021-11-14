@@ -696,9 +696,6 @@
     <ClInclude Include="CMatSystemSurface.h">
       <Filter>hooks\cmatsystemsurface</Filter>
     </ClInclude>
-    <ClInclude Include="ButtonCode.h">
-      <Filter>hooks\cinputsystem</Filter>
-    </ClInclude>
     <ClInclude Include="protocol.h">
       <Filter>hooks\common</Filter>
     </ClInclude>
@@ -734,6 +731,9 @@
     </ClInclude>
     <ClInclude Include="IConVarCallback.h">
       <Filter>hooks\iconvar</Filter>
+    </ClInclude>
+    <ClInclude Include="ButtonCode.h">
+      <Filter>hooks\common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

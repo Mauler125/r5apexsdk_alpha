@@ -49,10 +49,10 @@ bool HConCommand_IsFlagSet(ConCommandBase* cmd, int flag)
 //-----------------------------------------------------------------------------
 void* ConCommand_RegisterCommand(const char* name, const char* helpString, int flags, void* callback, void* callbackAfterExecution)
 {
-	static Address ConCommandVtable   = Address(0x14136BD70);
-	static Address NullSub            = Address(0x1401B3280);
-	static Address CallbackCompletion = Address(0x1401E3990);
-	static Address RegisterConCommand = Address(0x14046F470);
+	static ADDRESS ConCommandVtable   = ADDRESS(0x14136BD70);
+	static ADDRESS NullSub            = ADDRESS(0x1401B3280);
+	static ADDRESS CallbackCompletion = ADDRESS(0x1401E3990);
+	static ADDRESS RegisterConCommand = ADDRESS(0x14046F470);
 
 	void* command = reinterpret_cast<void*>(MemAlloc_Wrapper(0x68));       // Allocate new memory with StdMemAlloc else we crash.
 	memset(command, 0, 0x68);                                              // Set all to null.

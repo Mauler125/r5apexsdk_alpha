@@ -48,9 +48,9 @@ bool HIConVar_IsFlagSet(ConVar* cvar, int flag)
 //-----------------------------------------------------------------------------
 ConVar* IConVar_RegisterConVar(const char* name, const char* defaultValue, int flags, const char* helpString, bool bMin, float fMin, bool bMax, float fMax, void* callback, void* unk)
 {
-	static Address ConVarVtable = Address(0x14046FB50).Offset(0x12).ResolveRelativeAddress(); // Get vtable ptr for ConVar table.
-	static Address ICvarVtable  = Address(0x14046FB50).Offset(0x29).ResolveRelativeAddress(); // Get vtable ptr for ICvar table.
-	static Address CreateConVar = Address(0x140470540);                                       // Get CreateConvar address. TODO: CREATE SIG
+	static ADDRESS ConVarVtable = ADDRESS(0x14046FB50).Offset(0x12).ResolveRelativeAddress(); // Get vtable ptr for ConVar table.
+	static ADDRESS ICvarVtable  = ADDRESS(0x14046FB50).Offset(0x29).ResolveRelativeAddress(); // Get vtable ptr for ICvar table.
+	static ADDRESS CreateConVar = ADDRESS(0x140470540);                                       // Get CreateConvar address. TODO: CREATE SIG
 
 	ConVar* allocatedConvar = reinterpret_cast<ConVar*>(MemAlloc_Wrapper(0xA0)); // Allocate new memory with StdMemAlloc else we crash.
 	memset(allocatedConvar, 0, 0xA0);                                            // Set all to null.

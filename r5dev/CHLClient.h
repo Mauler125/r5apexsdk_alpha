@@ -38,8 +38,8 @@ public:
 namespace
 {
 	/* ==== CHLCLIENT ======================================================================================================================================================= */
-	DWORD64 p_FrameStageNotify = FindPatternV2("r5apex.exe", (const unsigned char*)"\x48\x83\xEC\x28\x89\x15\x00\x00\x00\x00", "xxxxxx????");
-	void (*FrameStageNotify)(void* rcx, int curStage) = (void(*)(void*, int))p_FrameStageNotify; /*48 83 EC 28 89 15 ?? ?? ?? ??*/
+	ADDRESS p_FrameStageNotify = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x48\x83\xEC\x28\x89\x15\x00\x00\x00\x00", "xxxxxx????");
+	void (*FrameStageNotify)(void* rcx, int curStage) = (void(*)(void*, int))p_FrameStageNotify.GetPtr(); /*48 83 EC 28 89 15 ?? ?? ?? ??*/
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -90,7 +90,7 @@ void KickID_Callback(CCommand* cmd)
 			}
 
 			std::string finalIPAddress = "null"; // If this stays null they modified the packet somehow.
-			Address ipAddressField = Address(((std::uintptr_t)client->GetNetChan()) + 0x1AC0); // Get client ip from netchan.
+			ADDRESS ipAddressField = ADDRESS(((std::uintptr_t)client->GetNetChan()) + 0x1AC0); // Get client ip from netchan.
 			if (ipAddressField)
 			{
 				std::stringstream ss;
@@ -180,7 +180,7 @@ void Ban_Callback(CCommand* cmd)
 		}
 
 		std::string finalIPAddress = "null"; // If this stays null they modified the packet somehow.
-		Address ipAddressField = Address(((std::uintptr_t)client->GetNetChan()) + 0x1AC0); // Get client ip from netchan.
+		ADDRESS ipAddressField = ADDRESS(((std::uintptr_t)client->GetNetChan()) + 0x1AC0); // Get client ip from netchan.
 		if (ipAddressField && ipAddressField.GetValue<int>() != 0x0)
 		{
 			std::stringstream ss;
@@ -238,7 +238,7 @@ void BanID_Callback(CCommand* cmd)
 			}
 
 			std::string finalIPAddress = "null"; // If this stays null they modified the packet somehow.
-			Address ipAddressField = Address(((std::uintptr_t)client->GetNetChan()) + 0x1AC0); // Get client ip from netchan.
+			ADDRESS ipAddressField = ADDRESS(((std::uintptr_t)client->GetNetChan()) + 0x1AC0); // Get client ip from netchan.
 			if (ipAddressField)
 			{
 				std::stringstream ss;

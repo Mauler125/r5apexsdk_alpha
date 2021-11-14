@@ -85,8 +85,8 @@ private:
 namespace
 {
 	/* ==== CONCOMMAND ====================================================================================================================================================== */
-	DWORD64 p_ConCommand_IsFlagSet = FindPatternV2("r5apex.exe", (const unsigned char*)"\x85\x51\x38\x0F\x95\xC0\xC3", "xxxxxxx");
-	bool (*ConCommand_IsFlagSet)(ConCommandBase* cmd, int flag) = (bool (*)(ConCommandBase*, int))p_ConCommand_IsFlagSet; /*85 51 38 0F 95 C0 C3*/
+	ADDRESS p_ConCommand_IsFlagSet = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x85\x51\x38\x0F\x95\xC0\xC3", "xxxxxxx");
+	bool (*ConCommand_IsFlagSet)(ConCommandBase* cmd, int flag) = (bool (*)(ConCommandBase*, int))p_ConCommand_IsFlagSet.GetPtr(); /*85 51 38 0F 95 C0 C3*/
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -10,9 +10,9 @@ int HCEngineVGui_Paint(void* thisptr, int mode)
 {
 	int result = CEngineVGui_Paint(thisptr, mode);
 
-	static void* pCMatSystemSurface = Address(0x14D40B3B0).RCast<void* (*)()>();
-	static auto fnRenderStart       = Address(0x14053EFC0).RCast<void(*)(void*)>();
-	static auto fnRenderEnd         = Address(0x14053F1B0).RCast<void* (*)()>();
+	static void* pCMatSystemSurface = ADDRESS(0x14D40B3B0).RCast<void* (*)()>();
+	static auto fnRenderStart       = ADDRESS(0x14053EFC0).RCast<void(*)(void*)>();
+	static auto fnRenderEnd         = ADDRESS(0x14053F1B0).RCast<void* (*)()>();
 
 	if (mode == 1 || mode == 2) // Render in-main menu and in-game.
 	{
@@ -39,7 +39,7 @@ void CLogSystem::Update()
 	{
 		return;
 	}
-	static void* pCMatSystemSurface = Address(0x14D40B360).RCast<void* (*)()>();
+	static void* pCMatSystemSurface = ADDRESS(0x14D40B360).RCast<void* (*)()>();
 	if (!pCMatSystemSurface)
 	{
 		return;

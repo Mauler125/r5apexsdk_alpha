@@ -220,7 +220,7 @@ bool HSQVM_LoadScript(void* sqvm, const char* script_path, const char* script_na
 
 void SQVM_RegisterFunction(void* sqvm, const char* name, const char* helpString, const char* retValType, const char* argTypes, void* funcPtr)
 {
-	static Address Script_RegisterFunction = Address(0x141056040); // TODO: CONVERT TO SIG!
+	static ADDRESS Script_RegisterFunction = ADDRESS(0x141056040); // TODO: CONVERT TO SIG!
 
 	SQFuncRegistration* func = new SQFuncRegistration();
 

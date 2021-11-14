@@ -136,4 +136,4 @@ void DetachCNetChanHooks()
 ///////////////////////////////////////////////////////////////////////////////
 bool g_bTraceNetChannel;
 std::string g_szNetKey = "WDNWLmJYQ2ZlM0VoTid3Yg==";
-std::uintptr_t g_uNetKeyPtr = g_mGameDll.StringSearch("client:NetEncryption_NewKey").FindPatternSelf("48 8D ? ? ? ? ? 48 3B", Address::Direction::UP, 150).ResolveRelativeAddressSelf(0x3, 0x7).GetPtr();
+std::uintptr_t g_uNetKeyPtr = g_mGameDll.StringSearch("client:NetEncryption_NewKey").FindPatternSelf("48 8D ? ? ? ? ? 48 3B", ADDRESS::Direction::UP, 150).ResolveRelativeAddressSelf(0x3, 0x7).GetPtr();

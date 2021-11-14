@@ -32,6 +32,9 @@
 namespace
 {
 	Module g_mGameDll = Module("r5apex.exe");
+	Module g_mRadVideoToolsDll = Module("bink2w64.dll");
+	Module g_mRadAudioDecoderDll = Module("binkawin64.dll");
+	Module g_mRadAudioSystemDll = Module("mileswin64.dll");
 }
 /*
 #pragma once

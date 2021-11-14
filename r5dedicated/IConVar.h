@@ -126,8 +126,8 @@ public:
 namespace
 {
 	/* ==== ICONVAR ========================================================================================================================================================= */
-	DWORD64 p_IConVar_IsFlagSet = FindPatternV2("r5apex.exe", (const unsigned char*)"\x48\x8B\x41\x48\x85\x50\x38", "xxxxxxx");
-	bool (*IConVar_IsFlagSet)(ConVar* cvar, int flag) = (bool (*)(ConVar*, int))p_IConVar_IsFlagSet; /*48 8B 41 48 85 50 38*/
+	ADDRESS p_IConVar_IsFlagSet = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x48\x8B\x41\x48\x85\x50\x38", "xxxxxxx");
+	bool (*IConVar_IsFlagSet)(ConVar* cvar, int flag) = (bool (*)(ConVar*, int))p_IConVar_IsFlagSet.GetPtr(); /*48 8B 41 48 85 50 38*/
 }
 
 ///////////////////////////////////////////////////////////////////////////////

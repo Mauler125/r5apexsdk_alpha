@@ -16,8 +16,8 @@ enum class FileWarningLevel_t : int
 namespace
 {
 	/* ==== CBASEFILESYSTEM ================================================================================================================================================= */
-	DWORD64 p_CBaseFileSystem_Warning = FindPatternV2("r5apex.exe", (const unsigned char*)"\x4C\x89\x4C\x24\x20\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x48", "xxxxxx??????????x");
-	void (*CBaseFileSystem_Warning)(void* thisptr, FileWarningLevel_t level, const char* fmt, ...) = (void (*)(void*, FileWarningLevel_t, const char*, ...))p_CBaseFileSystem_Warning; /*4C 89 4C 24 20 C3 ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? 48*/
+	ADDRESS p_CBaseFileSystem_Warning = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x4C\x89\x4C\x24\x20\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x48", "xxxxxx??????????x");
+	void (*CBaseFileSystem_Warning)(void* thisptr, FileWarningLevel_t level, const char* fmt, ...) = (void (*)(void*, FileWarningLevel_t, const char*, ...))p_CBaseFileSystem_Warning.GetPtr(); /*4C 89 4C 24 20 C3 ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? 48*/
 }
 
 ///////////////////////////////////////////////////////////////////////////////
