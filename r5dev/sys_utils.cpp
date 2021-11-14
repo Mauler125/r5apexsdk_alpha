@@ -36,7 +36,7 @@ void Sys_Print(SYS_DLL idx, const char* fmt, ...)
 
 	static auto iconsole = spdlog::stdout_logger_mt("sys_print_iconsole"); // in-game console.
 	static auto wconsole = spdlog::stdout_logger_mt("sys_print_wconsole"); // windows console.
-	static auto sqlogger = spdlog::basic_logger_mt("sys_print_logger", "platform\\logs\\SYS_Print.log"); // file logger.
+	static auto sqlogger = spdlog::basic_logger_mt("sys_print_logger", "platform\\logs\\sys_print.log"); // file logger.
 
 	std::string vmStr = vmType[vmIdx].c_str();
 

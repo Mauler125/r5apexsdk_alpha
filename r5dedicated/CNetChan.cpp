@@ -9,45 +9,41 @@
 //-----------------------------------------------------------------------------
 // Purpose: hook and log the receive datagram
 //-----------------------------------------------------------------------------
-bool HNET_ReceiveDatagram(int sock, void* inpacket, bool raw)
+char HNET_ReceiveDatagram(int sock, void* inpacket, bool raw)
 {
-	bool result = NET_ReceiveDatagram(sock, inpacket, raw);
 	if (!g_bTraceNetChannel)
 	{
-		return result;
+		return NET_ReceiveDatagram(sock, inpacket, raw);
 	}
 
+	const int i = NULL;
+	char result = NET_ReceiveDatagram(sock, inpacket, raw);
 	if (result)
 	{
-		int i = NULL;
 		netpacket_t* pkt = (netpacket_t*)inpacket;
 
-		///////////////////////////////////////////////////////////////////////
 		// Log received packet data
 		HexDump("[+] NET_ReceiveDatagram", 0, &pkt->data[i], pkt->wiresize);
 	}
-
 	return result;
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: hook and log the send datagram
 //-----------------------------------------------------------------------------
-unsigned int HNET_SendDatagram(SOCKET s, const char* buf, int len, int flags)
+std::int64_t HNET_SendDatagram(SOCKET s, const char* buf, int len, int flags)
 {
-	unsigned int result = NET_SendDatagram(s, buf, len, flags);
 	if (!g_bTraceNetChannel)
 	{
-		return result;
+		return NET_SendDatagram(s, buf, len, flags);
 	}
 
+	std::int64_t result = NET_SendDatagram(s, buf, len, flags);
 	if (result)
 	{
-		///////////////////////////////////////////////////////////////////////
 		// Log transmitted packet data
 		HexDump("[+] NET_SendDatagram", 0, buf, len);
 	}
-
 	return result;
 }
 

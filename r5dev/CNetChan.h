@@ -49,15 +49,15 @@ namespace
 	bool (*NET_ReceiveDatagram)(int, void*, bool) = (bool (*)(int, void*, bool))p_NET_ReceiveDatagram; /*E8 ?? ?? ?? ?? 84 C0 75 35 48 8B D3*/
 
 	DWORD64 p_NET_SendDatagram = FindPatternV2("r5apex.exe", (const unsigned char*)"\x48\x89\x5C\x24\x08\x48\x89\x6C\x24\x10\x48\x89\x74\x24\x18\x57\x41\x56\x41\x57\x48\x81\xEC\x00\x05\x00\x00", "xxxxxxxxxxxxxxxxxxxxxxx?xxx");
-	int (*NET_SendDatagram)(SOCKET s, const char* buf, int len, int flags) = (int (*)(SOCKET, const char*, int, int))p_NET_SendDatagram; /*48 89 5C 24 08 48 89 6C 24 10 48 89 74 24 18 57 41 56 41 57 48 81 EC ?? 05 00 00*/
+	std::int64_t(*NET_SendDatagram)(SOCKET s, const char* buf, int len, int flags) = (std::int64_t(*)(SOCKET, const char*, int, int))p_NET_SendDatagram; /*48 89 5C 24 08 48 89 6C 24 10 48 89 74 24 18 57 41 56 41 57 48 81 EC ?? 05 00 00*/
 
 	DWORD64 p_NET_PrintFunc = FindPatternV2("r5apex.exe", (const unsigned char*)"\x48\x89\x54\x24\x10\x4C\x89\x44\x24\x18\x4C\x89\x4C\x24\x20\xC3\x48", "xxxxxxxxxxxxxxxxx");
 	void (*NET_PrintFunc)(const char* a1) = (void(*)(const char*))p_NET_PrintFunc; /*48 89 54 24 10 4C 89 44 24 18 4C 89 4C 24 20 C3 48*/
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool HNET_ReceiveDatagram(int sock, void* inpacket, bool raw);
-unsigned int HNET_SendDatagram(SOCKET s, const char* buf, int len, int flags);
+char HNET_ReceiveDatagram(int sock, void* inpacket, bool raw);
+std::int64_t HNET_SendDatagram(SOCKET s, const char* buf, int len, int flags);
 void HNET_SetKey(std::string key);
 void HNET_GenerateKey();
 void HNET_PrintFunc(const char* fmt, ...);
