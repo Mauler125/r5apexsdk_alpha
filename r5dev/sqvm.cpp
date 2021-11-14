@@ -158,10 +158,10 @@ std::int64_t HSQVM_LoadRson(const char* rson_name)
 		if (g_bClassInitialized && g_pCvar->FindVar("sq_showrsonloading")->m_iValue > 0)
 		{
 			Sys_Print(SYS_DLL::ENGINE, "\n");
-			Sys_Print(SYS_DLL::ENGINE, ":______________________________________________________________\n");
-			Sys_Print(SYS_DLL::ENGINE, ":] RSON_DISK_PATH ---------------------------------------------\n");
-			Sys_Print(SYS_DLL::ENGINE, ":] '%s'\n", filepath);
-			Sys_Print(SYS_DLL::ENGINE, ":--------------------------------------------------------------\n");
+			Sys_Print(SYS_DLL::ENGINE, "______________________________________________________________\n");
+			Sys_Print(SYS_DLL::ENGINE, "] RSON_DISK_PATH ---------------------------------------------\n");
+			Sys_Print(SYS_DLL::ENGINE, "] '%s'\n", filepath);
+			Sys_Print(SYS_DLL::ENGINE, "--------------------------------------------------------------\n");
 			Sys_Print(SYS_DLL::ENGINE, "\n");
 		}
 		return SQVM_LoadRson(filepath);
