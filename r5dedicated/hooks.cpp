@@ -24,7 +24,7 @@
 void InstallHooks()
 {
 	///////////////////////////////////////////////////////////////////////////////
-	// Begin the detour transaction, to hook the the process
+	// Begin the detour transaction to hook the the process
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
 
@@ -61,7 +61,7 @@ void InstallHooks()
 void RemoveHooks()
 {
 	///////////////////////////////////////////////////////////////////////////////
-	// Begin the detour transaction, to unhook the the process
+	// Begin the detour transaction to unhook the the process
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
 

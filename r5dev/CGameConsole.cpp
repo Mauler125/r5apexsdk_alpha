@@ -86,14 +86,6 @@ void CGameConsole::Draw(const char* title, bool* bDraw)
         ImGui::OpenPopup("Options");
     }
     ImGui::SameLine();
-    if (ImGui::BeginPopup("Tools"))
-    {
-    }
-    if (ImGui::Button("Tools"))
-    {
-        ImGui::OpenPopup("Tools");
-    }
-    ImGui::SameLine();
     Filter.Draw("Filter [\"-incl,-excl\"] [\"error\"]", footer_width_to_reserve - 500);
     ImGui::Separator();
 

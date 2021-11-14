@@ -5,14 +5,14 @@ char* hsq_getstring(void* sqvm, int i)
 {
 	std::uintptr_t thisptr = reinterpret_cast<std::uintptr_t>(sqvm);
 
-	return *(char**)(*(__int64*)(thisptr + 0x58) + 0x10 * i + 0x8) + 0x40;
+	return *(char**)(*(std::int64_t*)(thisptr + 0x58) + 0x10 * i + 0x8) + 0x40;
 }
 
 int hsq_getinteger(void* sqvm, int i)
 {
 	std::uintptr_t thisptr = reinterpret_cast<std::uintptr_t>(sqvm);
 
-	return *(int*)(*(__int64*)(thisptr + 0x58) + 0x10 * i + 0x8);
+	return *(int*)(*(std::int64_t*)(thisptr + 0x58) + 0x10 * i + 0x8);
 }
 
 void hsq_pushbool(void* sqvm, int val)

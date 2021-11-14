@@ -128,41 +128,41 @@ namespace
 
 struct rpak_h
 {
-	uint32_t m_nMagic;    // 'RPak'
-	uint16_t m_nVersion;  // R2 = '7' R5 = '8'
-	uint8_t m_nFlag;      // only set in ui.rpak
-	bool m_bIsCompressed; // Has to be false when uncompressed
-	uint64_t m_nType;     //
-	uint8_t unk0[8];      //
-	uint32_t m_nSizeDisk; // Compressed size
-	uint8_t unk1[20];     //
-	uint32_t m_nSizeMem;  // Decompressed size
-	uint8_t unk3[26];     //
-	uint16_t unk4;        //
-	uint32_t m_nPad;      //
-	uint32_t unk6;        //
-	uint32_t m_nEntry;    // File entry count
-	uint32_t unk7;        //
-	uint32_t unk8;        //
-	uint8_t unk9[28];     //
+	std::uint32_t m_nMagic;        // 'RPak'
+	std::uint16_t m_nVersion;      // R2 = '7' R5 = '8'
+	std::uint8_t  m_nFlag;         // only set in ui.rpak
+	bool          m_bIsCompressed; // Has to be false when uncompressed
+	std::uint64_t m_nType;         //
+	std::uint8_t  unk0[8];         //
+	std::uint32_t m_nSizeDisk;     // Compressed size
+	std::uint8_t  unk1[20];        //
+	std::uint32_t m_nSizeMem;      // Decompressed size
+	std::uint8_t  unk3[26];        //
+	std::uint16_t unk4;            //
+	std::uint32_t m_nPad;          //
+	std::uint32_t unk6;            //
+	std::uint32_t m_nEntry;        // File entry count
+	std::uint32_t unk7;            //
+	std::uint32_t unk8;            //
+	std::uint8_t  unk9[28];        //
 };
 
 namespace
 {
 	/* ==== RTECH =========================================================================================================================================================== */
 	//DWORD64 p_RTech_Decompress = FindPatternV2("r5apex.exe", (const unsigned char*)"\x4C\x89\x44\x24\x18\x48\x89\x54\x24\x10\x53\x48\x83\xEC\x50\x48", "xxxxxxxxxxxxxxxx");
-	//char (*RTech_Decompress)(int64_t* parameter, uint64_t input, uint64_t output) = (char (*)(int64_t*, uint64_t, uint64_t))p_RTech_Decompress; /*4C 89 44 24 18 48 89 54 24 10 53 48 83 EC 50 48*/
+	//char (*RTech_Decompress)(int64_t* parameter, std::uint64_t input, std::uint64_t output) = (char (*)(std::int64_t*, std::uint64_t, std::uint64_t))p_RTech_Decompress; /*4C 89 44 24 18 48 89 54 24 10 53 48 83 EC 50 48*/
 
 	//DWORD64 p_RTech_DecompressedSize = FindPatternV2("r5apex.exe", (const unsigned char*)"\x48\x89\x5C\x24\x08\x48\x89\x6C\x24\x18\x48\x89\x74\x24\x20\x48\x89\x54\x24\x10\x57\x41\x54\x41\x55\x41\x56\x41\x57\x4C\x8B\x74", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-	//int64_t (*RTech_DecompressedSize)(int64_t parameter, uint8_t* input, int64_t magic, int64_t a4, int64_t a5) = (int64_t (*)(int64_t, uint8_t*, int64_t, int64_t, int64_t))p_RTech_DecompressedSize; /*48 89 5C 24 08 48 89 6C 24 18 48 89 74 24 20 48 89 54 24 10 57 41 54 41 55 41 56 41 57 4C 8B 74*/
+	//std::int64_t (*RTech_DecompressedSize)(std::int64_t parameter, std::uint8_t* input, std::int64_t magic, std::int64_t a4, std::int64_t a5) = (std::int64_t (*)(std::int64_t, std::uint8_t*, std::int64_t, std::int64_t, std::int64_t))p_RTech_DecompressedSize; /*48 89 5C 24 08 48 89 6C 24 18 48 89 74 24 20 48 89 54 24 10 57 41 54 41 55 41 56 41 57 4C 8B 74*/
 }
 
 class RTech
 {
 public:
-	unsigned __int64 __fastcall StringToGuid(const char* pData);
-	uint8_t __fastcall Decompress(int64_t* params, uint64_t file_size, uint64_t buffer_size);
-	uint32_t __fastcall DecompressedSize(int64_t param_buf, uint8_t* file_buf, int64_t file_size, int64_t off_no_header, int64_t header_size);
+	std::uint64_t __fastcall StringToGuid(const char* pData);
+	std::uint8_t __fastcall Decompress(std::int64_t* params, std::uint64_t file_size, std::uint64_t buffer_size);
+	std::uint32_t __fastcall DecompressedSize(std::int64_t param_buf, std::uint8_t* file_buf, std::int64_t file_size, std::int64_t off_no_header, std::int64_t header_size);
 };
 
 ///////////////////////////////////////////////////////////////////////////////

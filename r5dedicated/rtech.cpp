@@ -72,9 +72,9 @@ std::uint32_t __fastcall RTech::DecompressedSize(int64_t param_buf, std::uint8_t
     std::int64_t      v24;    // rax
     std::int64_t      v25;    // rsi
     std::int64_t      v26;    // rdx
-    std::int64_t      result; // rax
     std::int64_t      v28;    // rdx
     std::int64_t      v29;    // [rsp+48h] [rbp+18h]
+    std::int64_t   result;    // rax
 
     v29 = 0xFFFFFFi64;
     *(std::uint64_t*)param_buf = (std::uint64_t)file_buf;

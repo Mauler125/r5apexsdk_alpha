@@ -4,7 +4,7 @@
 //---------------------------------------------------------------------------------
 // Purpose: throw away any residual garbage in the channel
 //---------------------------------------------------------------------------------
-__int64* HCBaseClient_Clear(__int64 client)
+std::int64_t* HCBaseClient_Clear(std::int64_t client)
 {
 	return CBaseClient_Clear(client);
 }

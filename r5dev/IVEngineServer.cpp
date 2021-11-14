@@ -6,7 +6,7 @@
 //-----------------------------------------------------------------------------
 // Purpose: sets the persistence var in the CClient instance to 'ready'
 //-----------------------------------------------------------------------------
-bool HIVEngineServer_PersistenceAvailable(__int64 thisptr, int index)
+bool HIVEngineServer_PersistenceAvailable(std::int64_t thisptr, int index)
 {
 	CClient* client = g_pClient->GetClientInstance(index); // Get client instance.
 	std::uintptr_t targetInstance = (std::uintptr_t)client;
