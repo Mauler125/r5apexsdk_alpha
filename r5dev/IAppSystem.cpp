@@ -15,7 +15,7 @@ std::int64_t HIAppSystem_Main(std::int64_t a1, std::int64_t a2)
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-std::int64_t HIAppSystem_Create(std::int64_t a1)
+char HIAppSystem_Create(std::int64_t a1)
 {
 	return IAppSystem_Create(a1);
 }

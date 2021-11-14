@@ -14,7 +14,7 @@ auto g_bIsDedicated = (uint8_t*)0x162C61208;
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-std::int64_t HIAppSystem_Create(std::int64_t a1)
+char HIAppSystem_Create(std::int64_t a1)
 {
 	*g_bIsDedicated = 1; // HAS TO BE HERE!!!
 	HEbisuSDK_Init();
