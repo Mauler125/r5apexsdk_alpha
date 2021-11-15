@@ -84,13 +84,13 @@ void IConVar_InitConVar()
 	ConVar* consoleOverlayLines = IConVar_RegisterConVar("cl_consoleoverlay_lines", "3", FCVAR_RELEASE, "Number of lines of console output to draw.", false, 1.f, false, 50.f, nullptr, nullptr);
 	//-------------------------------------------------------------------------
 	// FILESYSTEM DLL                                                         |
-	ConVar* fileSystemWarningLevel = IConVar_RegisterConVar("fs_warning_level_native", "0", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Set the filesystem warning level ( !slower! ).", false, 0.f, false, 0.f, nullptr, nullptr);
+	ConVar* fileSystemWarningLevel = IConVar_RegisterConVar("fs_warning_level_native", "0", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Set the filesystem warning level ( !slower! ).", false, 0.f, false, 0.f, FS_Warning_Level_Native, nullptr);
 	//-------------------------------------------------------------------------
 	// SQUIRREL API                                                           |
-	ConVar* squirrelShowRsonLoading   = IConVar_RegisterConVar("sq_showrsonloading", "1", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Logs all 'rson' files loaded by the SQVM.", false, 0.f, false, 0.f, nullptr, nullptr);
-	ConVar* squirrelShowScriptLoading = IConVar_RegisterConVar("sq_showscriptloading", "0", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Logs all scripts loaded by the SQVM to be pre-compiled.", false, 0.f, false, 0.f, nullptr, nullptr);
-	ConVar* squirrelShowVMOutput      = IConVar_RegisterConVar("sq_showvmoutput", "1", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Prints the VM output to the console.", false, 0.f, false, 0.f, nullptr, nullptr);
-	ConVar* squirrelShowVMWarning     = IConVar_RegisterConVar("sq_showvmwarning", "1", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Prints the VM warning output to the console. 1 = Log to file. 2 = 1 + log to console. 3 = 1 + 2 + log to overhead console.", false, 0.f, false, 0.f, nullptr, nullptr);
+	ConVar* squirrelShowRsonLoading   = IConVar_RegisterConVar("sq_showrsonloading", "1", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Logs all 'rson' files loaded by the SQVM ( !slower! ).", false, 0.f, false, 0.f, SQ_Show_Rson_Loading_Callback, nullptr);
+	ConVar* squirrelShowScriptLoading = IConVar_RegisterConVar("sq_showscriptloading", "0", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Logs all scripts loaded by the SQVM to be pre-compiled ( !slower! ).", false, 0.f, false, 0.f, SQ_Show_Script_Loading_Callback, nullptr);
+	ConVar* squirrelShowVMOutput      = IConVar_RegisterConVar("sq_showvmoutput", "3", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Prints the VM output to the console. 1 = Log to file. 2 = 1 + log to console. 3 = 1 + 2 + log to overhead console.", false, 0.f, false, 0.f, SQ_Show_VM_Output_Callback, nullptr);
+	ConVar* squirrelShowVMWarning     = IConVar_RegisterConVar("sq_showvmwarning", "0", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Prints the VM warning output to the console. 1 = Log to file. 2 = 1 + log to console.", false, 0.f, false, 0.f, SQ_Show_VM_Warning_Callback, nullptr);
 	//-------------------------------------------------------------------------
 	// NETCHANNEL                                                             |
 	ConVar* netUseRandomKey = IConVar_RegisterConVar("net_userandomkey", "0", FCVAR_RELEASE, "If set to 1, the netchannel generates and sets a random base64 netkey.", false, 0.f, false, 0.f, nullptr, nullptr);
@@ -143,6 +143,16 @@ void DetachIConVarHooks()
 ///////////////////////////////////////////////////////////////////////////////
 CCVar* g_pCvar = nullptr;
 
-int g_cm_debug_cmdquery;
-int g_cm_return_false_cmdquery_all;
-int g_cm_return_false_cmdquery_dev_cheat;
+//-----------------------------------------------------------------------------
+// Use a global var for functions that frequently check a particular ConVar value
+// As calling 'g_pCvar->FindVar(..)' is quite expensive.
+// Initialize with default value and set the value through a callback, see 'IConVarCallback.cpp'
+//-----------------------------------------------------------------------------
+int g_cm_debug_cmdquery                  = 0;
+int g_cm_return_false_cmdquery_all       = 0;
+int g_cm_return_false_cmdquery_dev_cheat = 0;
+int g_fs_warning_level_native            = 0;
+int g_sq_show_rson_loading               = 1;
+int g_sq_show_script_loading             = 0;
+int g_sq_show_vm_output                  = 3;
+int g_sq_show_vm_warning                 = 0;

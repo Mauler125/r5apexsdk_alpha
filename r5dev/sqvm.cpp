@@ -5,6 +5,7 @@
 #include "IConVar.h"
 #include "CEngineVGui.h"
 #include "CGameConsole.h"
+#include "IConVar.h"
 
 //---------------------------------------------------------------------------------
 // Purpose: prints the output of each VM to the console
@@ -48,14 +49,20 @@ void* HSQVM_PrintFunc(void* sqvm, char* fmt, ...)
 
 	vmStr.append(buf);
 
-	iconsole->debug(vmStr);
-	wconsole->debug(vmStr);
-	sqlogger->debug(vmStr);
+	if (g_sq_show_vm_output > 0)
+	{
+		sqlogger->debug(vmStr);
+	}
+	if (g_sq_show_vm_output > 1)
+	{
+		iconsole->debug(vmStr);
+		wconsole->debug(vmStr);
 
-	std::string s = g_spd_sqvm_p_oss.str();
-	const char* c = s.c_str();
+		std::string s = g_spd_sqvm_p_oss.str();
+		const char* c = s.c_str();
 
-	Items.push_back(Strdup((const char*)c));
+		Items.push_back(Strdup((const char*)c));
+	}
 	return NULL;
 }
 
@@ -101,11 +108,11 @@ std::int64_t HSQVM_WarningFunc(void* sqvm, int a2, int a3, int* stringSize, void
 	std::string s = g_spd_sqvm_w_oss.str();
 	const char* c = s.c_str();
 
-	if (g_bClassInitialized && g_pCvar->FindVar("sq_showvmwarning")->m_iValue > 0)
+	if (g_sq_show_vm_warning > 0)
 	{
 		sqlogger->debug(vmStr); // Emit to file.
 	}
-	if (g_bClassInitialized && g_pCvar->FindVar("sq_showvmwarning")->m_iValue > 1)
+	if (g_sq_show_vm_warning > 1)
 	{
 		iconsole->debug(vmStr); // Emit to in-game console.
 		wconsole->debug(vmStr); // Emit to windows console.
@@ -114,7 +121,7 @@ std::int64_t HSQVM_WarningFunc(void* sqvm, int a2, int a3, int* stringSize, void
 		const char* c = s.c_str();
 		Items.push_back(Strdup(c));
 	}
-	if (g_bClassInitialized && g_pCvar->FindVar("sq_showvmwarning")->m_iValue > 2)
+	if (g_sq_show_vm_warning > 2)
 	{
 		g_pLogSystem.AddLog((LogType_t)vmIdx, s);
 		const char* c = s.c_str();
@@ -155,12 +162,12 @@ std::int64_t HSQVM_LoadRson(const char* rson_name)
 	// Returns the new path if the rson exists on the disk
 	if (FileExists(filepath) && SQVM_LoadRson(rson_name))
 	{
-		if (g_bClassInitialized && g_pCvar->FindVar("sq_showrsonloading")->m_iValue > 0)
+		if (g_sq_show_rson_loading > 0)
 		{
 			Sys_Print(SYS_DLL::ENGINE, "\n");
 			Sys_Print(SYS_DLL::ENGINE, "______________________________________________________________\n");
-			Sys_Print(SYS_DLL::ENGINE, "] RSON_DISK_PATH ---------------------------------------------\n");
-			Sys_Print(SYS_DLL::ENGINE, "] '%s'\n", filepath);
+			Sys_Print(SYS_DLL::ENGINE, "] RSON_DISK --------------------------------------------------\n");
+			Sys_Print(SYS_DLL::ENGINE, "] PATH: '%s'\n", filepath);
 			Sys_Print(SYS_DLL::ENGINE, "--------------------------------------------------------------\n");
 			Sys_Print(SYS_DLL::ENGINE, "\n");
 		}
@@ -168,12 +175,12 @@ std::int64_t HSQVM_LoadRson(const char* rson_name)
 	}
 	else
 	{
-		if (g_bClassInitialized && g_pCvar->FindVar("sq_showrsonloading")->m_iValue > 0)
+		if (g_sq_show_rson_loading > 0)
 		{
 			Sys_Print(SYS_DLL::ENGINE, "\n");
 			Sys_Print(SYS_DLL::ENGINE, "______________________________________________________________\n");
-			Sys_Print(SYS_DLL::ENGINE, "] RSON_VPK_PATH ----------------------------------------------\n");
-			Sys_Print(SYS_DLL::ENGINE, "] '%s'\n", rson_name);
+			Sys_Print(SYS_DLL::ENGINE, "] RSON_VPK ---------------------------------------------------\n");
+			Sys_Print(SYS_DLL::ENGINE, "] PATH: '%s'\n", rson_name);
 			Sys_Print(SYS_DLL::ENGINE, "--------------------------------------------------------------\n");
 			Sys_Print(SYS_DLL::ENGINE, "\n");
 		}
@@ -198,7 +205,7 @@ bool HSQVM_LoadScript(void* sqvm, const char* script_path, const char* script_na
 		}
 	}
 
-	if (g_bClassInitialized && g_pCvar->FindVar("sq_showscriptloading")->m_iValue > 0)
+	if (g_sq_show_script_loading > 0)
 	{
 		Sys_Print(SYS_DLL::ENGINE, "Loading SQVM Script '%s'\n", filepath);
 	}
@@ -209,7 +216,7 @@ bool HSQVM_LoadScript(void* sqvm, const char* script_path, const char* script_na
 		return true;
 	}
 
-	if (g_bClassInitialized && g_pCvar->FindVar("sq_showscriptloading")->m_iValue > 0)
+	if (g_sq_show_script_loading > 0)
 	{
 		Sys_Print(SYS_DLL::ENGINE, "FAILED.Try SP / VPK for '%s'\n", filepath);
 	}
