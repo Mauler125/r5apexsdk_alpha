@@ -381,7 +381,6 @@ void RTech_Decompress_Callback(CCommand* cmd)
 
 	Sys_Print(SYS_DLL::RTECH, "______________________________________________________________\n");
 	Sys_Print(SYS_DLL::RTECH, "] RTECH_DECOMPRESS -------------------------------------------\n");
-	Sys_Print(SYS_DLL::RTECH, "] Processing: '%s'\n", pak_name_in.c_str());
 
 	if (!FileExists(pak_name_in.c_str()))
 	{
@@ -389,7 +388,9 @@ void RTech_Decompress_Callback(CCommand* cmd)
 		return;
 	}
 
-	std::vector<uint8_t> upak; // Compressed region.
+	Sys_Print(SYS_DLL::RTECH, "] Processing: '%s'\n", pak_name_in.c_str());
+
+	std::vector<std::uint8_t> upak; // Compressed region.
 	std::ifstream ipak(pak_name_in, std::fstream::binary);
 
 	ipak.seekg(0, std::fstream::end);
@@ -428,8 +429,8 @@ void RTech_Decompress_Callback(CCommand* cmd)
 	Sys_Print(SYS_DLL::RTECH, "] Size decp: '%lld'\n", rheader->m_nSizeMem);
 	Sys_Print(SYS_DLL::RTECH, "] Ratio    : '%.02f'\n", (rheader->m_nSizeDisk * 100.f) / rheader->m_nSizeMem);
 
-	int64_t params[18];
-	uint32_t dsize = g_pRtech->DecompressedSize((int64_t)(params), upak.data(), upak.size(), 0, PAK_HEADER_SIZE);
+	std::int64_t params[18];
+	std::uint32_t dsize = g_pRtech->DecompressedSize((std::int64_t)(params), upak.data(), upak.size(), 0, PAK_HEADER_SIZE);
 	if (dsize == rheader->m_nSizeDisk)
 	{
 		Sys_Print(SYS_DLL::RTECH, "] Error: calculated size: '%zu' expected: '%zu'!\n", dsize, rheader->m_nSizeMem);
@@ -440,12 +441,12 @@ void RTech_Decompress_Callback(CCommand* cmd)
 		Sys_Print(SYS_DLL::RTECH, "] Calculated size: '%zu'\n", dsize);
 	}
 
-	std::vector<uint8_t> pakbuf(rheader->m_nSizeMem, 0);
+	std::vector<std::uint8_t> pakbuf(rheader->m_nSizeMem, 0);
 
-	params[1] = int64_t(pakbuf.data());
+	params[1] = std::int64_t(pakbuf.data());
 	params[3] = -1i64;
 
-	uint8_t decomp_result = g_pRtech->Decompress(params, upak.size(), pakbuf.size());
+	std::uint8_t decomp_result = g_pRtech->Decompress(params, upak.size(), pakbuf.size());
 	if (decomp_result != 1)
 	{
 		Sys_Print(SYS_DLL::RTECH, "] Error: decompression failed for '%s' return value: '%u'!\n", pak_name_in.c_str(), +decomp_result);
