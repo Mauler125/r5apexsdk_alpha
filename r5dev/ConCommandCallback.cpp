@@ -9,8 +9,6 @@
 #include "ConCommandCallback.h"
 #include "sys_utils.h"
 
-#pragma comment(lib, "bcrypt.lib")
-
 void CGameConsole_Callback(const CCommand& cmd)
 {
 	g_bShowConsole = !g_bShowConsole;

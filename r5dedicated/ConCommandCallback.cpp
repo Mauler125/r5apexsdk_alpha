@@ -7,8 +7,6 @@
 #include "ConCommandCallback.h"
 #include "sys_utils.h"
 
-#pragma comment(lib, "bcrypt.lib")
-
 void Kick_Callback(CCommand* cmd)
 {
 	std::int32_t argSize = *(std::int32_t*)((std::uintptr_t)cmd + 0x4);
