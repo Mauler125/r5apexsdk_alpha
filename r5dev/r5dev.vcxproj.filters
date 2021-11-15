@@ -134,6 +134,9 @@
     <Filter Include="hooks\cbaseclient">
       <UniqueIdentifier>{4b4bc688-32f5-42e3-b7de-93ac27c2c142}</UniqueIdentifier>
     </Filter>
+    <Filter Include="hooks\cfpspanel">
+      <UniqueIdentifier>{f50d508e-1505-44d2-9a25-db754a62f53a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\shared\utility.cpp">
@@ -273,6 +276,9 @@
     </ClCompile>
     <ClCompile Include="IConVarCallback.cpp">
       <Filter>hooks\iconvar</Filter>
+    </ClCompile>
+    <ClCompile Include="vgui_fpspanel.cpp">
+      <Filter>hooks\cfpspanel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -734,6 +740,9 @@
     </ClInclude>
     <ClInclude Include="ButtonCode.h">
       <Filter>hooks\common</Filter>
+    </ClInclude>
+    <ClInclude Include="vgui_fpspanel.h">
+      <Filter>hooks\cfpspanel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

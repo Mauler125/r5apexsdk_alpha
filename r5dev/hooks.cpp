@@ -5,6 +5,7 @@
 #include "CBaseClient.h"
 #include "basefilesystem.h"
 #include "CEngineVGui.h"
+#include "vgui_fpspanel.h"
 #include "CHLClient.h"
 #include "CHostState.h"
 #include "CKeyValuesSystem.h"
@@ -38,6 +39,7 @@ void InstallHooks()
 	AttachCBaseClientHooks();
 	AttachCBaseFileSystemHooks();
 	AttachCEngineVGuiHooks();
+	AttachCFPSPanelHooks();
 	AttachCHLClientHooks();
 	AttachCHostStateHooks();
 	AttachCNetChanHooks();
@@ -77,6 +79,7 @@ void RemoveHooks()
 	DetachCBaseClientHooks();
 	DetachCBaseFileSystemHooks();
 	DetachCEngineVGuiHooks();
+	DetachCFPSPanelHooks();
 	DetachCHLClientHooks();
 	DetachCHostStateHooks();
 	DetachCNetChanHooks();
@@ -104,6 +107,8 @@ void PrintHAddress() // Test the sigscan results
 	std::cout << "| CBaseFileSystem::Warning             : " << std::hex << std::uppercase << p_CBaseFileSystem_Warning.GetPtr()             << std::setw(8) << " |" << std::endl;
 	std::cout << "+--------------------------------------------------------+" << std::endl;
 	std::cout << "| CEngineVGui::Paint                   : " << std::hex << std::uppercase << p_CEngineVGui_Paint.GetPtr()                   << std::setw(8) << " |" << std::endl;
+	std::cout << "+--------------------------------------------------------+" << std::endl;
+	std::cout << "| CFPSPannel::Paint                    : " << std::hex << std::uppercase << p_CFPSPanel_Paint.GetPtr()                     << std::setw(8) << " |" << std::endl;
 	std::cout << "+--------------------------------------------------------+" << std::endl;
 	std::cout << "| CHLClient::FrameStageNotify          : " << std::hex << std::uppercase << p_FrameStageNotify.GetPtr()                    << std::setw(8) << " |" << std::endl;
 	std::cout << "+--------------------------------------------------------+" << std::endl;

@@ -2,6 +2,7 @@
 #include "logdef.h"
 #include "sys_utils.h"
 #include "CGameConsole.h"
+#include "CEngineVGui.h"
 
 //-----------------------------------------------------------------------------
 //	Sys_Error
@@ -72,6 +73,7 @@ void Sys_Print(SYS_DLL idx, const char* fmt, ...)
 	std::string s = g_spd_sys_w_oss.str();
 	const char* c = s.c_str();
 
+	g_pLogSystem.AddLog((LogType_t)SYS_DLL::ENGINE, s);
 	Items.push_back(Strdup((const char*)c));
 }
 

@@ -79,8 +79,10 @@ void IConVar_InitConVar()
 	ConVar* serverShowConnecting = IConVar_RegisterConVar("sv_showconnecting", "1", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Logs information about the connecting client to the console.", false, 0.f, false, 0.f, nullptr, nullptr);
 	//-------------------------------------------------------------------------
 	// CLIENT DLL                                                             |
-	ConVar* drawConsoleOverlay  = IConVar_RegisterConVar("cl_drawconsoleoverlay", "0", FCVAR_RELEASE, "Draw the console overlay at the top of the screen.", false, 0.f, false, 0.f, nullptr, nullptr);
-	ConVar* consoleOverlayLines = IConVar_RegisterConVar("cl_consoleoverlay_lines", "3", FCVAR_RELEASE, "Number of lines of console output to draw.", false, 1.f, false, 50.f, nullptr, nullptr);
+	ConVar* drawConsoleOverlay    = IConVar_RegisterConVar("cl_drawconsoleoverlay", "1", FCVAR_RELEASE, "Draw the console overlay at the top of the screen.", false, 0.f, false, 0.f, nullptr, nullptr);
+	ConVar* consoleOverlayLines   = IConVar_RegisterConVar("cl_consoleoverlay_lines", "3", FCVAR_RELEASE, "Number of lines of console output to draw.", false, 1.f, false, 50.f, nullptr, nullptr);
+	ConVar* consoleOverlayOffsetX = IConVar_RegisterConVar("cl_consoleoverlay_offset_x", "10", FCVAR_RELEASE, "X offset for console overlay.", false, 1.f, false, 50.f, nullptr, nullptr);
+	ConVar* consoleOverlayOffsetY = IConVar_RegisterConVar("cl_consoleoverlay_offset_y", "10", FCVAR_RELEASE, "Y offset for console overlay.", false, 1.f, false, 50.f, nullptr, nullptr);
 	//-------------------------------------------------------------------------
 	// FILESYSTEM DLL                                                         |
 	ConVar* fileSystemWarningLevel = IConVar_RegisterConVar("fs_warning_level_native", "0", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Set the filesystem warning level ( !slower! ).", false, 0.f, false, 0.f, FS_Warning_Level_Native, nullptr);
@@ -88,7 +90,7 @@ void IConVar_InitConVar()
 	// SQUIRREL API                                                           |
 	ConVar* squirrelShowRsonLoading   = IConVar_RegisterConVar("sq_showrsonloading", "1", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Logs all 'rson' files loaded by the SQVM ( !slower! ).", false, 0.f, false, 0.f, SQ_Show_Rson_Loading_Callback, nullptr);
 	ConVar* squirrelShowScriptLoading = IConVar_RegisterConVar("sq_showscriptloading", "0", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Logs all scripts loaded by the SQVM to be pre-compiled ( !slower! ).", false, 0.f, false, 0.f, SQ_Show_Script_Loading_Callback, nullptr);
-	ConVar* squirrelShowVMOutput      = IConVar_RegisterConVar("sq_showvmoutput", "3", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Prints the VM output to the console. 1 = Log to file. 2 = 1 + log to console. 3 = 1 + 2 + log to overhead console.", false, 0.f, false, 0.f, SQ_Show_VM_Output_Callback, nullptr);
+	ConVar* squirrelShowVMOutput      = IConVar_RegisterConVar("sq_showvmoutput", "3", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Prints the VM output to the console. 1 = Log to file. 2 = 1 + log to console. 3 = 1 + 2 + log to overhead console. 4 = only log to overhead console.", false, 0.f, false, 0.f, SQ_Show_VM_Output_Callback, nullptr);
 	ConVar* squirrelShowVMWarning     = IConVar_RegisterConVar("sq_showvmwarning", "0", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Prints the VM warning output to the console. 1 = Log to file. 2 = 1 + log to console.", false, 0.f, false, 0.f, SQ_Show_VM_Warning_Callback, nullptr);
 	//-------------------------------------------------------------------------
 	// NETCHANNEL                                                             |

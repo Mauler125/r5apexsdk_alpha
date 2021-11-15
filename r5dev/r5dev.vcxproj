@@ -313,6 +313,7 @@
     <ClInclude Include="ButtonCode.h" />
     <ClInclude Include="CBaseClient.h" />
     <ClInclude Include="CClient.h" />
+    <ClInclude Include="vgui_fpspanel.h" />
     <ClInclude Include="classes.h" />
     <ClInclude Include="IConVarCallback.h" />
     <ClInclude Include="IVEngineClient.h" />
@@ -389,6 +390,7 @@
     <ClCompile Include="basefilesystem.cpp" />
     <ClCompile Include="CBaseClient.cpp" />
     <ClCompile Include="CClient.cpp" />
+    <ClCompile Include="vgui_fpspanel.cpp" />
     <ClCompile Include="classes.cpp" />
     <ClCompile Include="IConVarCallback.cpp" />
     <ClCompile Include="IVEngineClient.cpp" />

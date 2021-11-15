@@ -6,6 +6,7 @@
 #include "CEngineVGui.h"
 #include "CGameConsole.h"
 #include "IConVar.h"
+#include "CEngineVGui.h"
 
 //---------------------------------------------------------------------------------
 // Purpose: prints the output of each VM to the console
@@ -60,8 +61,12 @@ void* HSQVM_PrintFunc(void* sqvm, char* fmt, ...)
 
 		std::string s = g_spd_sqvm_p_oss.str();
 		const char* c = s.c_str();
-
 		Items.push_back(Strdup((const char*)c));
+	}
+	if (g_sq_show_vm_output > 2)
+	{
+		std::string s = g_spd_sqvm_p_oss.str();
+		g_pLogSystem.AddLog((LogType_t)vmIdx, s);
 	}
 	return NULL;
 }

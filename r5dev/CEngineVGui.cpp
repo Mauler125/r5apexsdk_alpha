@@ -56,10 +56,11 @@ void CLogSystem::Update()
 				float fadepct = fminf(static_cast<float>(m_vLogs[i].Ticks) / 64.f, 1.0);
 				float ptc = static_cast<int>(ceilf(fadepct * 255.f));
 				int alpha = static_cast<int>(ptc);
-				int y = (10 + (fontHeight * i));
+				int y = (g_pCvar->FindVar("cl_consoleoverlay_offset_y")->m_iValue + (fontHeight * i));
+				int x = g_pCvar->FindVar("cl_consoleoverlay_offset_x")->m_iValue;
 
 				std::array<int, 3> color = GetLogColorForType(m_vLogs[i].Type);
-				CMatSystemSurface_DrawColoredText(pCMatSystemSurface, 0x13, fontHeight, 10, y, color[0], color[1], color[2], alpha, m_vLogs[i].Message.c_str());
+				CMatSystemSurface_DrawColoredText(pCMatSystemSurface, 0x13, fontHeight, x, y, color[0], color[1], color[2], alpha, m_vLogs[i].Message.c_str());
 			}
 			else
 			{
