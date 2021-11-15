@@ -147,6 +147,7 @@ void PrintHAddress() // Test the sigscan results
 	std::cout << "| SQVM_PrintFunc                       : " << std::hex << std::uppercase << p_SQVM_PrintFunc.GetPtr()                      << std::setw(8) << " |" << std::endl;
 	std::cout << "| SQVM_LoadScript                      : " << std::hex << std::uppercase << p_SQVM_LoadScript.GetPtr()                     << std::setw(8) << " |" << std::endl;
 	std::cout << "| SQVM_LoadRson                        : " << std::hex << std::uppercase << p_SQVM_LoadRson.GetPtr()                       << std::setw(8) << " |" << std::endl;
+	std::cout << "| SQVM_RegisterFunc                    : " << std::hex << std::uppercase << p_SQVM_RegisterFunc.GetPtr()                   << std::setw(8) << " |" << std::endl;
 	std::cout << "+--------------------------------------------------------+" << std::endl;
 	std::cout << "| Sys_Error_Internal                   : " << std::hex << std::uppercase << p_Sys_Error_Internal.GetPtr()                  << std::setw(8) << " |" << std::endl;
 	std::cout << "+--------------------------------------------------------+" << std::endl;

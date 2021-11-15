@@ -223,17 +223,15 @@ bool HSQVM_LoadScript(void* sqvm, const char* script_path, const char* script_na
 
 	if (g_sq_show_script_loading > 0)
 	{
-		Sys_Print(SYS_DLL::ENGINE, "FAILED.Try SP / VPK for '%s'\n", filepath);
+		Sys_Print(SYS_DLL::ENGINE, "FAILED. Try SP / VPK for '%s'\n", filepath);
 	}
 
 	///////////////////////////////////////////////////////////////////////////////
 	return SQVM_LoadScript(sqvm, script_path, script_name, flag);
 }
 
-void SQVM_RegisterFunction(void* sqvm, const char* name, const char* helpString, const char* retValType, const char* argTypes, void* funcPtr)
+void HSQVM_RegisterFunction(void* sqvm, const char* name, const char* helpString, const char* retValType, const char* argTypes, void* funcPtr)
 {
-	static ADDRESS Script_RegisterFunction = ADDRESS(0x141056040); // TODO: CONVERT TO SIG!
-
 	SQFuncRegistration* func = new SQFuncRegistration();
 
 	func->scriptName = name;
@@ -243,10 +241,10 @@ void SQVM_RegisterFunction(void* sqvm, const char* name, const char* helpString,
 	func->argTypes = argTypes;
 	func->funcPtr = funcPtr;
 
-	Script_RegisterFunction.RCast<void(*)(void*, SQFuncRegistration*, char unk)>()(sqvm, func, 1);
+	SQVM_RegisterFunc(sqvm, func, 1);
 }
 
-int SQVM_NativeTest(void* sqvm)
+int HSQVM_NativeTest(void* sqvm)
 {
 	// Function code goes here.
 	return 1;
@@ -254,17 +252,17 @@ int SQVM_NativeTest(void* sqvm)
 
 void RegisterUIScriptFunctions(void* sqvm)
 {
-	SQVM_RegisterFunction(sqvm, "UINativeTest", "native ui function", "void", "", &SQVM_NativeTest);
+	HSQVM_RegisterFunction(sqvm, "UINativeTest", "native ui function", "void", "", &HSQVM_NativeTest);
 }
 
 void RegisterClientScriptFunctions(void* sqvm)
 {
-	SQVM_RegisterFunction(sqvm, "ClientNativeTest", "native client function", "void", "", &SQVM_NativeTest);
+	HSQVM_RegisterFunction(sqvm, "ClientNativeTest", "native client function", "void", "", &HSQVM_NativeTest);
 }
 
 void RegisterServerScriptFunctions(void* sqvm)
 {
-	SQVM_RegisterFunction(sqvm, "ServerNativeTest", "native server function", "void", "", &SQVM_NativeTest);
+	HSQVM_RegisterFunction(sqvm, "ServerNativeTest", "native server function", "void", "", &HSQVM_NativeTest);
 }
 
 void AttachSQVMHooks()

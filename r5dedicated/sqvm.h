@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include "basetypes.h"
 
 struct SQFuncRegistration
 {
@@ -39,22 +40,26 @@ namespace
 
 	ADDRESS p_SQVM_WarningCmd = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x40\x53\x48\x83\xEC\x30\x33\xDB\x48\x8D\x44\x24\x00\x4C\x8D\x4C\x24\x00", "xxxxxxxxxxxx?xxxx?");
 	std::int64_t(*SQVM_WarningCmd)(int a1, int a2) = (std::int64_t(*)(int, int))p_SQVM_WarningCmd.GetPtr(); /*40 53 48 83 EC 30 33 DB 48 8D 44 24 ?? 4C 8D 4C 24 ??*/
-
-	//ADDRESS p_SQVM_LoadScript = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x48\x89\x5C\x24\x10\x48\x89\x74\x24\x18\x48\x89\x7C\x24\x20\x48\x89\x4C\x24\x08\x55\x41\x54\x41\x55\x41\x56\x41\x57\x48\x8D\x6C", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"); // For S0 and S1
-	ADDRESS p_SQVM_LoadScript = FindPatternV2("r5apex.exe", (const unsigned char*)"\x48\x8B\xC4\x48\x89\x48\x08\x55\x41\x56\x48\x8D\x68", "xxxxxxxxxxxxx"); // For anything S2 and above (current S8)
-	bool (*SQVM_LoadScript)(void* sqvm, const char* script_path, const char* script_name, int flag) = (bool (*)(void*, const char*, const char*, int))p_SQVM_LoadScript.GetPtr(); /*E8 ?? ?? ?? ?? 84 C0 74 1C 41 B9 ?? ?? ?? ??*/
-
+#if defined (GAMEDLL_S0) || defined (GAMEDLL_S1)
+	ADDRESS p_SQVM_LoadScript = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x48\x89\x5C\x24\x10\x48\x89\x74\x24\x18\x48\x89\x7C\x24\x20\x48\x89\x4C\x24\x08\x55\x41\x54\x41\x55\x41\x56\x41\x57\x48\x8D\x6C", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+	bool (*SQVM_LoadScript)(void* sqvm, const char* script_path, const char* script_name, int flag) = (bool (*)(void*, const char*, const char*, int))p_SQVM_LoadScript.GetPtr(); /*48 89 5C 24 10 48 89 74 24 18 48 89 7C 24 20 48 89 4C 24 08 55 41 54 41 55 41 56 41 57 48 8D 6C*/
+#elif defined (GAMEDLL_S2) || defined (GAMEDLL_S3)
+	ADDRESS p_SQVM_LoadScript = FindPatternV2("r5apex.exe", (const unsigned char*)"\x48\x8B\xC4\x48\x89\x48\x08\x55\x41\x56\x48\x8D\x68", "xxxxxxxxxxxxx"); /*48 8B C4 48 89 48 08 55 41 56 48 8D 68*/
+	bool (*SQVM_LoadScript)(void* sqvm, const char* script_path, const char* script_name, int flag) = (bool (*)(void*, const char*, const char*, int))p_SQVM_LoadScript.GetPtr();
+#endif
 	ADDRESS p_SQVM_LoadRson = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x4C\x8B\xDC\x49\x89\x5B\x08\x57\x48\x81\xEC\xA0\x00\x00\x00\x33", "xxxxxxxxxxxxxxxx");
 	int (*SQVM_LoadRson)(const char* rson_name) = (int (*)(const char*))p_SQVM_LoadRson.GetPtr(); /*4C 8B DC 49 89 5B 08 57 48 81 EC A0 00 00 00 33*/
+
+	ADDRESS p_SQVM_RegisterFunc = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x48\x83\xEC\x38\x45\x0F\xB6\xC8", "xxxxxxxx"); /*48 83 EC 38 45 0F B6 C8*/
+	std::int64_t(*SQVM_RegisterFunc)(void* sqvm, SQFuncRegistration* func, int a1) = (std::int64_t(*)(void*, SQFuncRegistration*, int))p_SQVM_RegisterFunc.GetPtr();
 }
 
 void* HSQVM_PrintFunc(void* sqvm, char* fmt, ...);
 std::int64_t HSQVM_LoadRson(const char* rson_name);
 bool HSQVM_LoadScript(void* sqvm, const char* script_path, const char* script_name, int flag);
 
-void SQVM_RegisterFunction(void* sqvm, const char* name, const char* helpString, const char* retValType, const char* argTypes, void* funcPtr);
-int SQVM_NativeTest(void* sqvm);
-
+void HSQVM_RegisterFunc(void* sqvm, const char* name, const char* helpString, const char* retValType, const char* argTypes, void* funcPtr);
+int HSQVM_NativeTest(void* sqvm);
 
 void AttachSQVMHooks();
 void DetachSQVMHooks();
