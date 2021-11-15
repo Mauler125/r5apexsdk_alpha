@@ -58,8 +58,8 @@ void* HSQVM_PrintFunc(void* sqvm, char* fmt, ...);
 std::int64_t HSQVM_LoadRson(const char* rson_name);
 bool HSQVM_LoadScript(void* sqvm, const char* script_path, const char* script_name, int flag);
 
-void SQVM_RegisterFunction(void* sqvm, const char* name, const char* helpString, const char* retValType, const char* argTypes, void* funcPtr);
-int SQVM_NativeTest(void* sqvm);
+void HSQVM_RegisterFunction(void* sqvm, const char* name, const char* helpString, const char* retValType, const char* argTypes, void* funcPtr);
+int HSQVM_NativeTest(void* sqvm);
 
 
 void AttachSQVMHooks();
