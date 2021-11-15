@@ -18,7 +18,7 @@ void ClassInit()
 	g_pClient            = reinterpret_cast<CClient*>         (0x16073B200);
 	g_pBanSystem         = new CBanSystem();
 
-	*(char*)m_bRestrictServerCommands = true; // Restrict commands.
+	*(char*)m_bRestrictServerCommands.GetPtr() = true; // Restrict commands.
 	void* disconnect = g_pCvar->FindCommand("disconnect");
 	*(std::int32_t*)((std::uintptr_t)disconnect + 0x38) |= FCVAR_SERVER_CAN_EXECUTE; // Make sure server is not restricted to this.
 

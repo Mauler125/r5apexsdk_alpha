@@ -7,7 +7,7 @@ namespace
 	/* ==== SQUIRREL ======================================================================================================================================================== */
 	ADDRESS p_sq_pushbool = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x48\x83\xEC\x38\x33\xC0\x48\xC7\x44\x24\x20\x08\x00\x00\x01\x48", "xxxxxxxxxxxxxxxx");
 	void (*sq_pushbool)(void* sqvm, int val) = (void (*)(void*, int))p_sq_pushbool.GetPtr(); /*48 83 EC 38 33 C0 48 C7 44 24 20 08 00 00 01 48*/
-#if defined (GAMEDLL_S0) || defined (GAMEDLL_S1)
+#if defined (GAMEDLL_S0) || defined (GAMEDLL_S1) || defined (GAMEDLL_S2)
 	ADDRESS p_sq_pushstring = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x40\x56\x48\x83\xEC\x30\x48\x8B\xF1\x48\x85\xD2\x0F\x84\x8C\x00", "xxxxxxxxxxxxxxxx");
 	void (*sq_pushstring)(void* sqvm, const char* string, int len) = (void (*)(void*, const char*, int))p_sq_pushstring.GetPtr(); /*40 56 48 83 EC 30 48 8B F1 48 85 D2 0F 84 8C 00*/
 #elif defined (GAMEDLL_S3)

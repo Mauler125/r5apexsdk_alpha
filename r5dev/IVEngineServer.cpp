@@ -2,6 +2,7 @@
 #include "IVEngineServer.h"
 #include "CClient.h"
 #include "sys_utils.h"
+#include "IConVar.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: sets the persistence var in the CClient instance to 'ready'
@@ -13,7 +14,7 @@ bool HIVEngineServer_PersistenceAvailable(std::int64_t thisptr, int index)
 	std::uintptr_t persistenceVar = 0x5BC;                 // TODO: Add to CClient struct.
 	*(char*)(targetInstance + persistenceVar) = (char)0x5; // Set the client instance to 'ready'.
 
-	if (!g_bIsPersistenceVarSet[index])
+	if (!g_bIsPersistenceVarSet[index] && g_pCvar->FindVar("sv_showconnecting")->m_iValue > 0)
 	{
 		void* clientNamePtr = (void**)(((std::uintptr_t)client->GetNetChan()) + 0x1A8D); // Get client name from netchan.
 		std::string clientName((char*)clientNamePtr, 32);                                // Get full name.
@@ -25,7 +26,7 @@ bool HIVEngineServer_PersistenceAvailable(std::int64_t thisptr, int index)
 		if (ipAddressField)
 		{
 			std::stringstream ss;
-			ss << std::to_string(ipAddressField.GetValue<std::uint8_t>()) << "."
+			ss  << std::to_string(ipAddressField.GetValue<std::uint8_t>()) << "."
 				<< std::to_string(ipAddressField.Offset(0x1).GetValue<std::uint8_t>()) << "."
 				<< std::to_string(ipAddressField.Offset(0x2).GetValue<std::uint8_t>()) << "."
 				<< std::to_string(ipAddressField.Offset(0x3).GetValue<std::uint8_t>());
@@ -35,14 +36,15 @@ bool HIVEngineServer_PersistenceAvailable(std::int64_t thisptr, int index)
 
 		Sys_Print(SYS_DLL::SERVER, "\n");
 		Sys_Print(SYS_DLL::SERVER, "______________________________________________________________\n");
-		Sys_Print(SYS_DLL::SERVER, "] CLIENT_INSTANCE_DETAILS ####################################\n");
+		Sys_Print(SYS_DLL::SERVER, "] CLIENT_INSTANCE_DETAILS ------------------------------------\n");
 		Sys_Print(SYS_DLL::SERVER, "] INDEX: | '#%d'\n", index);
 		Sys_Print(SYS_DLL::SERVER, "] NAME : | '%s'\n", clientName.c_str());
 		Sys_Print(SYS_DLL::SERVER, "] OID  : | '%lld'\n", originID);
 		Sys_Print(SYS_DLL::SERVER, "] UID  : | '%lld'\n", clientID);
 		Sys_Print(SYS_DLL::SERVER, "] IPADR: | '%s'\n", ipAddress.c_str());
-		Sys_Print(SYS_DLL::SERVER, "##############################################################\n");
+		Sys_Print(SYS_DLL::SERVER, "--------------------------------------------------------------\n");
 		Sys_Print(SYS_DLL::SERVER, "\n");
+
 		g_bIsPersistenceVarSet[index] = true;
 	}
 	///////////////////////////////////////////////////////////////////////////

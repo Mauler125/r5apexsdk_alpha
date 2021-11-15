@@ -149,4 +149,6 @@ void PrintHAddress() // Test the sigscan results
 	std::cout << "| Sys_LoadAsset                        : " << std::hex << std::uppercase << p_Sys_LoadAsset.GetPtr()                       << std::setw(8) << " |" << std::endl;
 	std::cout << "| MemAlloc_Wrapper                     : " << std::hex << std::uppercase << p_MemAlloc_Wrapper.GetPtr()                    << std::setw(8) << " |" << std::endl;
 	std::cout << "+--------------------------------------------------------+" << std::endl;
+	std::cout << "| g_uNetKeyPtr                         : " << std::hex << std::uppercase << g_uNetKeyPtr                                   << std::setw(8) << " |" << std::endl;
+	std::cout << "+--------------------------------------------------------+" << std::endl;
 }

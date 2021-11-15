@@ -33,6 +33,10 @@ static HWND                     g_hGameWindow               = NULL;
 extern DWORD                    g_dThreadId                 = NULL;
 
 ///////////////////////////////////////////////////////////////////////////////////
+static IPostMessageA            g_oPostMessageA             = NULL;
+static IPostMessageW            g_oPostMessageW             = NULL;
+
+///////////////////////////////////////////////////////////////////////////////////
 static IDXGIResizeBuffers       g_oResizeBuffers            = NULL;
 static IDXGISwapChainPresent    g_fnIDXGISwapChainPresent   = NULL;
 static IDXGISwapChain*          g_pSwapChain                = nullptr;
@@ -40,10 +44,6 @@ static ID3D11DeviceContext*     g_pDeviceContext            = nullptr;
 static ID3D11Device*            g_pDevice                   = nullptr;
 static ID3D11RenderTargetView*  g_pRenderTargetView         = nullptr;
 static ID3D11DepthStencilView*  g_pDepthStencilView         = nullptr;
-
-///////////////////////////////////////////////////////////////////////////////////
-static IPostMessageA            g_oPostMessageA             = NULL;
-static IPostMessageW            g_oPostMessageW             = NULL;
 
 //#################################################################################
 // WINDOW PROCEDURE
