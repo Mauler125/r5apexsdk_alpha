@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "hooks.h"
 #include "opcptc.h"
-#include "IAppSystem.h"
+#include "IApplication.h"
 #include "CBaseClient.h"
 #include "basefilesystem.h"
 #include "CEngineVGui.h"
@@ -35,7 +35,7 @@ void InstallHooks()
 
 	///////////////////////////////////////////////////////////////////////////////
 	// Hook functions
-	AttachIAppSystemHooks();
+	AttachIApplicationHooks();
 	AttachCBaseClientHooks();
 	AttachCBaseFileSystemHooks();
 	AttachCEngineVGuiHooks();
@@ -75,7 +75,7 @@ void RemoveHooks()
 
 	///////////////////////////////////////////////////////////////////////////////
 	// Unhook functions
-	DetachIAppSystemHooks();
+	DetachIApplicationHooks();
 	DetachCBaseClientHooks();
 	DetachCBaseFileSystemHooks();
 	DetachCEngineVGuiHooks();

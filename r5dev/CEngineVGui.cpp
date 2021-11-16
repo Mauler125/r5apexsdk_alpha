@@ -53,7 +53,7 @@ void CLogSystem::Update()
 		{
 			if (i < g_pCvar->FindVar("cl_consoleoverlay_lines")->m_iValue)
 			{
-				float fadepct = fminf(static_cast<float>(m_vLogs[i].Ticks) / 64.f, 1.0);
+				float fadepct = fminf(static_cast<float>(m_vLogs[i].Ticks) / 255.f, 4.0); // TODO: CREATE CVAR.
 				float ptc = static_cast<int>(ceilf(fadepct * 255.f));
 				int alpha = static_cast<int>(ptc);
 				int y = (g_pCvar->FindVar("cl_consoleoverlay_offset_y")->m_iValue + (fontHeight * i));
@@ -107,12 +107,12 @@ std::array<int, 3> CLogSystem::GetLogColorForType(LogType_t type)
 ///////////////////////////////////////////////////////////////////////////////
 void AttachCEngineVGuiHooks()
 {
-	DetourAttach((LPVOID*)&CEngineVGui_Paint, &HCEngineVGui_Paint);
+	//DetourAttach((LPVOID*)&CEngineVGui_Paint, &HCEngineVGui_Paint);
 }
 
 void DetachCEngineVGuiHooks()
 {
-	DetourDetach((LPVOID*)&CEngineVGui_Paint, &HCEngineVGui_Paint);
+	//DetourDetach((LPVOID*)&CEngineVGui_Paint, &HCEngineVGui_Paint);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

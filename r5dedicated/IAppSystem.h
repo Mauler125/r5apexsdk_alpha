@@ -19,10 +19,10 @@ namespace
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-std::int64_t HIAppSystem_Main(std::int64_t a1, std::int64_t a2);
-char HIAppSystem_Create(std::int64_t a1);
+std::int64_t HIApplication_Main(std::int64_t a1, std::int64_t a2);
+char HIApplication_Create(std::int64_t a1);
 
-void AttachIAppSystemHooks();
-void DetachIAppSystemHooks();
+void AttachIApplicationHooks();
+void DetachIApplicationHooks();
 
 ///////////////////////////////////////////////////////////////////////////////

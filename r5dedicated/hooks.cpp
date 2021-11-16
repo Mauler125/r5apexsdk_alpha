@@ -30,7 +30,7 @@ void InstallHooks()
 
 	///////////////////////////////////////////////////////////////////////////////
 	// Hook functions
-	AttachIAppSystemHooks();
+	AttachIApplicationHooks();
 	AttachCBaseClientHooks();
 	AttachCBaseFileSystemHooks();
 	AttachCHostStateHooks();
@@ -67,7 +67,7 @@ void RemoveHooks()
 
 	///////////////////////////////////////////////////////////////////////////////
 	// Unhook functions
-	DetachIAppSystemHooks();
+	DetachIApplicationHooks();
 	DetachCBaseClientHooks();
 	DetachCBaseFileSystemHooks();
 	DetachCHostStateHooks();
