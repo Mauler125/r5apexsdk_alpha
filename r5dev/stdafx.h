@@ -4,6 +4,7 @@
 #define WIN32_LEAN_AND_MEAN // Prevent winsock2 redefinition.
 #include <windows.h>
 #include <detours.h>
+#include <idetour.h>
 #include <WinSock2.h>
 #include <thread>
 #include <fstream>
@@ -38,52 +39,13 @@
 #include "httplib.h"
 #include "json.hpp"
 
-class IDetour
-{
-public:
-	virtual ~IDetour() { ; }
-	virtual void debug() = 0;
-	virtual void attach() = 0;
-	virtual void detach() = 0;
-};
-
 namespace
 {
 	Module g_mGameDll            = Module("r5apex.exe");
 	Module g_mRadVideoToolsDll   = Module("bink2w64.dll");
 	Module g_mRadAudioDecoderDll = Module("binkawin64.dll");
 	Module g_mRadAudioSystemDll  = Module("mileswin64.dll");
-
-	std::vector<IDetour*> vdetour;
-	std::int64_t ppadding = 0;
-
-	size_t addTest(IDetour* id)
-	{
-		vdetour.push_back(id);
-		return vdetour.size();
-	}
 }
-
-#define XREGISTER2(x,y)	static size_t dummy_reg_##y = addTest( new x() );
-#define XREGISTER(x,y)	XREGISTER2(x, y)
-#define REGISTER(x)		XREGISTER(x, __LINE__)
-
-class H : public IDetour
-{
-	virtual void attach()
-	{
-		//
-	}
-	virtual void detach()
-	{
-		//
-	}
-	virtual void debug()
-	{
-		//
-	}
-};
-REGISTER(H);
 
 //#include "address.h"
 /*
