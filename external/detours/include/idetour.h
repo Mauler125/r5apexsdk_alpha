@@ -1,4 +1,4 @@
-#define XREGISTER2(x,y)	static size_t dummy_reg_##y = addTest( new x() );
+#define XREGISTER2(x,y)	static size_t dummy_reg_##y = AddDetour( new x() );
 #define XREGISTER(x,y)	XREGISTER2(x, y)
 #define REGISTER(x)		XREGISTER(x, __LINE__)
 
@@ -14,11 +14,9 @@ public:
 namespace
 {
 	std::vector<IDetour*> vdetour;
-	std::int64_t ppadding = 0;
-
-	size_t addTest(IDetour* id)
+	size_t AddDetour(IDetour* idtr)
 	{
-		vdetour.push_back(id);
+		vdetour.push_back(idtr);
 		return vdetour.size();
 	}
 }
