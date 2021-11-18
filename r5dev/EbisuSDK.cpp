@@ -19,9 +19,9 @@ void HEbisuSDK_Init()
 		}
 	}
 
-	*(char*)g_bEbisuSDKInitialized.GetPtr()     = (char)0x1; // <- 1st Origin boolean check
-	*(char*)g_bEbisuSDKCvarInitialized.GetPtr() = (char)0x1; // <- 2nd Origin boolean check
-	*(char*)g_qEbisuSDKCvarInitialized.GetPtr() = (char)0x1; // <- 3rd Origin boolean check
+	*(char*)g_bEbisuSDKInitialized.GetPtr()     = (char)0x1; // <- 1st EbisuSDK check
+	*(char*)g_bEbisuSDKCvarInitialized.GetPtr() = (char)0x1; // <- 2nd EbisuSDK check
+	*(char*)g_qEbisuSDKCvarInitialized.GetPtr() = (char)0x1; // <- 3rd EbisuSDK check
 	memcpy((char*)g_sPlayerName.GetPtr(), sNameBuf, sizeof(sNameBuf));
 }
 
