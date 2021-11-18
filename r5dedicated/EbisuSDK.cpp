@@ -20,12 +20,12 @@ void HEbisuSDK_Init()
 	*(char*)(ofs004) = (char)0x0; // <- TODO: Enforces Necleus cvar's when not equal to 0
 }
 
-void AttachEbisuSDKHooks()
+void EbisuSDK_Attach()
 {
 	//
 }
 
-void DetachEbisuSDKHooks()
+void EbisuSDK_Detach()
 {
 	//
 }

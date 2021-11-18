@@ -309,6 +309,7 @@
     <ClInclude Include="..\shared\include\json.hpp" />
     <ClInclude Include="..\shared\include\serverlisting.h" />
     <ClInclude Include="..\shared\include\utility.h" />
+    <ClInclude Include="baseclientstate.h" />
     <ClInclude Include="basefilesystem.h" />
     <ClInclude Include="basetypes.h" />
     <ClInclude Include="ButtonCode.h" />
@@ -389,6 +390,7 @@
     <ClCompile Include="..\shared\bansystem.cpp" />
     <ClCompile Include="..\shared\serverlisting.cpp" />
     <ClCompile Include="..\shared\utility.cpp" />
+    <ClCompile Include="baseclientstate.cpp" />
     <ClCompile Include="basefilesystem.cpp" />
     <ClCompile Include="CBaseClient.cpp" />
     <ClCompile Include="CClient.cpp" />

@@ -149,6 +149,9 @@
     <Filter Include="sdk\vgui\CMatSystemSurface">
       <UniqueIdentifier>{59d90bcb-740d-42bd-a10f-92ca1789cce8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sdk\client\CClientState">
+      <UniqueIdentifier>{9c40bf21-4533-4066-bd96-0dff3ce96f19}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\shared\utility.cpp">
@@ -291,6 +294,9 @@
     </ClCompile>
     <ClCompile Include="opcptc.cpp">
       <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="baseclientstate.cpp">
+      <Filter>sdk\client\CClientState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -758,6 +764,9 @@
     </ClInclude>
     <ClInclude Include="opcptc.h">
       <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="baseclientstate.h">
+      <Filter>sdk\client\CClientState</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

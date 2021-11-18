@@ -81,7 +81,7 @@ void InstallOpcodes()
 	//-------------------------------------------------------------------------
 	// CSHADERSYSTEM
 	//-------------------------------------------------------------------------
-	//gCShaderSystem_Init.Patch({ 0xC3 });                                  // FUN --> RET | Return early in 'CShaderSystem::Init' to prevent initialization.
+	//gCShaderSystem_Init.Patch({ 0xC3 });                                   // FUN --> RET | Return early in 'CShaderSystem::Init' to prevent initialization.
 	gCShaderSystem__9.Offset(0x3).Patch({ 0xE9, 0x95, 0x03, 0x00, 0x00 }); // Unnecessary CShaderSystem call?
 
 	//-------------------------------------------------------------------------
