@@ -51,12 +51,12 @@ bool HIVEngineServer_PersistenceAvailable(std::int64_t thisptr, int index)
 	return IVEngineServer_PersistenceAvailable(thisptr, index);
 }
 
-void AttachIVEngineServerHooks()
+void IVEngineServer_Attach()
 {
 	DetourAttach((LPVOID*)&IVEngineServer_PersistenceAvailable, &HIVEngineServer_PersistenceAvailable);
 }
 
-void DetachIVEngineServerHooks()
+void IVEngineServer_Detach()
 {
 	DetourDetach((LPVOID*)&IVEngineServer_PersistenceAvailable, &HIVEngineServer_PersistenceAvailable);
 }

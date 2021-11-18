@@ -44,8 +44,8 @@ namespace
 ///////////////////////////////////////////////////////////////////////////////
 void HCHostState_FrameUpdate(void* rcx, void* rdx, float time);
 
-void AttachCHostStateHooks();
-void DetachCHostStateHooks();
+void CHostState_Attach();
+void CHostState_Detach();
 
 ///////////////////////////////////////////////////////////////////////////////
 extern CHostState* g_pHostState;

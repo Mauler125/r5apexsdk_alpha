@@ -93,7 +93,7 @@ namespace
 bool HConCommand_IsFlagSet(ConCommandBase* cmd, int flag);
 void ConCommand_InitConCommand();
 
-void AttachConCommandHooks();
-void DetachConCommandHooks();
+void ConCommand_Attach();
+void ConCommand_Detach();
 
 ///////////////////////////////////////////////////////////////////////////////

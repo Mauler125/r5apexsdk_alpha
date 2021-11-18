@@ -105,12 +105,12 @@ void ConCommand_InitConCommand()
 	void* netGenKeyCommand = ConCommand_RegisterCommand("net_generatekey", "Generates and sets a random base64 net key.", 0, NET_GenerateKey_Callback, nullptr);
 }
 
-void AttachConCommandHooks()
+void ConCommand_Attach()
 {
 	DetourAttach((LPVOID*)&ConCommand_IsFlagSet, &HConCommand_IsFlagSet);
 }
 
-void DetachConCommandHooks()
+void ConCommand_Detach()
 {
 	DetourDetach((LPVOID*)&ConCommand_IsFlagSet, &HConCommand_IsFlagSet);
 }

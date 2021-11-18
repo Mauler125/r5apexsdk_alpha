@@ -20,5 +20,5 @@ namespace
 std::int64_t HIApplication_Main(std::int64_t a1, std::int64_t a2);
 char HIApplication_Create(std::int64_t a1);
 
-void AttachIApplicationHooks();
-void DetachIApplicationHooks();
+void IApplication_Attach();
+void IApplication_Detach();

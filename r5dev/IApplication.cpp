@@ -20,13 +20,13 @@ char HIApplication_Create(std::int64_t a1)
 	return IAppSystem_Create(a1);
 }
 
-void AttachIApplicationHooks()
+void IApplication_Attach()
 {
 	DetourAttach((LPVOID*)&IAppSystem_Main, &HIApplication_Main);
 	DetourAttach((LPVOID*)&IAppSystem_Create, &HIApplication_Create);
 }
 
-void DetachIApplicationHooks()
+void IApplication_Detach()
 {
 	DetourDetach((LPVOID*)&IAppSystem_Main, &HIApplication_Main);
 	DetourDetach((LPVOID*)&IAppSystem_Create, &HIApplication_Create);

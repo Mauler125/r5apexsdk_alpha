@@ -105,12 +105,12 @@ std::array<int, 3> CLogSystem::GetLogColorForType(LogType_t type)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void AttachCEngineVGuiHooks()
+void CEngineVGui_Attach()
 {
 	//DetourAttach((LPVOID*)&CEngineVGui_Paint, &HCEngineVGui_Paint);
 }
 
-void DetachCEngineVGuiHooks()
+void CEngineVGui_Detach()
 {
 	//DetourDetach((LPVOID*)&CEngineVGui_Paint, &HCEngineVGui_Paint);
 }

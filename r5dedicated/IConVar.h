@@ -135,8 +135,8 @@ bool HIConVar_IsFlagSet(ConVar* cvar, int flag);
 void IConVar_InitConVar();
 void IConVar_ClearHostNames();
 
-void AttachIConVarHooks();
-void DetachIConVarHooks();
+void IConVar_Attach();
+void IConVar_Detach();
 
 ///////////////////////////////////////////////////////////////////////////////
 extern CCVar* g_pCvar;

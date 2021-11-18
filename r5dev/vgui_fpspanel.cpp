@@ -8,12 +8,12 @@ ConVar* HCFPSPanel_Paint(std::int64_t thisptr)
 	return CFPSPanel_Paint(thisptr);
 }
 
-void AttachCFPSPanelHooks()
+void CFPSPanel_Attach()
 {
-	//DetourAttach((LPVOID*)&CFPSPanel_Paint, &HCFPSPanel_Paint);
+	DetourAttach((LPVOID*)&CFPSPanel_Paint, &HCFPSPanel_Paint);
 }
 
-void DetachCFPSPanelHooks()
+void CFPSPanel_Detach()
 {
 	DetourDetach((LPVOID*)&CFPSPanel_Paint, &HCFPSPanel_Paint);
 }

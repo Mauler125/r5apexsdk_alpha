@@ -67,8 +67,8 @@ void HNET_GenerateKey();
 void HNET_PrintFunc(const char* fmt, ...);
 void NET_DisconnectClient(CClient* client, int index, const char* reason, std::uint8_t unk1, char unk2);
 
-void AttachCNetChanHooks();
-void DetachCNetChanHooks();
+void CNetChan_Attach();
+void CNetChan_Detach();
 
 ///////////////////////////////////////////////////////////////////////////////
 extern bool g_bTraceNetChannel;

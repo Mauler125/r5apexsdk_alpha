@@ -61,8 +61,8 @@ bool HSQVM_LoadScript(void* sqvm, const char* script_path, const char* script_na
 void HSQVM_RegisterFunc(void* sqvm, const char* name, const char* helpString, const char* retValType, const char* argTypes, void* funcPtr);
 int HSQVM_NativeTest(void* sqvm);
 
-void AttachSQVMHooks();
-void DetachSQVMHooks();
+void SQVM_Attach();
+void SQVM_Detach();
 
 ///////////////////////////////////////////////////////////////////////////////
 extern bool g_bSQVM_WarnFuncCalled;

@@ -215,12 +215,12 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 	//	originalFrameUpdate(rcx, rdx, time);
 }
 
-void AttachCHostStateHooks()
+void CHostState_Attach()
 {
 	DetourAttach((LPVOID*)&CHostState_FrameUpdate, &HCHostState_FrameUpdate);
 }
 
-void DetachCHostStateHooks()
+void CHostState_Detach()
 {
 	DetourDetach((LPVOID*)&CHostState_FrameUpdate, &HCHostState_FrameUpdate);
 }

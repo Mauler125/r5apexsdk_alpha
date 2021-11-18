@@ -9,5 +9,5 @@ namespace
 	ConVar* (*CFPSPanel_Paint)(std::int64_t a1) = (ConVar* (*)(std::int64_t))p_CFPSPanel_Paint.GetPtr(); /*48 8B C4 55 56 41 ?? 48 8D A8 ?? FD FF FF 48 81 EC 80*/
 }
 
-void AttachCFPSPanelHooks();
-void DetachCFPSPanelHooks();
+void CFPSPanel_Attach();
+void CFPSPanel_Detach();

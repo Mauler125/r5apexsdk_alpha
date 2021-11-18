@@ -46,5 +46,5 @@ namespace
 void __fastcall HFrameStageNotify(CHLClient* rcx, ClientFrameStage_t curStage);
 void PatchNetVarConVar();
 
-void AttachCHLClientHooks();
-void DetachCHLClientHooks();
+void CHLClient_Attach();
+void CHLClient_Detach();

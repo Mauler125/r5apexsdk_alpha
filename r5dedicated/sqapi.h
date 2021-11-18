@@ -46,5 +46,5 @@ void hsq_arrayappend(void* sqvm, int idx);
 void hsq_newtable(void* sqvm);
 void hsq_newslot(void* sqvm, int idx);
 
-void AttachSQAPIHooks();
-void DetachSQAPIHooks();
+void SQAPI_Attach();
+void SQAPI_Detach();

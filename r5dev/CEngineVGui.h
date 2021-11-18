@@ -49,8 +49,8 @@ namespace
 
 ///////////////////////////////////////////////////////////////////////////////
 int HCEngineVGui_Paint(void* thisptr, int mode);
-void AttachCEngineVGuiHooks();
-void DetachCEngineVGuiHooks();
+void CEngineVGui_Attach();
+void CEngineVGui_Detach();
 
 ///////////////////////////////////////////////////////////////////////////////
 extern CLogSystem g_pLogSystem;

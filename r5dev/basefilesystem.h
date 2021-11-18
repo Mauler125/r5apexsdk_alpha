@@ -21,5 +21,5 @@ namespace
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void AttachCBaseFileSystemHooks();
-void DetachCBaseFileSystemHooks();
+void CBaseFileSystem_Attach();
+void CBaseFileSystem_Detach();

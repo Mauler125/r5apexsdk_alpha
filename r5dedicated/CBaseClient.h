@@ -11,5 +11,5 @@ namespace
 ///////////////////////////////////////////////////////////////////////////////
 std::int64_t* HCBaseClient_Clear(std::int64_t client);
 
-void AttachCBaseClientHooks();
-void DetachCBaseClientHooks();
+void CBaseClient_Attach();
+void CBaseClient_Detach();

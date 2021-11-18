@@ -11,5 +11,5 @@ namespace
 ///////////////////////////////////////////////////////////////////////////////
 int HSys_Error_Internal(char* fmt, va_list args);
 
-void AttachSysDllHooks();
-void DetachSysDllHooks();
+void SysDll_Attach();
+void SysDll_Detach();

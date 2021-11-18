@@ -50,12 +50,12 @@ void HCBaseFileSystem_Warning(void* thisptr, FileWarningLevel_t level, const cha
 	Items.push_back(Strdup((const char*)c));
 }
 
-void AttachCBaseFileSystemHooks()
+void CBaseFileSystem_Attach()
 {
 	DetourAttach((LPVOID*)&CBaseFileSystem_Warning, &HCBaseFileSystem_Warning);
 }
 
-void DetachCBaseFileSystemHooks()
+void CBaseFileSystem_Detach()
 {
 	DetourDetach((LPVOID*)&CBaseFileSystem_Warning, &HCBaseFileSystem_Warning);
 }

@@ -11,8 +11,8 @@ namespace
 ///////////////////////////////////////////////////////////////////////////////
 bool HIVEngineServer_PersistenceAvailable(std::int64_t thisptr, int client);
 
-void AttachIVEngineServerHooks();
-void DetachIVEngineServerHooks();
+void IVEngineServer_Attach();
+void IVEngineServer_Detach();
 
 ///////////////////////////////////////////////////////////////////////////////
 extern bool g_bIsPersistenceVarSet[128];

@@ -62,8 +62,8 @@ void HSQVM_RegisterFunction(void* sqvm, const char* name, const char* helpString
 int HSQVM_NativeTest(void* sqvm);
 
 
-void AttachSQVMHooks();
-void DetachSQVMHooks();
+void SQVM_Attach();
+void SQVM_Detach();
 
 ///////////////////////////////////////////////////////////////////////////////
 extern bool g_bSQVM_WarnFuncCalled;

@@ -35,5 +35,5 @@ enum class SYS_DLL : int
 void HSys_Error(char* fmt, ...);
 void Sys_Print(SYS_DLL idx, const char* fmt, ...);
 
-void AttachSysUtilsHooks();
-void DetachSysUtilsHooks();
+void SysUtils_Attach();
+void SysUtils_Detach();

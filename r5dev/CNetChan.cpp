@@ -130,14 +130,14 @@ void NET_DisconnectClient(CClient* client, int index, const char* reason, uint8_
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void AttachCNetChanHooks()
+void CNetChan_Attach()
 {
 	DetourAttach((LPVOID*)&NET_PrintFunc, &HNET_PrintFunc);
 	DetourAttach((LPVOID*)&NET_ReceiveDatagram, &HNET_ReceiveDatagram);
 	DetourAttach((LPVOID*)&NET_SendDatagram, &HNET_SendDatagram);
 }
 
-void DetachCNetChanHooks()
+void CNetChan_Detach()
 {
 	DetourDetach((LPVOID*)&NET_PrintFunc, &HNET_PrintFunc);
 	DetourDetach((LPVOID*)&NET_ReceiveDatagram, &HNET_ReceiveDatagram);

@@ -10,11 +10,11 @@ std::int64_t* HCBaseClient_Clear(std::int64_t client)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void AttachCBaseClientHooks()
+void CBaseClient_Attach()
 {
 	DetourAttach((LPVOID*)&CBaseClient_Clear, &HCBaseClient_Clear);
 }
-void DetachCBaseClientHooks()
+void CBaseClient_Detach()
 {
 	DetourDetach((LPVOID*)&CBaseClient_Clear, &HCBaseClient_Clear);
 }

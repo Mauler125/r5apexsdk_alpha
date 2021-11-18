@@ -1,3 +1,5 @@
+#include <vector>
+
 #define XREGISTER2(x,y)	static size_t dummy_reg_##y = AddDetour( new x() );
 #define XREGISTER(x,y)	XREGISTER2(x, y)
 #define REGISTER(x)		XREGISTER(x, __LINE__)

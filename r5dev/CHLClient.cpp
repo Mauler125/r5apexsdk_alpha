@@ -107,12 +107,12 @@ void PatchNetVarConVar()
 	}
 }
 
-void AttachCHLClientHooks()
+void CHLClient_Attach()
 {
 	DetourAttach((LPVOID*)&FrameStageNotify, &HFrameStageNotify);
 }
 
-void DetachCHLClientHooks()
+void CHLClient_Detach()
 {
 	DetourDetach((LPVOID*)&FrameStageNotify, &HFrameStageNotify);
 }

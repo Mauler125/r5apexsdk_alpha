@@ -107,13 +107,13 @@ std::int64_t HSys_LoadAsset(const CHAR* lpFileName, std::int64_t a2, LARGE_INTEG
 	return Sys_LoadAsset(lpFileName, a2, a3);
 }
 
-void AttachSysUtilsHooks()
+void SysUtils_Attach()
 {
 	DetourAttach((LPVOID*)&Sys_Error, &HSys_Error);
 	DetourAttach((LPVOID*)&Sys_LoadAsset, &HSys_LoadAsset);
 }
 
-void DetachSysUtilsHooks()
+void SysUtils_Detach()
 {
 	DetourDetach((LPVOID*)&Sys_Error, &HSys_Error);
 	DetourDetach((LPVOID*)&Sys_LoadAsset, &HSys_LoadAsset);

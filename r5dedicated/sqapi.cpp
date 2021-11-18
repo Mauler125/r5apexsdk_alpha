@@ -50,7 +50,7 @@ void hsq_newslot(void* sqvm, int idx)
 	sq_newslot(sqvm, idx);
 }
 
-void AttachSQAPIHooks()
+void SQAPI_Attach()
 {
 	DetourAttach((LPVOID*)&sq_pushbool, &hsq_pushbool);
 	DetourAttach((LPVOID*)&sq_pushstring, &hsq_pushstring);
@@ -61,7 +61,7 @@ void AttachSQAPIHooks()
 	DetourAttach((LPVOID*)&sq_newslot, &hsq_newslot);
 }
 
-void DetachSQAPIHooks()
+void SQAPI_Detach()
 {
 	DetourDetach((LPVOID*)&sq_pushbool, &hsq_pushbool);
 	DetourDetach((LPVOID*)&sq_pushstring, &hsq_pushstring);

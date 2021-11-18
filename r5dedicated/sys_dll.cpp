@@ -15,12 +15,12 @@ int HSys_Error_Internal(char* fmt, va_list args)
 	return Sys_Error_Internal(fmt, args);
 }
 
-void AttachSysDllHooks()
+void SysDll_Attach()
 {
 	DetourAttach((LPVOID*)&Sys_Error_Internal, &HSys_Error_Internal);
 }
 
-void DetachSysDllHooks()
+void SysDll_Detach()
 {
 	DetourDetach((LPVOID*)&Sys_Error_Internal, &HSys_Error_Internal);
 }

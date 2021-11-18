@@ -130,12 +130,12 @@ void IConVar_ClearHostNames()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void AttachIConVarHooks()
+void IConVar_Attach()
 {
 	DetourAttach((LPVOID*)&IConVar_IsFlagSet, &HIConVar_IsFlagSet);
 }
 
-void DetachIConVarHooks()
+void IConVar_Detach()
 {
 	DetourDetach((LPVOID*)&IConVar_IsFlagSet, &HIConVar_IsFlagSet);
 }

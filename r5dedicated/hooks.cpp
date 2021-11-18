@@ -30,18 +30,18 @@ void InstallHooks()
 
 	///////////////////////////////////////////////////////////////////////////////
 	// Hook functions
-	AttachIApplicationHooks();
-	AttachCBaseClientHooks();
-	AttachCBaseFileSystemHooks();
-	AttachCHostStateHooks();
-	AttachCNetChanHooks();
-	AttachConCommandHooks();
-	AttachIConVarHooks();
-	AttachIVEngineServerHooks();
-	AttachSQAPIHooks();
-	AttachSQVMHooks();
-	AttachSysDllHooks();
-	AttachSysUtilsHooks();
+	IApplication_Attach();
+	CBaseClient_Attach();
+	CBaseFileSystem_Attach();
+	CHostState_Attach();
+	CNetChan_Attach();
+	ConCommand_Attach();
+	IConVar_Attach();
+	IVEngineServer_Attach();
+	SQAPI_Attach();
+	SQVM_Attach();
+	SysDll_Attach();
+	SysUtils_Attach();
 
 	///////////////////////////////////////////////////////////////////////////////
 	// Patch instructions
@@ -67,18 +67,18 @@ void RemoveHooks()
 
 	///////////////////////////////////////////////////////////////////////////////
 	// Unhook functions
-	DetachIApplicationHooks();
-	DetachCBaseClientHooks();
-	DetachCBaseFileSystemHooks();
-	DetachCHostStateHooks();
-	DetachCNetChanHooks();
-	DetachConCommandHooks();
-	DetachIConVarHooks();
-	DetachIVEngineServerHooks();
-	DetachSQAPIHooks();
-	DetachSQVMHooks();
-	DetachSysDllHooks();
-	DetachSysUtilsHooks();
+	IApplication_Detach();
+	CBaseClient_Detach();
+	CBaseFileSystem_Detach();
+	CHostState_Detach();
+	CNetChan_Detach();
+	ConCommand_Detach();
+	IConVar_Detach();
+	IVEngineServer_Detach();
+	SQAPI_Detach();
+	SQVM_Detach();
+	SysDll_Detach();
+	SysUtils_Detach();
 
 	///////////////////////////////////////////////////////////////////////////////
 	// Commit the transaction

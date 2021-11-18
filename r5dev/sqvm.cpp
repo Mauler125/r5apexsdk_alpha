@@ -265,7 +265,7 @@ void RegisterServerScriptFunctions(void* sqvm)
 	HSQVM_RegisterFunction(sqvm, "ServerNativeTest", "native server function", "void", "", &HSQVM_NativeTest);
 }
 
-void AttachSQVMHooks()
+void SQVM_Attach()
 {
 	DetourAttach((LPVOID*)&SQVM_PrintFunc, &HSQVM_PrintFunc);
 	DetourAttach((LPVOID*)&SQVM_WarningFunc, &HSQVM_WarningFunc);
@@ -274,7 +274,7 @@ void AttachSQVMHooks()
 	DetourAttach((LPVOID*)&SQVM_LoadScript, &HSQVM_LoadScript);
 }
 
-void DetachSQVMHooks()
+void SQVM_Detach()
 {
 	DetourDetach((LPVOID*)&SQVM_PrintFunc, &HSQVM_PrintFunc);
 	DetourDetach((LPVOID*)&SQVM_WarningFunc, &HSQVM_WarningFunc);
