@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include "basetypes.h"
 
 #define MAKE_3_BYTES_FROM_1_AND_2( x1, x2 ) (( (( std::uint16_t )x2) << 8 ) | (std::uint8_t)(x1))
 extern std::vector<std::string> g_szAllPlaylists;
@@ -23,8 +24,19 @@ enum KeyValuesTypes
 namespace
 {
 	/* ==== KEYVALUES ======================================================================================================================================================= */
+#if defined (GAMEDLL_S0) || defined (GAMEDLL_S1)
+	ADDRESS p_KeyValues_FindKey = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x48\x89\x5C\x24\x10\x48\x89\x6C\x24\x18\x48\x89\x74\x24\x20\x57\x41\x54\x41\x55\x41\x56\x41\x57\x48\x81\xEC\x20\x01\x00\x00\x45", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+	void* (*KeyValues_FindKey)(void* a1, const char* a2, bool a3) = (void* (*)(void*, const char*, bool))p_KeyValues_FindKey.GetPtr(); /*48 89 5C 24 10 48 89 6C 24 18 48 89 74 24 20 57 41 54 41 55 41 56 41 57 48 81 EC 20 01 00 00 45*/
+
+	ADDRESS p_KeyValues_Init = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x40\x53\x48\x83\xEC\x20\x48\x8B\xD9\xC7\x44\x24\x30\xFF\xFF\xFF", "xxxxxxxxxxxxxxxx"); /*40 53 48 83 EC 20 48 8B D9 C7 44 24 30 FF FF FF*/
+	std::int64_t(*KeyValues_Init)(std::int64_t a1, std::int64_t a2, std::int64_t a3, std::int64_t a4) = (std::int64_t(*)(std::int64_t, std::int64_t, std::int64_t, std::int64_t))p_KeyValues_Init.GetPtr();
+#elif defined (GAMEDLL_S2) || defined (GAMEDLL_S3)
 	ADDRESS p_KeyValues_FindKey = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x40\x56\x57\x41\x57\x48\x81\xEC\x00\x00\x00\x00\x45", "xxxxxxxx????x");
 	void* (*KeyValues_FindKey)(void* a1, const char* a2, bool a3) = (void* (*)(void*, const char*, bool))p_KeyValues_FindKey.GetPtr(); /*40 56 57 41 57 48 81 EC 30 01 00 00 45 0F B6 F8*/
+
+	ADDRESS p_KeyValues_Init = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x40\x53\x48\x83\xEC\x20\x48\x8B\x05\x00\x00\x00\x01\x48\x8B\xD9\x4C\x8B\xC2", "xxxxxxxxx???xxxxxxx"); /*40 53 48 83 EC 20 48 8B 05 ?? ?? ?? 01 48 8B D9 4C 8B C2*/
+	std::int64_t (*KeyValues_Init)(std::int64_t a1, std::int64_t a2, std::int64_t a3, std::int64_t a4) = (std::int64_t (*)(std::int64_t, std::int64_t, std::int64_t, std::int64_t))p_KeyValues_Init.GetPtr();
+#endif
 }
 
 class CKeyValuesSystem // VTABLE @ 0x1413AA1E8 in R5pc_r5launch_N1094_CL456479_2019_10_30_05_20_PM

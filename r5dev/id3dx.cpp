@@ -9,7 +9,7 @@
 #include "CServerBrowser.h"
 
 /*---------------------------------------------------------------------------------
- * _id3dx.cpp
+ * _id3dx.c
  *---------------------------------------------------------------------------------*/
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -58,7 +58,7 @@ LRESULT CALLBACK HwndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	if (uMsg == WM_KEYDOWN)
 	{
-		if (wParam == VK_OEM_3 || wParam == VK_INSERT) // For everyone without a US keyboard layout.
+		if (wParam == VK_OEM_3 || wParam == VK_INSERT) // For non-US keyboard layouts.
 		{
 			g_bShowConsole = !g_bShowConsole;
 		}
@@ -263,21 +263,22 @@ void DrawImGui()
 
 	ImGui::NewFrame();
 
-	static CInputSystem* InputSystem = *reinterpret_cast<CInputSystem**>(0x14D40B380);
-
-	if (g_bShowConsole)
+	if (g_bClassInitialized)
 	{
-		InputSystem->EnableInput(false); // Disable input to game when console is drawn.
-		DrawConsole(&bShowConsole);
-	}
-	if (g_bShowBrowser)
-	{
-		InputSystem->EnableInput(false); // Disable input to game when browser is drawn.
-		DrawBrowser(&bShowBrowser);
-	}
-	if (!g_bShowConsole && !g_bShowBrowser)
-	{
-		InputSystem->EnableInput(true); // Enable input to game when both are not drawn.
+		if (g_bShowConsole)
+		{
+			g_pInputSystem->EnableInput(false); // Disable input to game when console is drawn.
+			DrawConsole(&bShowConsole);
+		}
+		if (g_bShowBrowser)
+		{
+			g_pInputSystem->EnableInput(false); // Disable input to game when browser is drawn.
+			DrawBrowser(&bShowBrowser);
+		}
+		if (!g_bShowConsole && !g_bShowBrowser)
+		{
+			g_pInputSystem->EnableInput(true); // Enable input to game when both are not drawn.
+		}
 	}
 
 	ImGui::EndFrame();

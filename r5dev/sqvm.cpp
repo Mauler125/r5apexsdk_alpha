@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "logdef.h"
+#include "basetypes.h"
 #include "sys_utils.h"
 #include "sqvm.h"
 #include "IConVar.h"
@@ -13,11 +14,15 @@
 //---------------------------------------------------------------------------------
 void* HSQVM_PrintFunc(void* sqvm, char* fmt, ...)
 {
+#ifdef GAMEDLL_S3
 	int vmIdx = *(int*)((std::uintptr_t)sqvm + 0x18);
+#elif // TODO [ AMOS ]: nothing equal to 'rdx + 18h' exist in the vm pointers for S0, S1 and S2.
+	int vmIdx = 3;
+#endif
 	static bool initialized = false;
 
 	static char buf[1024];
-	static std::string vmType[3] = { "Script(S):", "Script(C):", "Script(U):" };
+	static std::string vmType[4] = { "Script(S):", "Script(C):", "Script(U):", "Script(X):" };
 
 	static auto iconsole = spdlog::stdout_logger_mt("sqvm_print_iconsole"); // in-game console.
 	static auto wconsole = spdlog::stdout_logger_mt("sqvm_print_wconsole"); // windows console.
@@ -83,13 +88,17 @@ std::int64_t HSQVM_WarningFunc(void* sqvm, int a2, int a3, int* stringSize, void
 	}
 
 	static bool initialized = false;
-	static std::string vmType[3] = { "Script(S): WARNING: ", "Script(C): WARNING: ", "Script(U): WARNING: " };
+	static std::string vmType[4] = { "Script(S): WARNING: ", "Script(C): WARNING: ", "Script(U): WARNING: ", "Script(X): WARNING: " };
 
 	static auto iconsole = spdlog::stdout_logger_mt("sqvm_warn_iconsole"); // in-game console.
 	static auto wconsole = spdlog::stdout_logger_mt("sqvm_warn_wconsole"); // windows console.
 	static auto sqlogger = spdlog::basic_logger_mt("sqvm_warn_logger", "platform\\logs\\sqvm_warn.log"); // file logger.
 
+#ifdef GAMEDLL_S3
 	int vmIdx = *(int*)((std::uintptr_t)sqvm + 0x18);
+#elif // TODO [ AMOS ]: nothing equal to 'rdx + 18h' exist in the vm pointers for S0, S1 and S2.
+	int vmIdx = 3;
+#endif
 	std::string vmStr = vmType[vmIdx].c_str();
 
 	g_spd_sqvm_w_oss.str("");

@@ -11,8 +11,7 @@ bool HIVEngineServer_PersistenceAvailable(std::int64_t thisptr, int index)
 {
 	CClient* client = g_pClient->GetClientInstance(index); // Get client instance.
 	std::uintptr_t targetInstance = (std::uintptr_t)client;
-	std::uintptr_t persistenceVar = 0x5BC;                 // TODO: Add to CClient struct.
-	*(char*)(targetInstance + persistenceVar) = (char)0x5; // Set the client instance to 'ready'.
+	*(char*)(targetInstance + g_dwPersistenceVar) = (char)0x5; // Set the client instance to 'ready'.
 
 	if (!g_bIsPersistenceVarSet[index] && g_pCvar->FindVar("sv_showconnecting")->m_iValue > 0)
 	{

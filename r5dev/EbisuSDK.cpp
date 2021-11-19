@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "EbisuSDK.h"
+#include "CClient.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: sets the player name in the OriginSDK struct from the cfg file

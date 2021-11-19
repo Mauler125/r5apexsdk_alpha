@@ -315,6 +315,9 @@
     <ClInclude Include="ButtonCode.h" />
     <ClInclude Include="CBaseClient.h" />
     <ClInclude Include="CClient.h" />
+    <ClInclude Include="cvar.h" />
+    <ClInclude Include="IAppSystem.h" />
+    <ClInclude Include="stryder.h" />
     <ClInclude Include="vgui.h" />
     <ClInclude Include="vgui_fpspanel.h" />
     <ClInclude Include="classes.h" />
@@ -394,6 +397,9 @@
     <ClCompile Include="basefilesystem.cpp" />
     <ClCompile Include="CBaseClient.cpp" />
     <ClCompile Include="CClient.cpp" />
+    <ClCompile Include="cvar.cpp" />
+    <ClCompile Include="IAppSystem.cpp" />
+    <ClCompile Include="stryder.cpp" />
     <ClCompile Include="vgui_fpspanel.cpp" />
     <ClCompile Include="classes.cpp" />
     <ClCompile Include="IConVarCallback.cpp" />

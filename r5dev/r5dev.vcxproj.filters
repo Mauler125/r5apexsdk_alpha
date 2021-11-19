@@ -140,17 +140,11 @@
     <Filter Include="sdk\public\Common">
       <UniqueIdentifier>{9aae9e20-a28d-4e5c-a68a-04ba4441e401}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sdk\vgui\CEngineVgui">
-      <UniqueIdentifier>{db82a2cc-bf26-4d56-8ba9-d4e687603529}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sdk\vgui\CFPSPanel">
-      <UniqueIdentifier>{f50d508e-1505-44d2-9a25-db754a62f53a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sdk\vgui\CMatSystemSurface">
-      <UniqueIdentifier>{59d90bcb-740d-42bd-a10f-92ca1789cce8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="sdk\client\CClientState">
       <UniqueIdentifier>{9c40bf21-4533-4066-bd96-0dff3ce96f19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sdk\stryder">
+      <UniqueIdentifier>{b96b2e83-a799-48f9-b10c-05314b04b1cc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -235,9 +229,6 @@
     <ClCompile Include="..\external\imgui\src\imgui_stdlib.cpp">
       <Filter>shared\libraries\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="CEngineVGui.cpp">
-      <Filter>sdk\vgui\CEngineVgui</Filter>
-    </ClCompile>
     <ClCompile Include="CInputSystem.cpp">
       <Filter>sdk\engine\CInputSystem</Filter>
     </ClCompile>
@@ -258,9 +249,6 @@
     </ClCompile>
     <ClCompile Include="..\shared\bansystem.cpp">
       <Filter>shared</Filter>
-    </ClCompile>
-    <ClCompile Include="CMatSystemSurface.cpp">
-      <Filter>sdk\vgui\CMatSystemSurface</Filter>
     </ClCompile>
     <ClCompile Include="basefilesystem.cpp">
       <Filter>sdk\vpc\CBaseFileSystem</Filter>
@@ -283,9 +271,6 @@
     <ClCompile Include="IConVarCallback.cpp">
       <Filter>sdk\engine\IConVar</Filter>
     </ClCompile>
-    <ClCompile Include="vgui_fpspanel.cpp">
-      <Filter>sdk\vgui\CFPSPanel</Filter>
-    </ClCompile>
     <ClCompile Include="..\shared\serverlisting.cpp">
       <Filter>shared</Filter>
     </ClCompile>
@@ -297,6 +282,24 @@
     </ClCompile>
     <ClCompile Include="baseclientstate.cpp">
       <Filter>sdk\client\CClientState</Filter>
+    </ClCompile>
+    <ClCompile Include="cvar.cpp">
+      <Filter>sdk\engine\IConVar</Filter>
+    </ClCompile>
+    <ClCompile Include="IAppSystem.cpp">
+      <Filter>sdk\launcher</Filter>
+    </ClCompile>
+    <ClCompile Include="CEngineVGui.cpp">
+      <Filter>sdk\vgui</Filter>
+    </ClCompile>
+    <ClCompile Include="CMatSystemSurface.cpp">
+      <Filter>sdk\vgui</Filter>
+    </ClCompile>
+    <ClCompile Include="vgui_fpspanel.cpp">
+      <Filter>sdk\vgui</Filter>
+    </ClCompile>
+    <ClCompile Include="stryder.cpp">
+      <Filter>sdk\stryder</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -690,9 +693,6 @@
     <ClInclude Include="..\shared\include\address.h">
       <Filter>shared\include</Filter>
     </ClInclude>
-    <ClInclude Include="CEngineVGui.h">
-      <Filter>sdk\vgui\CEngineVgui</Filter>
-    </ClInclude>
     <ClInclude Include="CInputSystem.h">
       <Filter>sdk\engine\CInputSystem</Filter>
     </ClInclude>
@@ -710,9 +710,6 @@
     </ClInclude>
     <ClInclude Include="IVEngineClient.h">
       <Filter>sdk\public\IVEngineClient</Filter>
-    </ClInclude>
-    <ClInclude Include="CMatSystemSurface.h">
-      <Filter>sdk\vgui\CMatSystemSurface</Filter>
     </ClInclude>
     <ClInclude Include="protocol.h">
       <Filter>sdk\public\Common</Filter>
@@ -750,9 +747,6 @@
     <ClInclude Include="ButtonCode.h">
       <Filter>sdk\public\Common</Filter>
     </ClInclude>
-    <ClInclude Include="vgui_fpspanel.h">
-      <Filter>sdk\vgui\CFPSPanel</Filter>
-    </ClInclude>
     <ClInclude Include="vgui.h">
       <Filter>sdk\vgui</Filter>
     </ClInclude>
@@ -767,6 +761,24 @@
     </ClInclude>
     <ClInclude Include="baseclientstate.h">
       <Filter>sdk\client\CClientState</Filter>
+    </ClInclude>
+    <ClInclude Include="cvar.h">
+      <Filter>sdk\engine\IConVar</Filter>
+    </ClInclude>
+    <ClInclude Include="IAppSystem.h">
+      <Filter>sdk\launcher</Filter>
+    </ClInclude>
+    <ClInclude Include="CEngineVGui.h">
+      <Filter>sdk\vgui</Filter>
+    </ClInclude>
+    <ClInclude Include="CMatSystemSurface.h">
+      <Filter>sdk\vgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vgui_fpspanel.h">
+      <Filter>sdk\vgui</Filter>
+    </ClInclude>
+    <ClInclude Include="stryder.h">
+      <Filter>sdk\stryder</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

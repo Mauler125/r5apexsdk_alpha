@@ -39,8 +39,7 @@ void CLogSystem::Update()
 	{
 		return;
 	}
-	static void* pCMatSystemSurface = ADDRESS(0x14D40B360).RCast<void* (*)()>();
-	if (!pCMatSystemSurface)
+	if (!g_pMatSystemSurface)
 	{
 		return;
 	}
@@ -53,14 +52,14 @@ void CLogSystem::Update()
 		{
 			if (i < g_pCvar->FindVar("cl_consoleoverlay_lines")->m_iValue)
 			{
-				float fadepct = fminf(static_cast<float>(m_vLogs[i].Ticks) / 255.f, 4.0); // TODO: CREATE CVAR.
-				float ptc = static_cast<int>(ceilf(fadepct * 255.f));
+				float fadepct = fminf(static_cast<float>(m_vLogs[i].Ticks) / 255.f, 4.0); // TODO [ AMOS ]: CREATE CONVAR.
+				float ptc = static_cast<int>(ceilf(fadepct * 100.f));
 				int alpha = static_cast<int>(ptc);
 				int y = (g_pCvar->FindVar("cl_consoleoverlay_offset_y")->m_iValue + (fontHeight * i));
 				int x = g_pCvar->FindVar("cl_consoleoverlay_offset_x")->m_iValue;
 
 				std::array<int, 3> color = GetLogColorForType(m_vLogs[i].Type);
-				CMatSystemSurface_DrawColoredText(pCMatSystemSurface, 0x13, fontHeight, x, y, color[0], color[1], color[2], alpha, m_vLogs[i].Message.c_str());
+				CMatSystemSurface_DrawColoredText(g_pMatSystemSurface, 0x13, fontHeight, x, y, color[0], color[1], color[2], alpha, m_vLogs[i].Message.c_str());
 			}
 			else
 			{
