@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "id3dx.h"
 #include "input.h"
-#include "classes.h"
-#include "console.h"
 #include "sys_utils.h"
 #include "CInputSystem.h"
 #include "CGameConsole.h"
@@ -263,22 +261,19 @@ void DrawImGui()
 
 	ImGui::NewFrame();
 
-	if (g_bClassInitialized)
+	if (g_bShowConsole)
 	{
-		if (g_bShowConsole)
-		{
-			g_pInputSystem->EnableInput(false); // Disable input to game when console is drawn.
-			DrawConsole(&bShowConsole);
-		}
-		if (g_bShowBrowser)
-		{
-			g_pInputSystem->EnableInput(false); // Disable input to game when browser is drawn.
-			DrawBrowser(&bShowBrowser);
-		}
-		if (!g_bShowConsole && !g_bShowBrowser)
-		{
-			g_pInputSystem->EnableInput(true); // Enable input to game when both are not drawn.
-		}
+		g_pInputSystem->EnableInput(false); // Disable input to game when console is drawn.
+		DrawConsole(&bShowConsole);
+	}
+	if (g_bShowBrowser)
+	{
+		g_pInputSystem->EnableInput(false); // Disable input to game when browser is drawn.
+		DrawBrowser(&bShowBrowser);
+	}
+	if (!g_bShowConsole && !g_bShowBrowser)
+	{
+		g_pInputSystem->EnableInput(true); // Enable input to game when both are not drawn.
 	}
 
 	ImGui::EndFrame();

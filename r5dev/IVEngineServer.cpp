@@ -2,7 +2,7 @@
 #include "IVEngineServer.h"
 #include "CClient.h"
 #include "sys_utils.h"
-#include "IConVar.h"
+#include "cvar.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: sets the persistence var in the CClient instance to 'ready'
@@ -13,7 +13,7 @@ bool HIVEngineServer_PersistenceAvailable(std::int64_t thisptr, int index)
 	std::uintptr_t targetInstance = (std::uintptr_t)client;
 	*(char*)(targetInstance + g_dwPersistenceVar) = (char)0x5; // Set the client instance to 'ready'.
 
-	if (!g_bIsPersistenceVarSet[index] && g_pCvar->FindVar("sv_showconnecting")->m_iValue > 0)
+	if (!g_bIsPersistenceVarSet[index] && sv_showconnecting->m_iValue > 0)
 	{
 		void* clientNamePtr = (void**)(((std::uintptr_t)client->GetNetChan()) + 0x1A8D); // Get client name from netchan.
 		std::string clientName((char*)clientNamePtr, 32);                                // Get full name.

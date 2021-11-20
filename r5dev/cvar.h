@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "basetypes.h"
+#include "IConVar.h"
 
 namespace
 {
@@ -13,3 +14,30 @@ namespace
 	std::int64_t (*CCvar_Disconnect)() = (std::int64_t(*)())p_CCvar_Disconnect.GetPtr(); /*48 83 EC 28 48 8B 0D ? ? ? ? 48 85 C9 74 26 80 3D ? ? ? ? ? 74 1D 48 8B 01 8B 15 ? ? ? ? FF 50 58 C7 05 ? ? ? ? ? ? ? ? C6 05 ? ? ? ? ? 48 C7 05 ? ? ? ? ? ? ? ?*/
 #endif
 }
+
+//-------------------------------------------------------------------------
+// ENGINE DLL                                                             |
+extern ConVar* cm_debug_cmdquery;
+extern ConVar* cm_return_false_cmdquery_all;
+extern ConVar* cm_return_false_cmdquery_dev_cheat;
+//-------------------------------------------------------------------------
+// SERVER DLL                                                             |
+extern ConVar* sv_showconnecting;
+//-------------------------------------------------------------------------
+// CLIENT DLL                                                             |
+extern ConVar* cl_drawconsoleoverlay;
+extern ConVar* cl_consoleoverlay_lines;
+extern ConVar* cl_consoleoverlay_offset_x;
+extern ConVar* cl_consoleoverlay_offset_y;
+//-------------------------------------------------------------------------
+// FILESYSTEM DLL                                                         |
+extern ConVar* fs_warning_level_native;
+//-------------------------------------------------------------------------
+// SQUIRREL API                                                           |
+extern ConVar* sq_showrsonloading;
+extern ConVar* sq_showscriptloading;
+extern ConVar* sq_showvmoutput;
+extern ConVar* sq_showvmwarning;
+//-------------------------------------------------------------------------
+// NETCHANNEL                                                             |
+extern ConVar* net_userandomkey;

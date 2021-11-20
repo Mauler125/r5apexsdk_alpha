@@ -1,9 +1,8 @@
 #include "stdafx.h"
-#include "classes.h"
 #include "sys_utils.h"
 #include "CHostState.h"
 #include "CNetChan.h"
-#include "IConVar.h"
+#include "cvar.h"
 #include "IVEngineClient.h"
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -31,25 +30,24 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 	static auto SendOfflineRequestToStryderFn  = ADDRESS(0x14033D380).RCast<void(*)()>();
 	static auto CEngine                        = ADDRESS(0X141741BA0).RCast<void*>();
 
-	if (!g_bClassInitialized)
+	static bool initialized;
+	if (!initialized)
 	{
-		ClassInit();
 		IConVar_ClearHostNames();
 		ConCommand_InitConCommand();
-		IConVar_InitConVar();
 
 		IVEngineClient_CommandExecute(NULL, "exec autoexec.cfg");
 		IVEngineClient_CommandExecute(NULL, "exec autoexec_server.cfg");
 		IVEngineClient_CommandExecute(NULL, "exec autoexec_client.cfg");
 
-		if (g_pCvar->FindVar("net_userandomkey")->m_iValue == 1)
+		if (net_userandomkey->m_iValue == 1)
 		{
 			HNET_GenerateKey();
 		}
 
 		g_pCvar->FindVar("net_usesocketsforloopback")->m_iValue = 1;
 
-		g_bClassInitialized = true;
+		initialized = true;
 	}
 
 	HostStates_t oldState;
@@ -235,4 +233,4 @@ void CHostState_Detach()
 	//DetourDetach((LPVOID*)&CHostState_FrameUpdate, &HCHostState_FrameUpdate);
 }
 
-CHostState* g_pHostState = nullptr;
+CHostState* g_pHostState = reinterpret_cast<CHostState*>(p_CHostState_FrameUpdate.FindPatternSelf("48 8D ?? ?? ?? ?? 01", ADDRESS::Direction::DOWN, 100).ResolveRelativeAddressSelf(0x3, 0x7).GetPtr());;

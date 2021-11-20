@@ -4,7 +4,6 @@
 #include "id3dx.h"
 #include "input.h"
 #include "hooks.h"
-#include "classes.h"
 #include "console.h"
 
 //#############################################################################

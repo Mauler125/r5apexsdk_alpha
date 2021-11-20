@@ -160,4 +160,4 @@ bool CBanSystem::IsBanListValid()
 	return !banList.empty();
 }
 
-CBanSystem* g_pBanSystem = nullptr;
+CBanSystem* g_pBanSystem = new CBanSystem();;

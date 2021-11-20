@@ -1,7 +1,8 @@
 #include "stdafx.h"
+#include "cvar.h"
 #include "CEngineVGui.h"
 #include "CMatSystemSurface.h"
-#include "IConVar.h"
+#include "CClient.h"
 
 //-----------------------------------------------------------------------------
 // Purpose:
@@ -31,7 +32,7 @@ int HCEngineVGui_Paint(void* thisptr, int mode)
 //-----------------------------------------------------------------------------
 void CLogSystem::Update()
 {
-	if (g_pCvar->FindVar("cl_drawconsoleoverlay")->m_iValue < 1)
+	if (cl_drawconsoleoverlay->m_iValue < 1)
 	{
 		return;
 	}
@@ -50,13 +51,13 @@ void CLogSystem::Update()
 	{
 		if (m_vLogs[i].Ticks >= 0)
 		{
-			if (i < g_pCvar->FindVar("cl_consoleoverlay_lines")->m_iValue)
+			if (i < cl_consoleoverlay_lines->m_iValue)
 			{
-				float fadepct = fminf(static_cast<float>(m_vLogs[i].Ticks) / 255.f, 4.0); // TODO [ AMOS ]: CREATE CONVAR.
-				float ptc = static_cast<int>(ceilf(fadepct * 100.f));
+				float fadepct = fminf(static_cast<float>(m_vLogs[i].Ticks) / 255.f, 4.0); // TODO [ AMOS ]: register a ConVar for this!
+				float ptc = static_cast<int>(ceilf(fadepct * 100.f));                     // TODO [ AMOS ]: register a ConVar for this!
 				int alpha = static_cast<int>(ptc);
-				int y = (g_pCvar->FindVar("cl_consoleoverlay_offset_y")->m_iValue + (fontHeight * i));
-				int x = g_pCvar->FindVar("cl_consoleoverlay_offset_x")->m_iValue;
+				int y = (cl_consoleoverlay_offset_y->m_iValue + (fontHeight * i));
+				int x = cl_consoleoverlay_offset_x->m_iValue;
 
 				std::array<int, 3> color = GetLogColorForType(m_vLogs[i].Type);
 				CMatSystemSurface_DrawColoredText(g_pMatSystemSurface, 0x13, fontHeight, x, y, color[0], color[1], color[2], alpha, m_vLogs[i].Message.c_str());

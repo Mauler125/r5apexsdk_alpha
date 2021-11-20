@@ -3,7 +3,7 @@
 #include "basetypes.h"
 #include "sys_utils.h"
 #include "sqvm.h"
-#include "IConVar.h"
+#include "cvar.h"
 #include "CEngineVGui.h"
 #include "CGameConsole.h"
 #include "IConVar.h"
@@ -55,11 +55,11 @@ void* HSQVM_PrintFunc(void* sqvm, char* fmt, ...)
 
 	vmStr.append(buf);
 
-	if (g_sq_show_vm_output > 0)
+	if (sq_showvmoutput->m_iValue > 0)
 	{
 		sqlogger->debug(vmStr);
 	}
-	if (g_sq_show_vm_output > 1)
+	if (sq_showvmoutput->m_iValue > 1)
 	{
 		iconsole->debug(vmStr);
 		wconsole->debug(vmStr);
@@ -68,7 +68,7 @@ void* HSQVM_PrintFunc(void* sqvm, char* fmt, ...)
 		const char* c = s.c_str();
 		Items.push_back(Strdup((const char*)c));
 	}
-	if (g_sq_show_vm_output > 2)
+	if (sq_showvmoutput->m_iValue > 2)
 	{
 		std::string s = g_spd_sqvm_p_oss.str();
 		g_pLogSystem.AddLog((LogType_t)vmIdx, s);
@@ -122,11 +122,11 @@ std::int64_t HSQVM_WarningFunc(void* sqvm, int a2, int a3, int* stringSize, void
 	std::string s = g_spd_sqvm_w_oss.str();
 	const char* c = s.c_str();
 
-	if (g_sq_show_vm_warning > 0)
+	if (sq_showvmwarning->m_iValue > 0)
 	{
 		sqlogger->debug(vmStr); // Emit to file.
 	}
-	if (g_sq_show_vm_warning > 1)
+	if (sq_showvmwarning->m_iValue > 1)
 	{
 		iconsole->debug(vmStr); // Emit to in-game console.
 		wconsole->debug(vmStr); // Emit to windows console.
@@ -135,7 +135,7 @@ std::int64_t HSQVM_WarningFunc(void* sqvm, int a2, int a3, int* stringSize, void
 		const char* c = s.c_str();
 		Items.push_back(Strdup(c));
 	}
-	if (g_sq_show_vm_warning > 2)
+	if (sq_showvmwarning->m_iValue > 2)
 	{
 		g_pLogSystem.AddLog((LogType_t)vmIdx, s);
 		const char* c = s.c_str();
@@ -176,7 +176,7 @@ std::int64_t HSQVM_LoadRson(const char* rson_name)
 	// Returns the new path if the rson exists on the disk
 	if (FileExists(filepath) && SQVM_LoadRson(rson_name))
 	{
-		if (g_sq_show_rson_loading > 0)
+		if (sq_showrsonloading->m_iValue > 0)
 		{
 			Sys_Print(SYS_DLL::ENGINE, "\n");
 			Sys_Print(SYS_DLL::ENGINE, "______________________________________________________________\n");
@@ -189,7 +189,7 @@ std::int64_t HSQVM_LoadRson(const char* rson_name)
 	}
 	else
 	{
-		if (g_sq_show_rson_loading > 0)
+		if (sq_showrsonloading->m_iValue > 0)
 		{
 			Sys_Print(SYS_DLL::ENGINE, "\n");
 			Sys_Print(SYS_DLL::ENGINE, "______________________________________________________________\n");
@@ -219,7 +219,7 @@ bool HSQVM_LoadScript(void* sqvm, const char* script_path, const char* script_na
 		}
 	}
 
-	if (g_sq_show_script_loading > 0)
+	if (sq_showscriptloading->m_iValue > 0)
 	{
 		Sys_Print(SYS_DLL::ENGINE, "Loading SQVM Script '%s'\n", filepath);
 	}
@@ -230,7 +230,7 @@ bool HSQVM_LoadScript(void* sqvm, const char* script_path, const char* script_na
 		return true;
 	}
 
-	if (g_sq_show_script_loading > 0)
+	if (sq_showscriptloading->m_iValue > 0)
 	{
 		Sys_Print(SYS_DLL::ENGINE, "FAILED. Try SP / VPK for '%s'\n", filepath);
 	}

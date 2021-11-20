@@ -4,7 +4,7 @@
 #include "CNetChan.h"
 #include "CBaseClient.h"
 #include "CGameConsole.h"
-#include "IConVar.h"
+#include "cvar.h"
 #include "IVEngineServer.h"
 
 //-----------------------------------------------------------------------------
@@ -65,7 +65,7 @@ void HNET_SetKey(std::string key)
 void HNET_GenerateKey()
 {
 	g_szNetKey.clear();
-	g_pCvar->FindVar("net_userandomkey")->m_iValue = 1;
+	net_userandomkey->m_iValue = 1;
 
 	BCRYPT_ALG_HANDLE hAlgorithm;
 	if (BCryptOpenAlgorithmProvider(&hAlgorithm, L"RNG", 0, 0) < 0)

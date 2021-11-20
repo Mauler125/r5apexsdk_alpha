@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "hooks.h"
+#include "cvar.h"
 #include "sys_utils.h"
+#include "sys_dll2.h"
 #include "IConVar.h"
-#include "IConVarCallback.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: test each ConVar query before setting the cvar
@@ -11,29 +12,29 @@
 //-----------------------------------------------------------------------------
 bool HIConVar_IsFlagSet(ConVar* cvar, int flag)
 {
-	if (g_cm_debug_cmdquery > 0)
+	if (cm_debug_cmdquery->m_iValue > 0)
 	{
 		printf("--------------------------------------------------\n");
 		printf(" Flaged: %08X\n", cvar->m_ConCommandBase.m_nFlags);
 	}
 	// Mask off FCVAR_CHEATS and FCVAR_DEVELOPMENTONLY
 	cvar->m_ConCommandBase.m_nFlags &= 0xFFFFBFFD;
-	if (g_cm_debug_cmdquery > 0)
+	if (cm_debug_cmdquery->m_iValue > 0)
 	{
 		printf(" Masked: %08X\n", cvar->m_ConCommandBase.m_nFlags);
 		printf(" Verify: %08X\n", flag);
 		printf("--------------------------------------------------\n");
 	}
-	if (flag & 0x80000 && g_cm_return_false_cmdquery_all <= 0)
+	if (flag & 0x80000 && cm_return_false_cmdquery_all->m_iValue <= 0)
 	{
 		return IConVar_IsFlagSet(cvar, flag);
 	}
-	if (g_cm_return_false_cmdquery_all > 0)
+	if (cm_return_false_cmdquery_all->m_iValue > 0)
 	{
 		// Returning false on all queries may cause problems.
 		return false;
 	}
-	if (g_cm_return_false_cmdquery_dev_cheat > 0)
+	if (cm_return_false_cmdquery_dev_cheat->m_iValue > 0)
 	{
 		// Return false on every FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT query.
 		return (cvar->m_ConCommandBase.m_nFlags & flag) != 0;
@@ -71,30 +72,30 @@ void IConVar_InitConVar()
 {
 	//-------------------------------------------------------------------------
 	// ENGINE DLL                                                             |
-	ConVar* engineDebugCmdQuery = IConVar_RegisterConVar("cm_debug_cmdquery", "0", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Prints the flags of each ConVar/ConCommand query to the console ( !slower! ).", false, 0.f, false, 0.f, CM_Debug_Cmdquery_Callback, nullptr);
-	ConVar* engineDebugReturnFalseAll      = IConVar_RegisterConVar("cm_return_false_cmdquery_all", "0", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Returns false on every ConVar/ConCommand query ( !warning! ).", false, 0.f, false, 0.f, CM_Return_False_Cmdquery_All_Callback, nullptr);
-	ConVar* engineDebugReturnFalseDevCheat = IConVar_RegisterConVar("cm_return_false_cmdquery_dev_cheat", "1", FCVAR_RELEASE, "Returns false on all FCVAR_DEVELOPMENTONLY and FCVAR_CHEAT ConVar/ConCommand queries ( !warning! ).", false, 0.f, false, 0.f, CM_Return_False_Cmdquery_Dev_Cheat_Callback, nullptr);
+	cm_debug_cmdquery                  = IConVar_RegisterConVar("cm_debug_cmdquery", "0", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Prints the flags of each ConVar/ConCommand query to the console ( !slower! ).", false, 0.f, false, 0.f, nullptr, nullptr);
+	cm_return_false_cmdquery_all       = IConVar_RegisterConVar("cm_return_false_cmdquery_all", "0", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Returns false on every ConVar/ConCommand query ( !warning! ).", false, 0.f, false, 0.f, nullptr, nullptr);
+	cm_return_false_cmdquery_dev_cheat = IConVar_RegisterConVar("cm_return_false_cmdquery_dev_cheat", "1", FCVAR_RELEASE, "Returns false on all FCVAR_DEVELOPMENTONLY and FCVAR_CHEAT ConVar/ConCommand queries ( !warning! ).", false, 0.f, false, 0.f, nullptr, nullptr);
 	//-------------------------------------------------------------------------
 	// SERVER DLL                                                             |
-	ConVar* serverShowConnecting = IConVar_RegisterConVar("sv_showconnecting", "1", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Logs information about the connecting client to the console.", false, 0.f, false, 0.f, nullptr, nullptr);
+	sv_showconnecting = IConVar_RegisterConVar("sv_showconnecting", "1", FCVAR_DEVELOPMENTONLY | FCVAR_CHEAT, "Logs information about the connecting client to the console.", false, 0.f, false, 0.f, nullptr, nullptr);
 	//-------------------------------------------------------------------------
 	// CLIENT DLL                                                             |
-	ConVar* drawConsoleOverlay    = IConVar_RegisterConVar("cl_drawconsoleoverlay", "1", FCVAR_RELEASE, "Draw the console overlay at the top of the screen.", false, 0.f, false, 0.f, nullptr, nullptr);
-	ConVar* consoleOverlayLines   = IConVar_RegisterConVar("cl_consoleoverlay_lines", "3", FCVAR_RELEASE, "Number of lines of console output to draw.", false, 1.f, false, 50.f, nullptr, nullptr);
-	ConVar* consoleOverlayOffsetX = IConVar_RegisterConVar("cl_consoleoverlay_offset_x", "10", FCVAR_RELEASE, "X offset for console overlay.", false, 1.f, false, 50.f, nullptr, nullptr);
-	ConVar* consoleOverlayOffsetY = IConVar_RegisterConVar("cl_consoleoverlay_offset_y", "10", FCVAR_RELEASE, "Y offset for console overlay.", false, 1.f, false, 50.f, nullptr, nullptr);
+	cl_drawconsoleoverlay      = IConVar_RegisterConVar("cl_drawconsoleoverlay", "1", FCVAR_RELEASE, "Draw the console overlay at the top of the screen.", false, 0.f, false, 0.f, nullptr, nullptr);
+	cl_consoleoverlay_lines    = IConVar_RegisterConVar("cl_consoleoverlay_lines", "3", FCVAR_RELEASE, "Number of lines of console output to draw.", false, 1.f, false, 50.f, nullptr, nullptr);
+	cl_consoleoverlay_offset_x = IConVar_RegisterConVar("cl_consoleoverlay_offset_x", "10", FCVAR_RELEASE, "X offset for console overlay.", false, 1.f, false, 50.f, nullptr, nullptr);
+	cl_consoleoverlay_offset_y = IConVar_RegisterConVar("cl_consoleoverlay_offset_y", "10", FCVAR_RELEASE, "Y offset for console overlay.", false, 1.f, false, 50.f, nullptr, nullptr);
 	//-------------------------------------------------------------------------
 	// FILESYSTEM DLL                                                         |
-	ConVar* fileSystemWarningLevel = IConVar_RegisterConVar("fs_warning_level_native", "0", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Set the filesystem warning level ( !slower! ).", false, 0.f, false, 0.f, FS_Warning_Level_Native, nullptr);
+	fs_warning_level_native = IConVar_RegisterConVar("fs_warning_level_native", "0", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Set the filesystem warning level ( !slower! ).", false, 0.f, false, 0.f, nullptr, nullptr);
 	//-------------------------------------------------------------------------
 	// SQUIRREL API                                                           |
-	ConVar* squirrelShowRsonLoading   = IConVar_RegisterConVar("sq_showrsonloading", "1", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Logs all 'rson' files loaded by the SQVM ( !slower! ).", false, 0.f, false, 0.f, SQ_Show_Rson_Loading_Callback, nullptr);
-	ConVar* squirrelShowScriptLoading = IConVar_RegisterConVar("sq_showscriptloading", "0", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Logs all scripts loaded by the SQVM to be pre-compiled ( !slower! ).", false, 0.f, false, 0.f, SQ_Show_Script_Loading_Callback, nullptr);
-	ConVar* squirrelShowVMOutput      = IConVar_RegisterConVar("sq_showvmoutput", "3", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Prints the VM output to the console. 1 = Log to file. 2 = 1 + log to console. 3 = 1 + 2 + log to overhead console. 4 = only log to overhead console.", false, 0.f, false, 0.f, SQ_Show_VM_Output_Callback, nullptr);
-	ConVar* squirrelShowVMWarning     = IConVar_RegisterConVar("sq_showvmwarning", "0", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Prints the VM warning output to the console. 1 = Log to file. 2 = 1 + log to console.", false, 0.f, false, 0.f, SQ_Show_VM_Warning_Callback, nullptr);
+	sq_showrsonloading   = IConVar_RegisterConVar("sq_showrsonloading", "1", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Logs all 'rson' files loaded by the SQVM ( !slower! ).", false, 0.f, false, 0.f, nullptr, nullptr);
+	sq_showscriptloading = IConVar_RegisterConVar("sq_showscriptloading", "0", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Logs all scripts loaded by the SQVM to be pre-compiled ( !slower! ).", false, 0.f, false, 0.f, nullptr, nullptr);
+	sq_showvmoutput      = IConVar_RegisterConVar("sq_showvmoutput", "3", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Prints the VM output to the console. 1 = Log to file. 2 = 1 + log to console. 3 = 1 + 2 + log to overhead console. 4 = only log to overhead console.", false, 0.f, false, 0.f, nullptr, nullptr);
+	sq_showvmwarning     = IConVar_RegisterConVar("sq_showvmwarning", "0", FCVAR_DEVELOPMENTONLY || FCVAR_CHEAT, "Prints the VM warning output to the console. 1 = Log to file. 2 = 1 + log to console.", false, 0.f, false, 0.f, nullptr, nullptr);
 	//-------------------------------------------------------------------------
 	// NETCHANNEL                                                             |
-	ConVar* netUseRandomKey = IConVar_RegisterConVar("net_userandomkey", "0", FCVAR_RELEASE, "If set to 1, the netchannel generates and sets a random base64 netkey.", false, 0.f, false, 0.f, nullptr, nullptr);
+	net_userandomkey = IConVar_RegisterConVar("net_userandomkey", "0", FCVAR_RELEASE, "If set to 1, the netchannel generates and sets a random base64 netkey.", false, 0.f, false, 0.f, nullptr, nullptr);
 }
 //-----------------------------------------------------------------------------
 // Purpose: clear all hostname ConVar's
@@ -141,18 +142,4 @@ void IConVar_Detach()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-CCVar* g_pCvar = nullptr;
-
-//-----------------------------------------------------------------------------
-// Use a global var for functions that frequently check a particular ConVar value
-// As calling 'g_pCvar->FindVar(..)' is quite expensive.
-// Initialize with default value and set the value through a callback, see 'IConVarCallback.cpp'
-//-----------------------------------------------------------------------------
-int g_cm_debug_cmdquery                  = 0;
-int g_cm_return_false_cmdquery_all       = 0;
-int g_cm_return_false_cmdquery_dev_cheat = 0;
-int g_fs_warning_level_native            = 0;
-int g_sq_show_rson_loading               = 1;
-int g_sq_show_script_loading             = 0;
-int g_sq_show_vm_output                  = 3;
-int g_sq_show_vm_warning                 = 0;
+CCVar* g_pCvar = reinterpret_cast<CCVar*>(p_CEngineAPI_Connect.FindPatternSelf("48 8D 0D", ADDRESS::Direction::DOWN, 40).ResolveRelativeAddressSelf(0x3, 0x7).GetPtr());

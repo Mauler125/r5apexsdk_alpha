@@ -318,10 +318,9 @@
     <ClInclude Include="cvar.h" />
     <ClInclude Include="IAppSystem.h" />
     <ClInclude Include="stryder.h" />
+    <ClInclude Include="sys_dll2.h" />
     <ClInclude Include="vgui.h" />
     <ClInclude Include="vgui_fpspanel.h" />
-    <ClInclude Include="classes.h" />
-    <ClInclude Include="IConVarCallback.h" />
     <ClInclude Include="IVEngineClient.h" />
     <ClInclude Include="CEngineVGui.h" />
     <ClInclude Include="CHLClient.h" />
@@ -400,9 +399,8 @@
     <ClCompile Include="cvar.cpp" />
     <ClCompile Include="IAppSystem.cpp" />
     <ClCompile Include="stryder.cpp" />
+    <ClCompile Include="sys_dll2.cpp" />
     <ClCompile Include="vgui_fpspanel.cpp" />
-    <ClCompile Include="classes.cpp" />
-    <ClCompile Include="IConVarCallback.cpp" />
     <ClCompile Include="IVEngineClient.cpp" />
     <ClCompile Include="CEngineVGui.cpp" />
     <ClCompile Include="CHLClient.cpp" />

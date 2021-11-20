@@ -2,7 +2,6 @@
 #include "hooks.h"
 #include "basetypes.h"
 #include "utility.h"
-#include "classes.h"
 
 enum class ClientFrameStage_t : int
 {

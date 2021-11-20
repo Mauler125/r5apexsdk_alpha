@@ -62,7 +62,7 @@ void InstallHooks()
 		TerminateProcess(GetCurrentProcess(), 0xBAD0C0DE);
 	}
 
-	InstallOpcodes();
+	IConVar_InitConVar();
 }
 
 void RemoveHooks()

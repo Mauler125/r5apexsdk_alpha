@@ -1,13 +1,13 @@
 #include "stdafx.h"
 #include "id3dx.h"
 #include "rtech.h"
-#include "classes.h"
 #include "basetypes.h"
 #include "CNetChan.h"
 #include "IConVar.h"
 #include "CGameConsole.h"
 #include "ConCommandCallback.h"
 #include "sys_utils.h"
+#include "bansystem.h"
 
 void CGameConsole_Callback(const CCommand& cmd)
 {

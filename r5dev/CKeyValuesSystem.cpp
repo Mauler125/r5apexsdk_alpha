@@ -1,10 +1,17 @@
 #include "stdafx.h"
 #include "CKeyValuesSystem.h"
+#include "stryder.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 std::vector<std::string> g_szAllPlaylists = { "none" };
-CKeyValuesSystem* g_pKeyValuesSystem = nullptr;
-KeyValues** g_pPlaylistKeyValues = nullptr;
+CKeyValuesSystem* g_pKeyValuesSystem = reinterpret_cast<CKeyValuesSystem*>(p_KeyValues_Init.FindPatternSelf("48 8D ?? ?? ?? ?? 01", ADDRESS::Direction::DOWN, 100).ResolveRelativeAddressSelf(0x3, 0x7).GetPtr());;
+//KeyValues** g_pPlaylistKeyValues = nullptr;
+
+#if defined (GAMEDLL_S0) || defined (GAMEDLL_S1)
+KeyValues** g_pPlaylistKeyValues = reinterpret_cast<KeyValues**>(p_Stryder_StitchRequest.FindPatternSelf("48 8B 2D", ADDRESS::Direction::DOWN, 100).ResolveRelativeAddressSelf(0x3, 0x7).GetPtr()); // Get the KeyValue for the playlist file.
+#elif defined (GAMEDLL_S2) || defined (GAMEDLL_S3)
+KeyValues** g_pPlaylistKeyValues = reinterpret_cast<KeyValues**>(p_Stryder_StitchRequest.FindPatternSelf("48 8B 0D", ADDRESS::Direction::DOWN, 100).ResolveRelativeAddressSelf(0x3, 0x7).GetPtr()); // Get the KeyValue for the playlist file.
+#endif
 
 //-----------------------------------------------------------------------------
 // Purpose:

@@ -146,6 +146,9 @@
     <Filter Include="sdk\stryder">
       <UniqueIdentifier>{b96b2e83-a799-48f9-b10c-05314b04b1cc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sdk\engine\CEngineAPI">
+      <UniqueIdentifier>{0e54c2f2-7c4e-4de0-a225-e9bb194b01b7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\shared\utility.cpp">
@@ -259,17 +262,11 @@
     <ClCompile Include="sys_dll.cpp">
       <Filter>sdk\system</Filter>
     </ClCompile>
-    <ClCompile Include="classes.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
     <ClCompile Include="CBaseClient.cpp">
       <Filter>sdk\client\CBaseClient</Filter>
     </ClCompile>
     <ClCompile Include="sqapi.cpp">
       <Filter>sdk\squirrel</Filter>
-    </ClCompile>
-    <ClCompile Include="IConVarCallback.cpp">
-      <Filter>sdk\engine\IConVar</Filter>
     </ClCompile>
     <ClCompile Include="..\shared\serverlisting.cpp">
       <Filter>shared</Filter>
@@ -300,6 +297,9 @@
     </ClCompile>
     <ClCompile Include="stryder.cpp">
       <Filter>sdk\stryder</Filter>
+    </ClCompile>
+    <ClCompile Include="sys_dll2.cpp">
+      <Filter>sdk\system</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -732,17 +732,11 @@
     <ClInclude Include="sys_dll.h">
       <Filter>sdk\system</Filter>
     </ClInclude>
-    <ClInclude Include="classes.h">
-      <Filter>core\include</Filter>
-    </ClInclude>
     <ClInclude Include="CBaseClient.h">
       <Filter>sdk\client\CBaseClient</Filter>
     </ClInclude>
     <ClInclude Include="sqapi.h">
       <Filter>sdk\squirrel</Filter>
-    </ClInclude>
-    <ClInclude Include="IConVarCallback.h">
-      <Filter>sdk\engine\IConVar</Filter>
     </ClInclude>
     <ClInclude Include="ButtonCode.h">
       <Filter>sdk\public\Common</Filter>
@@ -779,6 +773,9 @@
     </ClInclude>
     <ClInclude Include="stryder.h">
       <Filter>sdk\stryder</Filter>
+    </ClInclude>
+    <ClInclude Include="sys_dll2.h">
+      <Filter>sdk\system</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

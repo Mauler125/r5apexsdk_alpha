@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "logdef.h"
 #include "basefilesystem.h"
-#include "IConVar.h"
+#include "cvar.h"
 #include "CGameConsole.h"
 
 //---------------------------------------------------------------------------------
@@ -9,7 +9,7 @@
 //---------------------------------------------------------------------------------
 void HCBaseFileSystem_Warning(void* thisptr, FileWarningLevel_t level, const char* fmt, ...)
 {
-	if (g_fs_warning_level_native < (int)level)
+	if (fs_warning_level_native->m_iValue < (int)level)
 	{
 		return;
 	}

@@ -1,10 +1,12 @@
 #include "stdafx.h"
+#include "bansystem.h"
 #include "CHLClient.h"
 #include "CClient.h"
 #include "CNetChan.h"
 #include "IConVar.h"
 #include "basetypes.h"
 #include "IVEngineClient.h"
+#include "cvar.h"
 
 void __fastcall HFrameStageNotify(CHLClient* rcx, ClientFrameStage_t curStage)
 {
@@ -12,25 +14,27 @@ void __fastcall HFrameStageNotify(CHLClient* rcx, ClientFrameStage_t curStage)
 	{
 		case ClientFrameStage_t::FRAME_START: // FrameStageNotify gets called every frame by CEngine::Frame with the stage being FRAME_START. We can use this to check/set global variables.
 		{
-			if (!g_bClassInitialized)
+			static bool initialized;
+			if (!initialized)
 			{
-				ClassInit();
 				IConVar_ClearHostNames();
 				ConCommand_InitConCommand();
-				IConVar_InitConVar();
 
 				IVEngineClient_CommandExecute(NULL, "exec autoexec.cfg");
 				IVEngineClient_CommandExecute(NULL, "exec autoexec_server.cfg");
 				IVEngineClient_CommandExecute(NULL, "exec autoexec_client.cfg");
 
-				if (g_pCvar->FindVar("net_userandomkey")->m_iValue == 1)
+				*(char*)m_bRestrictServerCommands.GetPtr() = true; // Restrict commands.
+				void* disconnect = g_pCvar->FindCommand("disconnect");
+				*(std::int32_t*)((std::uintptr_t)disconnect + 0x38) |= FCVAR_SERVER_CAN_EXECUTE; // Make sure server is not restricted to this.
+
+				if (net_userandomkey->m_iValue == 1)
 				{
 					HNET_GenerateKey();
 				}
-
 				g_pCvar->FindVar("net_usesocketsforloopback")->m_iValue = 1;
 
-				g_bClassInitialized = true;
+				initialized = true;
 			}
 			break;
 		}
