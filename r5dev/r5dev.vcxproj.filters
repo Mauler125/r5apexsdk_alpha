@@ -1,789 +1,744 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="shared">
-      <UniqueIdentifier>{cbd3882c-cc07-484d-a793-5f0179c80190}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="shared\include">
-      <UniqueIdentifier>{fc3629e4-8c39-4d1d-beb5-a788dfb961fb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="core">
-      <UniqueIdentifier>{4500088a-e3cb-4322-a92b-a0fba4562612}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="shared\libraries">
-      <UniqueIdentifier>{af477348-bdb7-4cdb-88a4-b2670df3c1bf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="shared\libraries\detours">
-      <UniqueIdentifier>{928b078c-84d6-4d9c-b76a-fd4456c168c5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="shared\libraries\imgui">
-      <UniqueIdentifier>{c9440117-54eb-476b-b744-cee43bc36067}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="shared\libraries\spdlLog">
-      <UniqueIdentifier>{729f571d-afe4-46c2-9004-9b564fdd88a5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="core\include">
-      <UniqueIdentifier>{5c930816-2b98-4467-8e7a-7b3511de558e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="shared\libraries\imgui\include">
-      <UniqueIdentifier>{c71b3018-aefd-4b8c-9554-7e51c7ab4266}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="shared\libraries\spdlLog\include">
-      <UniqueIdentifier>{a9d6b391-5684-4b51-a84c-e47efe56e4db}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="shared\libraries\spdlLog\include\cfg">
-      <UniqueIdentifier>{1b64cedb-12f7-4c9f-b02b-e818ef60be80}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="shared\libraries\spdlLog\include\details">
-      <UniqueIdentifier>{b69eaebb-39e3-4791-afc1-997fd0be6582}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="shared\libraries\spdlLog\include\fmt">
-      <UniqueIdentifier>{e5975453-941b-4665-8a62-0ddadf02010e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="shared\libraries\spdlLog\include\fmt\bundled">
-      <UniqueIdentifier>{300eb574-06a4-4bec-8334-24688f13a37e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="shared\libraries\spdlLog\include\sinks">
-      <UniqueIdentifier>{8ff1c26c-9fb6-46b0-af1b-a6ebda386f70}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="shared\libraries\detours\include">
-      <UniqueIdentifier>{f1341f6e-5fa3-4a5a-be3a-058dd8c3be3b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="overlay">
-      <UniqueIdentifier>{9f16f4c2-a76e-47c7-b58a-1b83e633db34}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="overlay\include">
-      <UniqueIdentifier>{10006923-9236-46b2-8d40-96ba6304edba}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="core\include\resource">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+      <UniqueIdentifier>{5857edb8-da8e-491a-96a1-00a4fcfe3d38}</UniqueIdentifier>
     </Filter>
     <Filter Include="sdk">
-      <UniqueIdentifier>{b4ae4a4a-47b6-4a31-8ad7-3e8800053635}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sdk\client">
-      <UniqueIdentifier>{582a5afe-562e-45d7-90f1-bf6cbb6b8061}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sdk\client\CBaseClient">
-      <UniqueIdentifier>{4b4bc688-32f5-42e3-b7de-93ac27c2c142}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sdk\ebisu">
-      <UniqueIdentifier>{40e329ba-f4d2-49b1-98e4-db5d48cf1e02}</UniqueIdentifier>
+      <UniqueIdentifier>{8de4910c-a79a-4e5b-8da1-d6da52425492}</UniqueIdentifier>
     </Filter>
     <Filter Include="sdk\engine">
-      <UniqueIdentifier>{5f2aed43-7f31-417e-82cf-86f89e84bbb2}</UniqueIdentifier>
+      <UniqueIdentifier>{d2a0971d-1de6-47f7-8a77-4246bc0cda3c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sdk\launcher">
-      <UniqueIdentifier>{9a4ec621-311a-4ddd-aa94-2f998ccacea4}</UniqueIdentifier>
+    <Filter Include="sdk\ebisusdk">
+      <UniqueIdentifier>{c00eb6b9-50b2-4fc3-9e24-d8f7ff601e0e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sdk\launcher\CSourceAppSystemGroup">
-      <UniqueIdentifier>{a79fc4c3-e157-4d91-9645-121b4b8ad081}</UniqueIdentifier>
+    <Filter Include="sdk\common">
+      <UniqueIdentifier>{8caa20bd-7dea-4cb9-a69f-e90498e96a93}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sdk\public">
-      <UniqueIdentifier>{101c639f-938b-4591-84a3-0b93257197b5}</UniqueIdentifier>
+    <Filter Include="sdk\client">
+      <UniqueIdentifier>{c069ad8a-c3be-4e61-afbf-f3eee3846d83}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sdk\qhull">
-      <UniqueIdentifier>{ce407f36-881a-46ac-a054-85d4f78da775}</UniqueIdentifier>
+    <Filter Include="sdk\gameui">
+      <UniqueIdentifier>{0b1b90e6-79f6-4b19-8f5e-aac20d346094}</UniqueIdentifier>
     </Filter>
     <Filter Include="sdk\rtech">
-      <UniqueIdentifier>{9f227a1d-3e97-4f4c-92f0-85fa6fea32dd}</UniqueIdentifier>
+      <UniqueIdentifier>{fb47caac-589a-490f-9a7d-00f53add78cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sdk\inputsystem">
+      <UniqueIdentifier>{4afffd57-c78e-420f-a0a7-863b04e64812}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sdk\launcher">
+      <UniqueIdentifier>{86b2ad0f-8709-48fa-8e92-0e9b8053ffce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sdk\mathlib">
+      <UniqueIdentifier>{09875779-c73f-4138-9ed5-14af2b9d8337}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sdk\networksystem">
+      <UniqueIdentifier>{1dd9c7b9-1abc-412a-8e85-928c0d017beb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sdk\server">
+      <UniqueIdentifier>{525505fd-c8bb-453c-8cce-e11123499ae9}</UniqueIdentifier>
     </Filter>
     <Filter Include="sdk\squirrel">
-      <UniqueIdentifier>{b6baffa1-eb5f-4e85-876e-4dd446715d2d}</UniqueIdentifier>
+      <UniqueIdentifier>{10a04e38-fd13-476b-92ea-ebbe60803ef6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sdk\system">
-      <UniqueIdentifier>{e355ddfd-817c-42fe-b71c-12b8aaf7184d}</UniqueIdentifier>
+    <Filter Include="thirdparty">
+      <UniqueIdentifier>{7977cef5-28c7-40ca-be44-394d9f1b75de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="thirdparty\detours">
+      <UniqueIdentifier>{3d8e58ec-0228-40ca-8ec8-66791a71bc08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="thirdparty\detours\include">
+      <UniqueIdentifier>{4759136c-9b08-4e32-91a9-a71c62f019c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="thirdparty\imgui">
+      <UniqueIdentifier>{c54c9382-0c06-4046-9e91-fb2a8019a22b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="thirdparty\imgui\include">
+      <UniqueIdentifier>{0ac635a8-3c25-4b4b-b382-1bb8bc882c55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="thirdparty\spdlog">
+      <UniqueIdentifier>{db621634-f890-4852-b8dc-d540dffd433a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="thirdparty\spdlog\include">
+      <UniqueIdentifier>{2fb19b52-f018-4e95-8eca-ed230132ce0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="thirdparty\spdlog\include\sinks">
+      <UniqueIdentifier>{d0a016cc-d3bc-449b-be29-29289dc550cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="thirdparty\spdlog\include\fmt">
+      <UniqueIdentifier>{47bf6838-c9bf-4429-b55a-9a00339c630f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="thirdparty\spdlog\include\fmt\bundled">
+      <UniqueIdentifier>{510de005-f0c8-48b9-b274-2424ccf8f7c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="thirdparty\spdlog\include\details">
+      <UniqueIdentifier>{7cdf9989-f142-4f8a-a5ee-595fba1a354f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="thirdparty\spdlog\include\cfg">
+      <UniqueIdentifier>{ce08331e-176d-4071-8564-2cbda5a09f34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sdk\tier0">
+      <UniqueIdentifier>{a37df87a-dfda-47ab-a1be-1e49bdfecf44}</UniqueIdentifier>
     </Filter>
     <Filter Include="sdk\vgui">
-      <UniqueIdentifier>{859c014c-b97a-4f75-b974-2a5e64fc56c1}</UniqueIdentifier>
+      <UniqueIdentifier>{a7469cda-54f2-4efc-8a58-6105c74845f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sdk\vguimatsurface">
+      <UniqueIdentifier>{f7c791f6-2cda-4702-88bd-458ea662e7ef}</UniqueIdentifier>
     </Filter>
     <Filter Include="sdk\vpc">
-      <UniqueIdentifier>{e5da48b7-0548-4baf-a4fe-5614ffa2045b}</UniqueIdentifier>
+      <UniqueIdentifier>{956f49fb-0d6a-47d6-96a0-9d616e47e5f2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sdk\vpc\CBaseFileSystem">
-      <UniqueIdentifier>{db951fe0-860d-41f7-a5d7-1edf014050ab}</UniqueIdentifier>
+    <Filter Include="sdk\vphysics">
+      <UniqueIdentifier>{698f4add-abac-46e5-a3f8-55d3a230b369}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sdk\winapi">
-      <UniqueIdentifier>{d2a05174-98cb-4293-9c31-fc9e6c4a2a04}</UniqueIdentifier>
+    <Filter Include="windows">
+      <UniqueIdentifier>{942b8ea5-ce53-4e1e-ad7a-845991aaead6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sdk\client\CClient">
-      <UniqueIdentifier>{67653653-0e4c-4f69-bb60-59db514b976f}</UniqueIdentifier>
+    <Filter Include="public">
+      <UniqueIdentifier>{b0696621-8658-4918-b0f2-ba20acc26829}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sdk\client\CHLClient">
-      <UniqueIdentifier>{c1be0e46-773d-4136-893f-ec9400502580}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sdk\engine\CHostState">
-      <UniqueIdentifier>{a1bb43b6-d6e5-4489-b7df-ea8e33f04677}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sdk\engine\CInputSystem">
-      <UniqueIdentifier>{02ee1b76-c254-4269-84d0-71733bd04485}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sdk\engine\CKeyValuessystem">
-      <UniqueIdentifier>{be01bc43-0117-4408-afcb-f46a8caf14db}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sdk\engine\CNetChan">
-      <UniqueIdentifier>{94e61515-efb5-4c74-9689-4f6ea50fc7c5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sdk\engine\ConCommand">
-      <UniqueIdentifier>{fa0398e4-08a1-4c4f-931d-5f543be7236f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sdk\engine\IConVar">
-      <UniqueIdentifier>{e43e352b-3b39-4b42-aa0f-a402c313d351}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sdk\public\IVEngineClient">
-      <UniqueIdentifier>{e3f429b9-1d6b-4dd4-81d4-15067dbb7beb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sdk\public\IVEngineServer">
-      <UniqueIdentifier>{b6637f11-aadd-4197-9c7b-663c4c0a0df6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sdk\public\Common">
-      <UniqueIdentifier>{9aae9e20-a28d-4e5c-a68a-04ba4441e401}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sdk\client\CClientState">
-      <UniqueIdentifier>{9c40bf21-4533-4066-bd96-0dff3ce96f19}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sdk\stryder">
-      <UniqueIdentifier>{b96b2e83-a799-48f9-b10c-05314b04b1cc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sdk\engine\CEngineAPI">
-      <UniqueIdentifier>{0e54c2f2-7c4e-4de0-a225-e9bb194b01b7}</UniqueIdentifier>
+    <Filter Include="public\include">
+      <UniqueIdentifier>{cbe60970-f348-4a8b-8cee-d4cfebbe0d99}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\shared\utility.cpp">
-      <Filter>shared</Filter>
+    <ClCompile Include="client\client.cpp">
+      <Filter>sdk\client</Filter>
     </ClCompile>
-    <ClCompile Include="ConCommand.cpp">
-      <Filter>sdk\engine\ConCommand</Filter>
+    <ClCompile Include="client\IVEngineClient.cpp">
+      <Filter>sdk\client</Filter>
     </ClCompile>
-    <ClCompile Include="console.cpp">
-      <Filter>core</Filter>
+    <ClCompile Include="client\CHLClient.cpp">
+      <Filter>sdk\client</Filter>
     </ClCompile>
-    <ClCompile Include="IConVar.cpp">
-      <Filter>sdk\engine\IConVar</Filter>
+    <ClCompile Include="common\opcptc.cpp">
+      <Filter>sdk\common</Filter>
     </ClCompile>
-    <ClCompile Include="dllmain.cpp">
-      <Filter>core</Filter>
+    <ClCompile Include="ebisusdk\EbisuSDK.cpp">
+      <Filter>sdk\ebisusdk</Filter>
     </ClCompile>
-    <ClCompile Include="IVEngineServer.cpp">
-      <Filter>sdk\public\IVEngineServer</Filter>
+    <ClCompile Include="engine\host_state.cpp">
+      <Filter>sdk\engine</Filter>
     </ClCompile>
-    <ClCompile Include="CNetChan.cpp">
-      <Filter>sdk\engine\CNetChan</Filter>
+    <ClCompile Include="engine\net_chan.cpp">
+      <Filter>sdk\engine</Filter>
     </ClCompile>
-    <ClCompile Include="sqvm.cpp">
-      <Filter>sdk\squirrel</Filter>
+    <ClCompile Include="engine\sys_dll.cpp">
+      <Filter>sdk\engine</Filter>
     </ClCompile>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>core</Filter>
+    <ClCompile Include="engine\sys_dll2.cpp">
+      <Filter>sdk\engine</Filter>
     </ClCompile>
-    <ClCompile Include="id3dx.cpp">
-      <Filter>core</Filter>
+    <ClCompile Include="engine\sys_utils.cpp">
+      <Filter>sdk\engine</Filter>
     </ClCompile>
-    <ClCompile Include="input.cpp">
-      <Filter>sdk\winapi</Filter>
+    <ClCompile Include="engine\baseclient.cpp">
+      <Filter>sdk\engine</Filter>
     </ClCompile>
-    <ClCompile Include="..\external\imgui\src\imgui_widgets.cpp">
-      <Filter>shared\libraries\imgui</Filter>
+    <ClCompile Include="engine\baseclientstate.cpp">
+      <Filter>sdk\engine</Filter>
     </ClCompile>
-    <ClCompile Include="..\external\imgui\src\imgui.cpp">
-      <Filter>shared\libraries\imgui</Filter>
+    <ClCompile Include="gameui\IServerBrowser.cpp">
+      <Filter>sdk\gameui</Filter>
     </ClCompile>
-    <ClCompile Include="..\external\imgui\src\imgui_demo.cpp">
-      <Filter>shared\libraries\imgui</Filter>
+    <ClCompile Include="gameui\IGameConsole.cpp">
+      <Filter>sdk\gameui</Filter>
     </ClCompile>
-    <ClCompile Include="..\external\imgui\src\imgui_draw.cpp">
-      <Filter>shared\libraries\imgui</Filter>
+    <ClCompile Include="public\bansystem.cpp">
+      <Filter>public</Filter>
     </ClCompile>
-    <ClCompile Include="..\external\imgui\src\imgui_impl_dx11.cpp">
-      <Filter>shared\libraries\imgui</Filter>
+    <ClCompile Include="public\utility.cpp">
+      <Filter>public</Filter>
     </ClCompile>
-    <ClCompile Include="..\external\imgui\src\imgui_impl_win32.cpp">
-      <Filter>shared\libraries\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\external\imgui\src\imgui_tables.cpp">
-      <Filter>shared\libraries\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="EbisuSDK.cpp">
-      <Filter>sdk\ebisu</Filter>
-    </ClCompile>
-    <ClCompile Include="IApplication.cpp">
-      <Filter>sdk\launcher\CSourceAppSystemGroup</Filter>
-    </ClCompile>
-    <ClCompile Include="QHull.cpp">
-      <Filter>sdk\qhull</Filter>
-    </ClCompile>
-    <ClCompile Include="sys_utils.cpp">
-      <Filter>sdk\system</Filter>
-    </ClCompile>
-    <ClCompile Include="CGameConsole.cpp">
-      <Filter>overlay</Filter>
-    </ClCompile>
-    <ClCompile Include="CHLClient.cpp">
-      <Filter>sdk\client\CHLClient</Filter>
-    </ClCompile>
-    <ClCompile Include="..\external\imgui\src\imgui_utility.cpp">
-      <Filter>shared\libraries\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="CServerBrowser.cpp">
-      <Filter>overlay</Filter>
-    </ClCompile>
-    <ClCompile Include="..\external\imgui\src\imgui_stdlib.cpp">
-      <Filter>shared\libraries\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="CInputSystem.cpp">
-      <Filter>sdk\engine\CInputSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="CKeyValuesSystem.cpp">
-      <Filter>sdk\engine\CKeyValuessystem</Filter>
-    </ClCompile>
-    <ClCompile Include="CHostState.cpp">
-      <Filter>sdk\engine\CHostState</Filter>
-    </ClCompile>
-    <ClCompile Include="CClient.cpp">
-      <Filter>sdk\client\CClient</Filter>
-    </ClCompile>
-    <ClCompile Include="ConCommandCallback.cpp">
-      <Filter>sdk\engine\ConCommand</Filter>
-    </ClCompile>
-    <ClCompile Include="IVEngineClient.cpp">
-      <Filter>sdk\public\IVEngineClient</Filter>
-    </ClCompile>
-    <ClCompile Include="..\shared\bansystem.cpp">
-      <Filter>shared</Filter>
-    </ClCompile>
-    <ClCompile Include="basefilesystem.cpp">
-      <Filter>sdk\vpc\CBaseFileSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="rtech.cpp">
+    <ClCompile Include="rtech\rtech.cpp">
       <Filter>sdk\rtech</Filter>
     </ClCompile>
-    <ClCompile Include="sys_dll.cpp">
-      <Filter>sdk\system</Filter>
+    <ClCompile Include="rtech\stryder.cpp">
+      <Filter>sdk\rtech</Filter>
     </ClCompile>
-    <ClCompile Include="CBaseClient.cpp">
-      <Filter>sdk\client\CBaseClient</Filter>
+    <ClCompile Include="inputsystem\inputsystem.cpp">
+      <Filter>sdk\inputsystem</Filter>
     </ClCompile>
-    <ClCompile Include="sqapi.cpp">
-      <Filter>sdk\squirrel</Filter>
-    </ClCompile>
-    <ClCompile Include="..\shared\serverlisting.cpp">
-      <Filter>shared</Filter>
-    </ClCompile>
-    <ClCompile Include="hooks.cpp">
-      <Filter>sdk</Filter>
-    </ClCompile>
-    <ClCompile Include="opcptc.cpp">
-      <Filter>sdk</Filter>
-    </ClCompile>
-    <ClCompile Include="baseclientstate.cpp">
-      <Filter>sdk\client\CClientState</Filter>
-    </ClCompile>
-    <ClCompile Include="cvar.cpp">
-      <Filter>sdk\engine\IConVar</Filter>
-    </ClCompile>
-    <ClCompile Include="IAppSystem.cpp">
+    <ClCompile Include="launcher\IApplication.cpp">
       <Filter>sdk\launcher</Filter>
     </ClCompile>
-    <ClCompile Include="CEngineVGui.cpp">
+    <ClCompile Include="networksystem\serverlisting.cpp">
+      <Filter>sdk\networksystem</Filter>
+    </ClCompile>
+    <ClCompile Include="server\IVEngineServer.cpp">
+      <Filter>sdk\server</Filter>
+    </ClCompile>
+    <ClCompile Include="squirrel\sqvm.cpp">
+      <Filter>sdk\squirrel</Filter>
+    </ClCompile>
+    <ClCompile Include="squirrel\sqapi.cpp">
+      <Filter>sdk\squirrel</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\src\imgui_widgets.cpp">
+      <Filter>thirdparty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\src\imgui.cpp">
+      <Filter>thirdparty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\src\imgui_draw.cpp">
+      <Filter>thirdparty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\src\imgui_impl_dx11.cpp">
+      <Filter>thirdparty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\src\imgui_impl_win32.cpp">
+      <Filter>thirdparty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\src\imgui_stdlib.cpp">
+      <Filter>thirdparty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\src\imgui_tables.cpp">
+      <Filter>thirdparty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\src\imgui_utility.cpp">
+      <Filter>thirdparty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="tier0\ConCommandCallback.cpp">
+      <Filter>sdk\tier0</Filter>
+    </ClCompile>
+    <ClCompile Include="tier0\cvar.cpp">
+      <Filter>sdk\tier0</Filter>
+    </ClCompile>
+    <ClCompile Include="tier0\IConVar.cpp">
+      <Filter>sdk\tier0</Filter>
+    </ClCompile>
+    <ClCompile Include="tier0\ConCommand.cpp">
+      <Filter>sdk\tier0</Filter>
+    </ClCompile>
+    <ClCompile Include="vgui\vgui_fpspanel.cpp">
       <Filter>sdk\vgui</Filter>
     </ClCompile>
-    <ClCompile Include="CMatSystemSurface.cpp">
+    <ClCompile Include="vgui\CEngineVGui.cpp">
       <Filter>sdk\vgui</Filter>
     </ClCompile>
-    <ClCompile Include="vgui_fpspanel.cpp">
-      <Filter>sdk\vgui</Filter>
+    <ClCompile Include="vguimatsurface\MatSystemSurface.cpp">
+      <Filter>sdk\vguimatsurface</Filter>
     </ClCompile>
-    <ClCompile Include="stryder.cpp">
-      <Filter>sdk\stryder</Filter>
+    <ClCompile Include="vpc\IAppSystem.cpp">
+      <Filter>sdk\vpc</Filter>
     </ClCompile>
-    <ClCompile Include="sys_dll2.cpp">
-      <Filter>sdk\system</Filter>
+    <ClCompile Include="vpc\keyvalues.cpp">
+      <Filter>sdk\vpc</Filter>
+    </ClCompile>
+    <ClCompile Include="vpc\basefilesystem.cpp">
+      <Filter>sdk\vpc</Filter>
+    </ClCompile>
+    <ClCompile Include="vphysics\QHull.cpp">
+      <Filter>sdk\vphysics</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\id3dx.cpp">
+      <Filter>windows</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\input.cpp">
+      <Filter>windows</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\console.cpp">
+      <Filter>windows</Filter>
+    </ClCompile>
+    <ClCompile Include="core\stdafx.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\dllmain.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\init.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\src\imgui_demo.cpp">
+      <Filter>thirdparty\imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\external\detours\include\detours.h">
-      <Filter>shared\libraries\detours\include</Filter>
+    <ClInclude Include="client\CHLClient.h">
+      <Filter>sdk\client</Filter>
     </ClInclude>
-    <ClInclude Include="..\external\detours\include\detver.h">
-      <Filter>shared\libraries\detours\include</Filter>
+    <ClInclude Include="client\client.h">
+      <Filter>sdk\client</Filter>
     </ClInclude>
-    <ClInclude Include="..\external\detours\include\syelog.h">
-      <Filter>shared\libraries\detours\include</Filter>
+    <ClInclude Include="client\IVEngineClient.h">
+      <Filter>sdk\client</Filter>
     </ClInclude>
-    <ClInclude Include="..\external\imgui\include\imgui_internal.h">
-      <Filter>shared\libraries\imgui\include</Filter>
+    <ClInclude Include="common\opcptc.h">
+      <Filter>sdk\common</Filter>
     </ClInclude>
-    <ClInclude Include="..\external\imgui\include\imstb_rectpack.h">
-      <Filter>shared\libraries\imgui\include</Filter>
+    <ClInclude Include="common\protocol.h">
+      <Filter>sdk\common</Filter>
     </ClInclude>
-    <ClInclude Include="..\external\imgui\include\imstb_textedit.h">
-      <Filter>shared\libraries\imgui\include</Filter>
+    <ClInclude Include="ebisusdk\EbisuSDK.h">
+      <Filter>sdk\ebisusdk</Filter>
     </ClInclude>
-    <ClInclude Include="..\external\imgui\include\imstb_truetype.h">
-      <Filter>shared\libraries\imgui\include</Filter>
+    <ClInclude Include="engine\baseclientstate.h">
+      <Filter>sdk\engine</Filter>
     </ClInclude>
-    <ClInclude Include="..\external\imgui\include\imconfig.h">
-      <Filter>shared\libraries\imgui\include</Filter>
+    <ClInclude Include="engine\host_state.h">
+      <Filter>sdk\engine</Filter>
     </ClInclude>
-    <ClInclude Include="..\external\imgui\include\imgui.h">
-      <Filter>shared\libraries\imgui\include</Filter>
+    <ClInclude Include="engine\net_chan.h">
+      <Filter>sdk\engine</Filter>
     </ClInclude>
-    <ClInclude Include="..\external\imgui\include\imgui_impl_dx11.h">
-      <Filter>shared\libraries\imgui\include</Filter>
+    <ClInclude Include="engine\sys_dll.h">
+      <Filter>sdk\engine</Filter>
     </ClInclude>
-    <ClInclude Include="..\external\imgui\include\imgui_impl_win32.h">
-      <Filter>shared\libraries\imgui\include</Filter>
+    <ClInclude Include="engine\sys_dll2.h">
+      <Filter>sdk\engine</Filter>
     </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\formatter.h">
-      <Filter>shared\libraries\spdlLog\include</Filter>
+    <ClInclude Include="engine\sys_utils.h">
+      <Filter>sdk\engine</Filter>
     </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\fwd.h">
-      <Filter>shared\libraries\spdlLog\include</Filter>
+    <ClInclude Include="engine\baseclient.h">
+      <Filter>sdk\engine</Filter>
     </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\logger.h">
-      <Filter>shared\libraries\spdlLog\include</Filter>
+    <ClInclude Include="gameui\IServerBrowser.h">
+      <Filter>sdk\gameui</Filter>
     </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\logger-inl.h">
-      <Filter>shared\libraries\spdlLog\include</Filter>
+    <ClInclude Include="gameui\IGameConsole.h">
+      <Filter>sdk\gameui</Filter>
     </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\pattern_formatter.h">
-      <Filter>shared\libraries\spdlLog\include</Filter>
+    <ClInclude Include="public\include\bansystem.h">
+      <Filter>public\include</Filter>
     </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\pattern_formatter-inl.h">
-      <Filter>shared\libraries\spdlLog\include</Filter>
+    <ClInclude Include="public\include\httplib.h">
+      <Filter>public\include</Filter>
     </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\spdlog.h">
-      <Filter>shared\libraries\spdlLog\include</Filter>
+    <ClInclude Include="public\include\json.hpp">
+      <Filter>public\include</Filter>
     </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\spdlog-inl.h">
-      <Filter>shared\libraries\spdlLog\include</Filter>
+    <ClInclude Include="public\include\utility.h">
+      <Filter>public\include</Filter>
     </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\stopwatch.h">
-      <Filter>shared\libraries\spdlLog\include</Filter>
+    <ClInclude Include="public\include\address.h">
+      <Filter>public\include</Filter>
     </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\tweakme.h">
-      <Filter>shared\libraries\spdlLog\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\version.h">
-      <Filter>shared\libraries\spdlLog\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\async.h">
-      <Filter>shared\libraries\spdlLog\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\async_logger.h">
-      <Filter>shared\libraries\spdlLog\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\async_logger-inl.h">
-      <Filter>shared\libraries\spdlLog\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\common.h">
-      <Filter>shared\libraries\spdlLog\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\common-inl.h">
-      <Filter>shared\libraries\spdlLog\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\cfg\env.h">
-      <Filter>shared\libraries\spdlLog\include\cfg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\cfg\helpers.h">
-      <Filter>shared\libraries\spdlLog\include\cfg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\cfg\helpers-inl.h">
-      <Filter>shared\libraries\spdlLog\include\cfg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\cfg\argv.h">
-      <Filter>shared\libraries\spdlLog\include\cfg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\details\console_globals.h">
-      <Filter>shared\libraries\spdlLog\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\details\file_helper.h">
-      <Filter>shared\libraries\spdlLog\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\details\file_helper-inl.h">
-      <Filter>shared\libraries\spdlLog\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\details\fmt_helper.h">
-      <Filter>shared\libraries\spdlLog\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\details\log_msg.h">
-      <Filter>shared\libraries\spdlLog\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\details\log_msg_buffer.h">
-      <Filter>shared\libraries\spdlLog\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\details\log_msg_buffer-inl.h">
-      <Filter>shared\libraries\spdlLog\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\details\log_msg-inl.h">
-      <Filter>shared\libraries\spdlLog\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\details\mpmc_blocking_q.h">
-      <Filter>shared\libraries\spdlLog\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\details\null_mutex.h">
-      <Filter>shared\libraries\spdlLog\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\details\os.h">
-      <Filter>shared\libraries\spdlLog\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\details\os-inl.h">
-      <Filter>shared\libraries\spdlLog\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\details\periodic_worker.h">
-      <Filter>shared\libraries\spdlLog\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\details\periodic_worker-inl.h">
-      <Filter>shared\libraries\spdlLog\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\details\registry.h">
-      <Filter>shared\libraries\spdlLog\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\details\registry-inl.h">
-      <Filter>shared\libraries\spdlLog\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\details\synchronous_factory.h">
-      <Filter>shared\libraries\spdlLog\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\details\tcp_client.h">
-      <Filter>shared\libraries\spdlLog\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\details\tcp_client-windows.h">
-      <Filter>shared\libraries\spdlLog\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\details\thread_pool.h">
-      <Filter>shared\libraries\spdlLog\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\details\thread_pool-inl.h">
-      <Filter>shared\libraries\spdlLog\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\details\windows_include.h">
-      <Filter>shared\libraries\spdlLog\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\details\backtracer.h">
-      <Filter>shared\libraries\spdlLog\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\details\backtracer-inl.h">
-      <Filter>shared\libraries\spdlLog\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\details\circular_q.h">
-      <Filter>shared\libraries\spdlLog\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\fmt\chrono.h">
-      <Filter>shared\libraries\spdlLog\include\fmt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\fmt\fmt.h">
-      <Filter>shared\libraries\spdlLog\include\fmt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\fmt\ostr.h">
-      <Filter>shared\libraries\spdlLog\include\fmt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\fmt\xchar.h">
-      <Filter>shared\libraries\spdlLog\include\fmt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\fmt\bin_to_hex.h">
-      <Filter>shared\libraries\spdlLog\include\fmt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\fmt\bundled\compile.h">
-      <Filter>shared\libraries\spdlLog\include\fmt\bundled</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\fmt\bundled\core.h">
-      <Filter>shared\libraries\spdlLog\include\fmt\bundled</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\fmt\bundled\format.h">
-      <Filter>shared\libraries\spdlLog\include\fmt\bundled</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\fmt\bundled\format-inl.h">
-      <Filter>shared\libraries\spdlLog\include\fmt\bundled</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\fmt\bundled\locale.h">
-      <Filter>shared\libraries\spdlLog\include\fmt\bundled</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\fmt\bundled\os.h">
-      <Filter>shared\libraries\spdlLog\include\fmt\bundled</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\fmt\bundled\ostream.h">
-      <Filter>shared\libraries\spdlLog\include\fmt\bundled</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\fmt\bundled\printf.h">
-      <Filter>shared\libraries\spdlLog\include\fmt\bundled</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\fmt\bundled\ranges.h">
-      <Filter>shared\libraries\spdlLog\include\fmt\bundled</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\fmt\bundled\xchar.h">
-      <Filter>shared\libraries\spdlLog\include\fmt\bundled</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\fmt\bundled\args.h">
-      <Filter>shared\libraries\spdlLog\include\fmt\bundled</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\fmt\bundled\chrono.h">
-      <Filter>shared\libraries\spdlLog\include\fmt\bundled</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\fmt\bundled\color.h">
-      <Filter>shared\libraries\spdlLog\include\fmt\bundled</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\sinks\basic_file_sink.h">
-      <Filter>shared\libraries\spdlLog\include\sinks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\sinks\basic_file_sink-inl.h">
-      <Filter>shared\libraries\spdlLog\include\sinks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\sinks\daily_file_sink.h">
-      <Filter>shared\libraries\spdlLog\include\sinks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\sinks\dist_sink.h">
-      <Filter>shared\libraries\spdlLog\include\sinks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\sinks\dup_filter_sink.h">
-      <Filter>shared\libraries\spdlLog\include\sinks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\sinks\hourly_file_sink.h">
-      <Filter>shared\libraries\spdlLog\include\sinks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\sinks\mongo_sink.h">
-      <Filter>shared\libraries\spdlLog\include\sinks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\sinks\msvc_sink.h">
-      <Filter>shared\libraries\spdlLog\include\sinks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\sinks\null_sink.h">
-      <Filter>shared\libraries\spdlLog\include\sinks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\sinks\ostream_sink.h">
-      <Filter>shared\libraries\spdlLog\include\sinks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\sinks\qt_sinks.h">
-      <Filter>shared\libraries\spdlLog\include\sinks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\sinks\ringbuffer_sink.h">
-      <Filter>shared\libraries\spdlLog\include\sinks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\sinks\rotating_file_sink.h">
-      <Filter>shared\libraries\spdlLog\include\sinks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\sinks\rotating_file_sink-inl.h">
-      <Filter>shared\libraries\spdlLog\include\sinks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\sinks\sink.h">
-      <Filter>shared\libraries\spdlLog\include\sinks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\sinks\sink-inl.h">
-      <Filter>shared\libraries\spdlLog\include\sinks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\sinks\stdout_color_sinks.h">
-      <Filter>shared\libraries\spdlLog\include\sinks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\sinks\stdout_color_sinks-inl.h">
-      <Filter>shared\libraries\spdlLog\include\sinks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\sinks\stdout_sinks.h">
-      <Filter>shared\libraries\spdlLog\include\sinks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\sinks\stdout_sinks-inl.h">
-      <Filter>shared\libraries\spdlLog\include\sinks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\sinks\syslog_sink.h">
-      <Filter>shared\libraries\spdlLog\include\sinks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\sinks\systemd_sink.h">
-      <Filter>shared\libraries\spdlLog\include\sinks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\sinks\tcp_sink.h">
-      <Filter>shared\libraries\spdlLog\include\sinks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\sinks\win_eventlog_sink.h">
-      <Filter>shared\libraries\spdlLog\include\sinks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\sinks\wincolor_sink.h">
-      <Filter>shared\libraries\spdlLog\include\sinks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\sinks\wincolor_sink-inl.h">
-      <Filter>shared\libraries\spdlLog\include\sinks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\sinks\android_sink.h">
-      <Filter>shared\libraries\spdlLog\include\sinks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\sinks\ansicolor_sink.h">
-      <Filter>shared\libraries\spdlLog\include\sinks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\sinks\ansicolor_sink-inl.h">
-      <Filter>shared\libraries\spdlLog\include\sinks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\sinks\base_sink.h">
-      <Filter>shared\libraries\spdlLog\include\sinks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\spdlog\include\sinks\base_sink-inl.h">
-      <Filter>shared\libraries\spdlLog\include\sinks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\shared\include\utility.h">
-      <Filter>shared\include</Filter>
-    </ClInclude>
-    <ClInclude Include="ConCommand.h">
-      <Filter>sdk\engine\ConCommand</Filter>
-    </ClInclude>
-    <ClInclude Include="console.h">
-      <Filter>core\include</Filter>
-    </ClInclude>
-    <ClInclude Include="IConVar.h">
-      <Filter>sdk\engine\IConVar</Filter>
-    </ClInclude>
-    <ClInclude Include="IVEngineServer.h">
-      <Filter>sdk\public\IVEngineServer</Filter>
-    </ClInclude>
-    <ClInclude Include="CNetChan.h">
-      <Filter>sdk\engine\CNetChan</Filter>
-    </ClInclude>
-    <ClInclude Include="sqvm.h">
-      <Filter>sdk\squirrel</Filter>
-    </ClInclude>
-    <ClInclude Include="stdafx.h">
-      <Filter>core\include</Filter>
-    </ClInclude>
-    <ClInclude Include="rtech.h">
+    <ClInclude Include="rtech\rtech.h">
       <Filter>sdk\rtech</Filter>
     </ClInclude>
-    <ClInclude Include="r5dev.h">
-      <Filter>core\include</Filter>
+    <ClInclude Include="rtech\stryder.h">
+      <Filter>sdk\rtech</Filter>
     </ClInclude>
-    <ClInclude Include="input.h">
-      <Filter>sdk\winapi</Filter>
+    <ClInclude Include="inputsystem\inputsystem.h">
+      <Filter>sdk\inputsystem</Filter>
     </ClInclude>
-    <ClInclude Include="EbisuSDK.h">
-      <Filter>sdk\ebisu</Filter>
+    <ClInclude Include="inputsystem\ButtonCode.h">
+      <Filter>sdk\inputsystem</Filter>
     </ClInclude>
-    <ClInclude Include="IApplication.h">
-      <Filter>sdk\launcher\CSourceAppSystemGroup</Filter>
-    </ClInclude>
-    <ClInclude Include="QHull.h">
-      <Filter>sdk\qhull</Filter>
-    </ClInclude>
-    <ClInclude Include="sys_utils.h">
-      <Filter>sdk\system</Filter>
-    </ClInclude>
-    <ClInclude Include="CGameConsole.h">
-      <Filter>overlay\include</Filter>
-    </ClInclude>
-    <ClInclude Include="CHLClient.h">
-      <Filter>sdk\client\CHLClient</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\imgui\include\imgui_utility.h">
-      <Filter>shared\libraries\imgui\include</Filter>
-    </ClInclude>
-    <ClInclude Include="CServerBrowser.h">
-      <Filter>overlay\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\shared\include\httplib.h">
-      <Filter>shared\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\shared\include\json.hpp">
-      <Filter>shared\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\imgui\include\imgui_stdlib.h">
-      <Filter>shared\libraries\imgui\include</Filter>
-    </ClInclude>
-    <ClInclude Include="id3dx.h">
-      <Filter>core\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\shared\include\bansystem.h">
-      <Filter>shared\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\shared\include\address.h">
-      <Filter>shared\include</Filter>
-    </ClInclude>
-    <ClInclude Include="CInputSystem.h">
-      <Filter>sdk\engine\CInputSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="CKeyValuesSystem.h">
-      <Filter>sdk\engine\CKeyValuessystem</Filter>
-    </ClInclude>
-    <ClInclude Include="CHostState.h">
-      <Filter>sdk\engine\CHostState</Filter>
-    </ClInclude>
-    <ClInclude Include="CClient.h">
-      <Filter>sdk\client\CClient</Filter>
-    </ClInclude>
-    <ClInclude Include="ConCommandCallback.h">
-      <Filter>sdk\engine\ConCommand</Filter>
-    </ClInclude>
-    <ClInclude Include="IVEngineClient.h">
-      <Filter>sdk\public\IVEngineClient</Filter>
-    </ClInclude>
-    <ClInclude Include="protocol.h">
-      <Filter>sdk\public\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="basetypes.h">
-      <Filter>sdk\public\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="basefilesystem.h">
-      <Filter>sdk\vpc\CBaseFileSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="mathlib.h">
-      <Filter>sdk\public\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="interfaces.h">
-      <Filter>sdk\public\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="logdef.h">
-      <Filter>core\include</Filter>
-    </ClInclude>
-    <ClInclude Include="sys_dll.h">
-      <Filter>sdk\system</Filter>
-    </ClInclude>
-    <ClInclude Include="CBaseClient.h">
-      <Filter>sdk\client\CBaseClient</Filter>
-    </ClInclude>
-    <ClInclude Include="sqapi.h">
-      <Filter>sdk\squirrel</Filter>
-    </ClInclude>
-    <ClInclude Include="ButtonCode.h">
-      <Filter>sdk\public\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="vgui.h">
-      <Filter>sdk\vgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\shared\include\serverlisting.h">
-      <Filter>shared\include</Filter>
-    </ClInclude>
-    <ClInclude Include="hooks.h">
-      <Filter>sdk</Filter>
-    </ClInclude>
-    <ClInclude Include="opcptc.h">
-      <Filter>sdk</Filter>
-    </ClInclude>
-    <ClInclude Include="baseclientstate.h">
-      <Filter>sdk\client\CClientState</Filter>
-    </ClInclude>
-    <ClInclude Include="cvar.h">
-      <Filter>sdk\engine\IConVar</Filter>
-    </ClInclude>
-    <ClInclude Include="IAppSystem.h">
+    <ClInclude Include="launcher\IApplication.h">
       <Filter>sdk\launcher</Filter>
     </ClInclude>
-    <ClInclude Include="CEngineVGui.h">
+    <ClInclude Include="mathlib\vector.h">
+      <Filter>sdk\mathlib</Filter>
+    </ClInclude>
+    <ClInclude Include="networksystem\serverlisting.h">
+      <Filter>sdk\networksystem</Filter>
+    </ClInclude>
+    <ClInclude Include="networksystem\sm_protocol.h">
+      <Filter>sdk\networksystem</Filter>
+    </ClInclude>
+    <ClInclude Include="server\IVEngineServer.h">
+      <Filter>sdk\server</Filter>
+    </ClInclude>
+    <ClInclude Include="squirrel\sqapi.h">
+      <Filter>sdk\squirrel</Filter>
+    </ClInclude>
+    <ClInclude Include="squirrel\sqvm.h">
+      <Filter>sdk\squirrel</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\detours\include\detver.h">
+      <Filter>thirdparty\detours\include</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\detours\include\idetour.h">
+      <Filter>thirdparty\detours\include</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\detours\include\syelog.h">
+      <Filter>thirdparty\detours\include</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\detours\include\detours.h">
+      <Filter>thirdparty\detours\include</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\imgui\include\imgui_impl_dx11.h">
+      <Filter>thirdparty\imgui\include</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\imgui\include\imgui_impl_win32.h">
+      <Filter>thirdparty\imgui\include</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\imgui\include\imgui_internal.h">
+      <Filter>thirdparty\imgui\include</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\imgui\include\imgui_stdlib.h">
+      <Filter>thirdparty\imgui\include</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\imgui\include\imgui_utility.h">
+      <Filter>thirdparty\imgui\include</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\imgui\include\imstb_rectpack.h">
+      <Filter>thirdparty\imgui\include</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\imgui\include\imstb_textedit.h">
+      <Filter>thirdparty\imgui\include</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\imgui\include\imstb_truetype.h">
+      <Filter>thirdparty\imgui\include</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\imgui\include\imconfig.h">
+      <Filter>thirdparty\imgui\include</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\imgui\include\imgui.h">
+      <Filter>thirdparty\imgui\include</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\async_logger-inl.h">
+      <Filter>thirdparty\spdlog\include</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\common.h">
+      <Filter>thirdparty\spdlog\include</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\common-inl.h">
+      <Filter>thirdparty\spdlog\include</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\formatter.h">
+      <Filter>thirdparty\spdlog\include</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\fwd.h">
+      <Filter>thirdparty\spdlog\include</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\logger.h">
+      <Filter>thirdparty\spdlog\include</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\logger-inl.h">
+      <Filter>thirdparty\spdlog\include</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\pattern_formatter.h">
+      <Filter>thirdparty\spdlog\include</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\pattern_formatter-inl.h">
+      <Filter>thirdparty\spdlog\include</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\spdlog.h">
+      <Filter>thirdparty\spdlog\include</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\spdlog-inl.h">
+      <Filter>thirdparty\spdlog\include</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\stopwatch.h">
+      <Filter>thirdparty\spdlog\include</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\tweakme.h">
+      <Filter>thirdparty\spdlog\include</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\version.h">
+      <Filter>thirdparty\spdlog\include</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\async.h">
+      <Filter>thirdparty\spdlog\include</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\async_logger.h">
+      <Filter>thirdparty\spdlog\include</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\sinks\basic_file_sink-inl.h">
+      <Filter>thirdparty\spdlog\include\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\sinks\daily_file_sink.h">
+      <Filter>thirdparty\spdlog\include\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\sinks\dist_sink.h">
+      <Filter>thirdparty\spdlog\include\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\sinks\dup_filter_sink.h">
+      <Filter>thirdparty\spdlog\include\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\sinks\hourly_file_sink.h">
+      <Filter>thirdparty\spdlog\include\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\sinks\mongo_sink.h">
+      <Filter>thirdparty\spdlog\include\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\sinks\msvc_sink.h">
+      <Filter>thirdparty\spdlog\include\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\sinks\null_sink.h">
+      <Filter>thirdparty\spdlog\include\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\sinks\ostream_sink.h">
+      <Filter>thirdparty\spdlog\include\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\sinks\qt_sinks.h">
+      <Filter>thirdparty\spdlog\include\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\sinks\ringbuffer_sink.h">
+      <Filter>thirdparty\spdlog\include\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\sinks\rotating_file_sink.h">
+      <Filter>thirdparty\spdlog\include\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\sinks\rotating_file_sink-inl.h">
+      <Filter>thirdparty\spdlog\include\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\sinks\sink.h">
+      <Filter>thirdparty\spdlog\include\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\sinks\sink-inl.h">
+      <Filter>thirdparty\spdlog\include\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\sinks\stdout_color_sinks.h">
+      <Filter>thirdparty\spdlog\include\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\sinks\stdout_color_sinks-inl.h">
+      <Filter>thirdparty\spdlog\include\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\sinks\stdout_sinks.h">
+      <Filter>thirdparty\spdlog\include\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\sinks\stdout_sinks-inl.h">
+      <Filter>thirdparty\spdlog\include\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\sinks\syslog_sink.h">
+      <Filter>thirdparty\spdlog\include\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\sinks\systemd_sink.h">
+      <Filter>thirdparty\spdlog\include\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\sinks\tcp_sink.h">
+      <Filter>thirdparty\spdlog\include\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\sinks\win_eventlog_sink.h">
+      <Filter>thirdparty\spdlog\include\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\sinks\wincolor_sink.h">
+      <Filter>thirdparty\spdlog\include\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\sinks\wincolor_sink-inl.h">
+      <Filter>thirdparty\spdlog\include\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\sinks\android_sink.h">
+      <Filter>thirdparty\spdlog\include\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\sinks\ansicolor_sink.h">
+      <Filter>thirdparty\spdlog\include\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\sinks\ansicolor_sink-inl.h">
+      <Filter>thirdparty\spdlog\include\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\sinks\base_sink.h">
+      <Filter>thirdparty\spdlog\include\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\sinks\base_sink-inl.h">
+      <Filter>thirdparty\spdlog\include\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\sinks\basic_file_sink.h">
+      <Filter>thirdparty\spdlog\include\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\fmt\chrono.h">
+      <Filter>thirdparty\spdlog\include\fmt</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\fmt\fmt.h">
+      <Filter>thirdparty\spdlog\include\fmt</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\fmt\ostr.h">
+      <Filter>thirdparty\spdlog\include\fmt</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\fmt\xchar.h">
+      <Filter>thirdparty\spdlog\include\fmt</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\fmt\bin_to_hex.h">
+      <Filter>thirdparty\spdlog\include\fmt</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\fmt\bundled\core.h">
+      <Filter>thirdparty\spdlog\include\fmt\bundled</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\fmt\bundled\format.h">
+      <Filter>thirdparty\spdlog\include\fmt\bundled</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\fmt\bundled\format-inl.h">
+      <Filter>thirdparty\spdlog\include\fmt\bundled</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\fmt\bundled\locale.h">
+      <Filter>thirdparty\spdlog\include\fmt\bundled</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\fmt\bundled\os.h">
+      <Filter>thirdparty\spdlog\include\fmt\bundled</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\fmt\bundled\ostream.h">
+      <Filter>thirdparty\spdlog\include\fmt\bundled</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\fmt\bundled\printf.h">
+      <Filter>thirdparty\spdlog\include\fmt\bundled</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\fmt\bundled\ranges.h">
+      <Filter>thirdparty\spdlog\include\fmt\bundled</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\fmt\bundled\xchar.h">
+      <Filter>thirdparty\spdlog\include\fmt\bundled</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\fmt\bundled\args.h">
+      <Filter>thirdparty\spdlog\include\fmt\bundled</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\fmt\bundled\chrono.h">
+      <Filter>thirdparty\spdlog\include\fmt\bundled</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\fmt\bundled\color.h">
+      <Filter>thirdparty\spdlog\include\fmt\bundled</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\fmt\bundled\compile.h">
+      <Filter>thirdparty\spdlog\include\fmt\bundled</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\details\file_helper.h">
+      <Filter>thirdparty\spdlog\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\details\file_helper-inl.h">
+      <Filter>thirdparty\spdlog\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\details\fmt_helper.h">
+      <Filter>thirdparty\spdlog\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\details\log_msg.h">
+      <Filter>thirdparty\spdlog\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\details\log_msg_buffer.h">
+      <Filter>thirdparty\spdlog\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\details\log_msg_buffer-inl.h">
+      <Filter>thirdparty\spdlog\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\details\log_msg-inl.h">
+      <Filter>thirdparty\spdlog\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\details\mpmc_blocking_q.h">
+      <Filter>thirdparty\spdlog\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\details\null_mutex.h">
+      <Filter>thirdparty\spdlog\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\details\os.h">
+      <Filter>thirdparty\spdlog\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\details\os-inl.h">
+      <Filter>thirdparty\spdlog\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\details\periodic_worker.h">
+      <Filter>thirdparty\spdlog\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\details\periodic_worker-inl.h">
+      <Filter>thirdparty\spdlog\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\details\registry.h">
+      <Filter>thirdparty\spdlog\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\details\registry-inl.h">
+      <Filter>thirdparty\spdlog\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\details\synchronous_factory.h">
+      <Filter>thirdparty\spdlog\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\details\tcp_client.h">
+      <Filter>thirdparty\spdlog\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\details\tcp_client-windows.h">
+      <Filter>thirdparty\spdlog\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\details\thread_pool.h">
+      <Filter>thirdparty\spdlog\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\details\thread_pool-inl.h">
+      <Filter>thirdparty\spdlog\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\details\windows_include.h">
+      <Filter>thirdparty\spdlog\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\details\backtracer.h">
+      <Filter>thirdparty\spdlog\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\details\backtracer-inl.h">
+      <Filter>thirdparty\spdlog\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\details\circular_q.h">
+      <Filter>thirdparty\spdlog\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\details\console_globals.h">
+      <Filter>thirdparty\spdlog\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\cfg\env.h">
+      <Filter>thirdparty\spdlog\include\cfg</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\cfg\helpers.h">
+      <Filter>thirdparty\spdlog\include\cfg</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\cfg\helpers-inl.h">
+      <Filter>thirdparty\spdlog\include\cfg</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\spdlog\include\cfg\argv.h">
+      <Filter>thirdparty\spdlog\include\cfg</Filter>
+    </ClInclude>
+    <ClInclude Include="tier0\ConCommandCallback.h">
+      <Filter>sdk\tier0</Filter>
+    </ClInclude>
+    <ClInclude Include="tier0\cvar.h">
+      <Filter>sdk\tier0</Filter>
+    </ClInclude>
+    <ClInclude Include="tier0\IConVar.h">
+      <Filter>sdk\tier0</Filter>
+    </ClInclude>
+    <ClInclude Include="tier0\basetypes.h">
+      <Filter>sdk\tier0</Filter>
+    </ClInclude>
+    <ClInclude Include="tier0\ConCommand.h">
+      <Filter>sdk\tier0</Filter>
+    </ClInclude>
+    <ClInclude Include="vgui\vgui_fpspanel.h">
       <Filter>sdk\vgui</Filter>
     </ClInclude>
-    <ClInclude Include="CMatSystemSurface.h">
+    <ClInclude Include="vgui\CEngineVGui.h">
       <Filter>sdk\vgui</Filter>
     </ClInclude>
-    <ClInclude Include="vgui_fpspanel.h">
+    <ClInclude Include="vgui\vgui.h">
       <Filter>sdk\vgui</Filter>
     </ClInclude>
-    <ClInclude Include="stryder.h">
-      <Filter>sdk\stryder</Filter>
+    <ClInclude Include="vguimatsurface\MatSystemSurface.h">
+      <Filter>sdk\vguimatsurface</Filter>
     </ClInclude>
-    <ClInclude Include="sys_dll2.h">
-      <Filter>sdk\system</Filter>
+    <ClInclude Include="vpc\IAppSystem.h">
+      <Filter>sdk\vpc</Filter>
+    </ClInclude>
+    <ClInclude Include="vpc\interfaces.h">
+      <Filter>sdk\vpc</Filter>
+    </ClInclude>
+    <ClInclude Include="vpc\keyvalues.h">
+      <Filter>sdk\vpc</Filter>
+    </ClInclude>
+    <ClInclude Include="vpc\basefilesystem.h">
+      <Filter>sdk\vpc</Filter>
+    </ClInclude>
+    <ClInclude Include="vphysics\QHull.h">
+      <Filter>sdk\vphysics</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\id3dx.h">
+      <Filter>windows</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\input.h">
+      <Filter>windows</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\console.h">
+      <Filter>windows</Filter>
+    </ClInclude>
+    <ClInclude Include="core\init.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\logdef.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\r5dev.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\stdafx.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="r5dev.def">
-      <Filter>core\include\resource</Filter>
-    </None>
-    <None Include="cpp.hint">
-      <Filter>core\include\resource</Filter>
-    </None>
+    <None Include="r5dev.def" />
   </ItemGroup>
 </Project>
