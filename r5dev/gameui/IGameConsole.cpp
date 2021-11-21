@@ -22,25 +22,25 @@ History:
 CGameConsole::CGameConsole()
 {
     ClearLog();
-    memset(InputBuf, 0, sizeof(InputBuf));
+    memset(m_szInputBuf, 0, sizeof(m_szInputBuf));
 
-    HistoryPos     = -1;
-    AutoScroll     = true;
-    ScrollToBottom = false;
-    ThemeSet       = false;
+    m_nHistoryPos     = -1;
+    m_bAutoScroll     = true;
+    m_bScrollToBottom = false;
+    m_bThemeSet       = false;
 
-    Commands.push_back("CLEAR");
-    Commands.push_back("HELP");
-    Commands.push_back("HISTORY");
+    m_ivCommands.push_back("CLEAR");
+    m_ivCommands.push_back("HELP");
+    m_ivCommands.push_back("HISTORY");
     AddLog("[DEBUG] THREAD ID: %ld\n", g_dThreadId);
 }
 
 CGameConsole::~CGameConsole()
 {
     ClearLog();
-    for (int i = 0; i < History.Size; i++)
+    for (int i = 0; i < m_ivHistory.Size; i++)
     {
-        free(History[i]);
+        free(m_ivHistory[i]);
     }
 }
 
@@ -50,18 +50,18 @@ void CGameConsole::Draw(const char* title, bool* bDraw)
 {
     bool copy_to_clipboard = false;
 
-    if (!ThemeSet)
+    if (!m_bThemeSet)
     {
         SetStyleVar();
-        ThemeSet = true;
+        m_bThemeSet = true;
     }
 
-    ImGui::ShowStyleEditor();
+    //ImGui::ShowStyleEditor();
 
     ImGui::SetNextWindowSize(ImVec2(1000, 600), ImGuiCond_FirstUseEver);
     ImGui::SetWindowPos(ImVec2(-1000, 50), ImGuiCond_FirstUseEver);
 
-    if (!ImGui::Begin(title, bDraw)) // Passing a bool only causes problems if you Begin a new window. I would not suggest to use it.
+    if (!ImGui::Begin(title, bDraw))
     {
         ImGui::End();
         return;
@@ -79,7 +79,7 @@ void CGameConsole::Draw(const char* title, bool* bDraw)
     ImGui::Separator();
     if (ImGui::BeginPopup("Options"))
     {
-        ImGui::Checkbox("Auto-scroll", &AutoScroll);
+        ImGui::Checkbox("Auto-scroll", &m_bAutoScroll);
         if (ImGui::SmallButton("Clear"))
         {
             ClearLog();
@@ -92,7 +92,7 @@ void CGameConsole::Draw(const char* title, bool* bDraw)
         ImGui::OpenPopup("Options");
     }
     ImGui::SameLine();
-    Filter.Draw("Filter [\"-incl,-excl\"] [\"error\"]", footer_width_to_reserve - 500);
+    m_itFilter.Draw("Filter [\"-incl,-excl\"] [\"error\"]", footer_width_to_reserve - 500);
     ImGui::Separator();
 
     ///////////////////////////////////////////////////////////////////////
@@ -105,7 +105,7 @@ void CGameConsole::Draw(const char* title, bool* bDraw)
     for (int i = 0; i < Items.Size; i++)
     {
         const char* item = Items[i];
-        if (!Filter.PassFilter(item))
+        if (!m_itFilter.PassFilter(item))
         {
             continue;
         }
@@ -176,8 +176,8 @@ void CGameConsole::Draw(const char* title, bool* bDraw)
     }
     if (copy_to_clipboard) { ImGui::LogFinish(); }
 
-    if (ScrollToBottom || (AutoScroll && ImGui::GetScrollY() >= ImGui::GetScrollMaxY())) { ImGui::SetScrollHereY(1.0f); }
-    ScrollToBottom = false;
+    if (m_bScrollToBottom || (m_bAutoScroll && ImGui::GetScrollY() >= ImGui::GetScrollMaxY())) { ImGui::SetScrollHereY(1.0f); }
+    m_bScrollToBottom = false;
 
     ///////////////////////////////////////////////////////////////////////
     ImGui::PopStyleVar();
@@ -191,11 +191,11 @@ void CGameConsole::Draw(const char* title, bool* bDraw)
     if (ImGui::IsWindowAppearing()) { ImGui::SetKeyboardFocusHere(); }
     ImGuiInputTextFlags input_text_flags = ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackCompletion | ImGuiInputTextFlags_CallbackHistory;
 
-    if (ImGui::InputText("##input", InputBuf, IM_ARRAYSIZE(InputBuf), input_text_flags, &TextEditCallbackStub, (void*)this))
+    if (ImGui::InputText("##input", m_szInputBuf, IM_ARRAYSIZE(m_szInputBuf), input_text_flags, &TextEditCallbackStub, (void*)this))
     {
-        char* s = InputBuf;
+        char* s = m_szInputBuf;
         const char* replace = "";
-        if (strstr(InputBuf, "`")) { strcpy_s(s, sizeof(replace), replace); }
+        if (strstr(m_szInputBuf, "`")) { strcpy_s(s, sizeof(replace), replace); }
         Strtrim(s);
         if (s[0]) { ProcessCommand(s); }
         strcpy_s(s, sizeof(replace), replace);
@@ -205,7 +205,7 @@ void CGameConsole::Draw(const char* title, bool* bDraw)
     ImGui::SameLine();
     if (ImGui::Button("Submit"))
     {
-        char* s = InputBuf;
+        char* s = m_szInputBuf;
         const char* replace = "";
         if (s[0]) { ProcessCommand(s); }
         strcpy_s(s, sizeof(replace), replace);
@@ -235,40 +235,54 @@ void CGameConsole::ProcessCommand(const char* command_line)
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
     AddLog("# %s\n", command_line);
 
-    HistoryPos = -1;
-    for (int i = History.Size - 1; i >= 0; i--)
+    m_nHistoryPos = -1;
+    for (int i = m_ivHistory.Size - 1; i >= 0; i--)
     {
-        if (Stricmp(History[i], command_line) == 0)
+        if (Stricmp(m_ivHistory[i], command_line) == 0)
         {
-            delete History[i];
-            History.erase(History.begin() + i);
+            delete m_ivHistory[i];
+            m_ivHistory.erase(m_ivHistory.begin() + i);
             break;
         }
     }
 
-    History.push_back(Strdup(command_line));
+    m_ivHistory.push_back(Strdup(command_line));
     if (Stricmp(command_line, "CLEAR") == 0)
     {
         ClearLog();
     }
     else if (Stricmp(command_line, "HELP") == 0)
     {
-        AddLog("Commands:");
-        for (int i = 0; i < Commands.Size; i++)
+        AddLog("Frontend commands:");
+        for (int i = 0; i < m_ivCommands.Size; i++)
         {
-            AddLog("- %s", Commands[i]);
+            AddLog("- %s", m_ivCommands[i]);
         }
+
+        AddLog("Log types:");
+        AddLog("Script(S): = Server VM");
+        AddLog("Script(C): = Client VM");
+        AddLog("Script(U): = UI VM");
+
+        AddLog("Native(S): = Server dll code");
+        AddLog("Native(C): = Client dll code");
+        AddLog("Native(U): = UI dll code");
+
+        AddLog("Native(E): = Engine dll code");
+        AddLog("Native(F): = FileSystem dll code");
+        AddLog("Native(R): = RTech dll code");
+        AddLog("Native(M): = MaterialSystem dll code");
     }
     else if (Stricmp(command_line, "HISTORY") == 0)
     {
-        int first = History.Size - 10;
-        for (int i = first > 0 ? first : 0; i < History.Size; i++)
+        int first = m_ivHistory.Size - 10;
+        for (int i = first > 0 ? first : 0; i < m_ivHistory.Size; i++)
         {
-            AddLog("%3d: %s\n", i, History[i]);
+            AddLog("%3d: %s\n", i, m_ivHistory[i]);
         }
     }
 
-    ScrollToBottom = true;
+    m_bScrollToBottom = true;
 }
 
 void CGameConsole::ExecCommand(const char* command_line)
@@ -300,25 +314,25 @@ int CGameConsole::TextEditCallback(ImGuiInputTextCallbackData* data)
     }
     case ImGuiInputTextFlags_CallbackHistory:
     {
-        const int prev_history_pos = HistoryPos;
+        const int prev_history_pos = m_nHistoryPos;
         if (data->EventKey == ImGuiKey_UpArrow)
         {
-            if (HistoryPos == -1) { HistoryPos = History.Size - 1; }
-            else if (HistoryPos > 0) { HistoryPos--; }
+            if (m_nHistoryPos == -1) { m_nHistoryPos = m_ivHistory.Size - 1; }
+            else if (m_nHistoryPos > 0) { m_nHistoryPos--; }
         }
         else if (data->EventKey == ImGuiKey_DownArrow)
         {
-            if (HistoryPos != -1)
+            if (m_nHistoryPos != -1)
             {
-                if (++HistoryPos >= History.Size)
+                if (++m_nHistoryPos >= m_ivHistory.Size)
                 {
-                    HistoryPos = -1;
+                    m_nHistoryPos = -1;
                 }
             }
         }
-        if (prev_history_pos != HistoryPos)
+        if (prev_history_pos != m_nHistoryPos)
         {
-            const char* history_str = (HistoryPos >= 0) ? History[HistoryPos] : "";
+            const char* history_str = (m_nHistoryPos >= 0) ? m_ivHistory[m_nHistoryPos] : "";
             data->DeleteChars(0, data->BufTextLen);
             data->InsertChars(0, history_str);
         }

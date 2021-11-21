@@ -258,6 +258,9 @@
     <ClCompile Include="common\opcodes.cpp">
       <Filter>sdk\common</Filter>
     </ClCompile>
+    <ClCompile Include="mathlib\IceKey.cpp">
+      <Filter>sdk\mathlib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="client\CHLClient.h">
@@ -745,6 +748,9 @@
     </ClInclude>
     <ClInclude Include="common\opcodes.h">
       <Filter>sdk\common</Filter>
+    </ClInclude>
+    <ClInclude Include="mathlib\IceKey.H">
+      <Filter>sdk\mathlib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

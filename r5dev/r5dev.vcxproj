@@ -41,6 +41,7 @@
     <ClCompile Include="gameui\IServerBrowser.cpp" />
     <ClCompile Include="inputsystem\inputsystem.cpp" />
     <ClCompile Include="launcher\IApplication.cpp" />
+    <ClCompile Include="mathlib\IceKey.cpp" />
     <ClCompile Include="networksystem\serverlisting.cpp" />
     <ClCompile Include="public\bansystem.cpp" />
     <ClCompile Include="public\r5net.cpp" />
@@ -124,6 +125,7 @@
     <ClInclude Include="inputsystem\ButtonCode.h" />
     <ClInclude Include="inputsystem\inputsystem.h" />
     <ClInclude Include="launcher\IApplication.h" />
+    <ClInclude Include="mathlib\IceKey.H" />
     <ClInclude Include="mathlib\vector.h" />
     <ClInclude Include="networksystem\serverlisting.h" />
     <ClInclude Include="networksystem\sm_protocol.h" />
@@ -274,7 +276,7 @@
     <ProjectGuid>{28cc6b4f-7a95-4933-ada9-65e38d48516d}</ProjectGuid>
     <RootNamespace>r5dev</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>r5devdll</ProjectName>
+    <ProjectName>r5dev</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

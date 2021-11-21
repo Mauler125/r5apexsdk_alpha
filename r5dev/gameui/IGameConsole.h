@@ -13,14 +13,14 @@ class CGameConsole
 {
 private:
     ///////////////////////////////////////////////////////////////////////////
-    char                           InputBuf[256] = { 0 };
-    ImVector<const char*>          Commands;
-    ImVector<char*>                History;
-    int                            HistoryPos = -1;
-    ImGuiTextFilter                Filter;
-    bool                           AutoScroll = true;
-    bool                           ScrollToBottom = false;
-    bool                           ThemeSet = false;
+    char                           m_szInputBuf[256] = { 0 };
+    ImVector<const char*>          m_ivCommands;
+    ImVector<char*>                m_ivHistory;
+    int                            m_nHistoryPos = -1;
+    ImGuiTextFilter                m_itFilter;
+    bool                           m_bAutoScroll = true;
+    bool                           m_bScrollToBottom = false;
+    bool                           m_bThemeSet = false;
 
 public:
     ///////////////////////////////////////////////////////////////////////////
