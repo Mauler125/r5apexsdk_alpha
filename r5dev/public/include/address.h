@@ -320,7 +320,7 @@ private:
 	std::uintptr_t ptr = 0;
 };
 
-class Module
+class MODULE
 {
 public:
 
@@ -350,8 +350,8 @@ public:
 		return ModuleSections();
 	}
 
-	Module() = default;
-	Module(std::string moduleName) : moduleName(moduleName)
+	MODULE() = default;
+	MODULE(std::string moduleName) : moduleName(moduleName)
 	{
 		const MODULEINFO mInfo = GetModuleInfo(moduleName.c_str()); // Get module info.
 		sizeOfModule = (DWORD64)mInfo.SizeOfImage; // Grab the module size.

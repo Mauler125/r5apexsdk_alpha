@@ -47,9 +47,9 @@
 #ifndef SDKLAUNCHER
 namespace
 {
-	Module g_mGameDll            = Module("r5apex.exe");
-	Module g_mRadVideoToolsDll   = Module("bink2w64.dll");
-	Module g_mRadAudioDecoderDll = Module("binkawin64.dll");
-	Module g_mRadAudioSystemDll  = Module("mileswin64.dll");
+	MODULE g_mGameDll            = MODULE("r5apex.exe");
+	MODULE g_mRadVideoToolsDll   = MODULE("bink2w64.dll");
+	MODULE g_mRadAudioDecoderDll = MODULE("binkawin64.dll");
+	MODULE g_mRadAudioSystemDll  = MODULE("mileswin64.dll");
 }
 #endif // SDKLAUNCHER
