@@ -1,4 +1,5 @@
 #pragma once
+#ifndef DEDICATED
 
 ///////////////////////////////////////////////////////////////////////////////
 // Initialization
@@ -121,3 +122,4 @@ public:
 };
 
 extern CGameConsole* g_GameConsole;
+#endif // !DEDICATED

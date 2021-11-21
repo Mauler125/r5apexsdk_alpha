@@ -22,7 +22,7 @@
 
 #if !defined(DEDICATED)
 #include <d3d11.h>
-#endif // DEDICATED
+#endif // !DEDICATED
 
 #include "thirdparty/detours/include/detours.h"
 #include "thirdparty/detours/include/idetour.h"
@@ -33,7 +33,7 @@
 #include "thirdparty/imgui/include/imgui_stdlib.h"
 #include "thirdparty/imgui/include/imgui_impl_dx11.h"
 #include "thirdparty/imgui/include/imgui_impl_win32.h"
-#endif // DEDICATED
+#endif // !DEDICATED
 
 #include "thirdparty/spdlog/include/spdlog.h"
 #include "thirdparty/spdlog/include/sinks/basic_file_sink.h"
@@ -53,12 +53,3 @@ namespace
 	Module g_mRadAudioSystemDll  = Module("mileswin64.dll");
 }
 #endif // SDKLAUNCHER
-
-//#include "address.h"
-/*
-#define FUNC_AT_ADDRESS(name, funcbody, addr) \
-   using _##name = funcbody; \
-   _##name name = (funcbody)addr \
-
-#define PRINT_ADDRESS(name, address) std::cout << name << ": " << std::hex << std::uppercase << address << std::endl;
-*/

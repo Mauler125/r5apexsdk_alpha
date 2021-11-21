@@ -1,12 +1,16 @@
-#include "core/stdafx.h"
+﻿#include "core/stdafx.h"
 #include "core/init.h"
-#include "common/opcptc.h"
+#include "common/opcodes.h"
 #include "launcher/IApplication.h"
 #include "engine/baseclient.h"
 #include "vpc/basefilesystem.h"
+
+#ifndef DEDICATED
 #include "vgui/CEngineVGui.h"
 #include "vgui/vgui_fpspanel.h"
 #include "client/CHLClient.h"
+#endif // !DEDICATED
+
 #include "engine/host_state.h"
 #include "vpc/keyvalues.h"
 #include "vguimatsurface/MatSystemSurface.h"
@@ -37,9 +41,11 @@ void InstallHooks()
 	IApplication_Attach();
 	CBaseClient_Attach();
 	CBaseFileSystem_Attach();
+#ifndef DEDICATED
 	CEngineVGui_Attach();
 	CFPSPanel_Attach();
 	CHLClient_Attach();
+#endif // !DEDICATED
 	CHostState_Attach();
 	CNetChan_Attach();
 	ConCommand_Attach();
@@ -63,6 +69,11 @@ void InstallHooks()
 	}
 
 	IConVar_InitConVar();
+
+#ifdef DEDICATED
+	Dedicated_Init();
+#endif // DEDICATED
+
 }
 
 void RemoveHooks()
@@ -77,9 +88,11 @@ void RemoveHooks()
 	IApplication_Detach();
 	CBaseClient_Detach();
 	CBaseFileSystem_Detach();
+#ifndef DEDICATED
 	CEngineVGui_Detach();
 	CFPSPanel_Detach();
 	CHLClient_Detach();
+#endif // !DEDICATED
 	CHostState_Detach();
 	CNetChan_Detach();
 	ConCommand_Detach();
@@ -105,12 +118,14 @@ void PrintHAddress() // Test the sigscan results
 	std::cout << "+--------------------------------------------------------+" << std::endl;
 	std::cout << "| CBaseFileSystem::Warning             : " << std::hex << std::uppercase << p_CBaseFileSystem_Warning.GetPtr()             << std::setw(8) << " |" << std::endl;
 	std::cout << "+--------------------------------------------------------+" << std::endl;
+#ifndef DEDICATED
 	std::cout << "| CEngineVGui::Paint                   : " << std::hex << std::uppercase << p_CEngineVGui_Paint.GetPtr()                   << std::setw(8) << " |" << std::endl;
 	std::cout << "+--------------------------------------------------------+" << std::endl;
 	std::cout << "| CFPSPannel::Paint                    : " << std::hex << std::uppercase << p_CFPSPanel_Paint.GetPtr()                     << std::setw(8) << " |" << std::endl;
 	std::cout << "+--------------------------------------------------------+" << std::endl;
 	std::cout << "| CHLClient::FrameStageNotify          : " << std::hex << std::uppercase << p_FrameStageNotify.GetPtr()                    << std::setw(8) << " |" << std::endl;
 	std::cout << "+--------------------------------------------------------+" << std::endl;
+#endif // !DEDICATED
 	std::cout << "| CHostState::FrameUpdate              : " << std::hex << std::uppercase << p_CHostState_FrameUpdate.GetPtr()              << std::setw(8) << " |" << std::endl;
 	std::cout << "+--------------------------------------------------------+" << std::endl;
 	std::cout << "| KeyValues::FindKey                   : " << std::hex << std::uppercase << p_KeyValues_FindKey.GetPtr()                   << std::setw(8) << " |" << std::endl;

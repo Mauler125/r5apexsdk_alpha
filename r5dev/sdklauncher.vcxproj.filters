@@ -28,7 +28,7 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="sdklauncher.rc">
+    <ResourceCompile Include="sdklauncher\sdklauncher.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>

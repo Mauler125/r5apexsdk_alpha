@@ -13,8 +13,10 @@ namespace
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef DEDICATED
 void CGameConsole_Callback(const CCommand& cmd);
 void CCompanion_Callback(const CCommand& cmd);
+#endif // !DEDICATED
 void Kick_Callback(CCommand* cmd);
 void KickID_Callback(CCommand* cmd);
 void Ban_Callback(CCommand* cmd);

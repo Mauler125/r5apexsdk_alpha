@@ -44,10 +44,12 @@ void HCBaseFileSystem_Warning(void* thisptr, FileWarningLevel_t level, const cha
 	iconsole->debug(buf);
 	wconsole->debug(buf);
 
+#ifndef DEDICATED
 	std::string s = fs_oss.str();
 	const char* c = s.c_str();
 
 	Items.push_back(Strdup((const char*)c));
+#endif // !DEDICATED
 }
 
 void CBaseFileSystem_Attach()

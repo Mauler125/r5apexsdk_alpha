@@ -70,11 +70,13 @@ void Sys_Print(SYS_DLL idx, const char* fmt, ...)
 	wconsole->debug(vmStr);
 	sqlogger->debug(vmStr);
 
+#ifndef DEDICATED
 	std::string s = g_spd_sys_w_oss.str();
 	const char* c = s.c_str();
 
 	g_pLogSystem.AddLog((LogType_t)SYS_DLL::ENGINE, s);
 	Items.push_back(Strdup((const char*)c));
+#endif // !DEDICATED
 }
 
 //-----------------------------------------------------------------------------

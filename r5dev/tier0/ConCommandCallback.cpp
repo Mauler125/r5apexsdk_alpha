@@ -9,6 +9,7 @@
 #include "gameui/IGameConsole.h"
 #include "public/include/bansystem.h"
 
+#ifndef DEDICATED
 void CGameConsole_Callback(const CCommand& cmd)
 {
 	g_bShowConsole = !g_bShowConsole;
@@ -18,6 +19,7 @@ void CCompanion_Callback(const CCommand& cmd)
 {
 	g_bShowBrowser = !g_bShowBrowser;
 }
+#endif // !DEDICATED
 
 void Kick_Callback(CCommand* cmd)
 {

@@ -1,9 +1,11 @@
 #include "core/stdafx.h"
 #include "core/init.h"
-#include "common/opcptc.h"
+#include "common/opcodes.h"
 
 #include "rtech/rtech.h"
+#ifndef DEDICATED
 #include "windows/id3dx.h"
+#endif // !DEDICATED
 #include "windows/console.h"
 
 #include "client/IVEngineClient.h"
@@ -90,7 +92,9 @@ DWORD __stdcall ProcessConsoleWorker(LPVOID)
 		///////////////////////////////////////////////////////////////////////
 		// Debug toggles
 		if (sCommand == "pattern test") { PrintHAddress(); PrintOAddress(); continue; }
+#ifndef DEDICATED
 		if (sCommand == "directx test") { PrintDXAddress(); continue; }
+#endif // !DEDICATED
 		///////////////////////////////////////////////////////////////////////
 		// Execute the command in the r5 SQVM
 		IVEngineClient_CommandExecute(NULL, sCommand.c_str());

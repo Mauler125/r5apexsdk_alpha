@@ -1,4 +1,6 @@
 #include "core/stdafx.h"
+#ifndef DEDICATED // This file should not be compiled for DEDICATED!
+
 #include "windows/id3dx.h"
 #include "windows/input.h"
 #include "engine/sys_utils.h"
@@ -11,11 +13,11 @@
 File   : id3dx.cpp
 Date   : 15:06:2021
 Author : Kawe Mazidjatari
-Purpose: Microsoft DirectX hook implementation
+Purpose: Microsoft DirectX 11 'IDXGISwapChain::Present' hook implementation
 -----------------------------------------------------------------------------------
 History:
 - 15:06:2021 | 14:56 : Created by Kawe Mazidjatari
-- 17:06:2021 | 13:12 : Destroy / release objects on resolution change
+- 17:06:2021 | 13:12 : Destroy / release objects on 'GetResizeBuffers' callback
 
 **********************************************************************************/
 
@@ -534,7 +536,7 @@ DWORD __stdcall DXSwapChainWorker(LPVOID)
 
 void SetupDXSwapChain()
 {
-	// Create a worker thread for the console overlay
+	// Create a worker thread for the in-game console frontend
 	DWORD __stdcall DXSwapChainWorker(LPVOID);
 	HANDLE hThread = CreateThread(NULL, 0, DXSwapChainWorker, NULL, 0, &g_dThreadId);
 
@@ -543,3 +545,4 @@ void SetupDXSwapChain()
 		CloseHandle(hThread);
 	}
 }
+#endif // !DEDICATED

@@ -188,7 +188,7 @@
     <ClCompile Include="sdklauncher\sdklauncher.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="sdklauncher.rc" />
+    <ResourceCompile Include="sdklauncher\sdklauncher.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="shared\resource\sdklauncher.ico" />

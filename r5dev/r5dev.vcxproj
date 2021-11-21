@@ -22,7 +22,7 @@
     <ClCompile Include="client\CHLClient.cpp" />
     <ClCompile Include="client\client.cpp" />
     <ClCompile Include="client\IVEngineClient.cpp" />
-    <ClCompile Include="common\opcptc.cpp" />
+    <ClCompile Include="common\opcodes.cpp" />
     <ClCompile Include="core\dllmain.cpp" />
     <ClCompile Include="core\init.cpp" />
     <ClCompile Include="core\stdafx.cpp">
@@ -43,6 +43,7 @@
     <ClCompile Include="launcher\IApplication.cpp" />
     <ClCompile Include="networksystem\serverlisting.cpp" />
     <ClCompile Include="public\bansystem.cpp" />
+    <ClCompile Include="public\r5net.cpp" />
     <ClCompile Include="public\utility.cpp" />
     <ClCompile Include="rtech\rtech.cpp" />
     <ClCompile Include="rtech\stryder.cpp" />
@@ -104,7 +105,7 @@
     <ClInclude Include="client\CHLClient.h" />
     <ClInclude Include="client\client.h" />
     <ClInclude Include="client\IVEngineClient.h" />
-    <ClInclude Include="common\opcptc.h" />
+    <ClInclude Include="common\opcodes.h" />
     <ClInclude Include="common\protocol.h" />
     <ClInclude Include="core\init.h" />
     <ClInclude Include="core\logdef.h" />
@@ -130,6 +131,8 @@
     <ClInclude Include="public\include\bansystem.h" />
     <ClInclude Include="public\include\httplib.h" />
     <ClInclude Include="public\include\json.hpp" />
+    <ClInclude Include="public\include\r5net.h" />
+    <ClInclude Include="public\include\serverlisting.h" />
     <ClInclude Include="public\include\utility.h" />
     <ClInclude Include="rtech\rtech.h" />
     <ClInclude Include="rtech\stryder.h" />

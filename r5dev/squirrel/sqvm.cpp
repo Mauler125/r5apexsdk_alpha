@@ -62,16 +62,19 @@ void* HSQVM_PrintFunc(void* sqvm, char* fmt, ...)
 	{
 		iconsole->debug(vmStr);
 		wconsole->debug(vmStr);
-
+#ifndef DEDICATED
 		std::string s = g_spd_sqvm_p_oss.str();
 		const char* c = s.c_str();
 		Items.push_back(Strdup((const char*)c));
+#endif // !DEDICATED
 	}
+#ifndef DEDICATED
 	if (sq_showvmoutput->m_iValue > 2)
 	{
 		std::string s = g_spd_sqvm_p_oss.str();
 		g_pLogSystem.AddLog((LogType_t)vmIdx, s);
 	}
+#endif // !DEDICATED
 	return NULL;
 }
 
@@ -129,18 +132,20 @@ std::int64_t HSQVM_WarningFunc(void* sqvm, int a2, int a3, int* stringSize, void
 	{
 		iconsole->debug(vmStr); // Emit to in-game console.
 		wconsole->debug(vmStr); // Emit to windows console.
-
+#ifndef DEDICATED
 		std::string s = g_spd_sqvm_w_oss.str();
 		const char* c = s.c_str();
 		Items.push_back(Strdup(c));
+#endif // !DEDICATED
 	}
+#ifndef DEDICATED
 	if (sq_showvmwarning->m_iValue > 2)
 	{
 		g_pLogSystem.AddLog((LogType_t)vmIdx, s);
 		const char* c = s.c_str();
 		Items.push_back(Strdup(c));
 	}
-
+#endif // !DEDICATED
 	g_bSQVM_WarnFuncCalled = false;
 
 	return result;

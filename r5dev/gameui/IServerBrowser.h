@@ -1,4 +1,5 @@
 #pragma once
+#ifndef DEDICATED
 #include "networksystem/serverlisting.h"
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -151,3 +152,4 @@ public:
 };
 
 extern CServerBrowser* g_ServerBrowser;
+#endif // !DEDICATED

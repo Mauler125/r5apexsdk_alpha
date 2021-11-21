@@ -2,8 +2,10 @@
 #include "core/r5dev.h"
 #include "core/init.h"
 /*****************************************************************************/
+#ifndef DEDICATED
 #include "windows/id3dx.h"
 #include "windows/input.h"
+#endif // !DEDICATED
 #include "windows/console.h"
 
 //#############################################################################
@@ -14,8 +16,10 @@ void InitializeR5Dev()
 {
     SetupConsole();
     InstallHooks();
+#ifndef DEDICATED
     InstallIPHooks();
     SetupDXSwapChain();
+#endif // !DEDICATED
 
     spdlog::get("console")->set_pattern("%v");
     spdlog::info("+-----------------------------------------------------------------------------+\n");
@@ -26,8 +30,10 @@ void InitializeR5Dev()
 
 void TerminateR5Dev()
 {
+#ifndef DEDICATED
     RemoveIPHooks();
     RemoveDXHooks();
+#endif // !DEDICATED
     FreeConsole();
 }
 

@@ -84,10 +84,12 @@ void* ConCommand_RegisterCommand(const char* name, const char* helpString, int f
 //-----------------------------------------------------------------------------
 void ConCommand_InitConCommand()
 {
+#ifndef DEDICATED
 	//-------------------------------------------------------------------------
 	// CLIENT DLL                                                             |
 	void* gameConsoleCommand   = ConCommand_RegisterCommand("cl_showconsole", "Opens the game console.", 0, CGameConsole_Callback, nullptr);
 	void* serverBrowserCommand = ConCommand_RegisterCommand("cl_showbrowser", "Opens the server browser.", 0, CCompanion_Callback, nullptr);
+#endif // !DEDICATED
 	//-------------------------------------------------------------------------
 	// SERVER DLL                                                             |
 	void* kickCommand          = ConCommand_RegisterCommand("sv_kick", "Kick a client from the server by name. | Usage: kick <name>.", 0, Kick_Callback, nullptr);
