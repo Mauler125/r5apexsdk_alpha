@@ -85,7 +85,7 @@ BOOL WINAPI HShowCursor(BOOL bShow)
 // MANAGEMENT
 //#############################################################################
 
-void InstallIPHooks()
+void Input_Init()
 {
 	SetupIPHooks();
 	///////////////////////////////////////////////////////////////////////////
@@ -102,7 +102,7 @@ void InstallIPHooks()
 	DetourTransactionCommit();
 }
 
-void RemoveIPHooks()
+void Input_Shutdown()
 {
 	///////////////////////////////////////////////////////////////////////////
 	DetourTransactionBegin();

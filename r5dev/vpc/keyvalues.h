@@ -35,8 +35,10 @@ namespace
 	void* (*KeyValues_FindKey)(void* a1, const char* a2, bool a3) = (void* (*)(void*, const char*, bool))p_KeyValues_FindKey.GetPtr(); /*40 56 57 41 57 48 81 EC 30 01 00 00 45 0F B6 F8*/
 
 	ADDRESS p_KeyValues_Init = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x40\x53\x48\x83\xEC\x20\x48\x8B\x05\x00\x00\x00\x01\x48\x8B\xD9\x4C\x8B\xC2", "xxxxxxxxx???xxxxxxx"); /*40 53 48 83 EC 20 48 8B 05 ?? ?? ?? 01 48 8B D9 4C 8B C2*/
-	std::int64_t (*KeyValues_Init)(std::int64_t a1, std::int64_t a2, std::int64_t a3, std::int64_t a4) = (std::int64_t (*)(std::int64_t, std::int64_t, std::int64_t, std::int64_t))p_KeyValues_Init.GetPtr();
+	void* (*KeyValues_Init)(std::int64_t a1, std::int64_t a2, std::int64_t a3, std::int64_t a4) = (void* (*)(std::int64_t, std::int64_t, std::int64_t, std::int64_t))p_KeyValues_Init.GetPtr();
 #endif
+	ADDRESS p_KeyValues_LoadPlaylist = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\xE8\x00\x00\x00\x00\x80\x3D\x00\x00\x00\x00\x00\x74\x0C", "x????xx?????xx").FollowNearCallSelf().GetPtr();
+	bool (*KeyValues_LoadPlaylist)(const char* source) = (bool (*)(const char*))p_KeyValues_LoadPlaylist.GetPtr(); /*E8 ? ? ? ? 80 3D ? ? ? ? ? 74 0C*/
 }
 
 class CKeyValuesSystem // VTABLE @ 0x1413AA1E8 in R5pc_r5launch_N1094_CL456479_2019_10_30_05_20_PM
@@ -223,6 +225,10 @@ public:
 	KeyValues*       m_pSub;                       // 0x0038
 	KeyValues*       m_pChain;                     // 0x0040
 };
+
+///////////////////////////////////////////////////////////////////////////////
+void CKeyValueSystem_InitPlaylist();
+void CKeyValueSystem_Init();
 
 ///////////////////////////////////////////////////////////////////////////////
 extern CKeyValuesSystem* g_pKeyValuesSystem;

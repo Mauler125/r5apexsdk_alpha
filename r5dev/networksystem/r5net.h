@@ -1,5 +1,4 @@
 #pragma once
-
 #include "serverlisting.h"
 
 namespace R5Net

@@ -10,9 +10,6 @@
     <Filter Include="sdk\common">
       <UniqueIdentifier>{f280958c-f362-4918-a1f3-ca66f4bf1ec6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sdk\dedicated">
-      <UniqueIdentifier>{d8fa043d-6c1d-4e3f-a2bd-d3c3c82e0311}</UniqueIdentifier>
-    </Filter>
     <Filter Include="sdk\ebisusdk">
       <UniqueIdentifier>{00cd526c-e897-4d88-86e0-03612cfda456}</UniqueIdentifier>
     </Filter>
@@ -79,14 +76,14 @@
     <Filter Include="thirdparty\spdlog\include\cfg">
       <UniqueIdentifier>{d4c6d6c0-05da-43ab-a6fc-f61ce721f870}</UniqueIdentifier>
     </Filter>
-    <Filter Include="public">
-      <UniqueIdentifier>{bbb7a170-37ae-4c76-b99a-8ebb924818ed}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="public\include">
-      <UniqueIdentifier>{e1897f61-953e-4173-9c75-e59ca33929ea}</UniqueIdentifier>
-    </Filter>
     <Filter Include="core">
       <UniqueIdentifier>{8aacb674-0b73-41fa-94f0-98ba718289a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sdk\public">
+      <UniqueIdentifier>{bbb7a170-37ae-4c76-b99a-8ebb924818ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sdk\public\include">
+      <UniqueIdentifier>{e1897f61-953e-4173-9c75-e59ca33929ea}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -151,25 +148,19 @@
       <Filter>sdk\networksystem</Filter>
     </ClInclude>
     <ClInclude Include="public\include\httplib.h">
-      <Filter>public\include</Filter>
+      <Filter>sdk\public\include</Filter>
     </ClInclude>
     <ClInclude Include="public\include\json.hpp">
-      <Filter>public\include</Filter>
-    </ClInclude>
-    <ClInclude Include="public\include\r5net.h">
-      <Filter>public\include</Filter>
-    </ClInclude>
-    <ClInclude Include="public\include\serverlisting.h">
-      <Filter>public\include</Filter>
+      <Filter>sdk\public\include</Filter>
     </ClInclude>
     <ClInclude Include="public\include\utility.h">
-      <Filter>public\include</Filter>
+      <Filter>sdk\public\include</Filter>
     </ClInclude>
     <ClInclude Include="public\include\address.h">
-      <Filter>public\include</Filter>
+      <Filter>sdk\public\include</Filter>
     </ClInclude>
     <ClInclude Include="public\include\bansystem.h">
-      <Filter>public\include</Filter>
+      <Filter>sdk\public\include</Filter>
     </ClInclude>
     <ClInclude Include="rtech\stryder.h">
       <Filter>sdk\rtech</Filter>
@@ -513,6 +504,15 @@
     <ClInclude Include="windows\console.h">
       <Filter>windows</Filter>
     </ClInclude>
+    <ClInclude Include="networksystem\r5net.h">
+      <Filter>sdk\networksystem</Filter>
+    </ClInclude>
+    <ClInclude Include="mathlib\IceKey.H">
+      <Filter>sdk\mathlib</Filter>
+    </ClInclude>
+    <ClInclude Include="mathlib\parallel_for.h">
+      <Filter>sdk\mathlib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="client\IVEngineClient.cpp">
@@ -560,17 +560,11 @@
     <ClCompile Include="launcher\IApplication.cpp">
       <Filter>sdk\launcher</Filter>
     </ClCompile>
-    <ClCompile Include="networksystem\serverlisting.cpp">
-      <Filter>sdk\networksystem</Filter>
-    </ClCompile>
-    <ClCompile Include="public\r5net.cpp">
-      <Filter>public</Filter>
-    </ClCompile>
     <ClCompile Include="public\utility.cpp">
-      <Filter>public</Filter>
+      <Filter>sdk\public</Filter>
     </ClCompile>
     <ClCompile Include="public\bansystem.cpp">
-      <Filter>public</Filter>
+      <Filter>sdk\public</Filter>
     </ClCompile>
     <ClCompile Include="rtech\stryder.cpp">
       <Filter>sdk\rtech</Filter>
@@ -613,6 +607,12 @@
     </ClCompile>
     <ClCompile Include="windows\console.cpp">
       <Filter>windows</Filter>
+    </ClCompile>
+    <ClCompile Include="networksystem\r5net.cpp">
+      <Filter>sdk\networksystem</Filter>
+    </ClCompile>
+    <ClCompile Include="mathlib\IceKey.cpp">
+      <Filter>sdk\mathlib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

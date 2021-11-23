@@ -72,4 +72,4 @@ void CNetChan_Detach();
 ///////////////////////////////////////////////////////////////////////////////
 extern bool g_bTraceNetChannel;
 extern std::string g_szNetKey;
-extern std::uintptr_t g_uNetKeyPtr;
+extern std::uintptr_t g_pNetKey;

@@ -2,7 +2,7 @@
 //
 
 #include "core/stdafx.h"
-#include "public/include/r5net.h"
+#include "networksystem/r5net.h"
 
 std::string R5Net::Client::GetVersionString()
 {

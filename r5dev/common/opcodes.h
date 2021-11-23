@@ -4,7 +4,7 @@
 #include "public/include/utility.h"
 
 void Dedicated_Init();
-void InstallOpcodes();
+void RuntimePtc_Init();
 void ToggleOpcodes();
 
 namespace

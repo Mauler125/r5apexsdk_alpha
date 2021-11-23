@@ -1,3 +1,3 @@
 #pragma once
 
-void SetupConsole();
+void Console_Init();

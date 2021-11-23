@@ -1,5 +1,5 @@
 #pragma once
-
+//=============================================================================
 enum
 {
 	CONNECTIONLESS_HEADER = 0xffffffff,
@@ -33,7 +33,7 @@ enum NetworkMessageGroup_t
 enum SystemNetworkMessageType_t
 {
 	net_nop 		= 0,			// nop command used for padding
-	net_disconnect	= 1,			// disconnect, last message in connection
+	net_disconnect	= 1,			// disconnect (last message in connection)
 
 	net_num_messages
 };

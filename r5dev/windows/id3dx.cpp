@@ -217,7 +217,7 @@ void GetPresent()
 		Sys_Print(SYS_DLL::MS, "+--------------------------------------------------------+\n");
 		Sys_Print(SYS_DLL::MS, "| >>>>>>>>>| VIRTUAL METHOD TABLE HOOK FAILED |<<<<<<<<< |\n");
 		Sys_Print(SYS_DLL::MS, "+--------------------------------------------------------+\n");
-		RemoveDXHooks();
+		DirectX_Shutdown();
 		return;
 	}
 
@@ -465,21 +465,22 @@ bool LoadTextureBuffer(unsigned char* image_data, const int& image_width, const 
 
 void InstallDXHooks()
 {
+	///////////////////////////////////////////////////////////////////////////////
 	g_oPostMessageA = (IPostMessageA)DetourFindFunction("user32.dll", "PostMessageA");
 	g_oPostMessageW = (IPostMessageW)DetourFindFunction("user32.dll", "PostMessageW");
-	///////////////////////////////////////////////////////////////////////////////
+
 	// Begin the detour transaction
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
-	///////////////////////////////////////////////////////////////////////////////
+
 	// Hook PostMessage
 	DetourAttach(&(LPVOID&)g_oPostMessageA, (PBYTE)HPostMessageA);
 	DetourAttach(&(LPVOID&)g_oPostMessageW, (PBYTE)HPostMessageW);
-	///////////////////////////////////////////////////////////////////////////////
+
 	// Hook SwapChain
 	DetourAttach(&(LPVOID&)g_fnIDXGISwapChainPresent, (PBYTE)Present);
 	DetourAttach(&(LPVOID&)g_oResizeBuffers, (PBYTE)GetResizeBuffers);
-	///////////////////////////////////////////////////////////////////////////////
+
 	// Commit the transaction
 	if (DetourTransactionCommit() != NO_ERROR)
 	{
@@ -488,21 +489,21 @@ void InstallDXHooks()
 	}
 }
 
-void RemoveDXHooks()
+void DirectX_Shutdown()
 {
-	///////////////////////////////////////////////////////////////////////////////
+
 	// Begin the detour transaction
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
-	///////////////////////////////////////////////////////////////////////////////
+
 	// Unhook PostMessage
 	DetourDetach(&(LPVOID&)g_oPostMessageA, (PBYTE)HPostMessageA);
 	DetourDetach(&(LPVOID&)g_oPostMessageW, (PBYTE)HPostMessageW);
-	///////////////////////////////////////////////////////////////////////////////
+
 	// Unhook SwapChain
 	DetourDetach(&(LPVOID&)g_fnIDXGISwapChainPresent, (PBYTE)Present);
 	DetourDetach(&(LPVOID&)g_oResizeBuffers, (PBYTE)GetResizeBuffers);
-	///////////////////////////////////////////////////////////////////////////////
+
 	// Commit the transaction
 	DetourTransactionCommit();
 
@@ -534,7 +535,7 @@ DWORD __stdcall DXSwapChainWorker(LPVOID)
 	return true;
 }
 
-void SetupDXSwapChain()
+void DirectX_Init()
 {
 	// Create a worker thread for the in-game console frontend
 	DWORD __stdcall DXSwapChainWorker(LPVOID);

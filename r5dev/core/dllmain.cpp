@@ -12,13 +12,14 @@
 // INITIALIZATION
 //#############################################################################
 
-void InitializeR5Dev()
+void R5Dev_Init()
 {
-    SetupConsole();
-    InstallHooks();
+    Console_Init();
+    Systems_Init();
+
 #ifndef DEDICATED
-    InstallIPHooks();
-    SetupDXSwapChain();
+    Input_Init();
+    DirectX_Init();
 #endif // !DEDICATED
 
     spdlog::get("console")->set_pattern("%v");
@@ -28,12 +29,15 @@ void InitializeR5Dev()
     spdlog::get("console")->set_pattern("[%S.%e] %v");
 }
 
-void TerminateR5Dev()
+void R5Dev_Shutdown()
 {
+    Systems_Shutdown();
+
 #ifndef DEDICATED
-    RemoveIPHooks();
-    RemoveDXHooks();
+    Input_Shutdown();
+    DirectX_Shutdown();
 #endif // !DEDICATED
+
     FreeConsole();
 }
 
@@ -47,13 +51,13 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  dwReason, LPVOID lpReserved)
     {
         case DLL_PROCESS_ATTACH:
         {
-            InitializeR5Dev();
+            R5Dev_Init();
             break;
         }
 
         case DLL_PROCESS_DETACH:
         {
-            TerminateR5Dev();
+            R5Dev_Shutdown();
             break;
         }
     }

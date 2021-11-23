@@ -15,7 +15,7 @@ KeyValues** g_pPlaylistKeyValues = reinterpret_cast<KeyValues**>(p_Stryder_Stitc
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void InitPlaylist()
+void CKeyValueSystem_InitPlaylist()
 {
 	while (true)
 	{
@@ -45,6 +45,6 @@ const char* KeyValues::GetName()
 
 void CKeyValueSystem_Init()
 {
-	std::thread t1(InitPlaylist); // Start thread to grab playlists.
+	std::thread t1(CKeyValueSystem_InitPlaylist); // Start thread to grab playlists.
 	t1.detach(); // Detach thread from current one.
 }

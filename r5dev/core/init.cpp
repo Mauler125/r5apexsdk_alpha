@@ -1,42 +1,46 @@
 ﻿#include "core/stdafx.h"
 #include "core/init.h"
 #include "common/opcodes.h"
+#include "tier0/ConCommand.h"
+#include "tier0/IConVar.h"
 #include "launcher/IApplication.h"
-#include "engine/baseclient.h"
 #include "vpc/basefilesystem.h"
-
+#include "vpc/keyvalues.h"
+#include "vphysics/QHull.h"
 #ifndef DEDICATED
 #include "vgui/CEngineVGui.h"
 #include "vgui/vgui_fpspanel.h"
+#include "vguimatsurface/MatSystemSurface.h"
 #include "client/CHLClient.h"
 #endif // !DEDICATED
-
-#include "engine/host_state.h"
-#include "vpc/keyvalues.h"
-#include "vguimatsurface/MatSystemSurface.h"
-#include "engine/net_chan.h"
-#include "tier0/ConCommand.h"
-#include "tier0/IConVar.h"
-#include "server/IVEngineServer.h"
 #include "client/IVEngineClient.h"
-#include "vphysics/QHull.h"
+#include "server/IVEngineServer.h"
 #include "squirrel/sqapi.h"
 #include "squirrel/sqvm.h"
+#include "engine/baseclient.h"
+#include "engine/host_state.h"
+#include "engine/net_chan.h"
 #include "engine/sys_dll.h"
 #include "engine/sys_utils.h"
 
-//#################################################################################
-// MANAGEMENT
-//#################################################################################
 
-void InstallHooks()
+/////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// ██╗███╗   ██╗██╗████████╗██╗ █████╗ ██╗     ██╗███████╗ █████╗ ████████╗██╗ ██████╗ ███╗   ██╗
+// ██║████╗  ██║██║╚══██╔══╝██║██╔══██╗██║     ██║╚══███╔╝██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║
+// ██║██╔██╗ ██║██║   ██║   ██║███████║██║     ██║  ███╔╝ ███████║   ██║   ██║██║   ██║██╔██╗ ██║
+// ██║██║╚██╗██║██║   ██║   ██║██╔══██║██║     ██║ ███╔╝  ██╔══██║   ██║   ██║██║   ██║██║╚██╗██║
+// ██║██║ ╚████║██║   ██║   ██║██║  ██║███████╗██║███████╗██║  ██║   ██║   ██║╚██████╔╝██║ ╚████║
+// ╚═╝╚═╝  ╚═══╝╚═╝   ╚═╝   ╚═╝╚═╝  ╚═╝╚══════╝╚═╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+void Systems_Init()
 {
-	///////////////////////////////////////////////////////////////////////////////
 	// Begin the detour transaction to hook the the process
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
 
-	///////////////////////////////////////////////////////////////////////////////
 	// Hook functions
 	IApplication_Attach();
 	CBaseClient_Attach();
@@ -56,11 +60,9 @@ void InstallHooks()
 	SysDll_Attach();
 	SysUtils_Attach();
 
-	///////////////////////////////////////////////////////////////////////////////
 	// Patch instructions
-	InstallOpcodes();
+	RuntimePtc_Init();
 
-	///////////////////////////////////////////////////////////////////////////////
 	// Commit the transaction
 	if (DetourTransactionCommit() != NO_ERROR)
 	{
@@ -76,14 +78,23 @@ void InstallHooks()
 
 }
 
-void RemoveHooks()
+//////////////////////////////////////////////////////////////////////////
+//
+// ███████╗██╗  ██╗██╗   ██╗████████╗██████╗  ██████╗ ██╗    ██╗███╗   ██╗
+// ██╔════╝██║  ██║██║   ██║╚══██╔══╝██╔══██╗██╔═══██╗██║    ██║████╗  ██║
+// ███████╗███████║██║   ██║   ██║   ██║  ██║██║   ██║██║ █╗ ██║██╔██╗ ██║
+// ╚════██║██╔══██║██║   ██║   ██║   ██║  ██║██║   ██║██║███╗██║██║╚██╗██║
+// ███████║██║  ██║╚██████╔╝   ██║   ██████╔╝╚██████╔╝╚███╔███╔╝██║ ╚████║
+// ╚══════╝╚═╝  ╚═╝ ╚═════╝    ╚═╝   ╚═════╝  ╚═════╝  ╚══╝╚══╝ ╚═╝  ╚═══╝
+//
+//////////////////////////////////////////////////////////////////////////
+
+void Systems_Shutdown()
 {
-	///////////////////////////////////////////////////////////////////////////////
 	// Begin the detour transaction to unhook the the process
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
 
-	///////////////////////////////////////////////////////////////////////////////
 	// Unhook functions
 	IApplication_Detach();
 	CBaseClient_Detach();
@@ -103,10 +114,20 @@ void RemoveHooks()
 	SysDll_Detach();
 	SysUtils_Detach();
 
-	///////////////////////////////////////////////////////////////////////////////
 	// Commit the transaction
 	DetourTransactionCommit();
 }
+
+//////////////////////////////////////////////////////////
+//
+// ██████╗ ███████╗███████╗██╗   ██╗██╗  ████████╗███████╗
+// ██╔══██╗██╔════╝██╔════╝██║   ██║██║  ╚══██╔══╝██╔════╝
+// ██████╔╝█████╗  ███████╗██║   ██║██║     ██║   ███████╗
+// ██╔══██╗██╔══╝  ╚════██║██║   ██║██║     ██║   ╚════██║
+// ██║  ██║███████╗███████║╚██████╔╝███████╗██║   ███████║
+// ╚═╝  ╚═╝╚══════╝╚══════╝ ╚═════╝ ╚══════╝╚═╝   ╚══════╝
+//
+//////////////////////////////////////////////////////////
 
 void PrintHAddress() // Test the sigscan results
 {
@@ -130,8 +151,10 @@ void PrintHAddress() // Test the sigscan results
 	std::cout << "+--------------------------------------------------------+" << std::endl;
 	std::cout << "| KeyValues::FindKey                   : " << std::hex << std::uppercase << p_KeyValues_FindKey.GetPtr()                   << std::setw(8) << " |" << std::endl;
 	std::cout << "+--------------------------------------------------------+" << std::endl;
+#ifndef DEDICATED
 	std::cout << "| CMatSystemSurface::DrawColoredText   : " << std::hex << std::uppercase << p_CMatSystemSurface_DrawColoredText.GetPtr()   << std::setw(8) << " |" << std::endl;
 	std::cout << "+--------------------------------------------------------+" << std::endl;
+#endif // !DEDICATED
 	std::cout << "| NET_Init                             : " << std::hex << std::uppercase << p_NET_Init.GetPtr()                            << std::setw(8) << " |" << std::endl;
 	std::cout << "| NET_Shutdown                         : " << std::hex << std::uppercase << p_NET_Shutdown.GetPtr()                        << std::setw(8) << " |" << std::endl;
 	std::cout << "| NET_SetKey                           : " << std::hex << std::uppercase << p_NET_SetKey.GetPtr()                          << std::setw(8) << " |" << std::endl;
@@ -169,6 +192,6 @@ void PrintHAddress() // Test the sigscan results
 	std::cout << "| Sys_LoadAsset                        : " << std::hex << std::uppercase << p_Sys_LoadAsset.GetPtr()                       << std::setw(8) << " |" << std::endl;
 	std::cout << "| MemAlloc_Wrapper                     : " << std::hex << std::uppercase << p_MemAlloc_Wrapper.GetPtr()                    << std::setw(8) << " |" << std::endl;
 	std::cout << "+--------------------------------------------------------+" << std::endl;
-	std::cout << "| g_uNetKeyPtr                         : " << std::hex << std::uppercase << g_uNetKeyPtr                                   << std::setw(8) << " |" << std::endl;
+	std::cout << "| g_uNetKeyPtr                         : " << std::hex << std::uppercase << g_pNetKey                                   << std::setw(8) << " |" << std::endl;
 	std::cout << "+--------------------------------------------------------+" << std::endl;
 }

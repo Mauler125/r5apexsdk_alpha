@@ -186,19 +186,19 @@ void Dedicated_Init()
 }
 #endif // DEDICATED
 
-void InstallOpcodes() /* .TEXT */
+void RuntimePtc_Init() /* .TEXT */
 {
 	static HANDLE GameProcess = GetCurrentProcess();
 	//-------------------------------------------------------------------------
 	// JNZ --> JMP | Prevent OriginSDK from initializing on the client
-	WriteProcessMemory(GameProcess, LPVOID(Origin_Init + 0x0B), "\xE9\x63\x02\x00\x00\x00", 6, NULL);
-	WriteProcessMemory(GameProcess, LPVOID(Origin_SetState + 0x0E), "\xE9\xCB\x03\x00\x00", 5, NULL);
+	Origin_Init.Offset(0x0B).Patch({ 0xE9, 0x63, 0x02, 0x00, 0x00, 0x00 });
+	Origin_SetState.Offset(0x0E).Patch({ 0xE9, 0xCB, 0x03, 0x00, 0x00, 0x00 });
 	//-------------------------------------------------------------------------
 	// JNE --> JMP | Allow games to be loaded without the optional texture streaming file
-	WriteProcessMemory(GameProcess, LPVOID(dst002 + 0x8E5), "\xEB\x19", 2, NULL);
+	//WriteProcessMemory(GameProcess, LPVOID(dst002 + 0x8E5), "\xEB\x19", 2, NULL);
 	//-------------------------------------------------------------------------
 	// JNE --> JMP | Prevent connect command from crashing by invalid call to UI function
-	WriteProcessMemory(GameProcess, LPVOID(dst003 + 0x1D6), "\xEB\x27", 2, NULL);
+	dst003.Offset(0x1D6).Patch({ 0xEB, 0x27 });
 	//-------------------------------------------------------------------------
 	// JNE --> JMP | Prevent connect localhost from being executed after listenserver init
 	//WriteProcessMemory(GameProcess, LPVOID(dst004 + 0x637), "\xE9\xC1\x00\x00\x00", 5, NULL);
@@ -209,6 +209,7 @@ void InstallOpcodes() /* .TEXT */
 	//-------------------------------------------------------------------------
 	// JA  --> JMP | Prevent FairFight anti-cheat from initializing on the server
 	WriteProcessMemory(GameProcess, LPVOID(FairFight_Init + 0x61), "\xE9\xED\x00\x00\x00\x00", 6, NULL);
+	FairFight_Init.Offset(0x61).Patch({ 0xE9, 0xED, 0x00, 0x00, 0x00, 0x00 });
 }
 
 void ToggleOpcodes() /* .TEXT */

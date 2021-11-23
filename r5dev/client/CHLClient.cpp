@@ -8,6 +8,7 @@
 #include "client/client.h"
 #include "public/include/bansystem.h"
 #include "engine/net_chan.h"
+#include "vpc/keyvalues.h"
 /*********************************************************************************/
 
 void __fastcall HFrameStageNotify(CHLClient* rcx, ClientFrameStage_t curStage)
@@ -21,6 +22,7 @@ void __fastcall HFrameStageNotify(CHLClient* rcx, ClientFrameStage_t curStage)
 			{
 				IConVar_ClearHostNames();
 				ConCommand_InitConCommand();
+				CKeyValueSystem_Init();
 
 				IVEngineClient_CommandExecute(NULL, "exec autoexec.cfg");
 				IVEngineClient_CommandExecute(NULL, "exec autoexec_server.cfg");

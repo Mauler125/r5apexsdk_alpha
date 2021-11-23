@@ -97,10 +97,10 @@
     <Filter Include="windows">
       <UniqueIdentifier>{942b8ea5-ce53-4e1e-ad7a-845991aaead6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="public">
+    <Filter Include="sdk\public">
       <UniqueIdentifier>{b0696621-8658-4918-b0f2-ba20acc26829}</UniqueIdentifier>
     </Filter>
-    <Filter Include="public\include">
+    <Filter Include="sdk\public\include">
       <UniqueIdentifier>{cbe60970-f348-4a8b-8cee-d4cfebbe0d99}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -145,10 +145,10 @@
       <Filter>sdk\gameui</Filter>
     </ClCompile>
     <ClCompile Include="public\bansystem.cpp">
-      <Filter>public</Filter>
+      <Filter>sdk\public</Filter>
     </ClCompile>
     <ClCompile Include="public\utility.cpp">
-      <Filter>public</Filter>
+      <Filter>sdk\public</Filter>
     </ClCompile>
     <ClCompile Include="rtech\rtech.cpp">
       <Filter>sdk\rtech</Filter>
@@ -161,9 +161,6 @@
     </ClCompile>
     <ClCompile Include="launcher\IApplication.cpp">
       <Filter>sdk\launcher</Filter>
-    </ClCompile>
-    <ClCompile Include="networksystem\serverlisting.cpp">
-      <Filter>sdk\networksystem</Filter>
     </ClCompile>
     <ClCompile Include="server\IVEngineServer.cpp">
       <Filter>sdk\server</Filter>
@@ -252,14 +249,14 @@
     <ClCompile Include="thirdparty\imgui\src\imgui_demo.cpp">
       <Filter>thirdparty\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="public\r5net.cpp">
-      <Filter>public</Filter>
-    </ClCompile>
     <ClCompile Include="common\opcodes.cpp">
       <Filter>sdk\common</Filter>
     </ClCompile>
     <ClCompile Include="mathlib\IceKey.cpp">
       <Filter>sdk\mathlib</Filter>
+    </ClCompile>
+    <ClCompile Include="networksystem\r5net.cpp">
+      <Filter>sdk\networksystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -306,19 +303,19 @@
       <Filter>sdk\gameui</Filter>
     </ClInclude>
     <ClInclude Include="public\include\bansystem.h">
-      <Filter>public\include</Filter>
+      <Filter>sdk\public\include</Filter>
     </ClInclude>
     <ClInclude Include="public\include\httplib.h">
-      <Filter>public\include</Filter>
+      <Filter>sdk\public\include</Filter>
     </ClInclude>
     <ClInclude Include="public\include\json.hpp">
-      <Filter>public\include</Filter>
+      <Filter>sdk\public\include</Filter>
     </ClInclude>
     <ClInclude Include="public\include\utility.h">
-      <Filter>public\include</Filter>
+      <Filter>sdk\public\include</Filter>
     </ClInclude>
     <ClInclude Include="public\include\address.h">
-      <Filter>public\include</Filter>
+      <Filter>sdk\public\include</Filter>
     </ClInclude>
     <ClInclude Include="rtech\rtech.h">
       <Filter>sdk\rtech</Filter>
@@ -337,9 +334,6 @@
     </ClInclude>
     <ClInclude Include="mathlib\vector.h">
       <Filter>sdk\mathlib</Filter>
-    </ClInclude>
-    <ClInclude Include="networksystem\serverlisting.h">
-      <Filter>sdk\networksystem</Filter>
     </ClInclude>
     <ClInclude Include="networksystem\sm_protocol.h">
       <Filter>sdk\networksystem</Filter>
@@ -740,16 +734,19 @@
     <ClInclude Include="core\stdafx.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="public\include\r5net.h">
-      <Filter>public\include</Filter>
-    </ClInclude>
-    <ClInclude Include="public\include\serverlisting.h">
-      <Filter>public\include</Filter>
-    </ClInclude>
     <ClInclude Include="common\opcodes.h">
       <Filter>sdk\common</Filter>
     </ClInclude>
     <ClInclude Include="mathlib\IceKey.H">
+      <Filter>sdk\mathlib</Filter>
+    </ClInclude>
+    <ClInclude Include="networksystem\r5net.h">
+      <Filter>sdk\networksystem</Filter>
+    </ClInclude>
+    <ClInclude Include="networksystem\serverlisting.h">
+      <Filter>sdk\networksystem</Filter>
+    </ClInclude>
+    <ClInclude Include="mathlib\parallel_for.h">
       <Filter>sdk\mathlib</Filter>
     </ClInclude>
   </ItemGroup>

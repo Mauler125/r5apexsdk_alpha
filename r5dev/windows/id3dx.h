@@ -4,7 +4,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Initialization
 void SetupImGui();
-void SetupDXSwapChain();
+void DirectX_Init();
 void DrawImGui();
 void DestroyRenderTarget();
 
@@ -12,7 +12,7 @@ void DestroyRenderTarget();
 // Internals
 void PrintDXAddress();
 void InstallDXHooks();
-void RemoveDXHooks();
+void DirectX_Shutdown();
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 extern HRESULT __stdcall Present(IDXGISwapChain* pSwapChain, UINT nSyncInterval, UINT nFlags);

@@ -5,6 +5,6 @@ namespace
 	/* ==== ------- ========================================================================================================================================================= */
 }
 
-void InstallHooks();
-void RemoveHooks();
+void Systems_Init();
+void Systems_Shutdown();
 void PrintHAddress();

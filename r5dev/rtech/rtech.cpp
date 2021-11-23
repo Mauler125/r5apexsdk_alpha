@@ -12,7 +12,7 @@ Purpose: Implements the 'rtech_game' core utilities
 History:
 - 18:07:2021 | 13:02 : Created by Kawe Mazidjatari
 - 10:09:2021 | 18:22 : Implement 'StringToGuid' method
-- 12:11:2021 | 14:41 : Add decompression method to dedicated ConCommand callback
+- 12:11:2021 | 14:41 : Add decompression method to ConCommand callback
 
 ******************************************************************************/
 
@@ -123,12 +123,12 @@ std::uint32_t __fastcall RTech::DecompressedSize(std::int64_t param_buf, std::ui
 	}
 	else
 	{
-	 	v23 = v16 >> 3;
+		v23 = v16 >> 3;
 	 	v24 = v29 & *(std::uint64_t*)(param_buf + 72);
-	 	*(std::uint32_t*)(param_buf + 64) = v23 + 1;
+		*(std::uint32_t*)(param_buf + 64) = v23 + 1;
 	 	v25 = *(std::uint64_t*)(v24 + file_buf) & ((1i64 << (8 * ((std::uint8_t)v23 + 1))) - 1);
-	 	*(std::uint64_t*)(param_buf + 72) += v23 + 1;
-	 	*(std::uint64_t*)(param_buf + 88) = v25;
+		*(std::uint64_t*)(param_buf + 72) += v23 + 1;
+		*(std::uint64_t*)(param_buf + 88) = v25;
 	}
 	*(std::uint64_t*)(param_buf + 88) += off_no_header;
 	v26 = *(std::uint64_t*)(param_buf + 88);
