@@ -103,11 +103,11 @@
     <Filter Include="sdk\public\include">
       <UniqueIdentifier>{cbe60970-f348-4a8b-8cee-d4cfebbe0d99}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sdk\shared">
-      <UniqueIdentifier>{3d1be414-5cb9-48db-9609-9e8b84a74c32}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sdk\shared\resource">
+    <Filter Include="sdk\resource">
       <UniqueIdentifier>{14a61eec-93ec-4e7c-b0bf-2ce23c3b782c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sdk\resource\png">
+      <UniqueIdentifier>{64bc6e43-c5e7-474f-be64-31df89e0034b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -761,20 +761,24 @@
     <ClInclude Include="public\include\stb_image.h">
       <Filter>sdk\public\include</Filter>
     </ClInclude>
-    <ClInclude Include="core\resource.h" />
     <ClInclude Include="squirrel\sqinit.h">
       <Filter>sdk\squirrel</Filter>
+    </ClInclude>
+    <ClInclude Include="core\resource.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="r5dev.def" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="resource\r5dev.rc" />
+    <Image Include="shared\resource\lockedserver.png">
+      <Filter>sdk\resource\png</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="resource\png\lockedserver.png">
-      <Filter>sdk\shared\resource</Filter>
-    </Image>
+    <ResourceCompile Include="resource\r5dev.rc">
+      <Filter>sdk\resource</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
