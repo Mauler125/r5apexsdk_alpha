@@ -1,12 +1,14 @@
 #include "core/stdafx.h"
 #ifndef DEDICATED // This file should not be compiled for DEDICATED!
 
+#define STB_IMAGE_IMPLEMENTATION
 #include "windows/id3dx.h"
 #include "windows/input.h"
 #include "engine/sys_utils.h"
 #include "gameui/IGameConsole.h"
 #include "gameui/IServerBrowser.h"
 #include "inputsystem/inputsystem.h"
+#include "public/include/stb_image.h"
 
 /**********************************************************************************
 -----------------------------------------------------------------------------------
@@ -406,12 +408,12 @@ HRESULT __stdcall Present(IDXGISwapChain* pSwapChain, UINT nSyncInterval, UINT n
 	return g_fnIDXGISwapChainPresent(pSwapChain, nSyncInterval, nFlags);
 }
 
-bool LoadTextureBuffer(unsigned char* image_data, const int& image_width, const int& image_height, ID3D11ShaderResourceView** out_srv)
+bool LoadTextureBuffer(const char* filename, ID3D11ShaderResourceView** out_srv, int* out_width, int* out_height)
 {
 	// Load from disk into a raw RGBA buffer
-	//int image_width = 0;
-	//int image_height = 0;
-	//unsigned char* image_data = stbi_load(filename, &image_width, &image_height, NULL, 4);
+	int image_width  = 0;
+	int image_height = 0;
+	unsigned char* image_data = stbi_load(filename, &image_width, &image_height, NULL, 4);
 	if (image_data == NULL)
 	{
 		return false;
@@ -438,7 +440,6 @@ bool LoadTextureBuffer(unsigned char* image_data, const int& image_width, const 
 	subResource.pSysMem               = image_data;
 	subResource.SysMemPitch           = desc.Width * 4;
 	subResource.SysMemSlicePitch      = 0;
-
 	g_pDevice->CreateTexture2D(&desc, &subResource, &pTexture);
 
 	// Create texture view
@@ -451,10 +452,12 @@ bool LoadTextureBuffer(unsigned char* image_data, const int& image_width, const 
 	if (pTexture)
 	{
 		g_pDevice->CreateShaderResourceView(pTexture, &srvDesc, out_srv);
+		pTexture->Release();
 	}
-	pTexture->Release();
 
-	//stbi_image_free(image_data);
+	*out_width = image_width;
+	*out_height = image_height;
+	stbi_image_free(image_data);
 
 	return true;
 }

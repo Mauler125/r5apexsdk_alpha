@@ -134,6 +134,7 @@
     <ClInclude Include="public\include\bansystem.h" />
     <ClInclude Include="public\include\httplib.h" />
     <ClInclude Include="public\include\json.hpp" />
+    <ClInclude Include="public\include\stb_image.h" />
     <ClInclude Include="public\include\utility.h" />
     <ClInclude Include="rtech\rtech.h" />
     <ClInclude Include="rtech\stryder.h" />

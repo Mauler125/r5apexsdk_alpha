@@ -749,6 +749,9 @@
     <ClInclude Include="mathlib\parallel_for.h">
       <Filter>sdk\mathlib</Filter>
     </ClInclude>
+    <ClInclude Include="public\include\stb_image.h">
+      <Filter>sdk\public\include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="r5dev.def" />
