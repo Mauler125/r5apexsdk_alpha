@@ -408,7 +408,7 @@ HRESULT __stdcall Present(IDXGISwapChain* pSwapChain, UINT nSyncInterval, UINT n
 	return g_fnIDXGISwapChainPresent(pSwapChain, nSyncInterval, nFlags);
 }
 
-bool LoadTextureBuffer(unsigned char* buffer, int len, ID3D11ShaderResourceView** out_srv)
+bool LoadTextureBuffer(unsigned char* buffer, int len, ID3D11ShaderResourceView** out_srv, int* out_width, int* out_height)
 {
 	// Load PNG buffer to a raw RGBA buffer
 	int image_width  = 0;
@@ -458,7 +458,10 @@ bool LoadTextureBuffer(unsigned char* buffer, int len, ID3D11ShaderResourceView*
 		pTexture->Release();
 	}
 
+	*out_width = image_width;
+	*out_height = image_height;
 	stbi_image_free(image_data);
+
 	return true;
 }
 

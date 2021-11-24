@@ -85,9 +85,9 @@ public:
 
     /* Texture */
     ID3D11ShaderResourceView* m_idLockedIcon = nullptr;
-    int m_nLockedIconWidth = 48;
-    int m_nLockedIconHeight = 48;
-    std::vector<unsigned char>* m_idLockedIconBlob;
+    int m_nLockedIconWidth  = 0;
+    int m_nLockedIconHeight = 0;
+    std::vector<unsigned char>* m_vucLockedIconBlob;
 
     void SetSection(ESection section)
     {

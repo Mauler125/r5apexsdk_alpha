@@ -70,7 +70,7 @@ IBrowser::IBrowser() : m_szMatchmakingServerString("r5a-comp-sv.herokuapp.com"),
 
     if (rc != NULL) { rcData = LoadResource(handle, rc); }
     else { assert(rc == NULL); }
-    if (rcData != NULL) { m_idLockedIconBlob = (std::vector<unsigned char>*)LockResource(rcData); }
+    if (rcData != NULL) { m_vucLockedIconBlob = (std::vector<unsigned char>*)LockResource(rcData); }
     else { assert(rcData == NULL); }
 }
 
@@ -298,7 +298,7 @@ void IBrowser::HiddenServersModal()
 
         if (!m_idLockedIcon)
         {
-            bool ret = LoadTextureBuffer((unsigned char*)m_idLockedIconBlob, 0x1000 /*TODO [ AMOS ]: Calculate size dynamically*/, &m_idLockedIcon);
+            bool ret = LoadTextureBuffer((unsigned char*)m_vucLockedIconBlob, 0x1000 /*TODO [ AMOS ]: Calculate size dynamically*/, &m_idLockedIcon, &m_nLockedIconWidth, &m_nLockedIconHeight);
             IM_ASSERT(ret);
         }
 
