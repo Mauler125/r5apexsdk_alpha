@@ -7,7 +7,7 @@
  *-----------------------------------------------------------------------------*/
 
 ///////////////////////////////////////////////////////////////////////////////
-//
+// For checking if a specific file exists.
 BOOL FileExists(LPCTSTR szPath)
 {
     DWORD dwAttrib = GetFileAttributes(szPath);
@@ -117,7 +117,7 @@ DWORD64 FindPatternSIMD(const char* szModule, const unsigned char* szPattern, co
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-//
+// For printing output to the debugger.
 void DbgPrint(LPCSTR sFormat, ...)
 {
     CHAR sBuffer[512] = { 0 };
