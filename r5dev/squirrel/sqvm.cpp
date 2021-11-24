@@ -6,7 +6,7 @@
 #include "engine/sys_utils.h"
 #include "squirrel/sqvm.h"
 #include "vgui/CEngineVGui.h"
-#include "gameui/IGameConsole.h"
+#include "gameui/IConsole.h"
 
 //---------------------------------------------------------------------------------
 // Purpose: prints the output of each VM to the console

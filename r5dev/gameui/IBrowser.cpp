@@ -6,17 +6,15 @@
 #include "engine/net_chan.h"
 #include "engine/sys_utils.h"
 #include "engine/host_state.h"
-#include "gameui/IServerBrowser.h"
 #include "client/IVEngineClient.h"
 #include "networksystem/serverlisting.h"
-
 #include "vpc/keyvalues.h"
 #include "tier0/ConCommandCallback.h"
-
+#include "gameui/IBrowser.h"
 
 /******************************************************************************
 -------------------------------------------------------------------------------
-File   : IServerBrowser.cpp
+File   : IBrowser.cpp
 Date   : 09:06:2021
 Author : Sal
 Purpose: Implements the in-game server browser frontend
@@ -38,10 +36,7 @@ std::map<std::string, std::string> mapArray =
     { "mp_rr_canyonlands_staging", "King's Canyon Firing Range" }
 };
 
-/*-----------------------------------------------------------------------------
- * _ccompanion.cpp
- *-----------------------------------------------------------------------------*/
-CServerBrowser::CServerBrowser() : MatchmakingServerStringBuffer("r5a-comp-sv.herokuapp.com"), r5net(new R5Net::Client("r5a-comp-sv.herokuapp.com"))
+IBrowser::IBrowser() : MatchmakingServerStringBuffer("r5a-comp-sv.herokuapp.com"), r5net(new R5Net::Client("r5a-comp-sv.herokuapp.com"))
 {
     memset(ServerConnStringBuffer, 0, sizeof(ServerConnStringBuffer));
 
@@ -77,12 +72,12 @@ CServerBrowser::CServerBrowser() : MatchmakingServerStringBuffer("r5a-comp-sv.he
     HostingServerRequestThread.detach();
 }
 
-CServerBrowser::~CServerBrowser()
+IBrowser::~IBrowser()
 {
     delete r5net;
 }
 
-void CServerBrowser::UpdateHostingStatus()
+void IBrowser::UpdateHostingStatus()
 {
     if (!g_pHostState || !g_pCvar)
     {
@@ -133,7 +128,7 @@ void CServerBrowser::UpdateHostingStatus()
     }
 }
 
-void CServerBrowser::RefreshServerList()
+void IBrowser::RefreshServerList()
 {
     ServerList.clear();
 
@@ -153,7 +148,7 @@ void CServerBrowser::RefreshServerList()
     }
 }
 
-void CServerBrowser::SendHostingPostRequest()
+void IBrowser::SendHostingPostRequest()
 {
     HostToken = std::string();
     Sys_Print(SYS_DLL::CLIENT, "Sending PostServerHost request\n");
@@ -189,7 +184,7 @@ void CServerBrowser::SendHostingPostRequest()
 }
 
 
-void CServerBrowser::CompMenu()
+void IBrowser::CompMenu()
 {
     ImGui::BeginTabBar("CompMenu");
     if (ImGui::TabItemButton("Server Browser"))
@@ -207,7 +202,7 @@ void CServerBrowser::CompMenu()
     ImGui::EndTabBar();
 }
 
-void CServerBrowser::ServerBrowserSection()
+void IBrowser::ServerBrowserSection()
 {
     ImGui::BeginGroup();
     ServerBrowserFilter.Draw();
@@ -297,7 +292,7 @@ void CServerBrowser::ServerBrowserSection()
     ImGui::PopItemWidth();
 }
 
-void CServerBrowser::HiddenServersModal()
+void IBrowser::HiddenServersModal()
 {
     bool modalOpen = true;
     if (ImGui::BeginPopupModal("Connect to Private Server##HiddenServersConnectModal", &modalOpen))
@@ -371,7 +366,7 @@ void CServerBrowser::HiddenServersModal()
     }
 }
 
-void CServerBrowser::HostServerSection()
+void IBrowser::HostServerSection()
 {
     static std::string ServerNameErr = "";
     static std::string ServerMap = std::string();
@@ -539,7 +534,7 @@ void CServerBrowser::HostServerSection()
     }
 }
 
-void CServerBrowser::SettingsSection()
+void IBrowser::SettingsSection()
 {
     // Matchmaking Server String
     ImGui::InputTextWithHint("##MatchmakingServerString", "Matchmaking Server String", &MatchmakingServerStringBuffer);
@@ -559,7 +554,7 @@ void CServerBrowser::SettingsSection()
     ImGui::InputText("Encryption Key##SettingsSection_EncKey", (char*)g_szNetKey.c_str(), ImGuiInputTextFlags_ReadOnly);
 }
 
-void CServerBrowser::Draw(const char* title, bool* bDraw)
+void IBrowser::Draw(const char* title, bool* bDraw)
 {
     if (!ThemeSet)
     {
@@ -601,10 +596,10 @@ void CServerBrowser::Draw(const char* title, bool* bDraw)
     ImGui::End();
 }
 
-void CServerBrowser::ProcessCommand(const char* command_line)
+void IBrowser::ProcessCommand(const char* command_line)
 {
     spdlog::debug("[+CCompanion+] Processing command: {} creating thread now.\n", command_line);
-    std::thread t(&CServerBrowser::ExecCommand, this, command_line);
+    std::thread t(&IBrowser::ExecCommand, this, command_line);
     spdlog::debug("[+CCompanion+] Thread created.\n");
     t.detach();
     spdlog::debug("[+CCompanion+] Detached from Thread.\n");
@@ -613,13 +608,13 @@ void CServerBrowser::ProcessCommand(const char* command_line)
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
 }
 
-void CServerBrowser::ExecCommand(const char* command_line)
+void IBrowser::ExecCommand(const char* command_line)
 {
     // TODO: separate thread to avoid race condition.
     IVEngineClient_CommandExecute(NULL, command_line);
 }
 
-void CServerBrowser::ConnectToServer(const std::string ip, const std::string port, const std::string encKey)
+void IBrowser::ConnectToServer(const std::string ip, const std::string port, const std::string encKey)
 {
     if (!encKey.empty())
     {
@@ -631,7 +626,7 @@ void CServerBrowser::ConnectToServer(const std::string ip, const std::string por
     ProcessCommand(cmd.str().c_str());
 }
 
-void CServerBrowser::ConnectToServer(const std::string connString, const std::string encKey)
+void IBrowser::ConnectToServer(const std::string connString, const std::string encKey)
 {
     if (!encKey.empty())
     {
@@ -643,12 +638,12 @@ void CServerBrowser::ConnectToServer(const std::string connString, const std::st
     ProcessCommand(cmd.str().c_str());
 }
 
-void CServerBrowser::RegenerateEncryptionKey()
+void IBrowser::RegenerateEncryptionKey()
 {
     HNET_GenerateKey();
 }
 
-void CServerBrowser::ChangeEncryptionKeyTo(const std::string str)
+void IBrowser::ChangeEncryptionKeyTo(const std::string str)
 {
     HNET_SetKey(str);
 }
@@ -657,11 +652,11 @@ void CServerBrowser::ChangeEncryptionKeyTo(const std::string str)
 // ENTRYPOINT
 //#############################################################################
 
-CServerBrowser* g_pServerBrowser = nullptr;
+IBrowser* g_pServerBrowser = nullptr;
 bool g_bCheckCompBanDB = true;
 void DrawBrowser(bool* bDraw)
 {
-    static CServerBrowser browser;
+    static IBrowser browser;
     static bool AssignPtr = []()
     {
         g_pServerBrowser = &browser;

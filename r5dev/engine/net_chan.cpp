@@ -4,7 +4,7 @@
 #include "engine/net_chan.h"
 #include "engine/baseclient.h"
 #include "server/IVEngineServer.h"
-#include "gameui/IGameConsole.h"
+#include "gameui/IConsole.h"
 #include "tier0/cvar.h"
 
 //-----------------------------------------------------------------------------

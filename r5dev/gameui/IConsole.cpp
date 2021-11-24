@@ -2,12 +2,12 @@
 #include "core/init.h"
 #include "windows/id3dx.h"
 #include "windows/console.h"
-#include "gameui/IGameConsole.h"
+#include "gameui/IConsole.h"
 #include "client/IVEngineClient.h"
 
 /******************************************************************************
 -------------------------------------------------------------------------------
-File   : IGameConsole.cpp
+File   : IConsole.cpp
 Date   : 18:07:2021
 Author : Kawe Mazidjatari
 Purpose: Implements the in-game console frontend
@@ -19,7 +19,7 @@ History:
 
 ******************************************************************************/
 
-CGameConsole::CGameConsole()
+CConsole::CConsole()
 {
     ClearLog();
     memset(m_szInputBuf, 0, sizeof(m_szInputBuf));
@@ -35,7 +35,7 @@ CGameConsole::CGameConsole()
     AddLog("[DEBUG] THREAD ID: %ld\n", g_dThreadId);
 }
 
-CGameConsole::~CGameConsole()
+CConsole::~CConsole()
 {
     ClearLog();
     for (int i = 0; i < m_ivHistory.Size; i++)
@@ -46,7 +46,7 @@ CGameConsole::~CGameConsole()
 
 ///////////////////////////////////////////////////////////////////////////
 // Draw
-void CGameConsole::Draw(const char* title, bool* bDraw)
+void CConsole::Draw(const char* title, bool* bDraw)
 {
     bool copy_to_clipboard = false;
 
@@ -226,9 +226,9 @@ void CGameConsole::Draw(const char* title, bool* bDraw)
 
 ///////////////////////////////////////////////////////////////////////////
 // Exec
-void CGameConsole::ProcessCommand(const char* command_line)
+void CConsole::ProcessCommand(const char* command_line)
 {
-    std::thread t(&CGameConsole::ExecCommand, this, command_line);
+    std::thread t(&CConsole::ExecCommand, this, command_line);
     t.detach(); // Detach from render thread.
 
     // This is to avoid a race condition.
@@ -260,18 +260,18 @@ void CGameConsole::ProcessCommand(const char* command_line)
         }
 
         AddLog("Log types:");
-        AddLog("Script(S): = Server VM");
-        AddLog("Script(C): = Client VM");
-        AddLog("Script(U): = UI VM");
+        AddLog("Script(S): = Server (Script VM)");
+        AddLog("Script(C): = Client (Script VM)");
+        AddLog("Script(U): = UI (Script VM)");
 
-        AddLog("Native(S): = Server dll code");
-        AddLog("Native(C): = Client dll code");
-        AddLog("Native(U): = UI dll code");
+        AddLog("Native(S): = Server dll (Code)");
+        AddLog("Native(C): = Client dll (code)");
+        AddLog("Native(U): = UI dll (code)");
 
-        AddLog("Native(E): = Engine dll code");
-        AddLog("Native(F): = FileSystem dll code");
-        AddLog("Native(R): = RTech dll code");
-        AddLog("Native(M): = MaterialSystem dll code");
+        AddLog("Native(E): = Engine dll (code)");
+        AddLog("Native(F): = FileSystem dll (code)");
+        AddLog("Native(R): = RTech dll (code)");
+        AddLog("Native(M): = MaterialSystem dll (code)");
     }
     else if (Stricmp(command_line, "HISTORY") == 0)
     {
@@ -285,14 +285,14 @@ void CGameConsole::ProcessCommand(const char* command_line)
     m_bScrollToBottom = true;
 }
 
-void CGameConsole::ExecCommand(const char* command_line)
+void CConsole::ExecCommand(const char* command_line)
 {
     IVEngineClient_CommandExecute(NULL, command_line);
 }
 
 ///////////////////////////////////////////////////////////////////////////
 // Edit
-int CGameConsole::TextEditCallback(ImGuiInputTextCallbackData* data)
+int CConsole::TextEditCallback(ImGuiInputTextCallbackData* data)
 {
     switch (data->EventFlag)
     {
@@ -345,10 +345,10 @@ int CGameConsole::TextEditCallback(ImGuiInputTextCallbackData* data)
 // ENTRYPOINT
 //#############################################################################
 
-CGameConsole* g_GameConsole = nullptr;
+CConsole* g_GameConsole = nullptr;
 void DrawConsole(bool* bDraw)
 {
-    static CGameConsole console;
+    static CConsole console;
     static bool AssignPtr = []()
     {
         g_GameConsole = &console;

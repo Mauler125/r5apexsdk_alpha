@@ -2,7 +2,7 @@
 #include "core/logdef.h"
 #include "tier0/cvar.h"
 #include "vpc/basefilesystem.h"
-#include "gameui/IGameConsole.h"
+#include "gameui/IConsole.h"
 
 //---------------------------------------------------------------------------------
 // Purpose: prints the output of the filesystem based on the warning level

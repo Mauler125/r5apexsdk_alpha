@@ -138,10 +138,10 @@
     <ClCompile Include="engine\baseclientstate.cpp">
       <Filter>sdk\engine</Filter>
     </ClCompile>
-    <ClCompile Include="gameui\IServerBrowser.cpp">
+    <ClCompile Include="gameui\IBrowser.cpp">
       <Filter>sdk\gameui</Filter>
     </ClCompile>
-    <ClCompile Include="gameui\IGameConsole.cpp">
+    <ClCompile Include="gameui\IConsole.cpp">
       <Filter>sdk\gameui</Filter>
     </ClCompile>
     <ClCompile Include="public\bansystem.cpp">
@@ -296,10 +296,10 @@
     <ClInclude Include="engine\baseclient.h">
       <Filter>sdk\engine</Filter>
     </ClInclude>
-    <ClInclude Include="gameui\IServerBrowser.h">
+    <ClInclude Include="gameui\IBrowser.h">
       <Filter>sdk\gameui</Filter>
     </ClInclude>
-    <ClInclude Include="gameui\IGameConsole.h">
+    <ClInclude Include="gameui\IConsole.h">
       <Filter>sdk\gameui</Filter>
     </ClInclude>
     <ClInclude Include="public\include\bansystem.h">

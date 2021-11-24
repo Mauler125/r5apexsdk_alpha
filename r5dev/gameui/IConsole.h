@@ -9,7 +9,7 @@ void DrawConsole(bool* bDraw);
 // Globals
 inline ImVector<char*> Items;
 
-class CGameConsole
+class CConsole
 {
 private:
     ///////////////////////////////////////////////////////////////////////////
@@ -25,8 +25,8 @@ private:
 public:
     ///////////////////////////////////////////////////////////////////////////
 
-    CGameConsole();
-    ~CGameConsole();
+    CConsole();
+    ~CConsole();
 
     void Draw(const char* title, bool* bDraw);
     void ProcessCommand(const char* command_line);
@@ -37,7 +37,7 @@ public:
     // History
     static int TextEditCallbackStub(ImGuiInputTextCallbackData* data)
     {
-        CGameConsole* console = (CGameConsole*)data->UserData;
+        CConsole* console = (CConsole*)data->UserData;
         return console->TextEditCallback(data);
     }
 
@@ -121,5 +121,5 @@ public:
     }
 };
 
-extern CGameConsole* g_GameConsole;
+extern CConsole* g_GameConsole;
 #endif // !DEDICATED

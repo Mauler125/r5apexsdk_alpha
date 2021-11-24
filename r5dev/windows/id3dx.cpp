@@ -1,12 +1,12 @@
 #include "core/stdafx.h"
 #ifndef DEDICATED // This file should not be compiled for DEDICATED!
-
+//------------------------------
 #define STB_IMAGE_IMPLEMENTATION
 #include "windows/id3dx.h"
 #include "windows/input.h"
+#include "gameui/IConsole.h"
+#include "gameui/IBrowser.h"
 #include "engine/sys_utils.h"
-#include "gameui/IGameConsole.h"
-#include "gameui/IServerBrowser.h"
 #include "inputsystem/inputsystem.h"
 #include "public/include/stb_image.h"
 

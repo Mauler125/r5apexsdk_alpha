@@ -5,13 +5,13 @@
 
 void DrawBrowser(bool* bDraw);
 
-class CServerBrowser
+class IBrowser
 {
 private:
     bool ThemeSet = false;
 public:
-    CServerBrowser();
-    ~CServerBrowser();
+    IBrowser();
+    ~IBrowser();
 
     ////////////////////
     //     Enums      //
@@ -161,6 +161,6 @@ public:
     void ConnectToServer(const std::string connString, const std::string encKey);
 };
 
-extern CServerBrowser* g_pServerBrowser;
+extern IBrowser* g_pServerBrowser;
 extern bool g_bCheckCompBanDB;
 #endif
