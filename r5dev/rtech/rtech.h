@@ -1,3 +1,5 @@
+#pragma once
+
 #define PAK_HEADER_SIZE   0x80
 #define PAK_PARAM_SIZE    0xB0
 #define DCMP_BUF_SIZE 0x400000

@@ -62,7 +62,7 @@ DWORD64 FindPatternV1(const char* szModule, const unsigned char* szPattern, cons
 
 ///////////////////////////////////////////////////////////////////////////////
 // For finding a pattern in memory of the process with SIMD.
-DWORD64 FindPatternV2(const char* szModule, const unsigned char* szPattern, const char* szMask)
+DWORD64 FindPatternSIMD(const char* szModule, const unsigned char* szPattern, const char* szMask)
 {
     MODULEINFO mInfo = GetModuleInfo(szModule);
     DWORD64 base = (DWORD64)mInfo.lpBaseOfDll;
