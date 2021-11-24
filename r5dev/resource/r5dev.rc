@@ -1,9 +1,6 @@
 // Microsoft Visual C++ generated resource script.
 //
-#define RELEASE
-
-#ifdef RELEASE
-#include "sdklauncher/sdklauncher_res.h"
+#include "core/resource.h"
 
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
@@ -30,7 +27,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 
 1 TEXTINCLUDE 
 BEGIN
-    "sdklauncher/sdklauncher_res.h\0"
+    "core/resource.h\0"
 END
 
 2 TEXTINCLUDE 
@@ -50,12 +47,10 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// Icon
+// PNG
 //
 
-// Icon with lowest ID value placed first to ensure application icon
-// remains consistent on all systems.
-IDI_ICON1               ICON                    "shared\\resource\\sdklauncher.ico"
+IDB_PNG1                PNG                     "resource\\png\\lockedserver.png"
 
 #endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
@@ -67,7 +62,7 @@ IDI_ICON1               ICON                    "shared\\resource\\sdklauncher.i
 //
 // Generated from the TEXTINCLUDE 3 resource.
 //
-#endif
+
 
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED

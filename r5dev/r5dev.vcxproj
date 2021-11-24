@@ -137,7 +137,7 @@
     <ClInclude Include="public\include\json.hpp" />
     <ClInclude Include="public\include\stb_image.h" />
     <ClInclude Include="public\include\utility.h" />
-    <ClInclude Include="resource.h" />
+    <ClInclude Include="core\resource.h" />
     <ClInclude Include="rtech\rtech.h" />
     <ClInclude Include="rtech\stryder.h" />
     <ClInclude Include="server\IVEngineServer.h" />
@@ -274,7 +274,7 @@
     <None Include="r5dev.def" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="r5dev.rc" />
+    <ResourceCompile Include="resource\r5dev.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="shared\resource\lockedserver.png" />

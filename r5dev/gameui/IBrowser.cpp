@@ -1,5 +1,6 @@
 #include "core/stdafx.h"
 #include "core/init.h"
+#include "core/resource.h"
 #include "tier0/IConVar.h"
 #include "windows/id3dx.h"
 #include "windows/console.h"
@@ -13,7 +14,6 @@
 #include "tier0/ConCommandCallback.h"
 #include "squirrel/sqinit.h"
 #include "gameui/IBrowser.h"
-#include "resource.h"
 
 /******************************************************************************
 -------------------------------------------------------------------------------
