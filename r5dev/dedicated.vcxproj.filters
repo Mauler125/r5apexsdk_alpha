@@ -513,6 +513,9 @@
     <ClInclude Include="mathlib\parallel_for.h">
       <Filter>sdk\mathlib</Filter>
     </ClInclude>
+    <ClInclude Include="squirrel\sqinit.h">
+      <Filter>sdk\squirrel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="client\IVEngineClient.cpp">
@@ -613,6 +616,9 @@
     </ClCompile>
     <ClCompile Include="mathlib\IceKey.cpp">
       <Filter>sdk\mathlib</Filter>
+    </ClCompile>
+    <ClCompile Include="squirrel\sqinit.cpp">
+      <Filter>sdk\squirrel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

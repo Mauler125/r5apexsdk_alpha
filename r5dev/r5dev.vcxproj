@@ -49,6 +49,7 @@
     <ClCompile Include="rtech\stryder.cpp" />
     <ClCompile Include="server\IVEngineServer.cpp" />
     <ClCompile Include="squirrel\sqapi.cpp" />
+    <ClCompile Include="squirrel\sqinit.cpp" />
     <ClCompile Include="squirrel\sqvm.cpp" />
     <ClCompile Include="thirdparty\imgui\src\imgui.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -136,10 +137,12 @@
     <ClInclude Include="public\include\json.hpp" />
     <ClInclude Include="public\include\stb_image.h" />
     <ClInclude Include="public\include\utility.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="rtech\rtech.h" />
     <ClInclude Include="rtech\stryder.h" />
     <ClInclude Include="server\IVEngineServer.h" />
     <ClInclude Include="squirrel\sqapi.h" />
+    <ClInclude Include="squirrel\sqinit.h" />
     <ClInclude Include="squirrel\sqvm.h" />
     <ClInclude Include="thirdparty\detours\include\detours.h" />
     <ClInclude Include="thirdparty\detours\include\detver.h" />
@@ -270,6 +273,12 @@
   <ItemGroup>
     <None Include="r5dev.def" />
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="r5dev.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="shared\resource\lockedserver.png" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -397,7 +406,7 @@
       <PrecompiledHeaderFile>core\stdafx.h</PrecompiledHeaderFile>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>

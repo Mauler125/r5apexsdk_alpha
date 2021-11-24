@@ -197,6 +197,7 @@
     <ClInclude Include="rtech\stryder.h" />
     <ClInclude Include="server\IVEngineServer.h" />
     <ClInclude Include="squirrel\sqapi.h" />
+    <ClInclude Include="squirrel\sqinit.h" />
     <ClInclude Include="squirrel\sqvm.h" />
     <ClInclude Include="thirdparty\detours\include\detours.h" />
     <ClInclude Include="thirdparty\detours\include\detver.h" />
@@ -335,6 +336,7 @@
     <ClCompile Include="rtech\stryder.cpp" />
     <ClCompile Include="server\IVEngineServer.cpp" />
     <ClCompile Include="squirrel\sqapi.cpp" />
+    <ClCompile Include="squirrel\sqinit.cpp" />
     <ClCompile Include="squirrel\sqvm.cpp" />
     <ClCompile Include="tier0\ConCommand.cpp" />
     <ClCompile Include="tier0\ConCommandCallback.cpp" />

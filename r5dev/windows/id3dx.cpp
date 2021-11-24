@@ -408,14 +408,16 @@ HRESULT __stdcall Present(IDXGISwapChain* pSwapChain, UINT nSyncInterval, UINT n
 	return g_fnIDXGISwapChainPresent(pSwapChain, nSyncInterval, nFlags);
 }
 
-bool LoadTextureBuffer(const char* filename, ID3D11ShaderResourceView** out_srv, int* out_width, int* out_height)
+bool LoadTextureBuffer(unsigned char* buffer, int len, ID3D11ShaderResourceView** out_srv)
 {
-	// Load from disk into a raw RGBA buffer
+	// Load PNG buffer to a raw RGBA buffer
 	int image_width  = 0;
 	int image_height = 0;
-	unsigned char* image_data = stbi_load(filename, &image_width, &image_height, NULL, 4);
+	unsigned char* image_data = stbi_load_from_memory(buffer, len, &image_width, &image_height, NULL, 4);
+
 	if (image_data == NULL)
 	{
+		assert(image_data == NULL);
 		return false;
 	}
 
@@ -425,6 +427,7 @@ bool LoadTextureBuffer(const char* filename, ID3D11ShaderResourceView** out_srv,
 	D3D11_SUBRESOURCE_DATA          subResource;
 	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
 
+	///////////////////////////////////////////////////////////////////////////////
 	ZeroMemory(&desc, sizeof(desc));
 	desc.Width                        = image_width;
 	desc.Height                       = image_height;
@@ -455,10 +458,7 @@ bool LoadTextureBuffer(const char* filename, ID3D11ShaderResourceView** out_srv,
 		pTexture->Release();
 	}
 
-	*out_width = image_width;
-	*out_height = image_height;
 	stbi_image_free(image_data);
-
 	return true;
 }
 

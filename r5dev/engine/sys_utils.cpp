@@ -2,7 +2,7 @@
 #include "core/logdef.h"
 #include "engine/sys_utils.h"
 #include "vgui/CEngineVGui.h"
-#include "gameui/IGameConsole.h"
+#include "gameui/IConsole.h"
 
 //-----------------------------------------------------------------------------
 //	Sys_Error

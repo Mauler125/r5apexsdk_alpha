@@ -6,7 +6,7 @@
 #include "engine/net_chan.h"
 #include "engine/sys_utils.h"
 #include "rtech/rtech.h"
-#include "gameui/IGameConsole.h"
+#include "gameui/IConsole.h"
 #include "public/include/bansystem.h"
 
 #ifndef DEDICATED

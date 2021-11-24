@@ -8,9 +8,12 @@
 #include "engine/host_state.h"
 #include "client/IVEngineClient.h"
 #include "networksystem/serverlisting.h"
+#include "networksystem/r5net.h"
 #include "vpc/keyvalues.h"
 #include "tier0/ConCommandCallback.h"
+#include "squirrel/sqinit.h"
 #include "gameui/IBrowser.h"
+#include "resource.h"
 
 /******************************************************************************
 -------------------------------------------------------------------------------
@@ -25,51 +28,50 @@ History:
 
 ******************************************************************************/
 
-std::map<std::string, std::string> mapArray =
+IBrowser::IBrowser() : m_szMatchmakingServerString("r5a-comp-sv.herokuapp.com"), r5net(new R5Net::Client("r5a-comp-sv.herokuapp.com"))
 {
-    { "mp_rr_canyonlands_64k_x_64k", "King's Canyon Season 0" },
-    { "mp_rr_desertlands_64k_x_64k", "World's Edge Season 3" },
-    { "mp_rr_canyonlands_mu1", "King's Canyon Season 2" },
-    { "mp_rr_canyonlands_mu1_night", "King's Canyon Season 2 After Dark" },
-    { "mp_rr_desertlands_64k_x_64k_nx", "World's Edge Season 3 After Dark" },
-    { "mp_lobby", "Lobby Season 3" },
-    { "mp_rr_canyonlands_staging", "King's Canyon Firing Range" }
-};
-
-IBrowser::IBrowser() : MatchmakingServerStringBuffer("r5a-comp-sv.herokuapp.com"), r5net(new R5Net::Client("r5a-comp-sv.herokuapp.com"))
-{
-    memset(ServerConnStringBuffer, 0, sizeof(ServerConnStringBuffer));
+    memset(m_chServerConnStringBuffer, 0, sizeof(m_chServerConnStringBuffer));
 
     std::string path = "stbsp";
     for (const auto& entry : std::filesystem::directory_iterator(path))
     {
         std::string filename = entry.path().string();
         int slashPos = filename.rfind("\\", std::string::npos);
-        filename = filename.substr((INT8)slashPos + 1, std::string::npos);
+        filename = filename.substr(static_cast<std::basic_string<char, std::char_traits<char>, std::allocator<char>>::size_type>(slashPos) + 1, std::string::npos);
         filename = filename.substr(0, filename.size() - 6);
 
         auto it = mapArray.find(filename); // Find MapName in mapArray.
         if (it != mapArray.end())
         {
-            MapsList.push_back(it->second);
+            m_vszMapsList.push_back(it->second);
         }
         else
         {
-            MapsList.push_back(filename);
+            m_vszMapsList.push_back(filename);
         }
     }
 
-    MyServer.map = MapsList[0];
-    static std::thread HostingServerRequestThread([this]()
+    m_Server.map = m_vszMapsList[0];
+    static std::thread hostingServerRequestThread([this]()
+    {
+        while (true)
         {
-            while (true)
-            {
-                UpdateHostingStatus();
-                std::this_thread::sleep_for(std::chrono::milliseconds(5000));
-            }
-        });
+            UpdateHostingStatus();
+            std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+        }
+    });
 
-    HostingServerRequestThread.detach();
+    hostingServerRequestThread.detach();
+
+    static HGLOBAL rcData = NULL;
+    HMODULE handle;
+    GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT, (LPCSTR)"unnamed", &handle);
+    HRSRC rc = FindResource(handle, MAKEINTRESOURCE(IDB_PNG1), MAKEINTRESOURCE(PNG));
+
+    if (rc != NULL) { rcData = LoadResource(handle, rc); }
+    else { assert(rc == NULL); }
+    if (rcData != NULL) { m_idLockedIconBlob = (std::vector<unsigned char>*)LockResource(rcData); }
+    else { assert(rcData == NULL); }
 }
 
 IBrowser::~IBrowser()
@@ -84,37 +86,35 @@ void IBrowser::UpdateHostingStatus()
         return;
     }
 
-
-    HostingStatus = g_pHostState->m_bActiveGame ? EHostStatus::HOSTING : EHostStatus::NOT_HOSTING; // Are we hosting a server?
-
-    switch (HostingStatus)
+    eHostingStatus = g_pHostState->m_bActiveGame ? EHostStatus::HOSTING : EHostStatus::NOT_HOSTING; // Are we hosting a server?
+    switch (eHostingStatus)
     {
     case EHostStatus::NOT_HOSTING:
     {
-        HostRequestMessage = "";
-        HostRequestMessageColor = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
+        m_szHostRequestMessage = "";
+        m_iv4HostRequestMessageColor = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
         break;
     }
     case EHostStatus::HOSTING:
     {
-        if (ServerVisibility == EServerVisibility::OFFLINE)
+        if (eServerVisibility == EServerVisibility::OFFLINE)
         {
             break;
         }
 
-        if (*reinterpret_cast<std::int32_t*>(0x1656057E0) == NULL) // Check if script checksum is valid yet.
+        if (*reinterpret_cast<std::int32_t*>(g_nRemoteFunctionCallsChecksum.GetPtr()) == NULL) // Check if script checksum is valid yet.
         {
             break;
         }
 
-        switch (ServerVisibility)
+        switch (eServerVisibility)
         {
 
         case EServerVisibility::HIDDEN:
-            MyServer.hidden = true;
+            m_Server.hidden = true;
             break;
         case EServerVisibility::PUBLIC:
-            MyServer.hidden = false;
+            m_Server.hidden = false;
             break;
         default:
             break;
@@ -130,19 +130,19 @@ void IBrowser::UpdateHostingStatus()
 
 void IBrowser::RefreshServerList()
 {
-    ServerList.clear();
+    m_vServerList.clear();
 
     static bool bThreadLocked = false;
 
     if (!bThreadLocked)
     {
         std::thread t([this]()
-            {
-                Sys_Print(SYS_DLL::CLIENT, "Refreshing server list with string '%s'\n", MatchmakingServerStringBuffer.c_str());
-                bThreadLocked = true;
-                ServerList = r5net->GetServersList(ServerListMessage);
-                bThreadLocked = false;
-            });
+        {
+            Sys_Print(SYS_DLL::CLIENT, "Refreshing server list with string '%s'\n", m_szMatchmakingServerString.c_str());
+            bThreadLocked = true;
+            m_vServerList = r5net->GetServersList(m_szServerListMessage);
+            bThreadLocked = false;
+        });
 
         t.detach();
     }
@@ -150,17 +150,18 @@ void IBrowser::RefreshServerList()
 
 void IBrowser::SendHostingPostRequest()
 {
-    HostToken = std::string();
+    m_szHostToken = std::string();
     Sys_Print(SYS_DLL::CLIENT, "Sending PostServerHost request\n");
-    bool result = r5net->PostServerHost(HostRequestMessage, HostToken,
+    bool result = r5net->PostServerHost(m_szHostRequestMessage, m_szHostToken,
         ServerListing{
-            MyServer.name,
+            m_Server.name,
             std::string(g_pHostState->m_levelName),
             "",
             g_pCvar->FindVar("hostport")->m_pzsCurrentValue,
             g_pCvar->FindVar("mp_gamemode")->m_pzsCurrentValue,
-            MyServer.hidden,
-            std::to_string(*reinterpret_cast<std::int32_t*>(0x1656057E0)),
+            m_Server.hidden,
+            std::to_string(*reinterpret_cast<std::int32_t*>(g_nRemoteFunctionCallsChecksum.GetPtr())),
+
             std::string(),
             g_szNetKey.c_str()
         }
@@ -168,18 +169,18 @@ void IBrowser::SendHostingPostRequest()
 
     if (result)
     {
-        HostRequestMessageColor = ImVec4(0.00f, 1.00f, 0.00f, 1.00f);
+        m_iv4HostRequestMessageColor = ImVec4(0.00f, 1.00f, 0.00f, 1.00f);
         std::stringstream msg;
         msg << "Broadcasting! ";
-        if (!HostToken.empty())
+        if (!m_szHostToken.empty())
         {
-            msg << "Share the following token for people to connect: ";
+            msg << "Share the following token for clients to connect: ";
         }
-        HostRequestMessage = msg.str().c_str();
+        m_szHostRequestMessage = msg.str().c_str();
     }
     else
     {
-        HostRequestMessageColor = ImVec4(1.00f, 0.00f, 0.00f, 1.00f);
+        m_iv4HostRequestMessageColor = ImVec4(1.00f, 0.00f, 0.00f, 1.00f);
     }
 }
 
@@ -205,14 +206,14 @@ void IBrowser::CompMenu()
 void IBrowser::ServerBrowserSection()
 {
     ImGui::BeginGroup();
-    ServerBrowserFilter.Draw();
+    m_imServerBrowserFilter.Draw();
     ImGui::SameLine();
     if (ImGui::Button("Refresh List"))
     {
         RefreshServerList();
     }
     ImGui::EndGroup();
-    //ImGui::TextColored(ImVec4(1.00f, 0.00f, 0.00f, 1.00f), ServerListMessage.c_str());
+    ImGui::TextColored(ImVec4(1.00f, 0.00f, 0.00f, 1.00f), m_szServerListMessage.c_str());
     ImGui::Separator();
 
     const float FooterHeight = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
@@ -226,16 +227,16 @@ void IBrowser::ServerBrowserSection()
         ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch, 5);
         ImGui::TableHeadersRow();
 
-        for (ServerListing& server : ServerList)
+        for (ServerListing& server : m_vServerList)
         {
             const char* name = server.name.c_str();
             const char* map = server.map.c_str();
             const char* port = server.port.c_str();
             const char* playlist = server.playlist.c_str();
 
-            if (ServerBrowserFilter.PassFilter(name)
-                || ServerBrowserFilter.PassFilter(map)
-                || ServerBrowserFilter.PassFilter(port))
+            if (m_imServerBrowserFilter.PassFilter(name)
+                || m_imServerBrowserFilter.PassFilter(map)
+                || m_imServerBrowserFilter.PassFilter(port))
             {
                 ImGui::TableNextColumn();
                 ImGui::Text(name);
@@ -265,29 +266,25 @@ void IBrowser::ServerBrowserSection()
     ImGui::EndChild();
 
     ImGui::Separator();
-
     ImGui::PushItemWidth(ImGui::GetWindowContentRegionWidth() / 4);
     {
-        ImGui::InputTextWithHint("##ServerBrowser_ServerConnString", "Enter IP address or \"localhost\"", ServerConnStringBuffer, IM_ARRAYSIZE(ServerConnStringBuffer));
+        ImGui::InputTextWithHint("##ServerBrowser_ServerConnString", "Enter IP address or \"localhost\"", m_chServerConnStringBuffer, IM_ARRAYSIZE(m_chServerConnStringBuffer));
 
         ImGui::SameLine();
-        ImGui::InputTextWithHint("##ServerBrowser_ServerEncKey", "Enter encryption key", ServerEncKeyBuffer, IM_ARRAYSIZE(ServerEncKeyBuffer));
-        ImGui::SameLine();
+        ImGui::InputTextWithHint("##ServerBrowser_ServerEncKey", "Enter encryption key", m_chServerEncKeyBuffer, IM_ARRAYSIZE(m_chServerEncKeyBuffer));
 
+        ImGui::SameLine();
         if (ImGui::Button("Connect##ServerBrowser_ConnectByIp", ImVec2(ImGui::GetWindowContentRegionWidth() / 4, 18.5)))
         {
-            ConnectToServer(ServerConnStringBuffer, ServerEncKeyBuffer);
+            ConnectToServer(m_chServerConnStringBuffer, m_chServerEncKeyBuffer);
         }
 
         ImGui::SameLine();
-
         if (ImGui::Button("Private Servers##ServerBrowser_HiddenServersButton", ImVec2(ImGui::GetWindowContentRegionWidth() / 4, 18.5)))
         {
             ImGui::OpenPopup("Connect to Private Server##HiddenServersConnectModal");
         }
         HiddenServersModal();
-        // TODO: Still not in a seperate class...
-
     }
     ImGui::PopItemWidth();
 }
@@ -297,43 +294,32 @@ void IBrowser::HiddenServersModal()
     bool modalOpen = true;
     if (ImGui::BeginPopupModal("Connect to Private Server##HiddenServersConnectModal", &modalOpen))
     {
-        // I *WILL* move this in a separate class
-
         ImGui::SetWindowSize(ImVec2(400.f, 200.f), ImGuiCond_Always);
 
-        int imgWidth = 48;
-        int imgHeight = 48;
-        static ID3D11ShaderResourceView* apex_private_servers_icon = NULL;
-
-        if (!ApexLockIcon)
+        if (!m_idLockedIcon)
         {
-            bool ret = LoadTextureBuffer("lockedserver.png", &apex_private_servers_icon, &imgWidth, &imgHeight);
+            bool ret = LoadTextureBuffer((unsigned char*)m_idLockedIconBlob, 0x1000 /*TODO [ AMOS ]: Calculate size dynamically*/, &m_idLockedIcon);
             IM_ASSERT(ret);
-            printf("lockedserver.png\n");
-            ApexLockIcon = apex_private_servers_icon;
         }
 
         ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.00f, 0.00f, 0.00f, 0.00f)); // Override the style color for child bg.
+
         ImGui::BeginChild("##HiddenServersConnectModal_IconParent", ImVec2(m_nLockedIconWidth, m_nLockedIconHeight));
-        {
-            ImGui::Image(ApexLockIcon, ImVec2(m_nLockedIconWidth, m_nLockedIconHeight)); // Display texture.
-            printf("%p\n", ApexLockIcon);
-        }
+        ImGui::Image(m_idLockedIcon, ImVec2(m_nLockedIconWidth, m_nLockedIconHeight)); // Display texture.
         ImGui::EndChild();
+
         ImGui::PopStyleColor(); // Pop the override for the child bg.
 
         ImGui::SameLine();
-
-        ImGui::Text("Enter the following details to continue");
+        ImGui::Text("Enter the token to connect");
 
         ImGui::PushItemWidth(ImGui::GetWindowContentRegionWidth()); // Override item width.
         ImGui::InputTextWithHint("##HiddenServersConnectModal_TokenInput", "Token", &m_szHiddenServerToken);
-        ImGui::PopItemWidth(); // Pop item width.
+        ImGui::PopItemWidth();
 
         ImGui::Dummy(ImVec2(ImGui::GetWindowContentRegionWidth(), 19.f)); // Place a dummy, basically making space inserting a blank element.
 
         ImGui::TextColored(m_ivHiddenServerMessageColor, m_szHiddenServerRequestMessage.c_str());
-
         ImGui::Separator();
 
         if (ImGui::Button("Connect##HiddenServersConnectModal_ConnectButton", ImVec2(ImGui::GetWindowContentRegionWidth() / 2, 24)))
@@ -356,7 +342,6 @@ void IBrowser::HiddenServersModal()
         }
 
         ImGui::SameLine();
-
         if (ImGui::Button("Close##HiddenServersConnectModal_CloseButton", ImVec2(ImGui::GetWindowContentRegionWidth() / 2, 24)))
         {
             ImGui::CloseCurrentPopup();
@@ -368,37 +353,37 @@ void IBrowser::HiddenServersModal()
 
 void IBrowser::HostServerSection()
 {
-    static std::string ServerNameErr = "";
-    static std::string ServerMap = std::string();
+    static std::string szServerNameErr = "";
+    static std::string szServerMap = std::string();
 
-    ImGui::InputTextWithHint("##ServerHost_ServerName", "Server Name (Required)", &MyServer.name);
+    ImGui::InputTextWithHint("##ServerHost_ServerName", "Server Name (Required)", &m_Server.name);
     ImGui::Spacing();
 
-    if (ImGui::BeginCombo("Playlist##ServerHost_PlaylistBox", MyServer.playlist.c_str()))
+    if (ImGui::BeginCombo("Playlist##ServerHost_PlaylistBox", m_Server.playlist.c_str()))
     {
         for (auto& item : g_szAllPlaylists)
         {
-            if (ImGui::Selectable(item.c_str(), item == MyServer.playlist))
+            if (ImGui::Selectable(item.c_str(), item == m_Server.playlist))
             {
-                MyServer.playlist = item;
+                m_Server.playlist = item;
             }
         }
         ImGui::EndCombo();
     }
 
-    if (ImGui::BeginCombo("Map##ServerHost_MapListBox", MyServer.map.c_str()))
+    if (ImGui::BeginCombo("Map##ServerHost_MapListBox", m_Server.map.c_str()))
     {
-        for (auto& item : MapsList)
+        for (auto& item : m_vszMapsList)
         {
-            if (ImGui::Selectable(item.c_str(), item == MyServer.map))
+            if (ImGui::Selectable(item.c_str(), item == m_Server.map))
             {
-                MyServer.map = item;
-                ServerMap = item;
+                m_Server.map = item;
+                szServerMap = item;
                 for (auto it = mapArray.begin(); it != mapArray.end(); ++it)
                 {
-                    if (it->second.compare(MyServer.map) == NULL)
+                    if (it->second.compare(m_Server.map) == NULL)
                     {
-                        ServerMap = it->first;
+                        szServerMap = it->first;
                     }
                 }
             }
@@ -407,22 +392,22 @@ void IBrowser::HostServerSection()
     }
 
     ImGui::Checkbox("Load Global Ban List##ServerHost_CheckCompBanDBCheckbox", &g_bCheckCompBanDB);
-
     ImGui::Spacing();
+
     ImGui::SameLine();
     ImGui::Text("Server Visiblity");
 
-    if (ImGui::SameLine(); ImGui::RadioButton("Offline##ServerHost_ServerChoice1", ServerVisibility == EServerVisibility::OFFLINE))
+    if (ImGui::SameLine(); ImGui::RadioButton("Offline##ServerHost_ServerChoice1", eServerVisibility == EServerVisibility::OFFLINE))
     {
-        ServerVisibility = EServerVisibility::OFFLINE;
+        eServerVisibility = EServerVisibility::OFFLINE;
     }
-    if (ImGui::SameLine(); ImGui::RadioButton("Hidden##ServerHost_ServerChoice2", ServerVisibility == EServerVisibility::HIDDEN))
+    if (ImGui::SameLine(); ImGui::RadioButton("Hidden##ServerHost_ServerChoice2", eServerVisibility == EServerVisibility::HIDDEN))
     {
-        ServerVisibility = EServerVisibility::HIDDEN;
+        eServerVisibility = EServerVisibility::HIDDEN;
     }
-    if (ImGui::SameLine(); ImGui::RadioButton("Public##ServerHost_ServerChoice2", ServerVisibility == EServerVisibility::PUBLIC))
+    if (ImGui::SameLine(); ImGui::RadioButton("Public##ServerHost_ServerChoice2", eServerVisibility == EServerVisibility::PUBLIC))
     {
-        ServerVisibility = EServerVisibility::PUBLIC;
+        eServerVisibility = EServerVisibility::PUBLIC;
     }
 
     ImGui::Spacing();
@@ -432,41 +417,41 @@ void IBrowser::HostServerSection()
     {
         if (ImGui::Button("Start Server##ServerHost_StartServerButton", ImVec2(ImGui::GetWindowSize().x, 32)))
         {
-            if (!MyServer.name.empty() && !MyServer.playlist.empty() && !ServerMap.empty())
+            if (!m_Server.name.empty() && !m_Server.playlist.empty() && !szServerMap.empty())
             {
-                Sys_Print(SYS_DLL::CLIENT, "Starting Server with name '%s', map '%s' and playlist '%s'\n", MyServer.name.c_str(), ServerMap.c_str(), MyServer.playlist.c_str());
-                ServerNameErr = std::string();
+                Sys_Print(SYS_DLL::CLIENT, "Starting Server with name '%s', map '%s' and playlist '%s'\n", m_Server.name.c_str(), szServerMap.c_str(), m_Server.playlist.c_str());
+                szServerNameErr = std::string();
                 UpdateHostingStatus();
 
                 /*
                 * Playlist gets parsed in two instances, first in LoadPlaylist all the neccessary values.
                 * Then when you would normally call launchplaylist which calls StartPlaylist it would cmd call mp_gamemode which parses the gamemode specific part of the playlist..
                 */
-                KeyValues_LoadPlaylist(MyServer.playlist.c_str());
+                KeyValues_LoadPlaylist(m_Server.playlist.c_str());
                 std::stringstream cgmd;
-                cgmd << "mp_gamemode " << MyServer.playlist;
+                cgmd << "mp_gamemode " << m_Server.playlist;
                 ProcessCommand(cgmd.str().c_str());
 
                 // This is to avoid a race condition.
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
                 std::stringstream cmd;
-                cmd << "map " << ServerMap;
+                cmd << "map " << szServerMap;
                 ProcessCommand(cmd.str().c_str());
             }
             else
             {
-                if (!MyServer.name.empty())
+                if (!m_Server.name.empty())
                 {
-                    ServerNameErr = "No Server Name assigned.";
+                    szServerNameErr = "No Server Name assigned.";
                 }
-                else if (!MyServer.playlist.empty())
+                else if (!m_Server.playlist.empty())
                 {
-                    ServerNameErr = "No Playlist assigned.";
+                    szServerNameErr = "No Playlist assigned.";
                 }
-                else if (!ServerMap.empty())
+                else if (!szServerMap.empty())
                 {
-                    ServerNameErr = "Map didn't apply properly.";
+                    szServerNameErr = "Map didn't apply properly.";
                 }
             }
         }
@@ -474,51 +459,49 @@ void IBrowser::HostServerSection()
 
     if (ImGui::Button("Force Start##ServerHost_ForceStart", ImVec2(ImGui::GetWindowSize().x, 32)))
     {
-        ServerNameErr = std::string();
-        if (!ServerMap.empty())
+        szServerNameErr = std::string();
+        if (!szServerMap.empty())
         {
-            strncpy_s(g_pHostState->m_levelName, ServerMap.c_str(), 64); // Copy new map into hoststate levelname. 64 is size of m_levelname.
+            strncpy_s(g_pHostState->m_levelName, szServerMap.c_str(), 64); // Copy new map into hoststate levelname. 64 is size of m_levelname.
             g_pHostState->m_iNextState = HostStates_t::HS_NEW_GAME; // Force CHostState::FrameUpdate to start a server.
         }
         else
         {
-            ServerNameErr = "Failed to force start. Map didn't apply properly.";
+            szServerNameErr = "Failed to force start: 'levelname' was empty.";
         }
     }
 
-    ImGui::TextColored(ImVec4(1.00f, 0.00f, 0.00f, 1.00f), ServerNameErr.c_str());
-    ImGui::TextColored(HostRequestMessageColor, HostRequestMessage.c_str());
-    if (!HostToken.empty())
+    ImGui::TextColored(ImVec4(1.00f, 0.00f, 0.00f, 1.00f), szServerNameErr.c_str());
+    ImGui::TextColored(m_iv4HostRequestMessageColor, m_szHostRequestMessage.c_str());
+    if (!m_szHostToken.empty())
     {
-        ImGui::InputText("##ServerHost_HostToken", &HostToken, ImGuiInputTextFlags_ReadOnly);
+        ImGui::InputText("##ServerHost_HostToken", &m_szHostToken, ImGuiInputTextFlags_ReadOnly);
     }
 
     if (g_pHostState->m_bActiveGame)
     {
         if (ImGui::Button("Reload Scripts##ServerHost_ReloadServerButton", ImVec2(ImGui::GetWindowSize().x, 32)))
         {
-            spdlog::debug("[+CCompanion+] Reloading scripts..\n");
+            Sys_Print(SYS_DLL::ENGINE, "Recompiling scripts\n");
             ProcessCommand("reparse_weapons");
             ProcessCommand("reload");
         }
 
         if (ImGui::Button("Change Level##ServerHost_ChangeLevel", ImVec2(ImGui::GetWindowSize().x, 32)))
         {
-            if (!ServerMap.empty())
+            if (!szServerMap.empty())
             {
-                spdlog::debug("[+CCompanion+] Changing level to {}..\n", ServerMap);
-                strncpy_s(g_pHostState->m_levelName, ServerMap.c_str(), 64); // Copy new map into hoststate levelname. 64 is size of m_levelname.
+                strncpy_s(g_pHostState->m_levelName, szServerMap.c_str(), 64); // Copy new map into hoststate levelname. 64 is size of m_levelname.
                 g_pHostState->m_iNextState = HostStates_t::HS_CHANGE_LEVEL_MP; // Force CHostState::FrameUpdate to change the level.
             }
             else
             {
-                ServerNameErr = "Failed to change level. Map didn't apply properly.";
+                szServerNameErr = "Failed to change level: 'levelname' was empty.";
             }
         }
 
         if (ImGui::Button("Stop Server##ServerHost_StopServerButton", ImVec2(ImGui::GetWindowSize().x, 32)))
         {
-            spdlog::debug("[+CCompanion+] Stopping server..\n");
             ProcessCommand("LeaveMatch"); // Use script callback instead.
             g_pHostState->m_iNextState = HostStates_t::HS_GAME_SHUTDOWN; // Force CHostState::FrameUpdate to shutdown the server for dedicated.
         }
@@ -527,7 +510,6 @@ void IBrowser::HostServerSection()
     {
         if (ImGui::Button("Reload Playlist from Disk##ServerHost_ReloadPlaylist", ImVec2(ImGui::GetWindowSize().x, 32)))
         {
-            spdlog::debug("[+CCompanion+] Reloading playlist..\n");
             DownloadPlaylists_Callback();
             CKeyValueSystem_InitPlaylist(); // Re-Init playlist.
         }
@@ -536,17 +518,15 @@ void IBrowser::HostServerSection()
 
 void IBrowser::SettingsSection()
 {
-    // Matchmaking Server String
-    ImGui::InputTextWithHint("##MatchmakingServerString", "Matchmaking Server String", &MatchmakingServerStringBuffer);
+    ImGui::InputTextWithHint("##MatchmakingServerString", "Matchmaking Server String", &m_szMatchmakingServerString);
     if (ImGui::Button("Update Settings"))
     {
         if (r5net)
         {
             delete r5net;
-            r5net = new R5Net::Client(MatchmakingServerStringBuffer);
+            r5net = new R5Net::Client(m_szMatchmakingServerString);
         }
     }
-    // Encryption Key
     if (ImGui::Button("Regenerate Encryption Key##SettingsSection_RegenEncKey"))
     {
         RegenerateEncryptionKey();
@@ -556,10 +536,10 @@ void IBrowser::SettingsSection()
 
 void IBrowser::Draw(const char* title, bool* bDraw)
 {
-    if (!ThemeSet)
+    if (!m_bThemeSet)
     {
         SetStyleVar();
-        ThemeSet = true;
+        m_bThemeSet = true;
     }
     if (!ImGui::Begin(title, bDraw))
     {
@@ -578,7 +558,7 @@ void IBrowser::Draw(const char* title, bool* bDraw)
     {
         CompMenu();
 
-        switch (CurrentSection)
+        switch (eCurrentSection)
         {
         case ESection::SERVER_BROWSER:
             ServerBrowserSection();
@@ -598,11 +578,8 @@ void IBrowser::Draw(const char* title, bool* bDraw)
 
 void IBrowser::ProcessCommand(const char* command_line)
 {
-    spdlog::debug("[+CCompanion+] Processing command: {} creating thread now.\n", command_line);
     std::thread t(&IBrowser::ExecCommand, this, command_line);
-    spdlog::debug("[+CCompanion+] Thread created.\n");
     t.detach();
-    spdlog::debug("[+CCompanion+] Detached from Thread.\n");
 
     // This is to avoid a race condition.
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
@@ -610,7 +587,6 @@ void IBrowser::ProcessCommand(const char* command_line)
 
 void IBrowser::ExecCommand(const char* command_line)
 {
-    // TODO: separate thread to avoid race condition.
     IVEngineClient_CommandExecute(NULL, command_line);
 }
 

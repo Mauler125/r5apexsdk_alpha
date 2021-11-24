@@ -258,6 +258,9 @@
     <ClCompile Include="networksystem\r5net.cpp">
       <Filter>sdk\networksystem</Filter>
     </ClCompile>
+    <ClCompile Include="squirrel\sqinit.cpp">
+      <Filter>sdk\squirrel</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="client\CHLClient.h">
@@ -752,8 +755,18 @@
     <ClInclude Include="public\include\stb_image.h">
       <Filter>sdk\public\include</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="squirrel\sqinit.h">
+      <Filter>sdk\squirrel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="r5dev.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="r5dev.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="shared\resource\lockedserver.png" />
   </ItemGroup>
 </Project>

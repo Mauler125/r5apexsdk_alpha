@@ -25,6 +25,9 @@ namespace R5Net
 		bool GetClientIsBanned(std::string ip, std::int64_t orid, std::string& outErrCl);
 		std::string GetVersionString();
 
+		Client* r5net = nullptr;
+		Client* GetR5Net() { return r5net; }
+
 	private:
 		httplib::Client m_HttpClient;
 		Config config;
