@@ -385,9 +385,9 @@ HRESULT __stdcall Present(IDXGISwapChain* pSwapChain, UINT nSyncInterval, UINT n
 		if (FAILED(GetDeviceAndCtxFromSwapchain(pSwapChain, &g_pDevice, &g_pDeviceContext)))
 		{
 			return g_fnIDXGISwapChainPresent(pSwapChain, nSyncInterval, nFlags);
-			Sys_Print(SYS_DLL::MS, "+--------------------------------------------------------+");
-			Sys_Print(SYS_DLL::MS, "| >>>>>>>>>>| GET DVS AND CTX FROM SCP FAILED |<<<<<<<<< |");
-			Sys_Print(SYS_DLL::MS, "+--------------------------------------------------------+");
+			Sys_Print(SYS_DLL::MS, "+--------------------------------------------------------+\n");
+			Sys_Print(SYS_DLL::MS, "| >>>>>>>>>>| GET DVS AND CTX FROM SCP FAILED |<<<<<<<<< |\n");
+			Sys_Print(SYS_DLL::MS, "+--------------------------------------------------------+\n");
 		}
 
 		CreateRenderTarget(pSwapChain);
