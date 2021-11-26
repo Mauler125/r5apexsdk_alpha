@@ -19,6 +19,7 @@ namespace
 extern ConVar* cm_debug_cmdquery;
 extern ConVar* cm_return_false_cmdquery_all;
 extern ConVar* cm_return_false_cmdquery_dev_cheat;
+extern ConVar* matchmaking_hostname_r5net;
 //-------------------------------------------------------------------------
 // SERVER DLL                                                             |
 extern ConVar* sv_showconnecting;

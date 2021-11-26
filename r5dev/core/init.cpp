@@ -14,6 +14,7 @@
 #include "client/CHLClient.h"
 #endif // !DEDICATED
 #include "client/IVEngineClient.h"
+#include "server/server.h"
 #include "server/IVEngineServer.h"
 #include "squirrel/sqapi.h"
 #include "squirrel/sqvm.h"
@@ -50,6 +51,7 @@ void Systems_Init()
 	CFPSPanel_Attach();
 	CHLClient_Attach();
 #endif // !DEDICATED
+	CServer_Attach();
 	CHostState_Attach();
 	CNetChan_Attach();
 	ConCommand_Attach();
@@ -104,6 +106,7 @@ void Systems_Shutdown()
 	CFPSPanel_Detach();
 	CHLClient_Detach();
 #endif // !DEDICATED
+	CServer_Detach();
 	CHostState_Detach();
 	CNetChan_Detach();
 	ConCommand_Detach();

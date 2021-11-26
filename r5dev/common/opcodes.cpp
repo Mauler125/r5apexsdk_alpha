@@ -57,7 +57,7 @@ void Dedicated_Init()
 	//-------------------------------------------------------------------------
 	// CHLClIENT
 	//-------------------------------------------------------------------------
-	gCHLClient__1000.Patch({ 0xC3 });      // FUN --> RET | Return early in 'gCHLClient::unnamed' to prevent infinite loop.
+	gCHLClient__1000.Patch({ 0xC3 });       // FUN --> RET | Return early in 'gCHLClient::unnamed' to prevent infinite loop.
 	gCHLClient__HudMessage.Patch({ 0xC3 }); // FUN --> RET | Return early from 'CHudMessage' call.
 
 	//-------------------------------------------------------------------------
@@ -100,7 +100,7 @@ void Dedicated_Init()
 	gHost_Init_1.Offset(0x621).Patch({ 0xEB, 0x0C });                   // JNE --> JMP | Skip client.dll Init_PostVideo() validation code.
 	gHost_Init_1.Offset(0x658).Patch({ 0xE9, 0x8C, 0x00, 0x00, 0x00 }); // JE  --> JMP | Skip NULL call as client is never initialized.
 	gHost_Init_1.Offset(0x6E9).Patch({ 0xE9, 0xB0, 0x00, 0x00, 0x00 }); // JNE --> JMP | Skip shader preloading as cvar can't be checked due to client being NULL.
-	//gHost_Init_2.Offset(0x5D8).Patch({ 0xEB, 0x05 });                  // JE  --> JMP | Render?
+	//gHost_Init_2.Offset(0x5D8).Patch({ 0xEB, 0x05 });                   // JE  --> JMP | Render?
 
 	//-------------------------------------------------------------------------
 	// RUNTIME: _HOST_RUNFRAME
@@ -207,8 +207,7 @@ void RuntimePtc_Init() /* .TEXT */
 	//WriteProcessMemory(GameProcess, LPVOID(dst005 + 0x53), "\x90\x90", 2, NULL);
 	//WriteProcessMemory(GameProcess, LPVOID(dst005 + 0x284), "\x90\x90", 2, NULL);
 	//-------------------------------------------------------------------------
-	// JA  --> JMP | Prevent FairFight anti-cheat from initializing on the server
-	WriteProcessMemory(GameProcess, LPVOID(FairFight_Init + 0x61), "\xE9\xED\x00\x00\x00\x00", 6, NULL);
+	// JA  --> JMP | Prevent FairFight anti-cheat from initializing on the 
 	FairFight_Init.Offset(0x61).Patch({ 0xE9, 0xED, 0x00, 0x00, 0x00, 0x00 });
 }
 

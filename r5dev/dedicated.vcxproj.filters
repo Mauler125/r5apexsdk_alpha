@@ -516,6 +516,9 @@
     <ClInclude Include="squirrel\sqinit.h">
       <Filter>sdk\squirrel</Filter>
     </ClInclude>
+    <ClInclude Include="server\server.h">
+      <Filter>sdk\server</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="client\IVEngineClient.cpp">
@@ -619,6 +622,9 @@
     </ClCompile>
     <ClCompile Include="squirrel\sqinit.cpp">
       <Filter>sdk\squirrel</Filter>
+    </ClCompile>
+    <ClCompile Include="server\server.cpp">
+      <Filter>sdk\server</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

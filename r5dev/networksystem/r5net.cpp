@@ -2,6 +2,7 @@
 //
 
 #include "core/stdafx.h"
+#include "tier0/cvar.h"
 #include "networksystem/r5net.h"
 
 std::string R5Net::Client::GetVersionString()
@@ -261,3 +262,5 @@ bool R5Net::Client::GetClientIsBanned(const std::string ip, std::int64_t orid, s
     }
     return false;
 }
+
+R5Net::Client* r5net(new R5Net::Client("r5a-comp-sv.herokuapp.com"));

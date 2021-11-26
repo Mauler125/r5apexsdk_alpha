@@ -39,11 +39,7 @@ public:
     ////////////////////
     // Server Browser //
     ////////////////////
-private:
-    R5Net::Client* r5net = nullptr;
 public:
-    R5Net::Client* GetR5Net() { return r5net; }
-
     std::vector<ServerListing> m_vServerList;
     ImGuiTextFilter m_imServerBrowserFilter;
     char m_chServerConnStringBuffer[256] = { 0 };
@@ -64,7 +60,7 @@ public:
     ////////////////////
     //    Settings    //
     ////////////////////
-    std::string m_szMatchmakingServerString;
+    std::string m_szMatchmakingHostName;
 
     ////////////////////
     //   Host Server  //
@@ -176,5 +172,4 @@ public:
 };
 
 extern IBrowser* g_pServerBrowser;
-extern bool g_bCheckCompBanDB;
 #endif

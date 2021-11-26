@@ -267,6 +267,9 @@
     <ClCompile Include="squirrel\sqinit.cpp">
       <Filter>sdk\squirrel</Filter>
     </ClCompile>
+    <ClCompile Include="server\server.cpp">
+      <Filter>sdk\server</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="client\CHLClient.h">
@@ -766,6 +769,9 @@
     </ClInclude>
     <ClInclude Include="core\resource.h">
       <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="server\server.h">
+      <Filter>sdk\server</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -7,9 +7,10 @@
 ConVar* cm_debug_cmdquery;
 ConVar* cm_return_false_cmdquery_all;
 ConVar* cm_return_false_cmdquery_dev_cheat;
+ConVar* matchmaking_hostname_r5net;
 //-------------------------------------------------------------------------
 // SERVER DLL                                                             |
-ConVar* sv_showconnecting = NULL;
+ConVar* sv_showconnecting;
 //-------------------------------------------------------------------------
 // CLIENT DLL                                                             |
 ConVar* cl_drawconsoleoverlay;

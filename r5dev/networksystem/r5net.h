@@ -33,3 +33,4 @@ namespace R5Net
 		Config config;
 	};
 }
+extern R5Net::Client* r5net;

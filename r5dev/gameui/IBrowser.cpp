@@ -2,16 +2,18 @@
 #include "core/init.h"
 #include "core/resource.h"
 #include "tier0/IConVar.h"
+#include "tier0/cvar.h"
+#include "tier0/ConCommandCallback.h"
 #include "windows/id3dx.h"
 #include "windows/console.h"
 #include "engine/net_chan.h"
 #include "engine/sys_utils.h"
 #include "engine/host_state.h"
+#include "server/server.h"
 #include "client/IVEngineClient.h"
 #include "networksystem/serverlisting.h"
 #include "networksystem/r5net.h"
 #include "vpc/keyvalues.h"
-#include "tier0/ConCommandCallback.h"
 #include "squirrel/sqinit.h"
 #include "gameui/IBrowser.h"
 
@@ -28,7 +30,7 @@ History:
 
 ******************************************************************************/
 
-IBrowser::IBrowser() : m_szMatchmakingServerString("r5a-comp-sv.herokuapp.com"), r5net(new R5Net::Client("r5a-comp-sv.herokuapp.com"))
+IBrowser::IBrowser()
 {
     memset(m_chServerConnStringBuffer, 0, sizeof(m_chServerConnStringBuffer));
 
@@ -51,6 +53,7 @@ IBrowser::IBrowser() : m_szMatchmakingServerString("r5a-comp-sv.herokuapp.com"),
         }
     }
 
+    m_szMatchmakingHostName = matchmaking_hostname_r5net->m_pzsCurrentValue;
     m_Server.map = m_vszMapsList[0];
     static std::thread hostingServerRequestThread([this]()
     {
@@ -76,7 +79,7 @@ IBrowser::IBrowser() : m_szMatchmakingServerString("r5a-comp-sv.herokuapp.com"),
 
 IBrowser::~IBrowser()
 {
-    delete r5net;
+    //delete r5net;
 }
 
 void IBrowser::UpdateHostingStatus()
@@ -91,7 +94,7 @@ void IBrowser::UpdateHostingStatus()
     {
     case EHostStatus::NOT_HOSTING:
     {
-        m_szHostRequestMessage = "";
+        m_szHostRequestMessage.clear();
         m_iv4HostRequestMessageColor = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
         break;
     }
@@ -130,15 +133,16 @@ void IBrowser::UpdateHostingStatus()
 
 void IBrowser::RefreshServerList()
 {
-    m_vServerList.clear();
-
     static bool bThreadLocked = false;
+
+    m_vServerList.clear();
+    m_szServerListMessage.clear();
 
     if (!bThreadLocked)
     {
         std::thread t([this]()
         {
-            Sys_Print(SYS_DLL::CLIENT, "Refreshing server list with string '%s'\n", m_szMatchmakingServerString.c_str());
+            Sys_Print(SYS_DLL::CLIENT, "Refreshing server list with string '%s'\n", matchmaking_hostname_r5net->m_pzsCurrentValue);
             bThreadLocked = true;
             m_vServerList = r5net->GetServersList(m_szServerListMessage);
             bThreadLocked = false;
@@ -229,9 +233,9 @@ void IBrowser::ServerBrowserSection()
 
         for (ServerListing& server : m_vServerList)
         {
-            const char* name = server.name.c_str();
-            const char* map = server.map.c_str();
-            const char* port = server.port.c_str();
+            const char* name     = server.name.c_str();
+            const char* map      = server.map.c_str();
+            const char* port     = server.port.c_str();
             const char* playlist = server.playlist.c_str();
 
             if (m_imServerBrowserFilter.PassFilter(name)
@@ -324,7 +328,7 @@ void IBrowser::HiddenServersModal()
 
         if (ImGui::Button("Connect##HiddenServersConnectModal_ConnectButton", ImVec2(ImGui::GetWindowContentRegionWidth() / 2, 24)))
         {
-            m_szHiddenServerRequestMessage = "";
+            m_szHiddenServerRequestMessage.clear();
             ServerListing server;
             bool result = r5net->GetServerByToken(server, m_szHiddenServerRequestMessage, m_szHiddenServerToken); // Send token connect request.
             if (!server.name.empty())
@@ -451,7 +455,7 @@ void IBrowser::HostServerSection()
                 }
                 else if (!szServerMap.empty())
                 {
-                    szServerNameErr = "Map didn't apply properly.";
+                    szServerNameErr = "'levelname' was empty.";
                 }
             }
         }
@@ -502,7 +506,7 @@ void IBrowser::HostServerSection()
 
         if (ImGui::Button("Stop Server##ServerHost_StopServerButton", ImVec2(ImGui::GetWindowSize().x, 32)))
         {
-            ProcessCommand("LeaveMatch"); // Use script callback instead.
+            ProcessCommand("LeaveMatch"); // TODO: use script callback instead.
             g_pHostState->m_iNextState = HostStates_t::HS_GAME_SHUTDOWN; // Force CHostState::FrameUpdate to shutdown the server for dedicated.
         }
     }
@@ -518,20 +522,21 @@ void IBrowser::HostServerSection()
 
 void IBrowser::SettingsSection()
 {
-    ImGui::InputTextWithHint("##MatchmakingServerString", "Matchmaking Server String", &m_szMatchmakingServerString);
-    if (ImGui::Button("Update Settings"))
+    ImGui::InputTextWithHint("Hostname##MatchmakingServerString", "Matchmaking Server String", &m_szMatchmakingHostName);
+    if (ImGui::Button("Update Hostname"))
     {
+        matchmaking_hostname_r5net->m_pzsCurrentValue = m_szMatchmakingHostName.c_str();
         if (r5net)
         {
             delete r5net;
-            r5net = new R5Net::Client(m_szMatchmakingServerString);
+            r5net = new R5Net::Client(matchmaking_hostname_r5net->m_pzsCurrentValue);
         }
     }
+    ImGui::InputText("Netkey##SettingsSection_EncKey", (char*)g_szNetKey.c_str(), ImGuiInputTextFlags_ReadOnly);
     if (ImGui::Button("Regenerate Encryption Key##SettingsSection_RegenEncKey"))
     {
         RegenerateEncryptionKey();
     }
-    ImGui::InputText("Encryption Key##SettingsSection_EncKey", (char*)g_szNetKey.c_str(), ImGuiInputTextFlags_ReadOnly);
 }
 
 void IBrowser::Draw(const char* title, bool* bDraw)
@@ -629,7 +634,6 @@ void IBrowser::ChangeEncryptionKeyTo(const std::string str)
 //#############################################################################
 
 IBrowser* g_pServerBrowser = nullptr;
-bool g_bCheckCompBanDB = true;
 void DrawBrowser(bool* bDraw)
 {
     static IBrowser browser;

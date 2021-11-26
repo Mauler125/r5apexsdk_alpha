@@ -196,6 +196,7 @@
     <ClInclude Include="rtech\rtech.h" />
     <ClInclude Include="rtech\stryder.h" />
     <ClInclude Include="server\IVEngineServer.h" />
+    <ClInclude Include="server\server.h" />
     <ClInclude Include="squirrel\sqapi.h" />
     <ClInclude Include="squirrel\sqinit.h" />
     <ClInclude Include="squirrel\sqvm.h" />
@@ -335,6 +336,7 @@
     <ClCompile Include="rtech\rtech.cpp" />
     <ClCompile Include="rtech\stryder.cpp" />
     <ClCompile Include="server\IVEngineServer.cpp" />
+    <ClCompile Include="server\server.cpp" />
     <ClCompile Include="squirrel\sqapi.cpp" />
     <ClCompile Include="squirrel\sqinit.cpp" />
     <ClCompile Include="squirrel\sqvm.cpp" />
