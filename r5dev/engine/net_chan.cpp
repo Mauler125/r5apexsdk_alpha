@@ -10,21 +10,13 @@
 //-----------------------------------------------------------------------------
 // Purpose: hook and log the receive datagram
 //-----------------------------------------------------------------------------
-char HNET_ReceiveDatagram(int sock, void* inpacket, bool raw)
+bool HNET_ReceiveDatagram(int sock, netpacket_t* inpacket, bool raw)
 {
-	if (!g_bTraceNetChannel)
-	{
-		return NET_ReceiveDatagram(sock, inpacket, raw);
-	}
-
-	const int i = NULL;
-	char result = NET_ReceiveDatagram(sock, inpacket, raw);
+	bool result = NET_ReceiveDatagram(sock, inpacket, raw);
 	if (result)
 	{
-		netpacket_t* pkt = (netpacket_t*)inpacket;
-
 		// Log received packet data
-		HexDump("[+] NET_ReceiveDatagram", 0, &pkt->data[i], pkt->wiresize);
+		HexDump("[+] NET_ReceiveDatagram", 0, &inpacket->data[NULL], inpacket->wiresize);
 	}
 	return result;
 }
@@ -32,14 +24,9 @@ char HNET_ReceiveDatagram(int sock, void* inpacket, bool raw)
 //-----------------------------------------------------------------------------
 // Purpose: hook and log the send datagram
 //-----------------------------------------------------------------------------
-std::int64_t HNET_SendDatagram(SOCKET s, const char* buf, int len, int flags)
+void* HNET_SendDatagram(SOCKET s, const char* buf, int len, int flags)
 {
-	if (!g_bTraceNetChannel)
-	{
-		return NET_SendDatagram(s, buf, len, flags);
-	}
-
-	std::int64_t result = NET_SendDatagram(s, buf, len, flags);
+	void* result = NET_SendDatagram(s, buf, len, flags);
 	if (result)
 	{
 		// Log transmitted packet data
@@ -144,18 +131,25 @@ void NET_DisconnectClient(CClient* client, int index, const char* reason, uint8_
 void CNetChan_Attach()
 {
 	DetourAttach((LPVOID*)&NET_PrintFunc, &HNET_PrintFunc);
-	DetourAttach((LPVOID*)&NET_ReceiveDatagram, &HNET_ReceiveDatagram);
-	DetourAttach((LPVOID*)&NET_SendDatagram, &HNET_SendDatagram);
 }
 
 void CNetChan_Detach()
 {
 	DetourDetach((LPVOID*)&NET_PrintFunc, &HNET_PrintFunc);
+}
+
+void CNetChan_Trace_Attach()
+{
+	DetourAttach((LPVOID*)&NET_ReceiveDatagram, &HNET_ReceiveDatagram);
+	DetourAttach((LPVOID*)&NET_SendDatagram, &HNET_SendDatagram);
+}
+
+void CNetChan_Trace_Detach()
+{
 	DetourDetach((LPVOID*)&NET_ReceiveDatagram, &HNET_ReceiveDatagram);
 	DetourDetach((LPVOID*)&NET_SendDatagram, &HNET_SendDatagram);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool g_bTraceNetChannel;
 std::string g_szNetKey = "WDNWLmJYQ2ZlM0VoTid3Yg==";
 std::uintptr_t g_pNetKey = g_mGameDll.StringSearch("client:NetEncryption_NewKey").FindPatternSelf("48 8D ? ? ? ? ? 48 3B", ADDRESS::Direction::UP, 150).ResolveRelativeAddressSelf(0x3, 0x7).GetPtr();

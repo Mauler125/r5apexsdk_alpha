@@ -480,7 +480,8 @@ void RTech_Decompress_Callback(CCommand* cmd)
 
 void NET_TraceNetChan_Callback(CCommand* cmd)
 {
-	if (!g_bTraceNetChannel)
+	static bool bTraceNetChannel = false;
+	if (!bTraceNetChannel)
 	{
 		g_pCvar->FindVar("net_usesocketsforloopback")->m_iValue = 1;
 		Sys_Print(SYS_DLL::ENGINE, "\n");
@@ -488,6 +489,18 @@ void NET_TraceNetChan_Callback(CCommand* cmd)
 		Sys_Print(SYS_DLL::ENGINE, "|>>>>>>>>>>>>>| NETCHANNEL TRACE ACTIVATED |<<<<<<<<<<<<<|\n");
 		Sys_Print(SYS_DLL::ENGINE, "+--------------------------------------------------------+\n");
 		Sys_Print(SYS_DLL::ENGINE, "\n");
+
+		// Begin the detour transaction to hook the the process
+		DetourTransactionBegin();
+		DetourUpdateThread(GetCurrentThread());
+
+		CNetChan_Trace_Attach();
+		// Commit the transaction
+		if (DetourTransactionCommit() != NO_ERROR)
+		{
+			// Failed to hook into the process, terminate
+			TerminateProcess(GetCurrentProcess(), 0xBAD0C0DE);
+		}
 	}
 	else
 	{
@@ -496,8 +509,16 @@ void NET_TraceNetChan_Callback(CCommand* cmd)
 		Sys_Print(SYS_DLL::ENGINE, "|>>>>>>>>>>>>| NETCHANNEL TRACE DEACTIVATED |<<<<<<<<<<<<|\n");
 		Sys_Print(SYS_DLL::ENGINE, "+--------------------------------------------------------+\n");
 		Sys_Print(SYS_DLL::ENGINE, "\n");
+
+		// Begin the detour transaction to hook the the process
+		DetourTransactionBegin();
+		DetourUpdateThread(GetCurrentThread());
+
+		CNetChan_Trace_Detach();
+		// Commit the transaction
+		DetourTransactionCommit();
 	}
-	g_bTraceNetChannel = !g_bTraceNetChannel;
+	bTraceNetChannel = !bTraceNetChannel;
 }
 
 void NET_SetKey_Callback(CCommand* cmd)
