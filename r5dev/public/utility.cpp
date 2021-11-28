@@ -139,9 +139,8 @@ void DbgPrint(LPCSTR sFormat, ...)
 void HexDump(const char* szHeader, int nFunc, const void* pData, int nSize)
 {
     static std::atomic<int> i, j, k = 0;
-    static char ascii[17] = { 0 };
+    static unsigned char ascii[17] = { 0 };
     static auto logger = spdlog::get("default_logger");
-    auto pattern = std::make_unique<spdlog::pattern_formatter>("%v", spdlog::pattern_time_type::local, std::string(""));
 
     // Loop until the function returned to the first caller.
     while (k == 1) { /*Sleep(75);*/ }
@@ -158,7 +157,7 @@ void HexDump(const char* szHeader, int nFunc, const void* pData, int nSize)
     logger->trace("---------------------------------------------------------");
 
     // Disable EOL and create block header.
-    logger->set_formatter(std::move(pattern));
+    logger->set_pattern("%v");
     logger->trace("{:s} ---- LEN BYTES: {}\n:\n", szHeader, nSize);
     logger->trace("--------  0  1  2  3  4  5  6  7   8  9  A  B  C  D  E  F  0123456789ABCDEF\n");
 
