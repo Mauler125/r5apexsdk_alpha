@@ -1,12 +1,18 @@
-## Note [Important]
-This is not a cheat or hack. Do not attempt to use this on the latest version of the game.
-
-## Mod
- * Detours-based Visual Studio project for hooking and modding the game engine.
-
+## Note
 This project allows you to run APEX Legends with mods, by running the embedded server
 and loading custom scripts/global compile lists into the scripting VM.
 This allows you to create custom gamemodes, levels, weapons and more.
+
+This project mainly targets the S0, S1 and S2 versions of the game.
+Even though S3 is also supported, most updates and features will be released on our official repo first.
+Visit https://github.com/Mauler125/detours_r5 for our official public repo if you are using the S3 version of the game.
+This repo will be updated every now and then to implement new features for earlier versions of the game.
+
+[Important]
+This is not a cheat or hack. Do not attempt to use this on the live version of the game.
+
+## Mod
+ * Detours-based Visual Studio project for hooking and modding the game engine.
 
 Target supported versions are:
  * R5pc_r5launch_N52A_CL399039_2019_03_12_03_21_PM  (S1) (almost ready)
