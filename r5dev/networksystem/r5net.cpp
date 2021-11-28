@@ -1,6 +1,8 @@
 // r5net.cpp : Defines the functions for the static library.
 //
 
+#define DEBUGR5NET
+
 #include "core/stdafx.h"
 #include "tier0/cvar.h"
 #include "networksystem/r5net.h"
@@ -21,8 +23,8 @@ std::vector<ServerListing> R5Net::Client::GetServersList(std::string& outMessage
 
 #ifdef DEBUGR5NET
     std::cout << " [+R5Net+] Sending GetServerList post now..\n";
-#endif 
-    
+#endif
+
     httplib::Result res = m_HttpClient.Post("/servers", reqBody.dump().c_str(), reqBody.dump().length(), "application/json");
 
 #ifdef DEBUGR5NET
@@ -79,7 +81,7 @@ std::vector<ServerListing> R5Net::Client::GetServersList(std::string& outMessage
             return list;
         }
 
-        outMessage = "failed to reach comp-server unknown error code.";
+        outMessage = "Failed to reach comp-server. Unknown error code.";
         return list;
     }
 
@@ -100,7 +102,7 @@ bool R5Net::Client::PostServerHost(std::string& outMessage, std::string& outToke
 
     std::string reqBodyStr = reqBody.dump();
 
-    #ifdef DEBUGR5NET
+#ifdef DEBUGR5NET
     std::cout << " [+R5Net+] Sending PostServerHost post now..\n" << reqBodyStr << "\n";
 #endif 
 
@@ -155,7 +157,7 @@ bool R5Net::Client::PostServerHost(std::string& outMessage, std::string& outToke
         }
 
         outToken = std::string();
-        outMessage = "failed to reach comp-server unknown error code.";
+        outMessage = "Failed to reach comp-server. Unknown error code.";
         return false;
     }
 
@@ -231,7 +233,7 @@ bool R5Net::Client::GetServerByToken(ServerListing& outServer, std::string& outM
             return false;
         }
 
-        outMessage = "failed to reach comp-server unknown error code.";
+        outMessage = "Failed to reach comp-server. Unknown error code.";
         outServer = ServerListing{};
         return false;
     }

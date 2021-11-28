@@ -3,7 +3,7 @@
 #include "core/resource.h"
 #include "tier0/IConVar.h"
 #include "tier0/cvar.h"
-#include "tier0/ConCommandCallback.h"
+#include "tier0/completion.h"
 #include "windows/id3dx.h"
 #include "windows/console.h"
 #include "engine/net_chan.h"
@@ -54,7 +54,6 @@ IBrowser::IBrowser()
     }
 
     m_szMatchmakingHostName = matchmaking_hostname_r5net->m_pzsCurrentValue;
-    m_Server.map = m_vszMapsList[0];
     static std::thread hostingServerRequestThread([this]()
     {
         while (true)
@@ -66,12 +65,14 @@ IBrowser::IBrowser()
 
     hostingServerRequestThread.detach();
 
+    /* Obtain handle to module */
     static HGLOBAL rcData = NULL;
     HMODULE handle;
     GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT, (LPCSTR)"unnamed", &handle);
     HRSRC rc = FindResource(handle, MAKEINTRESOURCE(IDB_PNG1), MAKEINTRESOURCE(PNG));
-
-    if (rc != NULL) { rcData = LoadResource(handle, rc); }
+    /* Obtain assets from 'rsrc' */
+    if (rc != NULL)
+    { rcData = LoadResource(handle, rc); }
     else { assert(rc == NULL); }
     if (rcData != NULL) { m_vucLockedIconBlob = (std::vector<unsigned char>*)LockResource(rcData); }
     else { assert(rcData == NULL); }
@@ -358,7 +359,6 @@ void IBrowser::HiddenServersModal()
 void IBrowser::HostServerSection()
 {
     static std::string szServerNameErr = "";
-    static std::string szServerMap = std::string();
 
     ImGui::InputTextWithHint("##ServerHost_ServerName", "Server Name (Required)", &m_Server.name);
     ImGui::Spacing();
@@ -382,12 +382,11 @@ void IBrowser::HostServerSection()
             if (ImGui::Selectable(item.c_str(), item == m_Server.map))
             {
                 m_Server.map = item;
-                szServerMap = item;
                 for (auto it = mapArray.begin(); it != mapArray.end(); ++it)
                 {
                     if (it->second.compare(m_Server.map) == NULL)
                     {
-                        szServerMap = it->first;
+                        m_Server.map = it->first;
                     }
                 }
             }
@@ -421,9 +420,10 @@ void IBrowser::HostServerSection()
     {
         if (ImGui::Button("Start Server##ServerHost_StartServerButton", ImVec2(ImGui::GetWindowSize().x, 32)))
         {
-            if (!m_Server.name.empty() && !m_Server.playlist.empty() && !szServerMap.empty())
+            szServerNameErr.clear();
+            if (!m_Server.name.empty() && !m_Server.playlist.empty() && !m_Server.map.empty())
             {
-                Sys_Print(SYS_DLL::CLIENT, "Starting Server with name '%s', map '%s' and playlist '%s'\n", m_Server.name.c_str(), szServerMap.c_str(), m_Server.playlist.c_str());
+                Sys_Print(SYS_DLL::ENGINE, "Starting Server with name '%s', map '%s' and playlist '%s'\n", m_Server.name.c_str(), m_Server.map.c_str(), m_Server.playlist.c_str());
                 szServerNameErr = std::string();
                 UpdateHostingStatus();
 
@@ -440,20 +440,20 @@ void IBrowser::HostServerSection()
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
                 std::stringstream cmd;
-                cmd << "map " << szServerMap;
+                cmd << "map " << m_Server.map;
                 ProcessCommand(cmd.str().c_str());
             }
             else
             {
-                if (!m_Server.name.empty())
+                if (m_Server.name.empty())
                 {
                     szServerNameErr = "No Server Name assigned.";
                 }
-                else if (!m_Server.playlist.empty())
+                else if (m_Server.playlist.empty())
                 {
                     szServerNameErr = "No Playlist assigned.";
                 }
-                else if (!szServerMap.empty())
+                else if (m_Server.map.empty())
                 {
                     szServerNameErr = "'levelname' was empty.";
                 }
@@ -463,15 +463,39 @@ void IBrowser::HostServerSection()
 
     if (ImGui::Button("Force Start##ServerHost_ForceStart", ImVec2(ImGui::GetWindowSize().x, 32)))
     {
-        szServerNameErr = std::string();
-        if (!szServerMap.empty())
+        szServerNameErr.clear();
+        if (!m_Server.playlist.empty() && !m_Server.map.empty())
         {
-            strncpy_s(g_pHostState->m_levelName, szServerMap.c_str(), 64); // Copy new map into hoststate levelname. 64 is size of m_levelname.
-            g_pHostState->m_iNextState = HostStates_t::HS_NEW_GAME; // Force CHostState::FrameUpdate to start a server.
+            Sys_Print(SYS_DLL::ENGINE, "Starting Server with map '%s' and playlist '%s'\n", m_Server.map.c_str(), m_Server.playlist.c_str());
+            szServerNameErr = std::string();
+            UpdateHostingStatus();
+
+            /*
+            * Playlist gets parsed in two instances, first in LoadPlaylist all the neccessary values.
+            * Then when you would normally call launchplaylist which calls StartPlaylist it would cmd call mp_gamemode which parses the gamemode specific part of the playlist..
+            */
+            KeyValues_LoadPlaylist(m_Server.playlist.c_str());
+            std::stringstream cgmd;
+            cgmd << "mp_gamemode " << m_Server.playlist;
+            ProcessCommand(cgmd.str().c_str());
+
+            // This is to avoid a race condition.
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+            std::stringstream cmd;
+            cmd << "map " << m_Server.map;
+            ProcessCommand(cmd.str().c_str());
         }
         else
         {
-            szServerNameErr = "Failed to force start: 'levelname' was empty.";
+            if (m_Server.playlist.empty())
+            {
+                szServerNameErr = "No Playlist assigned.";
+            }
+            else if (m_Server.map.empty())
+            {
+                szServerNameErr = "'levelname' was empty.";
+            }
         }
     }
 
@@ -493,9 +517,9 @@ void IBrowser::HostServerSection()
 
         if (ImGui::Button("Change Level##ServerHost_ChangeLevel", ImVec2(ImGui::GetWindowSize().x, 32)))
         {
-            if (!szServerMap.empty())
+            if (!m_Server.map.empty())
             {
-                strncpy_s(g_pHostState->m_levelName, szServerMap.c_str(), 64); // Copy new map into hoststate levelname. 64 is size of m_levelname.
+                strncpy_s(g_pHostState->m_levelName, m_Server.map.c_str(), 64); // Copy new map into hoststate levelname. 64 is size of m_levelname.
                 g_pHostState->m_iNextState = HostStates_t::HS_CHANGE_LEVEL_MP; // Force CHostState::FrameUpdate to change the level.
             }
             else

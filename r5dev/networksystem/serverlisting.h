@@ -3,10 +3,10 @@
 struct ServerListing
 {
 	std::string name;
-	std::string map;
+	std::string map = "mp_rr_canyonlands_staging";
 	std::string ip;
 	std::string port;
-	std::string playlist;
+	std::string playlist = "survival_dev";
 	bool hidden;
 	std::string remoteChecksum;
 	std::string version;

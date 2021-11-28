@@ -1,13 +1,10 @@
 #include "core/stdafx.h"
 #include "core/init.h"
-#include "common/opcodes.h"
-
 #include "rtech/rtech.h"
 #ifndef DEDICATED
 #include "windows/id3dx.h"
 #endif // !DEDICATED
 #include "windows/console.h"
-
 #include "client/IVEngineClient.h"
 
 //#############################################################################
@@ -28,11 +25,8 @@ void Console_Init()
 	// Set the window title
 	FILE* sBuildTxt;
 	CHAR sBuildBuf[1024] = { 0 };
-#ifdef NDEBUG
+
 	fopen_s(&sBuildTxt, "build.txt", "r");
-#elif _DEBUG
-	fopen_s(&sBuildTxt, "..\\build.txt", "r");
-#endif
 
 	if (sBuildTxt)
 	{
@@ -52,21 +46,22 @@ void Console_Init()
 
 	///////////////////////////////////////////////////////////////////////////
 	// Create a worker thread to process console commands
-	DWORD threadId0;
+	DWORD threadId;
 	DWORD __stdcall ProcessConsoleWorker(LPVOID);
-	HANDLE hThread0 = CreateThread(NULL, 0, ProcessConsoleWorker, NULL, 0, &threadId0);
+	HANDLE hThread = CreateThread(NULL, 0, ProcessConsoleWorker, NULL, 0, &threadId);
 
 	// Initialize global spdlog.
 	auto console = spdlog::stdout_logger_mt("console");
 	console->set_pattern("[%S.%e] %v"); // Set pattern.
+
 	spdlog::set_level(spdlog::level::trace);
 	spdlog::set_default_logger(console); // Set as default.
 	spdlog::flush_every(std::chrono::seconds(5)); // Flush buffers every 5 seconds for every logger.
 	
-	if (hThread0)
+	if (hThread)
 	{
-		spdlog::debug("THREAD ID: {}\n\n", threadId0);
-		CloseHandle(hThread0);
+		spdlog::debug("THREAD ID: {}\n\n", threadId);
+		CloseHandle(hThread);
 	}
 }
 
@@ -79,7 +74,7 @@ DWORD __stdcall ProcessConsoleWorker(LPVOID)
 	// Loop forever
 	while (true)
 	{
-		std::string sCommand;
+		static std::string sCommand = "";
 
 		///////////////////////////////////////////////////////////////////////
 		// Get the user input on the debug console
@@ -87,11 +82,8 @@ DWORD __stdcall ProcessConsoleWorker(LPVOID)
 		std::getline(std::cin, sCommand);
 
 		///////////////////////////////////////////////////////////////////////
-		// Engine toggles
-		if (sCommand == "toggle opc") { ToggleOpcodes(); }
-		///////////////////////////////////////////////////////////////////////
 		// Debug toggles
-		if (sCommand == "pattern test") { PrintHAddress(); PrintOAddress(); continue; }
+		if (sCommand == "pattern test") { PrintHAddress(); continue; }
 #ifndef DEDICATED
 		if (sCommand == "directx test") { PrintDXAddress(); continue; }
 #endif // !DEDICATED

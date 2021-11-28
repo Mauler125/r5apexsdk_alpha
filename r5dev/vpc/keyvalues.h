@@ -229,6 +229,10 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
 void CKeyValueSystem_InitPlaylist();
 void CKeyValueSystem_Init();
+bool HKeyValues_LoadPlaylist(const char* playlist);
+
+void CKeyValueSystem_Attach();
+void CKeyValueSystem_Detach();
 
 ///////////////////////////////////////////////////////////////////////////////
 extern CKeyValuesSystem* g_pKeyValuesSystem;

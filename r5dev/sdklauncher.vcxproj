@@ -84,7 +84,7 @@
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(SolutionDir)r5dev\;$(IncludePath);</IncludePath>
     <LibraryPath>$(SolutionDir)r5dev\thirdparty\detours\libs;$(LibraryPath);</LibraryPath>
-    <TargetName>r5apexvtxa</TargetName>
+    <TargetName>r5reloaded</TargetName>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\$(ProjectName)\$(Configuration)\</IntDir>
   </PropertyGroup>
@@ -92,7 +92,7 @@
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(SolutionDir)r5dev\;$(IncludePath);</IncludePath>
     <LibraryPath>$(SolutionDir)r5dev\thirdparty\detours\libs;$(LibraryPath);</LibraryPath>
-    <TargetName>r5apexvtxa</TargetName>
+    <TargetName>r5reloaded</TargetName>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\$(ProjectName)\$(Configuration)\</IntDir>
   </PropertyGroup>
@@ -177,7 +177,7 @@
       <AdditionalDependencies>detours.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(TargetPath)" "..\..\..\$(TargetFileName)" &amp;&amp; del "..\..\..\bink64.exe" &amp;&amp; rename "..\..\..\$(TargetFileName)" "bink64.exe"</Command>
+      <Command>copy /Y "$(TargetPath)" "..\..\..\$(TargetFileName)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

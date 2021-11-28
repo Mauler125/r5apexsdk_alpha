@@ -83,7 +83,7 @@ void Sys_Print(SYS_DLL idx, const char* fmt, ...)
 //	Sys_LoadAsset
 //
 //-----------------------------------------------------------------------------
-std::int64_t HSys_LoadAsset(const CHAR* lpFileName, std::int64_t a2, LARGE_INTEGER* a3)
+void* HSys_LoadAsset(const CHAR* lpFileName, std::int64_t a2, LARGE_INTEGER* a3)
 {
 	std::string mod_file;
 	std::string base_file = lpFileName;

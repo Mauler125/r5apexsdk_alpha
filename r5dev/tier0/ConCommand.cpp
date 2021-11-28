@@ -1,7 +1,7 @@
 #include "core/stdafx.h"
 #include "tier0/cvar.h"
+#include "tier0/completion.h"
 #include "tier0/ConCommand.h"
-#include "tier0/ConCommandCallback.h"
 #include "client/client.h"
 #include "engine/sys_utils.h"
 

@@ -19,7 +19,7 @@ Purpose: Microsoft DirectX 11 'IDXGISwapChain::Present' hook implementation
 -----------------------------------------------------------------------------------
 History:
 - 15:06:2021 | 14:56 : Created by Kawe Mazidjatari
-- 17:06:2021 | 13:12 : Destroy / release objects on 'GetResizeBuffers' callback
+- 17:06:2021 | 13:12 : Destroy / release objects with 'GetResizeBuffers' callback
 
 **********************************************************************************/
 

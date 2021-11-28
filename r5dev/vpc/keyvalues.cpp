@@ -1,6 +1,7 @@
 #include "core/stdafx.h"
 #include "vpc/keyvalues.h"
 #include "rtech/stryder.h"
+#include "engine/sys_dll2.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 std::vector<std::string> g_szAllPlaylists = { "none" };
@@ -38,6 +39,12 @@ void CKeyValueSystem_InitPlaylist()
 	}
 }
 
+bool HKeyValues_LoadPlaylist(const char* playlist)
+{
+	memset(g_pMapVPKCache, 0, 0x40); // Clear VPK cache.
+	return KeyValues_LoadPlaylist(playlist);
+}
+
 const char* KeyValues::GetName()
 {
 	return g_pKeyValuesSystem->GetStringForSymbol(MAKE_3_BYTES_FROM_1_AND_2(m_iKeyNameCaseSensitive, m_iKeyNameCaseSensitive2));
@@ -47,4 +54,14 @@ void CKeyValueSystem_Init()
 {
 	std::thread t1(CKeyValueSystem_InitPlaylist); // Start thread to grab playlists.
 	t1.detach(); // Detach thread from current one.
+}
+
+void CKeyValueSystem_Attach()
+{
+	DetourAttach((LPVOID*)&KeyValues_LoadPlaylist, &HKeyValues_LoadPlaylist);
+}
+
+void CKeyValueSystem_Detach()
+{
+	DetourDetach((LPVOID*)&KeyValues_LoadPlaylist, &HKeyValues_LoadPlaylist);
 }

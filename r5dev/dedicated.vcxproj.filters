@@ -471,7 +471,7 @@
     <ClInclude Include="thirdparty\spdlog\include\cfg\argv.h">
       <Filter>thirdparty\spdlog\include\cfg</Filter>
     </ClInclude>
-    <ClInclude Include="tier0\ConCommandCallback.h">
+    <ClInclude Include="tier0\completion.h">
       <Filter>sdk\tier0</Filter>
     </ClInclude>
     <ClInclude Include="tier0\cvar.h">
@@ -518,6 +518,9 @@
     </ClInclude>
     <ClInclude Include="server\server.h">
       <Filter>sdk\server</Filter>
+    </ClInclude>
+    <ClInclude Include="tier0\interface.h">
+      <Filter>sdk\tier0</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -587,7 +590,7 @@
     <ClCompile Include="squirrel\sqvm.cpp">
       <Filter>sdk\squirrel</Filter>
     </ClCompile>
-    <ClCompile Include="tier0\ConCommandCallback.cpp">
+    <ClCompile Include="tier0\completion.cpp">
       <Filter>sdk\tier0</Filter>
     </ClCompile>
     <ClCompile Include="tier0\cvar.cpp">

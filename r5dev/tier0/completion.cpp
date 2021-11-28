@@ -1,7 +1,7 @@
 #include "core/stdafx.h"
 #include "tier0/basetypes.h"
 #include "tier0/IConVar.h"
-#include "tier0/ConCommandCallback.h"
+#include "tier0/completion.h"
 #include "windows/id3dx.h"
 #include "engine/net_chan.h"
 #include "engine/sys_utils.h"
@@ -396,7 +396,7 @@ void RTech_Decompress_Callback(CCommand* cmd)
 
 	if (!FileExists(pak_name_in.c_str()))
 	{
-		Sys_Print(SYS_DLL::RTECH, "] Error: pak file '%s' does not exist!\n", pak_name_in.c_str());
+		Sys_Print(SYS_DLL::RTECH, "Error: pak file '%s' does not exist!\n", pak_name_in.c_str());
 		return;
 	}
 
@@ -414,17 +414,17 @@ void RTech_Decompress_Callback(CCommand* cmd)
 
 	if (rheader->m_nMagic != 'kaPR')
 	{
-		Sys_Print(SYS_DLL::RTECH, "] Error: pak file '%s' has invalid magic!\n", pak_name_in.c_str());
+		Sys_Print(SYS_DLL::RTECH, "Error: pak file '%s' has invalid magic!\n", pak_name_in.c_str());
 		return;
 	}
 	if ((rheader->m_bIsCompressed & 1) != 1)
 	{
-		Sys_Print(SYS_DLL::RTECH, "] Error: pak file '%s' already decompressed!\n", pak_name_in.c_str());
+		Sys_Print(SYS_DLL::RTECH, "Error: pak file '%s' already decompressed!\n", pak_name_in.c_str());
 		return;
 	}
 	if (rheader->m_nSizeDisk != upak.size())
 	{
-		Sys_Print(SYS_DLL::RTECH, "] Error: pak file '%s' decompressed size '%u' doesn't match expected value '%u'!\n", pak_name_in.c_str(), upak.size(), rheader->m_nSizeMem);
+		Sys_Print(SYS_DLL::RTECH, "Error: pak file '%s' decompressed size '%u' doesn't match expected value '%u'!\n", pak_name_in.c_str(), upak.size(), rheader->m_nSizeMem);
 		return;
 	}
 
@@ -445,7 +445,7 @@ void RTech_Decompress_Callback(CCommand* cmd)
 	std::uint32_t dsize = g_pRtech->DecompressedSize((std::int64_t)(params), upak.data(), upak.size(), 0, PAK_HEADER_SIZE);
 	if (dsize == rheader->m_nSizeDisk)
 	{
-		Sys_Print(SYS_DLL::RTECH, "] Error: calculated size: '%zu' expected: '%zu'!\n", dsize, rheader->m_nSizeMem);
+		Sys_Print(SYS_DLL::RTECH, "Error: calculated size: '%zu' expected: '%zu'!\n", dsize, rheader->m_nSizeMem);
 		return;
 	}
 	else
@@ -461,7 +461,7 @@ void RTech_Decompress_Callback(CCommand* cmd)
 	std::uint8_t decomp_result = g_pRtech->Decompress(params, upak.size(), pakbuf.size());
 	if (decomp_result != 1)
 	{
-		Sys_Print(SYS_DLL::RTECH, "] Error: decompression failed for '%s' return value: '%u'!\n", pak_name_in.c_str(), +decomp_result);
+		Sys_Print(SYS_DLL::RTECH, "Error: decompression failed for '%s' return value: '%u'!\n", pak_name_in.c_str(), +decomp_result);
 		return;
 	}
 

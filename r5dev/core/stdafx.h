@@ -4,21 +4,22 @@
 #define WIN32_LEAN_AND_MEAN // Prevent winsock2 redefinition.
 #include <windows.h>
 #include <WinSock2.h>
-#include <thread>
-#include <fstream>
+
 #include <stdio.h>
-#include <filesystem>
-#include <sstream>
+#include <Psapi.h>
 #include <shlobj.h>
 #include <objbase.h>
-#include <cassert>
-#include <iomanip>
-#include <iostream>
-#include <string>
-#include <Psapi.h>
 #include <emmintrin.h>
-#include <vector>
 #include <cmath>
+#include <vector>
+#include <thread>
+#include <string>
+#include <sstream>
+#include <fstream>
+#include <iostream>
+#include <iomanip>
+#include <cassert>
+#include <filesystem>
 
 #if !defined(DEDICATED)
 #include <d3d11.h>

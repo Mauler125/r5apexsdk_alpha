@@ -3,6 +3,7 @@
 #include "common/opcodes.h"
 #include "tier0/ConCommand.h"
 #include "tier0/IConVar.h"
+#include "vpc/keyvalues.h"
 #include "launcher/IApplication.h"
 #include "vpc/basefilesystem.h"
 #include "vpc/keyvalues.h"
@@ -56,6 +57,7 @@ void Systems_Init()
 	CNetChan_Attach();
 	ConCommand_Attach();
 	IConVar_Attach();
+	CKeyValueSystem_Attach();
 	IVEngineServer_Attach();
 	SQAPI_Attach();
 	SQVM_Attach();
@@ -111,6 +113,7 @@ void Systems_Shutdown()
 	CNetChan_Detach();
 	ConCommand_Detach();
 	IConVar_Detach();
+	CKeyValueSystem_Detach();
 	IVEngineServer_Detach();
 	SQAPI_Detach();
 	SQVM_Detach();

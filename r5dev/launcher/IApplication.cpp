@@ -7,7 +7,9 @@
 //-----------------------------------------------------------------------------
 std::int64_t HIApplication_Main(std::int64_t a1, std::int64_t a2)
 {
+#ifdef DEDICATED
 	HEbisuSDK_Init();
+#endif // DEDICATED
 	return IAppSystem_Main(a1, a2);
 }
 

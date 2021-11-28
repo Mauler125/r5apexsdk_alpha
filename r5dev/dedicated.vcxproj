@@ -300,9 +300,10 @@
     <ClInclude Include="thirdparty\spdlog\include\version.h" />
     <ClInclude Include="tier0\basetypes.h" />
     <ClInclude Include="tier0\ConCommand.h" />
-    <ClInclude Include="tier0\ConCommandCallback.h" />
+    <ClInclude Include="tier0\completion.h" />
     <ClInclude Include="tier0\cvar.h" />
     <ClInclude Include="tier0\IConVar.h" />
+    <ClInclude Include="tier0\interface.h" />
     <ClInclude Include="vpc\basefilesystem.h" />
     <ClInclude Include="vpc\IAppSystem.h" />
     <ClInclude Include="vpc\interfaces.h" />
@@ -341,7 +342,7 @@
     <ClCompile Include="squirrel\sqinit.cpp" />
     <ClCompile Include="squirrel\sqvm.cpp" />
     <ClCompile Include="tier0\ConCommand.cpp" />
-    <ClCompile Include="tier0\ConCommandCallback.cpp" />
+    <ClCompile Include="tier0\completion.cpp" />
     <ClCompile Include="tier0\cvar.cpp" />
     <ClCompile Include="tier0\IConVar.cpp" />
     <ClCompile Include="vpc\basefilesystem.cpp" />

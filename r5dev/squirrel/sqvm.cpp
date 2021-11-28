@@ -81,9 +81,9 @@ void* HSQVM_PrintFunc(void* sqvm, char* fmt, ...)
 //---------------------------------------------------------------------------------
 // Purpose: prints the warning output of each VM to the console
 //---------------------------------------------------------------------------------
-std::int64_t HSQVM_WarningFunc(void* sqvm, int a2, int a3, int* stringSize, void** string)
+void* HSQVM_WarningFunc(void* sqvm, int a2, int a3, int* stringSize, void** string)
 {
-	std::int64_t result = SQVM_WarningFunc(sqvm, a2, a3, stringSize, string);
+	void* result = SQVM_WarningFunc(sqvm, a2, a3, stringSize, string);
 	if (g_bSQVM_WarnFuncCalled) // Check if its SQVM_Warning calling.
 	{
 		return result; // If not return.
@@ -154,7 +154,7 @@ std::int64_t HSQVM_WarningFunc(void* sqvm, int a2, int a3, int* stringSize, void
 //---------------------------------------------------------------------------------
 // Purpose:
 //---------------------------------------------------------------------------------
-std::int64_t HSQVM_WarningCmd(int a1, int a2)
+void* HSQVM_WarningCmd(int a1, int a2)
 {
 	g_bSQVM_WarnFuncCalled = true;
 	return SQVM_WarningCmd(a1, a2);
@@ -163,7 +163,7 @@ std::int64_t HSQVM_WarningCmd(int a1, int a2)
 //---------------------------------------------------------------------------------
 // Purpose: loads the include file from the mods directory
 //---------------------------------------------------------------------------------
-std::int64_t HSQVM_LoadRson(const char* rson_name)
+void* HSQVM_LoadRson(const char* rson_name)
 {
 	char filepath[MAX_PATH] = { 0 };
 	sprintf_s(filepath, MAX_PATH, "platform\\%s", rson_name);

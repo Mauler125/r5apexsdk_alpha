@@ -188,11 +188,12 @@ void Dedicated_Init()
 
 void RuntimePtc_Init() /* .TEXT */
 {
-	static HANDLE GameProcess = GetCurrentProcess();
+#ifdef DEDICATED
 	//-------------------------------------------------------------------------
-	// JNZ --> JMP | Prevent OriginSDK from initializing on the client
+	// JNZ --> JMP | Prevent OriginSDK from initializing on the server
 	Origin_Init.Offset(0x0B).Patch({ 0xE9, 0x63, 0x02, 0x00, 0x00, 0x00 });
 	Origin_SetState.Offset(0x0E).Patch({ 0xE9, 0xCB, 0x03, 0x00, 0x00, 0x00 });
+#endif // DEDICATED
 	//-------------------------------------------------------------------------
 	// JNE --> JMP | Allow games to be loaded without the optional texture streaming file
 	//WriteProcessMemory(GameProcess, LPVOID(dst002 + 0x8E5), "\xEB\x19", 2, NULL);
@@ -200,49 +201,6 @@ void RuntimePtc_Init() /* .TEXT */
 	// JNE --> JMP | Prevent connect command from crashing by invalid call to UI function
 	dst003.Offset(0x1D6).Patch({ 0xEB, 0x27 });
 	//-------------------------------------------------------------------------
-	// JNE --> JMP | Prevent connect localhost from being executed after listenserver init
-	//WriteProcessMemory(GameProcess, LPVOID(dst004 + 0x637), "\xE9\xC1\x00\x00\x00", 5, NULL);
-	//-------------------------------------------------------------------------
-	// JA  --> JMP | Disable server-side account and packet verification
-	//WriteProcessMemory(GameProcess, LPVOID(dst005 + 0x53), "\x90\x90", 2, NULL);
-	//WriteProcessMemory(GameProcess, LPVOID(dst005 + 0x284), "\x90\x90", 2, NULL);
-	//-------------------------------------------------------------------------
 	// JA  --> JMP | Prevent FairFight anti-cheat from initializing on the 
 	FairFight_Init.Offset(0x61).Patch({ 0xE9, 0xED, 0x00, 0x00, 0x00, 0x00 });
-}
-
-void ToggleOpcodes() /* .TEXT */
-{
-	static HANDLE GameProcess = GetCurrentProcess();
-	static bool g_nop = true;
-
-	if (g_nop)
-	{
-		//-------------------------------------------------------------------------
-		// CALL --> NOP | Allow some maps to be loaded by nopping out a call in LoadProp function
-		WriteProcessMemory(GameProcess, LPVOID(dst007 + 0x5E8), "\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90", 11, NULL);
-		//-------------------------------------------------------------------------
-		// CALL --> NOP | Disable the viewmodel rendered to avoid a crash from a certain entity in desertlands_mu1
-		WriteProcessMemory(GameProcess, LPVOID(dst008 + 0x67), "\x90\x90\x90\x90\x90", 5, NULL);
-		printf("\n");
-		printf("+--------------------------------------------------------+\n");
-		printf("|>>>>>>>>>>>>>>| TEXT OPCODES OVERWRITTEN |<<<<<<<<<<<<<<|\n");
-		printf("+--------------------------------------------------------+\n");
-		printf("\n");
-	}
-	else
-	{
-		//-------------------------------------------------------------------------
-		// NOP --> CALL | Recover function DST007
-		WriteProcessMemory(GameProcess, LPVOID(dst007 + 0x5E8), "\x48\x8B\x03\xFF\x90\xB0\x02\x00\x00\x84\xC0", 11, NULL);
-		//-------------------------------------------------------------------------
-		// NOP --> CALL | Recover function DST008
-		WriteProcessMemory(GameProcess, LPVOID(dst008 + 0x67), "\xE8\x54\xD8\xFF\xFF", 5, NULL);
-		printf("\n");
-		printf("+--------------------------------------------------------+\n");
-		printf("|>>>>>>>>>>>>>>>| TEXT OPCODES RECOVERED |<<<<<<<<<<<<<<<|\n");
-		printf("+--------------------------------------------------------+\n");
-		printf("\n");
-	}
-	g_nop = !g_nop;
 }

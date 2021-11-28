@@ -5,7 +5,6 @@
 
 void Dedicated_Init();
 void RuntimePtc_Init();
-void ToggleOpcodes();
 
 namespace
 {

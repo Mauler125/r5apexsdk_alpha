@@ -70,7 +70,6 @@ public:
     std::string m_szHostRequestMessage  = "";
     std::string m_szHostToken           = "";
     ImVec4 m_iv4HostRequestMessageColor = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
-    bool m_bOverridePlaylist            = false;
 
     ////////////////////
     // Private Server //

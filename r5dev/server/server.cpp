@@ -1,11 +1,10 @@
 #include "core/stdafx.h"
+#include "tier0/cvar.h"
 #include "engine/sys_utils.h"
 #include "server/server.h"
 #include "client/client.h"
 #include "networksystem/r5net.h"
 #include "public/include/bansystem.h"
-
-#include "public/include/utility.h"
 
 void IsClientBanned(R5Net::Client* r5net, const std::string ipaddr, std::int64_t nucleus_id)
 {
@@ -59,26 +58,36 @@ void* HCServer_Authenticate(void* cserver, user_creds* inpacket)
 		ipAddress = ss.str();
 	}
 
-	Sys_Print(SYS_DLL::SERVER, "\n");
-	Sys_Print(SYS_DLL::SERVER, "______________________________________________________________\n");
-	Sys_Print(SYS_DLL::SERVER, "] AUTHENTICATION_DETAILS -------------------------------------\n");
-	Sys_Print(SYS_DLL::SERVER, "] UserID   : | '%s'\n", inpacket->user_id);
-	Sys_Print(SYS_DLL::SERVER, "] OriginID : | '%lld'\n", inpacket->nucleus_id);
-	Sys_Print(SYS_DLL::SERVER, "] IP-ADDR  : | '%s'\n", ipAddress.c_str());
-	Sys_Print(SYS_DLL::SERVER, "--------------------------------------------------------------\n");
+	if (sv_showconnecting->m_iValue > 0)
+	{
+		Sys_Print(SYS_DLL::SERVER, "\n");
+		Sys_Print(SYS_DLL::SERVER, "______________________________________________________________\n");
+		Sys_Print(SYS_DLL::SERVER, "] AUTHENTICATION_DETAILS -------------------------------------\n");
+		Sys_Print(SYS_DLL::SERVER, "] UserID   : | '%s'\n", inpacket->user_id);
+		Sys_Print(SYS_DLL::SERVER, "] OriginID : | '%lld'\n", inpacket->nucleus_id);
+		Sys_Print(SYS_DLL::SERVER, "] IP-ADDR  : | '%s'\n", ipAddress.c_str());
+		Sys_Print(SYS_DLL::SERVER, "--------------------------------------------------------------\n");
+	}
 
 	if (g_pBanSystem->IsBanListValid()) // Is the banlist vector valid?
 	{
 		if (g_pBanSystem->IsBanned(ipAddress, inpacket->nucleus_id)) // Is the client trying to connect banned?
 		{
 			CServer_RejectConnection(cserver, *(unsigned int*)((std::uintptr_t)cserver + 0xC), inpacket, "You have been banned from this Server."); // RejectConnection for the client.
-			Sys_Print(SYS_DLL::SERVER, "] NOTICE   : | THIS CLIENT IS BANNED!\n");
-			Sys_Print(SYS_DLL::SERVER, "--------------------------------------------------------------\n");
-			Sys_Print(SYS_DLL::SERVER, "\n");
+
+			if (sv_showconnecting->m_iValue > 0)
+			{
+				Sys_Print(SYS_DLL::SERVER, "] NOTICE   : | THIS CLIENT IS BANNED!\n");
+				Sys_Print(SYS_DLL::SERVER, "--------------------------------------------------------------\n");
+				Sys_Print(SYS_DLL::SERVER, "\n");
+			}
 			return nullptr;
 		}
 	}
-	Sys_Print(SYS_DLL::SERVER, "\n");
+	if (sv_showconnecting->m_iValue > 0)
+	{
+		Sys_Print(SYS_DLL::SERVER, "\n");
+	}
 
 	if (g_bCheckCompBanDB)
 	{

@@ -139,6 +139,10 @@ namespace
 	ADDRESS p_ConVar_Register = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x48\x89\x5C\x24\x00\x48\x89\x6C\x24\x00\x48\x89\x74\x24\x00\x57\x48\x83\xEC\x40\xF3\x0F\x10\x84\x24\x00\x00\x00\x00", "xxxx?xxxx?xxxx?xxxxxxxxxx????"); /*48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC 40 F3 0F 10 84 24 ? ? ? ?*/
 	void* (*ConVar_Register)(ConVar* allocatedConvar, const char* name, const char* defaultValue, int flags, const char* helpString, bool bMin, float fMin, bool bMax, float fMax, void* callback, void* unk) = (void* (*)(ConVar*, const char*, const char*, int, const char*, bool, float, bool, float, void*, void*))p_ConVar_Register.GetPtr();
 #endif
+}
+
+namespace
+{
 	ADDRESS g_pIConVarVtable = p_ConVar_SetInfo.Offset(0x16).FindPatternSelf("48 8D 05", ADDRESS::Direction::DOWN, 100).ResolveRelativeAddressSelf(0x3, 0x7).GetPtr(); // Get vtable ptr for ICvar table.
 	ADDRESS g_pConVarVtable = p_ConVar_SetInfo.Offset(0x00).FindPatternSelf("48 8D 05", ADDRESS::Direction::DOWN, 100).ResolveRelativeAddressSelf(0x3, 0x7).GetPtr(); // Get vtable ptr for ConVar table.
 }
