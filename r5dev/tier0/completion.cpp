@@ -1,11 +1,12 @@
 #include "core/stdafx.h"
+#include "windows/id3dx.h"
 #include "tier0/basetypes.h"
 #include "tier0/IConVar.h"
 #include "tier0/completion.h"
-#include "windows/id3dx.h"
 #include "engine/net_chan.h"
 #include "engine/sys_utils.h"
 #include "rtech/rtech.h"
+#include "vpklib/packedstore.h"
 #include "gameui/IConsole.h"
 #include "public/include/bansystem.h"
 
@@ -410,42 +411,44 @@ void RTech_Decompress_Callback(CCommand* cmd)
 	ipak.seekg(0, std::fstream::beg);
 	ipak.read((char*)upak.data(), upak.size());
 
-	auto rheader = (rpak_h*)upak.data();
+	rpak_h* rheader = (rpak_h*)upak.data();
+	uint16_t flags = (rheader->m_nFlags[0] << 8) | rheader->m_nFlags[1];
+
+	Sys_Print(SYS_DLL::RTECH, "______________________________________________________________\n");
+	Sys_Print(SYS_DLL::RTECH, "] HEADER_DETAILS ---------------------------------------------\n");
+	Sys_Print(SYS_DLL::RTECH, "] Magic    : '%08X'\n", rheader->m_nMagic);
+	Sys_Print(SYS_DLL::RTECH, "] Version  : '%u'\n", (rheader->m_nVersion));
+	Sys_Print(SYS_DLL::RTECH, "] Flags    : '%04X'\n", (flags));
+	Sys_Print(SYS_DLL::RTECH, "] Hash     : '%llu'\n", rheader->m_nHash);
+	Sys_Print(SYS_DLL::RTECH, "] Entries  : '%zu'\n", rheader->m_nAssetEntryCount);
+	Sys_Print(SYS_DLL::RTECH, "______________________________________________________________\n");
+	Sys_Print(SYS_DLL::RTECH, "] COMPRESSION_DETAILS ----------------------------------------\n");
+	Sys_Print(SYS_DLL::RTECH, "] Size disk: '%lld'\n", rheader->m_nSizeDisk);
+	Sys_Print(SYS_DLL::RTECH, "] Size decp: '%lld'\n", rheader->m_nSizeMemory);
+	Sys_Print(SYS_DLL::RTECH, "] Ratio    : '%.02f'\n", (rheader->m_nSizeDisk * 100.f) / rheader->m_nSizeMemory);
 
 	if (rheader->m_nMagic != 'kaPR')
 	{
 		Sys_Print(SYS_DLL::RTECH, "Error: pak file '%s' has invalid magic!\n", pak_name_in.c_str());
 		return;
 	}
-	if ((rheader->m_bIsCompressed & 1) != 1)
+	if ((rheader->m_nFlags[1] & 1) != 1)
 	{
 		Sys_Print(SYS_DLL::RTECH, "Error: pak file '%s' already decompressed!\n", pak_name_in.c_str());
 		return;
 	}
 	if (rheader->m_nSizeDisk != upak.size())
 	{
-		Sys_Print(SYS_DLL::RTECH, "Error: pak file '%s' decompressed size '%u' doesn't match expected value '%u'!\n", pak_name_in.c_str(), upak.size(), rheader->m_nSizeMem);
+		Sys_Print(SYS_DLL::RTECH, "Error: pak file '%s' decompressed size '%u' doesn't match expected value '%u'!\n", pak_name_in.c_str(), upak.size(), rheader->m_nSizeMemory);
 		return;
 	}
 
-	Sys_Print(SYS_DLL::RTECH, "______________________________________________________________\n");
-	Sys_Print(SYS_DLL::RTECH, "] HEADER_DETAILS ---------------------------------------------\n");
-	Sys_Print(SYS_DLL::RTECH, "] Magic    : '%08X'\n", rheader->m_nMagic);
-	Sys_Print(SYS_DLL::RTECH, "] Version  : '%u'\n", (rheader->m_nVersion));
-	Sys_Print(SYS_DLL::RTECH, "] Flags    : '%u'\n", (rheader->m_nFlag));
-	Sys_Print(SYS_DLL::RTECH, "] Type     : '%llu'\n", rheader->m_nType);
-	Sys_Print(SYS_DLL::RTECH, "] Entries  : '%zu'\n", rheader->m_nEntry);
-	Sys_Print(SYS_DLL::RTECH, "______________________________________________________________\n");
-	Sys_Print(SYS_DLL::RTECH, "] COMPRESSION_DETAILS ----------------------------------------\n");
-	Sys_Print(SYS_DLL::RTECH, "] Size disk: '%lld'\n", rheader->m_nSizeDisk);
-	Sys_Print(SYS_DLL::RTECH, "] Size decp: '%lld'\n", rheader->m_nSizeMem);
-	Sys_Print(SYS_DLL::RTECH, "] Ratio    : '%.02f'\n", (rheader->m_nSizeDisk * 100.f) / rheader->m_nSizeMem);
-
 	std::int64_t params[18];
 	std::uint32_t dsize = g_pRtech->DecompressedSize((std::int64_t)(params), upak.data(), upak.size(), 0, PAK_HEADER_SIZE);
+
 	if (dsize == rheader->m_nSizeDisk)
 	{
-		Sys_Print(SYS_DLL::RTECH, "Error: calculated size: '%zu' expected: '%zu'!\n", dsize, rheader->m_nSizeMem);
+		Sys_Print(SYS_DLL::RTECH, "Error: calculated size: '%zu' expected: '%zu'!\n", dsize, rheader->m_nSizeMemory);
 		return;
 	}
 	else
@@ -453,7 +456,7 @@ void RTech_Decompress_Callback(CCommand* cmd)
 		Sys_Print(SYS_DLL::RTECH, "] Calculated size: '%zu'\n", dsize);
 	}
 
-	std::vector<std::uint8_t> pakbuf(rheader->m_nSizeMem, 0);
+	std::vector<std::uint8_t> pakbuf(rheader->m_nSizeMemory, 0);
 
 	params[1] = std::int64_t(pakbuf.data());
 	params[3] = -1i64;
@@ -465,8 +468,8 @@ void RTech_Decompress_Callback(CCommand* cmd)
 		return;
 	}
 
-	rheader->m_bIsCompressed = false; // Set compressed to false for the decompressed pak file
-	rheader->m_nSizeDisk = rheader->m_nSizeMem; // Equal compressed size with decompressed
+	rheader->m_nFlags[1] = 0x0; // Set compressed flag to false for the decompressed pak file
+	rheader->m_nSizeDisk = rheader->m_nSizeMemory; // Equal compressed size with decompressed
 
 	std::ofstream out_block(pak_name_out, std::fstream::binary);
 	std::ofstream out_header(pak_name_out, std::fstream::binary);
@@ -474,7 +477,7 @@ void RTech_Decompress_Callback(CCommand* cmd)
 	out_block.write((char*)pakbuf.data(), params[5]);
 	out_header.write((char*)rheader, PAK_HEADER_SIZE);
 
-	Sys_Print(SYS_DLL::RTECH, "] Decompressed file to: '%s'\n", pak_name_out.c_str());
+	Sys_Print(SYS_DLL::RTECH, "] Decompressed rpak to: '%s'\n", pak_name_out.c_str());
 	Sys_Print(SYS_DLL::RTECH, "--------------------------------------------------------------\n");
 }
 
@@ -515,16 +518,52 @@ void NET_TraceNetChan_Callback(CCommand* cmd)
 		DetourUpdateThread(GetCurrentThread());
 
 		CNetChan_Trace_Detach();
+
 		// Commit the transaction
 		DetourTransactionCommit();
 	}
 	bTraceNetChannel = !bTraceNetChannel;
 }
 
+void VPK_Decompress_Callback(CCommand* cmd)
+{
+	std::int32_t argSize = *(std::int32_t*)((std::uintptr_t)cmd + 0x4);
+
+	if (argSize < 2) // Do we atleast have 2 arguments?
+	{
+		return;
+	}
+
+	CCommand& cmdReference = *cmd; // Get reference.
+	std::string firstArg = cmdReference[1]; // Get first arg.
+	std::string szPathOut = "platform\\vpk";
+
+	std::chrono::milliseconds msStart = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
+
+	Sys_Print(SYS_DLL::FS, "______________________________________________________________\n");
+	Sys_Print(SYS_DLL::FS, "] FS_DECOMPRESS ----------------------------------------------\n");
+	Sys_Print(SYS_DLL::FS, "] Processing: '%s'\n", firstArg.c_str());
+
+	vpk_dir_h vpk = g_pPackedStore->GetPackDirFile(firstArg);
+	g_pPackedStore->InitLzParams();
+
+	std::thread th([&] { g_pPackedStore->UnpackAll(vpk, szPathOut); });
+	th.join();
+
+	std::chrono::milliseconds msEnd = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
+	float duration = msEnd.count() - msStart.count();
+
+	Sys_Print(SYS_DLL::FS, "______________________________________________________________\n");
+	Sys_Print(SYS_DLL::FS, "] OPERATION_DETAILS ------------------------------------------\n");
+	Sys_Print(SYS_DLL::FS, "] Time elapsed: '%.3f' seconds\n", (duration / 1000));
+	Sys_Print(SYS_DLL::FS, "] Decompressed vpk to: '%s'\n", szPathOut.c_str());
+	Sys_Print(SYS_DLL::FS, "--------------------------------------------------------------\n");
+}
+
 void NET_SetKey_Callback(CCommand* cmd)
 {
 	CCommand& cmdReference = *cmd; // Get reference.
-	const char* firstArg = cmdReference[1]; // Get first arg.
+	std::string firstArg = cmdReference[1]; // Get first arg.
 
 	std::int32_t argSize = *(std::int32_t*)((std::uintptr_t)cmd + 0x4);
 

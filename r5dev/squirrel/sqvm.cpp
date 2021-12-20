@@ -15,7 +15,7 @@ void* HSQVM_PrintFunc(void* sqvm, char* fmt, ...)
 {
 #ifdef GAMEDLL_S3
 	int vmIdx = *(int*)((std::uintptr_t)sqvm + 0x18);
-#elif // TODO [ AMOS ]: nothing equal to 'rdx + 18h' exist in the vm pointers for anything below S3.
+#else // TODO [ AMOS ]: nothing equal to 'rdx + 18h' exist in the vm pointers for anything below S3.
 	int vmIdx = 3;
 #endif
 	static bool initialized = false;
@@ -98,7 +98,7 @@ void* HSQVM_WarningFunc(void* sqvm, int a2, int a3, int* stringSize, void** stri
 
 #ifdef GAMEDLL_S3
 	int vmIdx = *(int*)((std::uintptr_t)sqvm + 0x18);
-#elif // TODO [ AMOS ]: nothing equal to 'rdx + 18h' exist in the vm pointers for anything below S3.
+#else // TODO [ AMOS ]: nothing equal to 'rdx + 18h' exist in the vm pointers for anything below S3.
 	int vmIdx = 3;
 #endif
 	std::string vmStr = vmType[vmIdx].c_str();
@@ -291,6 +291,7 @@ void SQVM_Detach()
 {
 	DetourDetach((LPVOID*)&SQVM_PrintFunc, &HSQVM_PrintFunc);
 	DetourDetach((LPVOID*)&SQVM_WarningFunc, &HSQVM_WarningFunc);
+	DetourDetach((LPVOID*)&SQVM_WarningCmd, &HSQVM_WarningCmd);
 	DetourDetach((LPVOID*)&SQVM_LoadRson, &HSQVM_LoadRson);
 	DetourDetach((LPVOID*)&SQVM_LoadScript, &HSQVM_LoadScript);
 }

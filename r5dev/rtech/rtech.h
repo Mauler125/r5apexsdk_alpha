@@ -128,23 +128,30 @@ namespace
 
 struct rpak_h
 {
-	std::uint32_t m_nMagic;        // 'RPak'
-	std::uint16_t m_nVersion;      // R2 = '7' R5 = '8'
-	std::uint8_t  m_nFlag;         // only set in ui.rpak
-	bool          m_bIsCompressed; // Has to be false when uncompressed
-	std::uint64_t m_nType;         //
-	std::uint8_t  unk0[8];         //
-	std::uint32_t m_nSizeDisk;     // Compressed size
-	std::uint8_t  unk1[20];        //
-	std::uint32_t m_nSizeMem;      // Decompressed size
-	std::uint8_t  unk3[26];        //
-	std::uint16_t unk4;            //
-	std::uint32_t m_nPad;          //
-	std::uint32_t unk6;            //
-	std::uint32_t m_nEntry;        // File entry count
-	std::uint32_t unk7;            //
-	std::uint32_t unk8;            //
-	std::uint8_t  unk9[28];        //
+	std::uint32_t m_nMagic;                    // 'RPak'
+	std::uint16_t m_nVersion;                  // R2 = '7' R5 = '8'
+	std::uint8_t  m_nFlags[0x2];               //
+	std::uint8_t  m_nHash[0x10];               //
+	std::uint64_t m_nSizeDisk;                 // Compressed size
+	std::uint64_t m_nEmbeddedStarpakOffset;    //
+	std::uint8_t  unk0[0x8];                   //
+	std::uint64_t m_nSizeMemory;               // Decompressed size
+	std::uint64_t m_nEmbeddedStarpakSize;      //
+	std::uint8_t  unk1[0x8];                   //
+
+	std::uint16_t m_nStarpakReferenceSize;     //
+	std::uint16_t m_nStarpakOptReferenceSize;  //
+	std::uint16_t m_nVirtualSegmentCount;      // * 0x10
+	std::uint16_t m_nVirtualSegmentBlockCount; // * 0xC
+
+	std::uint32_t m_nPatchIndex;               //
+
+	std::uint32_t m_nUnknownThirdBlockCount;   //
+	std::uint32_t m_nAssetEntryCount;          // File entry count
+	std::uint32_t m_nUnknownFifthBlockCount;   //
+	std::uint32_t m_nUnknownSixedBlockCount;   //
+
+	std::uint8_t  unk2[0x1C];                  //
 };
 
 namespace

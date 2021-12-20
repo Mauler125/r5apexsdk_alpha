@@ -36,7 +36,7 @@ void* HNET_SendDatagram(SOCKET s, const char* buf, int len, int flags)
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: sets the encryption key
+// Purpose: sets the user specified encryption key
 //-----------------------------------------------------------------------------
 void HNET_SetKey(std::string key)
 {
@@ -63,11 +63,13 @@ void HNET_GenerateKey()
 	if (BCryptOpenAlgorithmProvider(&hAlgorithm, L"RNG", 0, 0) < 0)
 	{
 		Sys_Print(SYS_DLL::ENGINE, "Failed to open rng algorithm\n");
+		return;
 	}
 	unsigned char pBuffer[0x10u];
 	if (BCryptGenRandom(hAlgorithm, pBuffer, 0x10u, 0) < 0)
 	{
 		Sys_Print(SYS_DLL::ENGINE, "Failed to generate random data\n");
+		return;
 	}
 
 	for (int i = 0; i < 0x10u; i++)

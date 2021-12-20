@@ -55,19 +55,19 @@
 class ConVar
 {
 public:
-	ConCommandBase m_ConCommandBase; //0x0000
-	void* m_pConVarVTable;           //0x0040
-	ConVar* m_pParent;               //0x0048
-	const char* n_pszDefaultValue;   //0x0050
-	const char* m_pzsCurrentValue;   //0x0058
-	std::int64_t m_iStringLength;    //0x0060
-	float m_flValue;                 //0x0068
-	int m_iValue;                    //0x006C
-	bool m_bHasMin;                  //0x0070
-	float m_flMinValue;              //0x0074
-	bool m_bHasMax;                  //0x0078
-	float m_flMaxValue;              //0x007C
-	char pad_0080[32];               //0x0080
+	ConCommandBase m_ConCommandBase;  //0x0000
+	void*          m_pConVarVTable;   //0x0040
+	ConVar*        m_pParent;         //0x0048
+	const char*    n_pszDefaultValue; //0x0050
+	const char*    m_pzsCurrentValue; //0x0058
+	std::int64_t   m_iStringLength;   //0x0060
+	float          m_flValue;         //0x0068
+	int            m_iValue;          //0x006C
+	bool           m_bHasMin;         //0x0070
+	float          m_flMinValue;      //0x0074
+	bool           m_bHasMax;         //0x0078
+	float          m_flMaxValue;      //0x007C
+	char           pad_0080[32];      //0x0080
 }; //Size: 0x00A0
 
 class CCVarIteratorInternal // Fully reversed table, just look at the virtual function table and rename the function.
@@ -115,9 +115,9 @@ public:
 
 		for (itint->SetFirst(); itint->IsValid(); itint->Next()) // Loop through all instances.
 		{
-			ConCommandBase* command = itint->Get();
-			const char* commandName = command->m_pszName;
-			allConVars[commandName] = command;
+			ConCommandBase* pCommand = itint->Get();
+			const char* commandName = pCommand->m_pszName;
+			allConVars[commandName] = pCommand;
 		}
 
 		return allConVars;
@@ -143,8 +143,8 @@ namespace
 
 namespace
 {
+	ADDRESS g_pConVarVtable  = p_ConVar_SetInfo.Offset(0x00).FindPatternSelf("48 8D 05", ADDRESS::Direction::DOWN, 100).ResolveRelativeAddressSelf(0x3, 0x7).GetPtr(); // Get vtable ptr for ConVar table.
 	ADDRESS g_pIConVarVtable = p_ConVar_SetInfo.Offset(0x16).FindPatternSelf("48 8D 05", ADDRESS::Direction::DOWN, 100).ResolveRelativeAddressSelf(0x3, 0x7).GetPtr(); // Get vtable ptr for ICvar table.
-	ADDRESS g_pConVarVtable = p_ConVar_SetInfo.Offset(0x00).FindPatternSelf("48 8D 05", ADDRESS::Direction::DOWN, 100).ResolveRelativeAddressSelf(0x3, 0x7).GetPtr(); // Get vtable ptr for ConVar table.
 }
 
 ///////////////////////////////////////////////////////////////////////////////

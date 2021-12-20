@@ -44,6 +44,7 @@
     <ClCompile Include="mathlib\IceKey.cpp" />
     <ClCompile Include="networksystem\r5net.cpp" />
     <ClCompile Include="public\bansystem.cpp" />
+    <ClCompile Include="public\binstream.cpp" />
     <ClCompile Include="public\utility.cpp" />
     <ClCompile Include="rtech\rtech.cpp" />
     <ClCompile Include="rtech\stryder.cpp" />
@@ -99,6 +100,7 @@
     <ClCompile Include="vpc\IAppSystem.cpp" />
     <ClCompile Include="vpc\keyvalues.cpp" />
     <ClCompile Include="vphysics\QHull.cpp" />
+    <ClCompile Include="vpklib\packedstore.cpp" />
     <ClCompile Include="windows\console.cpp" />
     <ClCompile Include="windows\id3dx.cpp" />
     <ClCompile Include="windows\input.cpp" />
@@ -126,6 +128,8 @@
     <ClInclude Include="inputsystem\ButtonCode.h" />
     <ClInclude Include="inputsystem\inputsystem.h" />
     <ClInclude Include="launcher\IApplication.h" />
+    <ClInclude Include="mathlib\adler32.h" />
+    <ClInclude Include="mathlib\crc32.h" />
     <ClInclude Include="mathlib\IceKey.H" />
     <ClInclude Include="mathlib\parallel_for.h" />
     <ClInclude Include="mathlib\vector.h" />
@@ -134,6 +138,7 @@
     <ClInclude Include="networksystem\sm_protocol.h" />
     <ClInclude Include="public\include\address.h" />
     <ClInclude Include="public\include\bansystem.h" />
+    <ClInclude Include="public\include\binstream.h" />
     <ClInclude Include="public\include\httplib.h" />
     <ClInclude Include="public\include\json.hpp" />
     <ClInclude Include="public\include\stb_image.h" />
@@ -160,6 +165,8 @@
     <ClInclude Include="thirdparty\imgui\include\imstb_rectpack.h" />
     <ClInclude Include="thirdparty\imgui\include\imstb_textedit.h" />
     <ClInclude Include="thirdparty\imgui\include\imstb_truetype.h" />
+    <ClInclude Include="thirdparty\lzham\include\lzham.h" />
+    <ClInclude Include="thirdparty\lzham\include\lzham_static_lib.h" />
     <ClInclude Include="thirdparty\spdlog\include\async.h" />
     <ClInclude Include="thirdparty\spdlog\include\async_logger-inl.h" />
     <ClInclude Include="thirdparty\spdlog\include\async_logger.h" />
@@ -269,6 +276,7 @@
     <ClInclude Include="vpc\interfaces.h" />
     <ClInclude Include="vpc\keyvalues.h" />
     <ClInclude Include="vphysics\QHull.h" />
+    <ClInclude Include="vpklib\packedstore.h" />
     <ClInclude Include="windows\console.h" />
     <ClInclude Include="windows\id3dx.h" />
     <ClInclude Include="windows\input.h" />
@@ -348,7 +356,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(SolutionDir)r5dev\;$(IncludePath);$(DXSDK_DIR)Include</IncludePath>
-    <LibraryPath>$(SolutionDir)r5dev\thirdparty\detours\libs;$(LibraryPath);$(DXSDK_DIR)Lib\x64</LibraryPath>
+    <LibraryPath>$(SolutionDir)r5dev\thirdparty\detours\libs;$(SolutionDir)r5dev\thirdparty\lzham\libs;$(LibraryPath);$(DXSDK_DIR)Lib\x64</LibraryPath>
     <TargetName>r5apexvtxd</TargetName>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\$(ProjectName)\$(Configuration)\</IntDir>
@@ -357,7 +365,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(SolutionDir)r5dev\;$(IncludePath);$(DXSDK_DIR)Include</IncludePath>
-    <LibraryPath>$(SolutionDir)r5dev\thirdparty\detours\libs;$(LibraryPath);$(DXSDK_DIR)Lib\x64</LibraryPath>
+    <LibraryPath>$(SolutionDir)r5dev\thirdparty\detours\libs;$(SolutionDir)r5dev\thirdparty\lzham\libs;$(LibraryPath);$(DXSDK_DIR)Lib\x64</LibraryPath>
     <TargetName>r5apexsdkd</TargetName>
     <ReferencePath>$(VC_ReferencesPath_x64);</ReferencePath>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
@@ -417,7 +425,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <ModuleDefinitionFile>r5dev.def</ModuleDefinitionFile>
-      <AdditionalDependencies>detours.lib;d3d11.lib;bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>detours.lib;lzhamlib_x64D.lib;lzhamcomp_x64D.lib;lzhamdecomp_x64D.lib;d3d11.lib;bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(TargetPath)" "..\..\..\bin\$(TargetFileName)"</Command>
@@ -453,7 +461,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <ModuleDefinitionFile>r5dev.def</ModuleDefinitionFile>
-      <AdditionalDependencies>detours.lib;d3d11.lib;bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>detours.lib;lzhamlib_x64.lib;lzhamcomp_x64.lib;lzhamdecomp_x64.lib;d3d11.lib;bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(TargetPath)" "..\..\..\$(TargetFileName)" &amp;&amp; del "..\..\..\r5apexsdkd64.dll" &amp;&amp; rename "..\..\..\$(TargetFileName)" "r5apexsdkd64.dll"</Command>

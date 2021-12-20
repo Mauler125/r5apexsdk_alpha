@@ -82,7 +82,8 @@ void IConVar_InitConVar()
 	cl_consoleoverlay_offset_y = IConVar_RegisterConVar("cl_consoleoverlay_offset_y", "10", FCVAR_RELEASE, "Y offset for console overlay.", false, 1.f, false, 50.f, nullptr, nullptr);
 	//-------------------------------------------------------------------------
 	// FILESYSTEM DLL                                                         |
-	fs_warning_level_native = IConVar_RegisterConVar("fs_warning_level_native", "0", FCVAR_DEVELOPMENTONLY | FCVAR_CHEAT, "Set the filesystem warning level ( !slower! ).", false, 0.f, false, 0.f, nullptr, nullptr);
+	fs_warning_level_native         = IConVar_RegisterConVar("fs_warning_level_native", "0", FCVAR_DEVELOPMENTONLY | FCVAR_CHEAT, "Set the filesystem warning level ( !slower! ).", false, 0.f, false, 0.f, nullptr, nullptr);
+	fs_packedstore_entryblock_stats = IConVar_RegisterConVar("fs_packedstore_entryblock_stats", "0", FCVAR_DEVELOPMENTONLY | FCVAR_CHEAT, "If set to 1, prints the stats of each file entry in the VPK during decompression ( !slower! ).", false, 0.f, false, 0.f, nullptr, nullptr);
 	//-------------------------------------------------------------------------
 	// SQUIRREL API                                                           |
 	sq_showrsonloading   = IConVar_RegisterConVar("sq_showrsonloading", "1", FCVAR_DEVELOPMENTONLY | FCVAR_CHEAT, "Logs all 'rson' files loaded by the SQVM ( !slower! ).", false, 0.f, false, 0.f, nullptr, nullptr);

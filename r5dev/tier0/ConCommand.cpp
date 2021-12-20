@@ -44,43 +44,38 @@ bool HConCommand_IsFlagSet(ConCommandBase* cmd, int flag)
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: register concommands
+// Purpose: register ConCommand's
 //-----------------------------------------------------------------------------
-void* ConCommand_RegisterCommand(const char* name, const char* helpString, int flags, void* callback, void* callbackAfterExecution)
+void* ConCommand_RegisterCommand(const char* pName, const char* pHelpString, int flags, void* pCallback, void* pCommandCompletionCallback)
 {
-	static ADDRESS ConCommandVtable   = ADDRESS(0x14136BD70);
-	static ADDRESS NullSub            = ADDRESS(0x1401B3280);
-	static ADDRESS CallbackCompletion = ADDRESS(0x1401E3990);
-	static ADDRESS RegisterConCommand = ADDRESS(0x14046F470);
+	void* pCommand = reinterpret_cast<void*>(MemAlloc_Wrapper(0x68));         // Allocate new memory with StdMemAlloc else we crash.
+	memset(pCommand, 0, 0x68);                                                // Set all to null.
+	std::uintptr_t pCommandBase = reinterpret_cast<std::uintptr_t>(pCommand); // To ptr.
 
-	void* command = reinterpret_cast<void*>(MemAlloc_Wrapper(0x68));       // Allocate new memory with StdMemAlloc else we crash.
-	memset(command, 0, 0x68);                                              // Set all to null.
-	std::uintptr_t commandPtr = reinterpret_cast<std::uintptr_t>(command); // To ptr.
+	*(void**)pCommandBase                 = g_pConCommandVtable.RCast<void*>();  // 0x00 to ConCommand vtable.
+	*(const char**)(pCommandBase + 0x18)  = pName;                               // 0x18 to ConCommand Name.
+	*(const char**)(pCommandBase + 0x20)  = pHelpString;                         // 0x20 to ConCommand help string.
+	*(std::int32_t*)(pCommandBase + 0x38) = flags;                               // 0x38 to ConCommand Flags.
+	*(void**)(pCommandBase + 0x40)        = p_ConCommand_NullSub.RCast<void*>(); // 0x40 Nullsub since every concommand has it.
+	*(void**)(pCommandBase + 0x50)        = pCallback;                           // 0x50 has function callback.
+	*(std::int32_t*)(pCommandBase + 0x60) = 2; // 0x60 Set to use callback and newcommand callback.
 
-	*(void**)commandPtr = ConCommandVtable.RCast<void*>(); // 0x0 to ConCommand vtable.
-	*(const char**)(commandPtr + 0x18) = name;             // 0x18 to ConCommand Name.
-	*(const char**)(commandPtr + 0x20) = helpString;       // 0x20 to ConCommand help string.
-	*(std::int32_t*)(commandPtr + 0x38) = flags;           // 0x38 to ConCommand Flags.
-	*(void**)(commandPtr + 0x40) = NullSub.RCast<void*>(); // 0x40 Nullsub since every concommand has it.
-	*(void**)(commandPtr + 0x50) = callback;               // 0x50 has function callback.
-	*(std::int32_t*)(commandPtr + 0x60) = 2;               // 0x60 Set to use callback and newcommand callback.
-
-	if (callbackAfterExecution) // callback after execution desired?
+	if (pCommandCompletionCallback) // callback after execution desired?
 	{
-		*(void**)(commandPtr + 0x58) = callbackAfterExecution; // 0x58 to our callback after execution.
+		*(void**)(pCommandBase + 0x58) = pCommandCompletionCallback; // 0x58 to our callback after execution.
 	}
 	else
 	{
-		*(void**)(commandPtr + 0x58) = CallbackCompletion.RCast<void*>(); // 0x58 nullsub.
+		*(void**)(pCommandBase + 0x58) = p_ConCommand_CallbackCompletion.RCast<void*>(); // 0x58 nullsub.
 	}
 
-	RegisterConCommand.RCast<void(*)(void*)>()((void*)commandPtr); // Register command in ConVarAccessor.
+	p_ConCommand_RegisterConCommand.RCast<void(*)(void*)>()((void*)pCommandBase); // Register command in ConVarAccessor.
 
-	return command;
+	return pCommand;
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: concommands definitions to be registered
+// Purpose: ConCommand definitions to be registered
 //-----------------------------------------------------------------------------
 void ConCommand_InitConCommand()
 {
@@ -102,6 +97,7 @@ void ConCommand_InitConCommand()
 	// RTECH API                                                              |
 	void* rTechGenerateGuidCommand = ConCommand_RegisterCommand("rtech_toguid", "Calculates the GUID from input data.", 0, RTech_GenerateGUID_Callback, nullptr);
 	void* rTechDecompressCommand   = ConCommand_RegisterCommand("rtech_decompress", "Decompresses user specified 'RPak' file.", 0, RTech_Decompress_Callback, nullptr);
+	void* fsDecompressCommand      = ConCommand_RegisterCommand("fs_decompress_pak", "Decompresses user specified 'vpk_dir' file.", 0, VPK_Decompress_Callback, nullptr);
 	//-------------------------------------------------------------------------
 	// NETCHANNEL                                                             |
 	void* netTraceCommand  = ConCommand_RegisterCommand("net_toggletrace", "Logs the sending and receiving datagram to a file on the disk.", 0, NET_TraceNetChan_Callback, nullptr);

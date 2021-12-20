@@ -44,7 +44,6 @@ namespace
 	ADDRESS p_NET_Shutdown = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x48\x89\x6C\x24\x18\x56\x57\x41\x56\x48\x83\xEC\x30\x83\xB9\xD0", "xxxxxxxxxxxxxxxx");
 	void (*NET_Shutdown)(void* thisptr, const char* a0, std::uint8_t a1, char a2) = (void (*)(void*, const char*, std::uint8_t, char))p_NET_Shutdown.GetPtr(); /*48 89 6C 24 18 56 57 41 56 48 83 EC 30 83 B9 D0*/
 #endif
-
 	ADDRESS p_NET_SetKey = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x48\x89\x5C\x24\x08\x48\x89\x6C\x24\x10\x48\x89\x74\x24\x18\x57\x48\x83\xEC\x20\x48\x8B\xF9\x41\xB8", "xxxxxxxxxxxxxxxxxxxxxxxxx");
 	void (*NET_SetKey)(std::uintptr_t keyptr, const char* hash) = (void (*)(std::uintptr_t, const char*))p_NET_SetKey.GetPtr(); /*48 89 5C 24 08 48 89 6C 24 10 48 89 74 24 18 57 48 83 EC 20 48 8B F9 41 B8*/
 

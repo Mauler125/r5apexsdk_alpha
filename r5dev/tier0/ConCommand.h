@@ -62,6 +62,11 @@ private:
 	const char*  m_ppArgv[COMMAND_MAX_ARGC];
 };
 
+class ConCommand
+{
+	// TODO
+};
+
 class ConCommandBase
 {
 public:
@@ -86,6 +91,20 @@ namespace
 	/* ==== CONCOMMAND ====================================================================================================================================================== */
 	ADDRESS p_ConCommand_IsFlagSet = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x85\x51\x38\x0F\x95\xC0\xC3", "xxxxxxx");
 	bool (*ConCommand_IsFlagSet)(ConCommandBase* cmd, int flag) = (bool (*)(ConCommandBase*, int))p_ConCommand_IsFlagSet.GetPtr(); /*85 51 38 0F 95 C0 C3*/
+
+	ADDRESS p_ConCommand_CMaterialSystemSystemCommandInit = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x48\x89\x5C\x24\x00\x48\x89\x74\x24\x00\x48\x89\x7C\x24\x00\x55\x41\x54\x41\x55\x41\x56\x41\x57\x48\x8B\xEC\x48\x83\xEC\x50\x48\x8B\x15\x00\x00\x00\x00", "xxxx?xxxx?xxxx?xxxxxxxxxxxxxxxxxxx????");
+	ConCommand*(*ConCommand_CMaterialSystemSystemCommandInit)() = (ConCommand* (*)())p_ConCommand_CMaterialSystemSystemCommandInit.GetPtr();
+
+	ADDRESS p_ConCommand_NullSub = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\xC2\x00\x00\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x40\x53\x48\x83\xEC\x20\x48\x8D\x05\x00\x00\x00\x00", "xxxxxxxxxxxxxxxxxxxxxxxxx????");
+	void (*ConCommand_NullSub)() = (void (*)())p_ConCommand_NullSub.GetPtr(); /*C2 00 00 CC CC CC CC CC CC CC CC CC CC CC CC CC 40 53 48 83 EC 20 48 8D 05 ?? ?? ?? ??*/
+
+	ADDRESS p_ConCommand_CallbackCompletion = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x33\xC0\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x80\x49\x68\x08", "xxxxxxxxxxxxxxxxxxxx");
+	void* (*ConCommand_CallbackCompletion)(struct _exception* _exc) = (void* (*)(struct _exception*))p_ConCommand_CallbackCompletion.GetPtr(); /*33 C0 C3 CC CC CC CC CC CC CC CC CC CC CC CC CC 80 49 68 08*/ /*UserMathErrorFunction*/
+
+	ADDRESS p_ConCommand_RegisterConCommand = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x48\x8B\xD1\x48\x8B\x0D\x00\x00\x00\x00\x48\x85\xC9\x74\x06", "xxxxxx????xxxxx");
+	void* (*ConCommand_RegisterConCommand)(ConCommandBase* pCommandBase) = (void* (*)(ConCommandBase*))p_ConCommand_RegisterConCommand.GetPtr(); /*48 8B D1 48 8B 0D ?? ?? ?? ?? 48 85 C9 74 06 */
+
+	static ADDRESS g_pConCommandVtable = p_ConCommand_CMaterialSystemSystemCommandInit.FindPatternSelf("4C 8D 25", ADDRESS::Direction::DOWN, 150).ResolveRelativeAddressSelf(0x3, 0x7);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

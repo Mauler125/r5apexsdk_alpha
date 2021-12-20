@@ -134,7 +134,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>detours.lib;d3d11.lib;bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>detours.lib;lzhamlib_x64D.lib;lzhamcomp_x64D.lib;lzhamdecomp_x64D.lib;d3d11.lib;bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(TargetPath)" "..\..\..\</Command>
@@ -158,7 +158,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>detours.lib;d3d11.lib;bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>detours.lib;lzhamlib_x64.lib;lzhamcomp_x64.lib;lzhamdecomp_x64.lib;d3d11.lib;bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(TargetPath)" "..\..\..\</Command>
@@ -182,6 +182,8 @@
     <ClInclude Include="engine\sys_dll2.h" />
     <ClInclude Include="engine\sys_utils.h" />
     <ClInclude Include="launcher\IApplication.h" />
+    <ClInclude Include="mathlib\adler32.h" />
+    <ClInclude Include="mathlib\crc32.h" />
     <ClInclude Include="mathlib\IceKey.H" />
     <ClInclude Include="mathlib\parallel_for.h" />
     <ClInclude Include="mathlib\vector.h" />
@@ -190,6 +192,7 @@
     <ClInclude Include="networksystem\sm_protocol.h" />
     <ClInclude Include="public\include\address.h" />
     <ClInclude Include="public\include\bansystem.h" />
+    <ClInclude Include="public\include\binstream.h" />
     <ClInclude Include="public\include\httplib.h" />
     <ClInclude Include="public\include\json.hpp" />
     <ClInclude Include="public\include\utility.h" />
@@ -204,6 +207,8 @@
     <ClInclude Include="thirdparty\detours\include\detver.h" />
     <ClInclude Include="thirdparty\detours\include\idetour.h" />
     <ClInclude Include="thirdparty\detours\include\syelog.h" />
+    <ClInclude Include="thirdparty\lzham\include\lzham.h" />
+    <ClInclude Include="thirdparty\lzham\include\lzham_static_lib.h" />
     <ClInclude Include="thirdparty\spdlog\include\async.h" />
     <ClInclude Include="thirdparty\spdlog\include\async_logger-inl.h" />
     <ClInclude Include="thirdparty\spdlog\include\async_logger.h" />
@@ -309,6 +314,7 @@
     <ClInclude Include="vpc\interfaces.h" />
     <ClInclude Include="vpc\keyvalues.h" />
     <ClInclude Include="vphysics\QHull.h" />
+    <ClInclude Include="vpklib\packedstore.h" />
     <ClInclude Include="windows\console.h" />
   </ItemGroup>
   <ItemGroup>
@@ -333,6 +339,7 @@
     <ClCompile Include="mathlib\IceKey.cpp" />
     <ClCompile Include="networksystem\r5net.cpp" />
     <ClCompile Include="public\bansystem.cpp" />
+    <ClCompile Include="public\binstream.cpp" />
     <ClCompile Include="public\utility.cpp" />
     <ClCompile Include="rtech\rtech.cpp" />
     <ClCompile Include="rtech\stryder.cpp" />
@@ -349,6 +356,7 @@
     <ClCompile Include="vpc\IAppSystem.cpp" />
     <ClCompile Include="vpc\keyvalues.cpp" />
     <ClCompile Include="vphysics\QHull.cpp" />
+    <ClCompile Include="vpklib\packedstore.cpp" />
     <ClCompile Include="windows\console.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -228,12 +228,13 @@ void CConsole::Draw(const char* title, bool* bDraw)
 // Exec
 void CConsole::ProcessCommand(const char* command_line)
 {
+    AddLog("# %s\n", command_line);
+
     std::thread t(&CConsole::ExecCommand, this, command_line);
     t.detach(); // Detach from render thread.
 
     // This is to avoid a race condition.
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
-    AddLog("# %s\n", command_line);
 
     m_nHistoryPos = -1;
     for (int i = m_ivHistory.Size - 1; i >= 0; i--)

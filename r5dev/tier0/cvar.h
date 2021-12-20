@@ -32,6 +32,7 @@ extern ConVar* cl_consoleoverlay_offset_y;
 //-------------------------------------------------------------------------
 // FILESYSTEM DLL                                                         |
 extern ConVar* fs_warning_level_native;
+extern ConVar* fs_packedstore_entryblock_stats;
 //-------------------------------------------------------------------------
 // SQUIRREL API                                                           |
 extern ConVar* sq_showrsonloading;

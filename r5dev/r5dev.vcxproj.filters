@@ -109,6 +109,15 @@
     <Filter Include="sdk\resource\png">
       <UniqueIdentifier>{64bc6e43-c5e7-474f-be64-31df89e0034b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sdk\vpklib">
+      <UniqueIdentifier>{d914384a-56bc-4829-977b-5900f01b5612}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="thirdparty\lzham">
+      <UniqueIdentifier>{da0b06b6-feab-44a9-bf9e-afb9e103eceb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="thirdparty\lzham\include">
+      <UniqueIdentifier>{7995c0ea-4972-4c52-854a-bd94cbdc6be9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="client\client.cpp">
@@ -269,6 +278,12 @@
     </ClCompile>
     <ClCompile Include="server\server.cpp">
       <Filter>sdk\server</Filter>
+    </ClCompile>
+    <ClCompile Include="vpklib\packedstore.cpp">
+      <Filter>sdk\vpklib</Filter>
+    </ClCompile>
+    <ClCompile Include="public\binstream.cpp">
+      <Filter>sdk\public</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -775,6 +790,24 @@
     </ClInclude>
     <ClInclude Include="tier0\interface.h">
       <Filter>sdk\tier0</Filter>
+    </ClInclude>
+    <ClInclude Include="mathlib\crc32.h">
+      <Filter>sdk\mathlib</Filter>
+    </ClInclude>
+    <ClInclude Include="vpklib\packedstore.h">
+      <Filter>sdk\vpklib</Filter>
+    </ClInclude>
+    <ClInclude Include="public\include\binstream.h">
+      <Filter>sdk\public\include</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\lzham\include\lzham.h">
+      <Filter>thirdparty\lzham\include</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\lzham\include\lzham_static_lib.h">
+      <Filter>thirdparty\lzham\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mathlib\adler32.h">
+      <Filter>sdk\mathlib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
