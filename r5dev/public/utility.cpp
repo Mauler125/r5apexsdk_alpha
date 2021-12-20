@@ -1,10 +1,10 @@
-#include "core/stdafx.h"
-#include "core/logdef.h"
-#include "public/include/utility.h"
-
 /*-----------------------------------------------------------------------------
  * _utility
  *-----------------------------------------------------------------------------*/
+
+#include "core/stdafx.h"
+#include "core/logdef.h"
+#include "public/include/utility.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // For checking if a specific file exists.
@@ -54,10 +54,10 @@ DWORD64 FindPatternV1(const char* szModule, const unsigned char* szPattern, cons
     {
         if (Compare((unsigned char*)(dwAddress + i), szPattern, szMask))
         {
-            return (DWORD64)(dwAddress + i);
+            return (dwAddress + i);
         }
     }
-    return 0;
+    return NULL;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -266,4 +266,33 @@ std::string base64_decode(const std::string& in)
         }
     }
     return out;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// For replacing parts of a given string.
+bool string_replace(std::string& str, const std::string& from, const std::string& to)
+{
+    size_t start_pos = str.find(from);
+    if (start_pos == std::string::npos)
+    {
+        return false;
+    }
+
+    str.replace(start_pos, from.length(), to);
+    return true;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// For creating directories for output streams.
+std::string create_directories(std::string svFilePath)
+{
+    std::filesystem::path fspPathOut(svFilePath);
+    std::string results = fspPathOut.u8string();
+
+    string_replace(svFilePath, "\\ \\", "\\");
+    fspPathOut = fspPathOut.parent_path();
+
+    std::filesystem::create_directories(fspPathOut);
+
+    return results;
 }
