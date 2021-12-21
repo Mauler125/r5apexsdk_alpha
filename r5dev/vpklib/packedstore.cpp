@@ -147,7 +147,7 @@ void CPackedStore::ValidateAdler32PostDecomp(std::string svAssetFile)
 
 	if (m_nAdler32 != m_nAdler32_Internal)
 	{
-		Sys_Print(SYS_DLL::FS, "Warning: ADLER32 checksum mismatch for entry '%s' computed value '0x%zX' doesn't match expected value '0x%zX'!\n", svAssetFile.c_str(), m_nAdler32, m_nAdler32_Internal);
+		Sys_Print(SYS_DLL::FS, "Warning: ADLER32 checksum mismatch for entry '%s' computed value '0x%luX' doesn't match expected value '0x%luX'!\n", svAssetFile.c_str(), m_nAdler32, m_nAdler32_Internal);
 		m_nAdler32          = 0;
 		m_nAdler32_Internal = 0;
 	}
@@ -173,7 +173,7 @@ void CPackedStore::ValidateCRC32PostDecomp(std::string svDirAsset)
 
 	if (m_nCrc32 != m_nCrc32_Internal)
 	{
-		Sys_Print(SYS_DLL::FS, "Warning: CRC32 checksum mismatch for entry '%s' computed value '0x%zX' doesn't match expected value '0x%zX'!\n", svDirAsset.c_str(), m_nCrc32, m_nCrc32_Internal);
+		Sys_Print(SYS_DLL::FS, "Warning: CRC32 checksum mismatch for entry '%s' computed value '0x%luX' doesn't match expected value '0x%luX'!\n", svDirAsset.c_str(), m_nCrc32, m_nCrc32_Internal);
 		m_nCrc32          = 0;
 		m_nCrc32_Internal = 0;
 	}
@@ -227,12 +227,12 @@ void CPackedStore::UnpackAll(vpk_dir_h vpk_dir, std::string svPathOut)
 						{
 							Sys_Print(SYS_DLL::FS, "--------------------------------------------------------------\n");
 							Sys_Print(SYS_DLL::FS, "] Block path            : '%s'\n", block.m_svBlockPath.c_str());
-							Sys_Print(SYS_DLL::FS, "] Entry count           : '%d'\n", block.m_vvEntries.size());
-							Sys_Print(SYS_DLL::FS, "] Compressed size       : '%d'\n", entry.m_nCompressedSize);
-							Sys_Print(SYS_DLL::FS, "] Uncompressed size     : '%d'\n", entry.m_nUncompressedSize);
-							Sys_Print(SYS_DLL::FS, "] Static CRC32 hash     : '0x%zX'\n", block.m_nCrc32);
-							Sys_Print(SYS_DLL::FS, "] Computed CRC32 hash   : '0x%zX'\n", m_nCrc32_Internal);
-							Sys_Print(SYS_DLL::FS, "] Computed ADLER32 hash : '0x%zX'\n", m_nAdler32_Internal);
+							Sys_Print(SYS_DLL::FS, "] Entry count           : '%llu'\n", block.m_vvEntries.size());
+							Sys_Print(SYS_DLL::FS, "] Compressed size       : '%llu'\n", entry.m_nCompressedSize);
+							Sys_Print(SYS_DLL::FS, "] Uncompressed size     : '%llu'\n", entry.m_nUncompressedSize);
+							Sys_Print(SYS_DLL::FS, "] Static CRC32 hash     : '0x%luX'\n", block.m_nCrc32);
+							Sys_Print(SYS_DLL::FS, "] Computed CRC32 hash   : '0x%luX'\n", m_nCrc32_Internal);
+							Sys_Print(SYS_DLL::FS, "] Computed ADLER32 hash : '0x%luX'\n", m_nAdler32_Internal);
 							Sys_Print(SYS_DLL::FS, "--------------------------------------------------------------\n");
 						}
 
@@ -240,7 +240,7 @@ void CPackedStore::UnpackAll(vpk_dir_h vpk_dir, std::string svPathOut)
 						{
 							if (block.m_nCrc32 != m_nCrc32_Internal)
 							{
-								Sys_Print(SYS_DLL::FS, "Warning: CRC32 checksum mismatch for entry '%s' computed value '0x%zX' doesn't match expected value '0x%zX'!\n", block.m_svBlockPath.c_str(), m_nCrc32_Internal, block.m_nCrc32);
+								Sys_Print(SYS_DLL::FS, "Warning: CRC32 checksum mismatch for entry '%s' computed value '0x%luX' doesn't match expected value '0x%luX'!\n", block.m_svBlockPath.c_str(), m_nCrc32_Internal, block.m_nCrc32);
 							}
 						}
 						else
@@ -336,11 +336,11 @@ vpk_dir_h::vpk_dir_h(std::string svPath)
 
 	Sys_Print(SYS_DLL::FS, "______________________________________________________________\n");
 	Sys_Print(SYS_DLL::FS, "] HEADER_DETAILS ---------------------------------------------\n");
-	Sys_Print(SYS_DLL::FS, "] File Magic     : '%zu'\n", this->m_nFileMagic);
+	Sys_Print(SYS_DLL::FS, "] File Magic     : '%lu'\n", this->m_nFileMagic);
 	Sys_Print(SYS_DLL::FS, "] Major Version  : '%hu'\n", (this->m_nMajorVersion));
 	Sys_Print(SYS_DLL::FS, "] Minor Version  : '%hu'\n", (this->m_nMinorVersion));
-	Sys_Print(SYS_DLL::FS, "] Tree Size      : '%zu'\n", this->m_nTreeSize);
-	Sys_Print(SYS_DLL::FS, "] File Data Size : '%zu'\n", this->m_nFileDataSize);
+	Sys_Print(SYS_DLL::FS, "] Tree Size      : '%lu'\n", this->m_nTreeSize);
+	Sys_Print(SYS_DLL::FS, "] File Data Size : '%lu'\n", this->m_nFileDataSize);
 
 	this->m_vvEntryBlocks = g_pPackedStore->GetEntryBlocks(&reader);
 	this->m_svDirPath = svPath; // Set path to vpk_dir file.
