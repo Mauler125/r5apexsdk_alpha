@@ -414,6 +414,7 @@ HRESULT __stdcall Present(IDXGISwapChain* pSwapChain, UINT nSyncInterval, UINT n
 
 		g_bInitialized  = true;
 		g_pSwapChain    = pSwapChain;
+		g_pImGuiConfig->Load(); // Load ImGui configs.
 	}
 
 	DrawImGui();
