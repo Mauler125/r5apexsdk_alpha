@@ -1,5 +1,6 @@
 #include "core/stdafx.h"
 #include "core/init.h"
+#include "tier0/cvar.h"
 #include "windows/id3dx.h"
 #include "windows/console.h"
 #include "gameui/IConsole.h"
@@ -56,11 +57,18 @@ CConsole::~CConsole()
 void CConsole::Draw(const char* title, bool* bDraw)
 {
     bool copy_to_clipboard = false;
+    static auto iConsoleConfig = &g_pImGuiConfig->IConsole_Config;
+    static auto iBrowserConfig = &g_pImGuiConfig->IBrowser_Config;
 
     if (!m_bThemeSet)
     {
         SetStyleVar();
         m_bThemeSet = true;
+    }
+    if (iConsoleConfig->m_bAutoClear && Items.Size > iConsoleConfig->m_nAutoClearLimit) // Check if Auto-Clear is enabled and if its above our limit.
+    {
+        ClearLog();
+        m_ivHistory.clear();
     }
 
     //ImGui::ShowStyleEditor();
@@ -86,12 +94,47 @@ void CConsole::Draw(const char* title, bool* bDraw)
     ImGui::Separator();
     if (ImGui::BeginPopup("Options"))
     {
-        ImGui::Checkbox("Auto-scroll", &m_bAutoScroll);
+        ImGui::Checkbox("Auto-Scroll", &m_bAutoScroll);
+
+        if (ImGui::Checkbox("Auto-Clear", &iConsoleConfig->m_bAutoClear))
+        {
+            g_pImGuiConfig->Save();
+        }
+
+        ImGui::SameLine();
+        ImGui::PushItemWidth(100);
+
+        if (ImGui::InputInt("Limit##AutoClearAfterCertainIndexCGameConsole", &iConsoleConfig->m_nAutoClearLimit))
+        {
+            g_pImGuiConfig->Save();
+        }
+
+        ImGui::PopItemWidth();
+
         if (ImGui::SmallButton("Clear"))
         {
             ClearLog();
         }
+
+        ImGui::SameLine();
         copy_to_clipboard = ImGui::SmallButton("Copy");
+
+        ImGui::Text("Console Hotkey:");
+        ImGui::SameLine();
+
+        if (ImGui::Hotkey("##OpenIConsoleBind0", &iConsoleConfig->m_nBind0, ImVec2(80, 80)))
+        {
+            g_pImGuiConfig->Save();
+        }
+
+        ImGui::Text("Browser Hotkey:");
+        ImGui::SameLine();
+
+        if (ImGui::Hotkey("##OpenIBrowserBind0", &iBrowserConfig->m_nBind0, ImVec2(80, 80)))
+        {
+            g_pImGuiConfig->Save();
+        }
+
         ImGui::EndPopup();
     }
     if (ImGui::Button("Options"))
