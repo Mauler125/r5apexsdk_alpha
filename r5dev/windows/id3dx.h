@@ -1,4 +1,6 @@
 #pragma once
+#ifndef DEDICATED // This file should not be compiled for DEDICATED!
+//------------------------------
 #include <d3d11.h>
 
 /////////////////////////////////////////////////////////////////////////////
@@ -116,3 +118,4 @@ class HIDXGI : public IDetour
 	///////////////////////////////////////////////////////////////////////////////
 };
 REGISTER(HIDXGI);
+#endif // !DEDICATED
