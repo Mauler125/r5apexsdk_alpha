@@ -118,6 +118,9 @@
     <Filter Include="thirdparty\lzham\include">
       <UniqueIdentifier>{7995c0ea-4972-4c52-854a-bd94cbdc6be9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sdk\bsplib">
+      <UniqueIdentifier>{336e3141-0276-4cd5-a836-585eef681b7b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="client\client.cpp">
@@ -126,7 +129,7 @@
     <ClCompile Include="client\IVEngineClient.cpp">
       <Filter>sdk\client</Filter>
     </ClCompile>
-    <ClCompile Include="client\CHLClient.cpp">
+    <ClCompile Include="client\cdll_engine_int.cpp">
       <Filter>sdk\client</Filter>
     </ClCompile>
     <ClCompile Include="ebisusdk\EbisuSDK.cpp">
@@ -285,9 +288,18 @@
     <ClCompile Include="public\binstream.cpp">
       <Filter>sdk\public</Filter>
     </ClCompile>
+    <ClCompile Include="bsplib\bsplib.cpp">
+      <Filter>sdk\bsplib</Filter>
+    </ClCompile>
+    <ClCompile Include="mathlib\adler32.cpp">
+      <Filter>sdk\mathlib</Filter>
+    </ClCompile>
+    <ClCompile Include="mathlib\crc32.cpp">
+      <Filter>sdk\mathlib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="client\CHLClient.h">
+    <ClInclude Include="client\cdll_engine_int.h">
       <Filter>sdk\client</Filter>
     </ClInclude>
     <ClInclude Include="client\client.h">
@@ -341,7 +353,7 @@
     <ClInclude Include="public\include\utility.h">
       <Filter>sdk\public\include</Filter>
     </ClInclude>
-    <ClInclude Include="public\include\address.h">
+    <ClInclude Include="public\include\memaddr.h">
       <Filter>sdk\public\include</Filter>
     </ClInclude>
     <ClInclude Include="rtech\rtech.h">
@@ -808,6 +820,12 @@
     </ClInclude>
     <ClInclude Include="mathlib\adler32.h">
       <Filter>sdk\mathlib</Filter>
+    </ClInclude>
+    <ClInclude Include="bsplib\bsplib.h">
+      <Filter>sdk\bsplib</Filter>
+    </ClInclude>
+    <ClInclude Include="common\psuedodefs.h">
+      <Filter>sdk\common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

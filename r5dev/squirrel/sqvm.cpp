@@ -54,11 +54,11 @@ void* HSQVM_PrintFunc(void* sqvm, char* fmt, ...)
 
 	vmStr.append(buf);
 
-	if (sq_showvmoutput->m_iValue > 0)
+	if (sq_showvmoutput->m_pParent->m_iValue > 0)
 	{
 		sqlogger->debug(vmStr);
 	}
-	if (sq_showvmoutput->m_iValue > 1)
+	if (sq_showvmoutput->m_pParent->m_iValue > 1)
 	{
 		iconsole->debug(vmStr);
 		wconsole->debug(vmStr);
@@ -69,7 +69,7 @@ void* HSQVM_PrintFunc(void* sqvm, char* fmt, ...)
 #endif // !DEDICATED
 	}
 #ifndef DEDICATED
-	if (sq_showvmoutput->m_iValue > 2)
+	if (sq_showvmoutput->m_pParent->m_iValue > 2)
 	{
 		std::string s = g_spd_sqvm_p_oss.str();
 		g_pLogSystem.AddLog((LogType_t)vmIdx, s);
@@ -81,9 +81,9 @@ void* HSQVM_PrintFunc(void* sqvm, char* fmt, ...)
 //---------------------------------------------------------------------------------
 // Purpose: prints the warning output of each VM to the console
 //---------------------------------------------------------------------------------
-void* HSQVM_WarningFunc(void* sqvm, int a2, int a3, int* stringSize, void** string)
+void* HSQVM_WarningFunc(void* sqvm, int a2, int a3, int* nStringSize, void** ppString)
 {
-	void* result = SQVM_WarningFunc(sqvm, a2, a3, stringSize, string);
+	void* result = SQVM_WarningFunc(sqvm, a2, a3, nStringSize, ppString);
 	if (g_bSQVM_WarnFuncCalled) // Check if its SQVM_Warning calling.
 	{
 		return result; // If not return.
@@ -118,17 +118,17 @@ void* HSQVM_WarningFunc(void* sqvm, int a2, int a3, int* stringSize, void** stri
 		initialized = true;
 	}
 
-	std::string stringConstructor((char*)*string, *stringSize); // Get string from memory via std::string constructor.
+	std::string stringConstructor((char*)*ppString, *nStringSize); // Get string from memory via std::string constructor.
 	vmStr.append(stringConstructor);
 
 	std::string s = g_spd_sqvm_w_oss.str();
 	const char* c = s.c_str();
 
-	if (sq_showvmwarning->m_iValue > 0)
+	if (sq_showvmwarning->m_pParent->m_iValue > 0)
 	{
 		sqlogger->debug(vmStr); // Emit to file.
 	}
-	if (sq_showvmwarning->m_iValue > 1)
+	if (sq_showvmwarning->m_pParent->m_iValue > 1)
 	{
 		iconsole->debug(vmStr); // Emit to in-game console.
 		wconsole->debug(vmStr); // Emit to windows console.
@@ -139,7 +139,7 @@ void* HSQVM_WarningFunc(void* sqvm, int a2, int a3, int* stringSize, void** stri
 #endif // !DEDICATED
 	}
 #ifndef DEDICATED
-	if (sq_showvmwarning->m_iValue > 2)
+	if (sq_showvmwarning->m_pParent->m_iValue > 2)
 	{
 		g_pLogSystem.AddLog((LogType_t)vmIdx, s);
 		const char* c = s.c_str();
@@ -152,7 +152,7 @@ void* HSQVM_WarningFunc(void* sqvm, int a2, int a3, int* stringSize, void** stri
 }
 
 //---------------------------------------------------------------------------------
-// Purpose:
+// Purpose: 
 //---------------------------------------------------------------------------------
 void* HSQVM_WarningCmd(int a1, int a2)
 {
@@ -163,56 +163,56 @@ void* HSQVM_WarningCmd(int a1, int a2)
 //---------------------------------------------------------------------------------
 // Purpose: loads the include file from the mods directory
 //---------------------------------------------------------------------------------
-void* HSQVM_LoadRson(const char* rson_name)
+void* HSQVM_LoadRson(const char* szRsonName)
 {
-	char filepath[MAX_PATH] = { 0 };
-	sprintf_s(filepath, MAX_PATH, "platform\\%s", rson_name);
+	char szFilePath[MAX_PATH] = { 0 };
+	sprintf_s(szFilePath, MAX_PATH, "platform\\%s", szRsonName);
 
 	// Flip forward slashes in filepath to windows-style backslash
-	for (int i = 0; i < strlen(filepath); i++)
+	for (int i = 0; i < strlen(szFilePath); i++)
 	{
-		if (filepath[i] == '/')
+		if (szFilePath[i] == '/')
 		{
-			filepath[i] = '\\';
+			szFilePath[i] = '\\';
 		}
 	}
 
 	// Returns the new path if the rson exists on the disk
-	if (FileExists(filepath) && SQVM_LoadRson(rson_name))
+	if (FileExists(szFilePath) && SQVM_LoadRson(szRsonName))
 	{
-		if (sq_showrsonloading->m_iValue > 0)
+		if (sq_showrsonloading->m_pParent->m_iValue > 0)
 		{
-			Sys_Print(SYS_DLL::ENGINE, "\n");
-			Sys_Print(SYS_DLL::ENGINE, "______________________________________________________________\n");
-			Sys_Print(SYS_DLL::ENGINE, "] RSON_DISK --------------------------------------------------\n");
-			Sys_Print(SYS_DLL::ENGINE, "] PATH: '%s'\n", filepath);
-			Sys_Print(SYS_DLL::ENGINE, "--------------------------------------------------------------\n");
-			Sys_Print(SYS_DLL::ENGINE, "\n");
+			DevMsg(eDLL::ENGINE, "\n");
+			DevMsg(eDLL::ENGINE, "______________________________________________________________\n");
+			DevMsg(eDLL::ENGINE, "] RSON_DISK --------------------------------------------------\n");
+			DevMsg(eDLL::ENGINE, "] PATH: '%s'\n", szFilePath);
+			DevMsg(eDLL::ENGINE, "--------------------------------------------------------------\n");
+			DevMsg(eDLL::ENGINE, "\n");
 		}
-		return SQVM_LoadRson(filepath);
+		return SQVM_LoadRson(szFilePath);
 	}
 	else
 	{
-		if (sq_showrsonloading->m_iValue > 0)
+		if (sq_showrsonloading->m_pParent->m_iValue > 0)
 		{
-			Sys_Print(SYS_DLL::ENGINE, "\n");
-			Sys_Print(SYS_DLL::ENGINE, "______________________________________________________________\n");
-			Sys_Print(SYS_DLL::ENGINE, "] RSON_VPK ---------------------------------------------------\n");
-			Sys_Print(SYS_DLL::ENGINE, "] PATH: '%s'\n", rson_name);
-			Sys_Print(SYS_DLL::ENGINE, "--------------------------------------------------------------\n");
-			Sys_Print(SYS_DLL::ENGINE, "\n");
+			DevMsg(eDLL::ENGINE, "\n");
+			DevMsg(eDLL::ENGINE, "______________________________________________________________\n");
+			DevMsg(eDLL::ENGINE, "] RSON_VPK ---------------------------------------------------\n");
+			DevMsg(eDLL::ENGINE, "] PATH: '%s'\n", szRsonName);
+			DevMsg(eDLL::ENGINE, "--------------------------------------------------------------\n");
+			DevMsg(eDLL::ENGINE, "\n");
 		}
 	}
-	return SQVM_LoadRson(rson_name);
+	return SQVM_LoadRson(szRsonName);
 }
 
 //---------------------------------------------------------------------------------
 // Purpose: loads the script file from the mods directory
 //---------------------------------------------------------------------------------
-bool HSQVM_LoadScript(void* sqvm, const char* script_path, const char* script_name, int flag)
+bool HSQVM_LoadScript(void* sqvm, const char* szScriptPath, const char* szScriptName, int nFlag)
 {
 	char filepath[MAX_PATH] = { 0 };
-	sprintf_s(filepath, MAX_PATH, "platform\\%s", script_path);
+	sprintf_s(filepath, MAX_PATH, "platform\\%s", szScriptPath);
 
 	// Flip forward slashes in filepath to windows-style backslash
 	for (int i = 0; i < strlen(filepath); i++)
@@ -223,38 +223,38 @@ bool HSQVM_LoadScript(void* sqvm, const char* script_path, const char* script_na
 		}
 	}
 
-	if (sq_showscriptloading->m_iValue > 0)
+	if (sq_showscriptloading->m_pParent->m_iValue > 0)
 	{
-		Sys_Print(SYS_DLL::ENGINE, "Loading SQVM Script '%s'\n", filepath);
+		DevMsg(eDLL::ENGINE, "Loading SQVM Script '%s'\n", filepath);
 	}
 
 	// Returns true if the script exists on the disk
-	if (FileExists(filepath) && SQVM_LoadScript(sqvm, filepath, script_name, flag))
+	if (FileExists(filepath) && SQVM_LoadScript(sqvm, filepath, szScriptName, nFlag))
 	{
 		return true;
 	}
 
-	if (sq_showscriptloading->m_iValue > 0)
+	if (sq_showscriptloading->m_pParent->m_iValue > 0)
 	{
-		Sys_Print(SYS_DLL::ENGINE, "FAILED. Try SP / VPK for '%s'\n", filepath);
+		DevMsg(eDLL::ENGINE, "FAILED. Try SP / VPK for '%s'\n", filepath);
 	}
 
 	///////////////////////////////////////////////////////////////////////////////
-	return SQVM_LoadScript(sqvm, script_path, script_name, flag);
+	return SQVM_LoadScript(sqvm, szScriptPath, szScriptName, nFlag);
 }
 
-void HSQVM_RegisterFunction(void* sqvm, const char* name, const char* helpString, const char* retValType, const char* argTypes, void* funcPtr)
+void HSQVM_RegisterFunction(void* sqvm, const char* szName, const char* szHelpString, const char* szRetValType, const char* szArgTypes, void* pFunction)
 {
-	SQFuncRegistration* func = new SQFuncRegistration();
+	SQFuncRegistration* sqFunc = new SQFuncRegistration();
 
-	func->scriptName = name;
-	func->nativeName = name;
-	func->helpString = helpString;
-	func->retValType = retValType;
-	func->argTypes = argTypes;
-	func->funcPtr = funcPtr;
+	sqFunc->m_szScriptName = szName;
+	sqFunc->m_szNativeName = szName;
+	sqFunc->m_szHelpString = szHelpString;
+	sqFunc->m_szRetValType = szRetValType;
+	sqFunc->m_szArgTypes   = szArgTypes;
+	sqFunc->m_pFunction    = pFunction;
 
-	SQVM_RegisterFunc(sqvm, func, 1);
+	SQVM_RegisterFunc(sqvm, sqFunc, 1);
 }
 
 int HSQVM_NativeTest(void* sqvm)
@@ -297,4 +297,4 @@ void SQVM_Detach()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool g_bSQVM_WarnFuncCalled;
+bool g_bSQVM_WarnFuncCalled = false;

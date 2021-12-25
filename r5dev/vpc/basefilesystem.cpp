@@ -9,13 +9,13 @@
 //---------------------------------------------------------------------------------
 void HCBaseFileSystem_Warning(void* thisptr, FileWarningLevel_t level, const char* fmt, ...)
 {
-	if (fs_warning_level_native->m_iValue < (int)level)
+	if (fs_warning_level_native->m_pParent->m_iValue < (int)level)
 	{
 		return;
 	}
 
 	static bool initialized = false;
-	static char buf[1024];
+	static char buf[1024] = {};
 
 	static auto iconsole = spdlog::stdout_logger_mt("fs_warn_iconsole"); // in-game console.
 	static auto wconsole = spdlog::stdout_logger_mt("fs_warn_wconsole"); // windows console.
@@ -33,7 +33,7 @@ void HCBaseFileSystem_Warning(void* thisptr, FileWarningLevel_t level, const cha
 		initialized = true;
 	}
 
-	va_list args;
+	va_list args{};
 	va_start(args, fmt);
 
 	vsnprintf(buf, sizeof(buf), fmt, args);

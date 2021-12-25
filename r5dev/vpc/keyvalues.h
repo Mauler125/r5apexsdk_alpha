@@ -25,20 +25,25 @@ namespace
 {
 	/* ==== KEYVALUES ======================================================================================================================================================= */
 #if defined (GAMEDLL_S0) || defined (GAMEDLL_S1)
-	ADDRESS p_KeyValues_FindKey = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x48\x89\x5C\x24\x10\x48\x89\x6C\x24\x18\x48\x89\x74\x24\x20\x57\x41\x54\x41\x55\x41\x56\x41\x57\x48\x81\xEC\x20\x01\x00\x00\x45", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-	void* (*KeyValues_FindKey)(void* a1, const char* a2, bool a3) = (void* (*)(void*, const char*, bool))p_KeyValues_FindKey.GetPtr(); /*48 89 5C 24 10 48 89 6C 24 18 48 89 74 24 20 57 41 54 41 55 41 56 41 57 48 81 EC 20 01 00 00 45*/
-
 	ADDRESS p_KeyValues_Init = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x40\x53\x48\x83\xEC\x20\x48\x8B\xD9\xC7\x44\x24\x30\xFF\xFF\xFF", "xxxxxxxxxxxxxxxx"); /*40 53 48 83 EC 20 48 8B D9 C7 44 24 30 FF FF FF*/
 	std::int64_t(*KeyValues_Init)(std::int64_t a1, std::int64_t a2, std::int64_t a3, std::int64_t a4) = (std::int64_t(*)(std::int64_t, std::int64_t, std::int64_t, std::int64_t))p_KeyValues_Init.GetPtr();
-#elif defined (GAMEDLL_S2) || defined (GAMEDLL_S3)
-	ADDRESS p_KeyValues_FindKey = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x40\x56\x57\x41\x57\x48\x81\xEC\x00\x00\x00\x00\x45", "xxxxxxxx????x");
-	void* (*KeyValues_FindKey)(void* a1, const char* a2, bool a3) = (void* (*)(void*, const char*, bool))p_KeyValues_FindKey.GetPtr(); /*40 56 57 41 57 48 81 EC 30 01 00 00 45 0F B6 F8*/
 
+	ADDRESS p_KeyValues_FindKey = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x48\x89\x5C\x24\x10\x48\x89\x6C\x24\x18\x48\x89\x74\x24\x20\x57\x41\x54\x41\x55\x41\x56\x41\x57\x48\x81\xEC\x20\x01\x00\x00\x45", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+	void* (*KeyValues_FindKey)(void* a1, const char* a2, bool a3) = (void* (*)(void*, const char*, bool))p_KeyValues_FindKey.GetPtr(); /*48 89 5C 24 10 48 89 6C 24 18 48 89 74 24 20 57 41 54 41 55 41 56 41 57 48 81 EC 20 01 00 00 45*/
+#elif defined (GAMEDLL_S2) || defined (GAMEDLL_S3)
 	ADDRESS p_KeyValues_Init = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x40\x53\x48\x83\xEC\x20\x48\x8B\x05\x00\x00\x00\x01\x48\x8B\xD9\x4C\x8B\xC2", "xxxxxxxxx???xxxxxxx"); /*40 53 48 83 EC 20 48 8B 05 ?? ?? ?? 01 48 8B D9 4C 8B C2*/
 	void* (*KeyValues_Init)(std::int64_t a1, std::int64_t a2, std::int64_t a3, std::int64_t a4) = (void* (*)(std::int64_t, std::int64_t, std::int64_t, std::int64_t))p_KeyValues_Init.GetPtr();
+
+	ADDRESS p_KeyValues_FindKey = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x40\x56\x57\x41\x57\x48\x81\xEC\x00\x00\x00\x00\x45", "xxxxxxxx????x");
+	void* (*KeyValues_FindKey)(void* a1, const char* a2, bool a3) = (void* (*)(void*, const char*, bool))p_KeyValues_FindKey.GetPtr(); /*40 56 57 41 57 48 81 EC 30 01 00 00 45 0F B6 F8*/
 #endif
-	ADDRESS p_KeyValues_LoadPlaylist = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\xE8\x00\x00\x00\x00\x80\x3D\x00\x00\x00\x00\x00\x74\x0C", "x????xx?????xx").FollowNearCallSelf().GetPtr();
-	bool (*KeyValues_LoadPlaylist)(const char* source) = (bool (*)(const char*))p_KeyValues_LoadPlaylist.GetPtr(); /*E8 ? ? ? ? 80 3D ? ? ? ? ? 74 0C*/
+	ADDRESS p_KeyValues_LoadPlaylist = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\xE8\x00\x00\x00\x00\x80\x3D\x00\x00\x00\x00\x00\x74\x0C", "x????xx?????xx").FollowNearCallSelf().GetPtr();;
+	bool (*KeyValues_LoadPlaylist)(const char* source) = (bool (*)(const char*))p_KeyValues_LoadPlaylist.GetPtr(); /*E8 ?? ?? ?? ?? 80 3D ?? ?? ?? ?? ?? 74 0C*/
+
+	ADDRESS p_KeyValues_GetMemPool = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x48\x8B\x05\x00\x00\x00\x00\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x48\x85\xD2", "xxx????xxxxxxxxxxxx");
+	void* (*KeyValues_GetMemPool)() = (void* (*)())p_KeyValues_GetMemPool.GetPtr(); /*48 8B 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 48 85 D2*/
+
+	std::uintptr_t g_pKeyValuesMemPool = p_KeyValues_GetMemPool.ResolveRelativeAddressSelf(0x3, 0x7).GetPtr();
 }
 
 class CKeyValuesSystem // VTABLE @ 0x1413AA1E8 in R5pc_r5launch_N1094_CL456479_2019_10_30_05_20_PM
@@ -102,7 +107,7 @@ public:
 	// GetMemPool return a global variable called m_pMemPool it gets modified by AllocKeyValuesMemory and FreeKeyValuesMemory above you can see where the find it in FreeKeyValuesMemory.
 	void* GetMemPool() // @0x1413AA228 in R5pc_r5launch_N1094_CL456479_2019_10_30_05_20_PM
 	{
-		return reinterpret_cast<void*>(0x14D412768); // May need to dereference this once more not sure right now.
+		return reinterpret_cast<void*>(g_pKeyValuesMemPool); // May need to dereference this once more not sure right now.
 	}
 
 	void SetKeyValuesExpressionSymbol(const char* name, bool bValue) // @0x1413AA230 in R5pc_r5launch_N1094_CL456479_2019_10_30_05_20_PM
@@ -215,7 +220,7 @@ public:
 	uint32_t m_iKeyNameCaseSensitive : 8;          // 0x0003
 	char*            m_sValue;                     // 0x0008
 	wchar_t*         m_wsValue;                    // 0x0010
-	int              m_Value;                      // 0x0018
+	int              m_nValue;                     // 0x0018
 private:
 	char             gap1C[12];                    // 0x0020
 public:
@@ -237,3 +242,22 @@ void CKeyValueSystem_Detach();
 ///////////////////////////////////////////////////////////////////////////////
 extern CKeyValuesSystem* g_pKeyValuesSystem;
 extern KeyValues** g_pPlaylistKeyValues;
+
+///////////////////////////////////////////////////////////////////////////////
+class HKeyValues : public IDetour
+{
+	virtual void debugp()
+	{
+		std::cout << "| FUN: KeyValues::Init                      : 0x" << std::hex << std::uppercase << p_KeyValues_Init.GetPtr()         << std::setw(npad) << " |" << std::endl;
+		std::cout << "| FUN: KeyValues::FindKey                   : 0x" << std::hex << std::uppercase << p_KeyValues_FindKey.GetPtr()      << std::setw(npad) << " |" << std::endl;
+		std::cout << "| FUN: KeyValues::LoadPlaylist              : 0x" << std::hex << std::uppercase << p_KeyValues_LoadPlaylist.GetPtr() << std::setw(npad) << " |" << std::endl;
+		std::cout << "| FUN: KeyValues::GetMemPool                : 0x" << std::hex << std::uppercase << p_KeyValues_GetMemPool.GetPtr()   << std::setw(npad) << " |" << std::endl;
+		std::cout << "| VAR: g_pKeyValuesMemPool                  : 0x" << std::hex << std::uppercase << g_pKeyValuesMemPool               << std::setw(npad) << " |" << std::endl;
+		std::cout << "| VAR: g_pKeyValuesSystem                   : 0x" << std::hex << std::uppercase << g_pKeyValuesSystem                << std::setw(0)    << " |" << std::endl;
+		std::cout << "| VAR: g_pPlaylistKeyValues                 : 0x" << std::hex << std::uppercase << g_pPlaylistKeyValues              << std::setw(0)    << " |" << std::endl;
+		std::cout << "+----------------------------------------------------------------+" << std::endl;
+	}
+};
+///////////////////////////////////////////////////////////////////////////////
+
+REGISTER(HKeyValues);

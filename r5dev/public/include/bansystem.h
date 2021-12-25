@@ -8,17 +8,17 @@ public:
 	void operator[](std::pair<std::string, std::int64_t> pair);
 	void Load();
 	void Save();
-	void AddEntry(std::string ipAddress, std::int64_t originID);
-	void DeleteEntry(std::string ipAddress, std::int64_t originID);
-	void AddConnectionRefuse(std::string error, int userID);
-	void DeleteConnectionRefuse(int userID);
-	bool IsBanned(std::string ipAddress, std::int64_t originID);
+	void AddEntry(std::string svIpAddress, std::int64_t nOriginID);
+	void DeleteEntry(std::string svIpAddress, std::int64_t nOriginID);
+	void AddConnectionRefuse(std::string svError, int nUserID);
+	void DeleteConnectionRefuse(int nUserID);
+	bool IsBanned(std::string svIpAddress, std::int64_t nOriginID);
 	bool IsRefuseListValid();
 	bool IsBanListValid();
 
-	std::vector<std::pair<std::string, int>> refuseList = {};;
+	std::vector<std::pair<std::string, int>> vsvrefuseList = {};;
 private:
-	std::vector<std::pair<std::string, std::int64_t>> banList = {};
+	std::vector<std::pair<std::string, std::int64_t>> vsvBanList = {};
 };
 
 extern CBanSystem* g_pBanSystem;

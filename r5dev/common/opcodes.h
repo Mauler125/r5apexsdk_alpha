@@ -5,31 +5,32 @@
 
 void Dedicated_Init();
 void RuntimePtc_Init();
+void RuntimePtc_Toggle();
 
 namespace
 {
-	/* -------------- ORIGIN ------------------------------------------------------------------------------------------------------------------------------------------------ */
+	///* -------------- ORIGIN ------------------------------------------------------------------------------------------------------------------------------------------------ */
 	ADDRESS Origin_Init = /*0x14032EEA0*/ FindPatternSIMD("r5apex.exe", (const unsigned char*)"\x48\x83\xEC\x28\x80\x3D\x00\x00\x00\x23\x00\x0F\x85\x00\x02\x00", "xxxxxx???xxxx?xx");
 	ADDRESS Origin_SetState = /*0x140330290*/ FindPatternSIMD("r5apex.exe", (const unsigned char*)"\x48\x81\xEC\x58\x04\x00\x00\x80\x3D\x00\x00\x00\x00\x00\x0F\x84", "xxxxxxxxx????xxx");
 
-	/* -------------- ENGINE ------------------------------------------------------------------------------------------------------------------------------------------------ */
-	ADDRESS dst002 = /*0x14043FB90*/ FindPatternSIMD("r5apex.exe", (const unsigned char*)"\x48\x89\x4C\x24\x08\x56\x41\x55\x48\x81\xEC\x68\x03\x00\x00\x4C", "xxxx?xxxxxxxxxxx");
+	///* -------------- ENGINE ------------------------------------------------------------------------------------------------------------------------------------------------ */
+	//ADDRESS dst002 = /*0x14043FB90*/ FindPatternSIMD("r5apex.exe", (const unsigned char*)"\x48\x89\x4C\x24\x08\x56\x41\x55\x48\x81\xEC\x68\x03\x00\x00\x4C", "xxxx?xxxxxxxxxxx");
 	ADDRESS dst003 = /*0x14022A4A0*/ FindPatternSIMD("r5apex.exe", (const unsigned char*)"\x48\x83\xEC\x38\x0F\x29\x74\x24\x20\x48\x89\x5C\x24\x40\x48\x8B", "xxxxxxxxxxxxxxxx");
 	ADDRESS Host_NewGame = /*0x140238DA0*/ FindPatternSIMD("r5apex.exe", (const unsigned char*)"\x48\x8B\xC4\x00\x41\x54\x41\x00\x48\x81\xEC\x00\x00\x00\x00\xF2", "xxx?xxx?xxx??xxx");
 
-	/* -------------- NETCHAN ----------------------------------------------------------------------------------------------------------------------------------------------- */
-	ADDRESS CServer_Auth = /*0x14030D000*/ FindPatternSIMD("r5apex.exe", (const unsigned char*)"\x40\x55\x57\x41\x55\x41\x57\x48\x8D\xAC\x24\x28\xFF\xFF\xFF\x48", "xxxxxxxxxxxxxxxx");
+	///* -------------- NETCHAN ----------------------------------------------------------------------------------------------------------------------------------------------- */
+	//ADDRESS CServer_Auth = /*0x14030D000*/ FindPatternSIMD("r5apex.exe", (const unsigned char*)"\x40\x55\x57\x41\x55\x41\x57\x48\x8D\xAC\x24\x28\xFF\xFF\xFF\x48", "xxxxxxxxxxxxxxxx");
 
-	/* -------------- FAIRFIGHT --------------------------------------------------------------------------------------------------------------------------------------------- */
+	///* -------------- FAIRFIGHT --------------------------------------------------------------------------------------------------------------------------------------------- */
 	ADDRESS FairFight_Init = /*0x140303AE0*/ FindPatternSIMD("r5apex.exe", (const unsigned char*)"\x40\x53\x48\x83\xEC\x20\x8B\x81\xB0\x03\x00\x00\x48\x8B\xD9\xC6", "xxxxxxxxxxxxxxxx");
 
-	/* -------------- OTHER ------------------------------------------------------------------------------------------------------------------------------------------------- */
+	///* -------------- OTHER ------------------------------------------------------------------------------------------------------------------------------------------------- */
 	ADDRESS dst007 = /*0x14028F3B0*/ FindPatternSIMD("r5apex.exe", (const unsigned char*)"\x48\x8B\xC4\x44\x89\x40\x18\x48\x89\x50\x10\x55\x53\x56\x57\x41", "xxxxxxxxxxxxxxxx");
 	ADDRESS dst008 = /*0x140E3E110*/ FindPatternSIMD("r5apex.exe", (const unsigned char*)"\x48\x83\xEC\x78\x48\x8B\x84\x24\x00\x00\x00\x00\x4D\x8B\xD8\x00", "xxxxxxxx????xxx?");
 
-	ADDRESS dst009 = FindPatternSIMD("r5apex.exe", (const unsigned char*)"\x48\x8B\xC4\x55\x41\x54\x41\x55\x41\x56\x41\x57\x48\x8B\xEC\x48\x83\xEC\x60", "xxxxxxxxxxxxxxxxxxx");
+	//ADDRESS dst009 = FindPatternSIMD("r5apex.exe", (const unsigned char*)"\x48\x8B\xC4\x55\x41\x54\x41\x55\x41\x56\x41\x57\x48\x8B\xEC\x48\x83\xEC\x60", "xxxxxxxxxxxxxxxxxxx");
 
-	/* -------------- ------- ----------------------------------------------------------------------------------------------------------------------------------------------- */
+	///* -------------- ------- ----------------------------------------------------------------------------------------------------------------------------------------------- */
 
 	namespace
 	{
@@ -103,11 +104,11 @@ namespace
 		std::cout << "| Origin_Init              : " << std::hex << std::uppercase << Origin_Init.GetPtr() << std::setw(20) << " |" << std::endl;
 		std::cout << "| Origin_SetState          : " << std::hex << std::uppercase << Origin_SetState.GetPtr() << std::setw(20) << " |" << std::endl;
 		std::cout << "+--------------------------------------------------------+" << std::endl;
-		std::cout << "| dst002                   : " << std::hex << std::uppercase << dst002.GetPtr() << std::setw(20) << " |" << std::endl;
+		//std::cout << "| dst002                   : " << std::hex << std::uppercase << dst002.GetPtr() << std::setw(20) << " |" << std::endl;
 		std::cout << "| dst003                   : " << std::hex << std::uppercase << dst003.GetPtr() << std::setw(20) << " |" << std::endl;
-		std::cout << "| Host_NewGame             : " << std::hex << std::uppercase << Host_NewGame.GetPtr() << std::setw(20) << " |" << std::endl;
+		//std::cout << "| Host_NewGame             : " << std::hex << std::uppercase << Host_NewGame.GetPtr() << std::setw(20) << " |" << std::endl;
 		std::cout << "+--------------------------------------------------------+" << std::endl;
-		std::cout << "| CServer_Auth             : " << std::hex << std::uppercase << CServer_Auth.GetPtr() << std::setw(20) << " |" << std::endl;
+		//std::cout << "| CServer_Auth             : " << std::hex << std::uppercase << CServer_Auth.GetPtr() << std::setw(20) << " |" << std::endl;
 		std::cout << "+--------------------------------------------------------+" << std::endl;
 		std::cout << "| FairFight_Init           : " << std::hex << std::uppercase << FairFight_Init.GetPtr() << std::setw(20) << " |" << std::endl;
 		std::cout << "+--------------------------------------------------------+" << std::endl;

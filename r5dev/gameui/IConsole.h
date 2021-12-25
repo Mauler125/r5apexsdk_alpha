@@ -30,7 +30,6 @@ public:
 
     void Draw(const char* title, bool* bDraw);
     void ProcessCommand(const char* command_line);
-    void ExecCommand(const char* command_line);
     int TextEditCallback(ImGuiInputTextCallbackData* data);
 
     ///////////////////////////////////////////////////////////////////////////

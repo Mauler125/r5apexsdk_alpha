@@ -15,3 +15,17 @@ namespace
 	//void (*CClientState__CheckForResend)(std::int64_t a1, const char* a2, std::int64_t a3, char a4, int a5, std::uint8_t* a6) = (void(*)(std::int64_t, const char*, std::int64_t, char, int, std::uint8_t*))p_CClientState__CheckForResend.GetPtr();
 #endif
 }
+
+
+///////////////////////////////////////////////////////////////////////////////
+class HClientState : public IDetour
+{
+	virtual void debugp()
+	{
+		//std::cout << "| FUN: CClientState::CheckForResend         : 0x" << std::hex << std::uppercase << p_CClientState__CheckForResend.GetPtr() << std::setw(npad) << " |" << std::endl;
+		//std::cout << "+----------------------------------------------------------------+" << std::endl;
+	}
+};
+///////////////////////////////////////////////////////////////////////////////
+
+REGISTER(HClientState);

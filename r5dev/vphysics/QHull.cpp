@@ -15,13 +15,13 @@ int HQHull_PrintDebug(char* fmt, va_list args)
 	vprintf(fmt, args);
 	return QHull_PrintDebug(fmt, args);
 }
-void AttachQHullHooks()
+void QHull_Attach()
 {
 	DetourAttach((LPVOID*)&QHull_PrintDebug, &HQHull_PrintDebug);
 	DetourAttach((LPVOID*)&QHull_PrintError, &HQHull_PrintError);
 }
 
-void DetachQHullHooks()
+void QHull_Detach()
 {
 	DetourDetach((LPVOID*)&QHull_PrintDebug, &HQHull_PrintDebug);
 	DetourDetach((LPVOID*)&QHull_PrintError, &HQHull_PrintError);

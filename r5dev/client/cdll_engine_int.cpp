@@ -1,24 +1,27 @@
 #include "core/stdafx.h"
-/*********************************************************************************/
+/*****************************************************************************/
 #include "tier0/basetypes.h"
 #include "tier0/IConVar.h"
 #include "tier0/cvar.h"
 #include "client/IVEngineClient.h"
-#include "client/CHLClient.h"
 #include "client/client.h"
+#include "client/cdll_engine_int.h"
 #include "public/include/bansystem.h"
 #include "engine/net_chan.h"
 #include "vpc/keyvalues.h"
-/*********************************************************************************/
+/*****************************************************************************/
 
-void __fastcall HFrameStageNotify(CHLClient* rcx, ClientFrameStage_t curStage)
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
+void __fastcall HFrameStageNotify(CHLClient* rcx, ClientFrameStage_t frameStage)
 {
-	switch (curStage)
+	switch (frameStage)
 	{
 		case ClientFrameStage_t::FRAME_START: // FrameStageNotify gets called every frame by CEngine::Frame with the stage being FRAME_START. We can use this to check/set global variables.
 		{
-			static bool initialized;
-			if (!initialized)
+			static bool bInitialized = false;
+			if (!bInitialized)
 			{
 				IConVar_ClearHostNames();
 				ConCommand_InitConCommand();
@@ -28,17 +31,17 @@ void __fastcall HFrameStageNotify(CHLClient* rcx, ClientFrameStage_t curStage)
 				IVEngineClient_CommandExecute(NULL, "exec autoexec_server.cfg");
 				IVEngineClient_CommandExecute(NULL, "exec autoexec_client.cfg");
 
-				*(char*)m_bRestrictServerCommands.GetPtr() = true; // Restrict commands.
+				*(bool*)m_bRestrictServerCommands = true; // Restrict commands.
 				void* disconnect = g_pCvar->FindCommand("disconnect");
 				*(std::int32_t*)((std::uintptr_t)disconnect + 0x38) |= FCVAR_SERVER_CAN_EXECUTE; // Make sure server is not restricted to this.
 
-				if (net_userandomkey->m_iValue == 1)
+				if (net_userandomkey->m_pParent->m_iValue == 1)
 				{
 					HNET_GenerateKey();
 				}
-				g_pCvar->FindVar("net_usesocketsforloopback")->m_iValue = 1;
+				g_pCvar->FindVar("net_usesocketsforloopback")->m_pParent->m_iValue = 1;
 
-				initialized = true;
+				bInitialized = true;
 			}
 			break;
 		}
@@ -46,7 +49,7 @@ void __fastcall HFrameStageNotify(CHLClient* rcx, ClientFrameStage_t curStage)
 		{
 			if (g_pBanSystem->IsRefuseListValid())
 			{
-				for (int i = 0; i < g_pBanSystem->refuseList.size(); i++) // Loop through vector.
+				for (int i = 0; i < g_pBanSystem->vsvrefuseList.size(); i++) // Loop through vector.
 				{
 					for (int c = 0; c < MAX_PLAYERS; c++) // Loop through all possible client instances.
 					{
@@ -62,12 +65,12 @@ void __fastcall HFrameStageNotify(CHLClient* rcx, ClientFrameStage_t curStage)
 						}
 
 						int clientID = g_pClient->m_iUserID + 1; // Get UserID + 1.
-						if (clientID != g_pBanSystem->refuseList[i].second) // See if they match.
+						if (clientID != g_pBanSystem->vsvrefuseList[i].second) // See if they match.
 						{
 							continue;
 						}
 
-						NET_DisconnectClient(g_pClient, c, g_pBanSystem->refuseList[i].first.c_str(), 0, 1);
+						NET_DisconnectClient(g_pClient, c, g_pBanSystem->vsvrefuseList[i].first.c_str(), 0, 1);
 						g_pBanSystem->DeleteConnectionRefuse(clientID);
 						break;
 					}
@@ -82,45 +85,49 @@ void __fastcall HFrameStageNotify(CHLClient* rcx, ClientFrameStage_t curStage)
 		}
 	}
 
-	FrameStageNotify(rcx, (int)curStage);
+	CHLClient_FrameStageNotify(rcx, (int)frameStage);
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
 void PatchNetVarConVar()
 {
-	CHAR convarPtr[] = "\x72\x3a\x73\x76\x72\x75\x73\x7a\x7a\x03\x04";
-	PCHAR curr = convarPtr;
+	CHAR sConvarPtr[] = "\x72\x3a\x73\x76\x72\x75\x73\x7a\x7a\x03\x04";
+	PCHAR curr = sConvarPtr;
 	while (*curr)
 	{
 		*curr ^= 'B';
 		++curr;
 	}
 
-	std::int64_t cvaraddr = 0;
+	std::int64_t nCvarAddr = 0;
 	std::stringstream ss;
-	ss << std::hex << std::string(convarPtr);
-	ss >> cvaraddr;
-	void* cvarptr = reinterpret_cast<void*>(cvaraddr);
+	ss << std::hex << std::string(sConvarPtr);
+	ss >> nCvarAddr;
+	void* pCvar = reinterpret_cast<void*>(nCvarAddr);
 
-	if (*reinterpret_cast<std::uint8_t*>(cvarptr) == 144)
+	if (*reinterpret_cast<std::uint8_t*>(pCvar) == 144)
 	{
 		std::uint8_t padding[] =
 		{
 			0x48, 0x8B, 0x45, 0x58, 0xC7, 0x00, 0x00, 0x00, 0x00, 0x00
 		};
 
-		void* Callback = nullptr;
-		VirtualAlloc(Callback, 10, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
-		memcpy(Callback, (void*)padding, 9);
-		reinterpret_cast<void(*)()>(Callback)();
+		void* pCallback = nullptr;
+		VirtualAlloc(pCallback, 10, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+		memcpy(pCallback, (void*)padding, 9);
+		reinterpret_cast<void(*)()>(pCallback)();
 	}
 }
 
+///////////////////////////////////////////////////////////////////////////////
 void CHLClient_Attach()
 {
-	DetourAttach((LPVOID*)&FrameStageNotify, &HFrameStageNotify);
+	DetourAttach((LPVOID*)&CHLClient_FrameStageNotify, &HFrameStageNotify);
 }
 
 void CHLClient_Detach()
 {
-	DetourDetach((LPVOID*)&FrameStageNotify, &HFrameStageNotify);
+	DetourDetach((LPVOID*)&CHLClient_FrameStageNotify, &HFrameStageNotify);
 }

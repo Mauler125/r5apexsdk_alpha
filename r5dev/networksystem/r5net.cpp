@@ -1,44 +1,52 @@
 // r5net.cpp : Defines the functions for the static library.
 //
 
-#define DEBUGR5NET
-
 #include "core/stdafx.h"
+#include "tier0/basetypes.h"
 #include "tier0/cvar.h"
+#include "engine/sys_utils.h"
 #include "networksystem/r5net.h"
 
-std::string R5Net::Client::GetVersionString()
+//-----------------------------------------------------------------------------
+// Purpose: returns the sdk version string.
+//-----------------------------------------------------------------------------
+std::string R5Net::Client::GetSDKVersion()
 {
-    return "beta 1.6";
+    return SDK_VERSION;
 }
 
-std::vector<ServerListing> R5Net::Client::GetServersList(std::string& outMessage)
+//-----------------------------------------------------------------------------
+// Purpose: returns a vector of hosted servers.
+//-----------------------------------------------------------------------------
+std::vector<ServerListing> R5Net::Client::GetServersList(std::string& svOutMessage)
 {
-    std::vector<ServerListing> list{ };
+    std::vector<ServerListing> vslList{};
 
-    nlohmann::json reqBody = nlohmann::json::object();
-    reqBody["version"] = GetVersionString();
+    nlohmann::json jsReqBody = nlohmann::json::object();
+    jsReqBody["version"] = GetSDKVersion();
 
-    std::string reqBodyStr = reqBody.dump();
+    std::string reqBodyStr = jsReqBody.dump();
 
-#ifdef DEBUGR5NET
-    std::cout << " [+R5Net+] Sending GetServerList post now..\n";
-#endif
-
-    httplib::Result res = m_HttpClient.Post("/servers", reqBody.dump().c_str(), reqBody.dump().length(), "application/json");
-
-#ifdef DEBUGR5NET
-    std::cout << " [+R5Net+] GetServerList replied with " << res->status << "\n";
-#endif 
-
-    if (res && res->status == 200) // STATUS_OK
+    if (r5net_show_debug->m_pParent->m_iValue > 0)
     {
-        nlohmann::json resBody = nlohmann::json::parse(res->body);
-        if (resBody["success"].is_boolean() && resBody["success"].get<bool>())
+       DevMsg(eDLL::ENGINE, "Sending GetServerList post.\n");
+    }
+
+    httplib::Result htResults = m_HttpClient.Post("/servers", jsReqBody.dump().c_str(), jsReqBody.dump().length(), "application/json");
+
+    if (r5net_show_debug->m_pParent->m_iValue > 0)
+    {
+        DevMsg(eDLL::ENGINE, "GetServerList replied with '%d'.\n", htResults->status);
+    }
+
+    if (htResults && htResults->status == 200) // STATUS_OK
+    {
+        nlohmann::json jsResultBody = nlohmann::json::parse(htResults->body);
+        if (jsResultBody["success"].is_boolean() && jsResultBody["success"].get<bool>())
         {
-            for (auto obj : resBody["servers"])
+            for (auto &obj : jsResultBody["servers"])
             {
-                list.push_back(
+                vslList.push_back(
                     ServerListing{
                         obj.value("name",""),
                         obj.value("map", ""),
@@ -47,7 +55,7 @@ std::vector<ServerListing> R5Net::Client::GetServersList(std::string& outMessage
                         obj.value("gamemode", ""),
                         obj.value("hidden", "false") == "true",
                         obj.value("remote_checksum", ""),
-                        obj.value("version", GetVersionString()),
+                        obj.value("version", GetSDKVersion()),
                         obj.value("encKey", "")
                     }
                 );
@@ -55,214 +63,266 @@ std::vector<ServerListing> R5Net::Client::GetServersList(std::string& outMessage
         }
         else
         {
-            if (resBody["err"].is_string())
-                outMessage = resBody["err"].get<std::string>();
+            if (jsResultBody["err"].is_string())
+            {
+                svOutMessage = jsResultBody["err"].get<std::string>();
+            }
             else
-                outMessage = "An unknown error occured!";
+            {
+                svOutMessage = "An unknown error occured!";
+            }
         }
     }
     else
     {
-        if (res)
+        if (htResults)
         {
-            if (!res->body.empty())
+            if (!htResults->body.empty())
             {
-                nlohmann::json resBody = nlohmann::json::parse(res->body);
+                nlohmann::json jsResultBody = nlohmann::json::parse(htResults->body);
 
-                if (resBody["err"].is_string())
-                    outMessage = resBody["err"].get<std::string>();
+                if (jsResultBody["err"].is_string())
+                {
+                    svOutMessage = jsResultBody["err"].get<std::string>();
+                }
                 else
-                    outMessage = std::string("Failed to reach comp-server ") + std::to_string(res->status);
+                {
+                    svOutMessage = std::string("Failed to reach comp-server ") + std::to_string(htResults->status);
+                }
 
-                return list;
+                return vslList;
             }
 
-            outMessage = std::string("Failed to reach comp-server ") + std::to_string(res->status);
-            return list;
+            svOutMessage = std::string("Failed to reach comp-server ") + std::to_string(htResults->status);
+            return vslList;
         }
 
-        outMessage = "Failed to reach comp-server. Unknown error code.";
-        return list;
+        svOutMessage = "Failed to reach comp-server. Unknown error code.";
+        return vslList;
     }
 
-    return list;
+    return vslList;
 }
 
-bool R5Net::Client::PostServerHost(std::string& outMessage, std::string& outToken, const ServerListing& serverListing)
+//-----------------------------------------------------------------------------
+// Purpose: Sends host server POST request.
+// Input  : &svOutMessage - 
+//			&svOutToken - 
+//			&slServerListing - 
+// Output : Returns true on success, false on failure.
+//-----------------------------------------------------------------------------
+bool R5Net::Client::PostServerHost(std::string& svOutMessage, std::string& svOutToken, const ServerListing& slServerListing)
 {
-    nlohmann::json reqBody = nlohmann::json::object();
-    reqBody["name"] = serverListing.name;
-    reqBody["map"] = serverListing.map;
-    reqBody["port"] = serverListing.port;
-    reqBody["remote_checksum"] = serverListing.remoteChecksum;
-    reqBody["version"] = GetVersionString();
-    reqBody["gamemode"] = serverListing.playlist;
-    reqBody["encKey"] = serverListing.netchanEncryptionKey;
-    reqBody["hidden"] = serverListing.hidden;
+    nlohmann::json jsRequestBody = nlohmann::json::object();
+    jsRequestBody["name"] = slServerListing.svServerName;
+    jsRequestBody["map"] = slServerListing.svMapName;
+    jsRequestBody["port"] = slServerListing.svPort;
+    jsRequestBody["remote_checksum"] = slServerListing.svRemoteChecksum;
+    jsRequestBody["version"] = GetSDKVersion();
+    jsRequestBody["gamemode"] = slServerListing.svPlaylist;
+    jsRequestBody["encKey"] = slServerListing.svEncryptionKey;
+    jsRequestBody["hidden"] = slServerListing.bHidden;
 
-    std::string reqBodyStr = reqBody.dump();
+    std::string svRequestBody = jsRequestBody.dump();
 
-#ifdef DEBUGR5NET
-    std::cout << " [+R5Net+] Sending PostServerHost post now..\n" << reqBodyStr << "\n";
-#endif 
-
-    httplib::Result res = m_HttpClient.Post("/servers/add", reqBodyStr.c_str(), reqBodyStr.length(), "application/json");
-
-#ifdef DEBUGR5NET
-    std::cout << " [+R5Net+] PostServerHost replied with " << res->status << "\n";
-#endif 
-
-    if (res && res->status == 200) // STATUS_OK
+    if (r5net_show_debug->m_pParent->m_iValue > 0)
     {
-        nlohmann::json resBody = nlohmann::json::parse(res->body);
-        if (resBody["success"].is_boolean() && resBody["success"].get<bool>())
+        DevMsg(eDLL::ENGINE, "Sending PostServerHost post '%s'.\n", svRequestBody.c_str());
+    }
+
+    httplib::Result htResults = m_HttpClient.Post("/servers/add", svRequestBody.c_str(), svRequestBody.length(), "application/json");
+
+    if (r5net_show_debug->m_pParent->m_iValue > 0)
+    {
+        DevMsg(eDLL::ENGINE, "PostServerHost replied with '%d'.\n", htResults->status);
+    }
+
+    if (htResults && htResults->status == 200) // STATUS_OK
+    {
+        nlohmann::json jsResultBody = nlohmann::json::parse(htResults->body);
+        if (jsResultBody["success"].is_boolean() && jsResultBody["success"].get<bool>())
         {
-            if (resBody["token"].is_string())
-                outToken = resBody["token"].get<std::string>();
+            if (jsResultBody["token"].is_string())
+            {
+                svOutToken = jsResultBody["token"].get<std::string>();
+            }
             else
-                outToken = std::string();
+            {
+                svOutToken = std::string();
+            }
 
             return true;
         }
         else
         {
-            if (resBody["err"].is_string())
-                outMessage = resBody["err"].get<std::string>();
+            if (jsResultBody["err"].is_string())
+            {
+                svOutMessage = jsResultBody["err"].get<std::string>();
+            }
             else
-                outMessage = "An unknown error occured!";
-
+            {
+                svOutMessage = "An unknown error occured!";
+            }
             return false;
         }
     }
     else
     {
-        if (res)
+        if (htResults)
         {
-            if (!res->body.empty())
+            if (!htResults->body.empty())
             {
-                nlohmann::json resBody = nlohmann::json::parse(res->body);
+                nlohmann::json jsResultBody = nlohmann::json::parse(htResults->body);
 
-                if (resBody["err"].is_string())
-                    outMessage = resBody["err"].get<std::string>();
+                if (jsResultBody["err"].is_string())
+                {
+                    svOutMessage = jsResultBody["err"].get<std::string>();
+                }
                 else
-                    outMessage = std::string("Failed to reach comp-server ") + std::to_string(res->status);
+                {
+                    svOutMessage = std::string("Failed to reach comp-server ") + std::to_string(htResults->status);
+                }
 
-                outToken = std::string();
+                svOutToken = std::string();
                 return false;
             }
 
-            outToken = std::string();
-            outMessage = std::string("Failed to reach comp-server ") + std::to_string(res->status);
+            svOutToken = std::string();
+            svOutMessage = std::string("Failed to reach comp-server ") + std::to_string(htResults->status);
             return false;
         }
 
-        outToken = std::string();
-        outMessage = "Failed to reach comp-server. Unknown error code.";
+        svOutToken = std::string();
+        svOutMessage = "Failed to reach comp-server. Unknown error code.";
         return false;
     }
 
     return false;
 }
 
-bool R5Net::Client::GetServerByToken(ServerListing& outServer, std::string& outMessage, const std::string token)
+//-----------------------------------------------------------------------------
+// Purpose: Gets the server by token string.
+// Input  : &slOutServer - 
+//			&svOutMessage - 
+//			svToken - 
+// Output : Returns true on success, false on failure.
+//-----------------------------------------------------------------------------
+bool R5Net::Client::GetServerByToken(ServerListing& slOutServer, std::string& svOutMessage, const std::string svToken)
 {
-    nlohmann::json reqBody = nlohmann::json::object();
+    nlohmann::json jsRequestBody = nlohmann::json::object();
 
-    reqBody["token"] = token;
+    jsRequestBody["token"] = svToken;
 
-#ifdef DEBUGR5NET
-    std::cout << " [+R5Net+] Sending GetServerByToken post now...\n";
-#endif 
-
-    httplib::Result res = m_HttpClient.Post("/server/byToken", reqBody.dump().c_str(), reqBody.dump().length(), "application/json");
-
-#ifdef DEBUGR5NET
-    std::cout << " [+R5Net+] GetServerByToken replied with " << res->status << "\n";
-#endif 
-
-    if (res && res->status == 200) // STATUS_OK
+    if (r5net_show_debug->m_pParent->m_iValue > 0)
     {
-        if (!res->body.empty())
-        {
-            nlohmann::json resBody = nlohmann::json::parse(res->body);
+        DevMsg(eDLL::ENGINE, "Sending GetServerByToken post.\n");
+    }
 
-            if (res && resBody["success"].is_boolean() && resBody["success"])
+    httplib::Result htResults = m_HttpClient.Post("/server/byToken", jsRequestBody.dump().c_str(), jsRequestBody.dump().length(), "application/json");
+
+    if (r5net_show_debug->m_pParent->m_iValue > 0)
+    {
+        DevMsg(eDLL::ENGINE, "GetServerByToken replied with '%d'\n", htResults->status);
+    }
+
+    if (htResults && htResults->status == 200) // STATUS_OK
+    {
+        if (!htResults->body.empty())
+        {
+            nlohmann::json jsResultBody = nlohmann::json::parse(htResults->body);
+
+            if (htResults && jsResultBody["success"].is_boolean() && jsResultBody["success"])
             {
-                outServer = ServerListing{
-                        resBody["server"].value("name",""),
-                        resBody["server"].value("map", ""),
-                        resBody["server"].value("ip", ""),
-                        resBody["server"].value("port", ""),
-                        resBody["server"].value("gamemode", ""),
-                        resBody["server"].value("hidden", "false") == "true",
-                        resBody["server"].value("remote_checksum", ""),
-                        resBody["server"].value("version", GetVersionString()),
-                        resBody["server"].value("encKey", "")
+                slOutServer = ServerListing{
+                        jsResultBody["server"].value("name",""),
+                        jsResultBody["server"].value("map", ""),
+                        jsResultBody["server"].value("ip", ""),
+                        jsResultBody["server"].value("port", ""),
+                        jsResultBody["server"].value("gamemode", ""),
+                        jsResultBody["server"].value("hidden", "false") == "true",
+                        jsResultBody["server"].value("remote_checksum", ""),
+                        jsResultBody["server"].value("version", GetSDKVersion()),
+                        jsResultBody["server"].value("encKey", "")
                 };
                 return true;
             }
             else
             {
-                if (resBody["err"].is_string())
-                    outMessage = resBody["err"].get<std::string>();
+                if (jsResultBody["err"].is_string())
+                {
+                    svOutMessage = jsResultBody["err"].get<std::string>();
+                }
                 else
-                    outMessage = "";
+                {
+                    svOutMessage = "";
+                }
 
-                outServer = ServerListing{};
+                slOutServer = ServerListing{};
                 return false;
             }
         }
     }
     else
     {
-        if (res)
+        if (htResults)
         {
-            if (!res->body.empty())
+            if (!htResults->body.empty())
             {
-                nlohmann::json resBody = nlohmann::json::parse(res->body);
+                nlohmann::json jsResultBody = nlohmann::json::parse(htResults->body);
 
-                if (resBody["err"].is_string())
-                    outMessage = resBody["err"].get<std::string>();
+                if (jsResultBody["err"].is_string())
+                {
+                    svOutMessage = jsResultBody["err"].get<std::string>();
+                }
                 else
-                    outMessage = std::string("Failed to reach comp-server ") + std::to_string(res->status);
+                {
+                    svOutMessage = std::string("Failed to reach comp-server ") + std::to_string(htResults->status);
+                }
 
                 return false;
             }
 
-            outMessage = std::string("Failed to reach comp-server ") + std::to_string(res->status);
+            svOutMessage = std::string("Failed to reach comp-server ") + std::to_string(htResults->status);
             return false;
         }
 
-        outMessage = "Failed to reach comp-server. Unknown error code.";
-        outServer = ServerListing{};
+        svOutMessage = "Failed to reach comp-server. Unknown error code.";
+        slOutServer = ServerListing{};
         return false;
     }
 
     return false;
 }
 
-bool R5Net::Client::GetClientIsBanned(const std::string ip, std::int64_t orid, std::string& outErrCl)
+//-----------------------------------------------------------------------------
+// Purpose: Checks if client is banned on the comp server.
+// Input  : svIpAddress - 
+//			nOriginID - 
+//			&svOutErrCl - 
+// Output : Returns true if banned, false if not banned.
+//-----------------------------------------------------------------------------
+bool R5Net::Client::GetClientIsBanned(const std::string svIpAddress, std::int64_t nOriginID, std::string& svOutErrCl)
 {
-    nlohmann::json reqBody = nlohmann::json::object();
-    reqBody["ip"] = ip;
-    reqBody["orid"] = orid;
+    nlohmann::json jsRequestBody = nlohmann::json::object();
+    jsRequestBody["ip"] = svIpAddress;
+    jsRequestBody["orid"] = nOriginID;
 
-    httplib::Result res = m_HttpClient.Post("/banlist/isBanned", reqBody.dump().c_str(), reqBody.dump().length(), "application/json");
+    httplib::Result htResults = m_HttpClient.Post("/banlist/isBanned", jsRequestBody.dump().c_str(), jsRequestBody.dump().length(), "application/json");
 
-    if (res && res->status == 200)
+    if (htResults && htResults->status == 200)
     {
-        nlohmann::json resBody = nlohmann::json::parse(res->body);
+        nlohmann::json jsResultBody = nlohmann::json::parse(htResults->body);
 
-        if (resBody["success"].is_boolean() && resBody["success"].get<bool>())
+        if (jsResultBody["success"].is_boolean() && jsResultBody["success"].get<bool>())
         {
-            if (resBody["isBanned"].is_boolean() && resBody["isBanned"].get<bool>())
+            if (jsResultBody["isBanned"].is_boolean() && jsResultBody["isBanned"].get<bool>())
             {
-                outErrCl = resBody.value("errCl", "Generic error (code:gen). Contact R5Reloaded developers.");
+                svOutErrCl = jsResultBody.value("errCl", "Generic error (code:gen). Contact R5Reloaded developers.");
                 return true;
             }
         }
     }
     return false;
 }
-
-R5Net::Client* r5net(new R5Net::Client("r5a-comp-sv.herokuapp.com"));
+///////////////////////////////////////////////////////////////////////////////
+R5Net::Client* g_pR5net(new R5Net::Client("r5a-comp-sv.herokuapp.com"));

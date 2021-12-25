@@ -38,14 +38,14 @@ namespace
 {
 	/* ==== CHLCLIENT ======================================================================================================================================================= */
 #if defined (GAMEDLL_S0) || defined (GAMEDLL_S1)
-	ADDRESS p_FrameStageNotify = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x48\x83\xEC\x38\x89\x15\x00\x00\x00\x00", "xxxxxx????");
-	void (*FrameStageNotify)(void* rcx, int curStage) = (void(*)(void*, int))p_FrameStageNotify.GetPtr(); /*48 83 EC 38 89 15 ?? ?? ?? ??*/
+	ADDRESS p_CHLClient_FrameStageNotify = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x48\x83\xEC\x38\x89\x15\x00\x00\x00\x00", "xxxxxx????");
+	void (*CHLClient_FrameStageNotify)(void* rcx, int curStage) = (void(*)(void*, int))p_CHLClient_FrameStageNotify.GetPtr(); /*48 83 EC 38 89 15 ?? ?? ?? ??*/
 
 	ADDRESS p_CHLClient_PostInit = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x48\x83\x3D\x00\x00\x00\x00\x00\x48\x8D\x05\x00\x00\x00\x00\x48\x89\x05\x00\x00\x00\x00\x48\x8D\x05\x00\x00\x00\x00\x48\x89\x05\x00\x00\x00\x00\x48\x8D\x05\x00\x00\x00\x00\x48\x89\x05\x00\x00\x00\x00\x48\x8D\x05\x00\x00\x00\x00\x48\x89\x05\x00\x00\x00\x00\x48\x8D\x05\x00\x00\x00\x00\x48\x89\x05\x00\x00\x00\x00\x48\x8D\x05\x00\x00\x00\x00\x48\x89\x05\x00\x00\x00\x00\x48\x8D\x05\x00\x00\x00\x00\x48\x89\x05\x00\x00\x00\x00\x48\x8D\x05\x00\x00\x00\x00\x48\x89\x05\x00\x00\x00\x00\x48\x8D\x05\x00\x00\x00\x00", "xxx?????xxx????xxx????xxx????xxx????xxx????xxx????xxx????xxx????xxx????xxx????xxx????xxx????xxx????xxx????xxx????xxx????xxx????");
 	void* (*CHLClient_PostInit)() = (void* (*)())p_CHLClient_PostInit.GetPtr(); /*48 83 3D ? ? ? ? ? 48 8D 05 ? ? ? ? 48 89 05 ? ? ? ? 48 8D 05 ? ? ? ? 48 89 05 ? ? ? ? 48 8D 05 ? ? ? ? 48 89 05 ? ? ? ? 48 8D 05 ? ? ? ? 48 89 05 ? ? ? ? 48 8D 05 ? ? ? ? 48 89 05 ? ? ? ? 48 8D 05 ? ? ? ? 48 89 05 ? ? ? ? 48 8D 05 ? ? ? ? 48 89 05 ? ? ? ? 48 8D 05 ? ? ? ? 48 89 05 ? ? ? ? 48 8D 05 ? ? ? ?*/
 #elif defined (GAMEDLL_S2) || defined (GAMEDLL_S3)
-	ADDRESS p_FrameStageNotify = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x48\x83\xEC\x28\x89\x15\x00\x00\x00\x00", "xxxxxx????");
-	void (*FrameStageNotify)(void* rcx, int curStage) = (void(*)(void*, int))p_FrameStageNotify.GetPtr(); /*48 83 EC 28 89 15 ?? ?? ?? ??*/
+	ADDRESS p_CHLClient_FrameStageNotify = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x48\x83\xEC\x28\x89\x15\x00\x00\x00\x00", "xxxxxx????");
+	void (*CHLClient_FrameStageNotify)(void* rcx, int curStage) = (void(*)(void*, int))p_CHLClient_FrameStageNotify.GetPtr(); /*48 83 EC 28 89 15 ?? ?? ?? ??*/
 
 	ADDRESS p_CHLClient_PostInit = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x48\x83\xEC\x28\x48\x83\x3D\x00\x00\x00\x00\x00\x48\x8D\x05\x00\x00\x00\x00", "xxxxxxx?????xxx????");
 	void* (*CHLClient_PostInit)() = (void* (*)())p_CHLClient_PostInit.GetPtr(); /*48 83 EC 28 48 83 3D ? ? ? ? ? 48 8D 05 ? ? ? ?*/
@@ -58,3 +58,17 @@ void PatchNetVarConVar();
 
 void CHLClient_Attach();
 void CHLClient_Detach();
+
+///////////////////////////////////////////////////////////////////////////////
+class HDll_Engine_Int : public IDetour
+{
+	virtual void debugp()
+	{
+		std::cout << "| FUN: CHLClient::FrameStageNotify          : 0x" << std::hex << std::uppercase << p_CHLClient_FrameStageNotify.GetPtr() << std::setw(npad) << " |" << std::endl;
+		std::cout << "| FUN: CHLClient::PostInit                  : 0x" << std::hex << std::uppercase << p_CHLClient_PostInit.GetPtr()         << std::setw(npad) << " |" << std::endl;
+		std::cout << "+----------------------------------------------------------------+" << std::endl;
+	}
+};
+///////////////////////////////////////////////////////////////////////////////
+
+REGISTER(HDll_Engine_Int);

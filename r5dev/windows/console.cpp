@@ -6,6 +6,7 @@
 #endif // !DEDICATED
 #include "windows/console.h"
 #include "client/IVEngineClient.h"
+#include "common/opcodes.h"
 
 //#############################################################################
 // INITIALIZATION
@@ -83,10 +84,8 @@ DWORD __stdcall ProcessConsoleWorker(LPVOID)
 
 		///////////////////////////////////////////////////////////////////////
 		// Debug toggles
-		if (sCommand == "pattern test") { PrintHAddress(); continue; }
-#ifndef DEDICATED
-		if (sCommand == "directx test") { PrintDXAddress(); continue; }
-#endif // !DEDICATED
+		if (sCommand == "pattern test") { PrintHAddress(); PrintOAddress(); continue; }
+		if (sCommand == "opcodes test") { RuntimePtc_Toggle(); continue; }
 		///////////////////////////////////////////////////////////////////////
 		// Execute the command in the r5 SQVM
 		IVEngineClient_CommandExecute(NULL, sCommand.c_str());
@@ -96,6 +95,5 @@ DWORD __stdcall ProcessConsoleWorker(LPVOID)
 		// Sleep and loop
 		Sleep(50);
 	}
-
-	return 0;
+	return NULL;
 }

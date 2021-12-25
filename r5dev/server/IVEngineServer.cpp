@@ -7,21 +7,21 @@
 //-----------------------------------------------------------------------------
 // Purpose: sets the persistence var in the CClient instance to 'ready'
 //-----------------------------------------------------------------------------
-bool HIVEngineServer_PersistenceAvailable(std::int64_t thisptr, int index)
+bool HIVEngineServer_PersistenceAvailable(void* entidx, int clientidx)
 {
-	CClient* client = g_pClient->GetClientInstance(index); // Get client instance.
-	std::uintptr_t targetInstance = (std::uintptr_t)client;
+	CClient* pClient = g_pClient->GetClientInstance(clientidx); // Get client instance.
+	std::uintptr_t targetInstance = (std::uintptr_t)pClient;
 	*(char*)(targetInstance + g_dwPersistenceVar) = (char)0x5; // Set the client instance to 'ready'.
 
-	if (!g_bIsPersistenceVarSet[index] && sv_showconnecting->m_iValue > 0)
+	if (!g_bIsPersistenceVarSet[clientidx] && sv_showconnecting->m_pParent->m_iValue > 0)
 	{
-		void* clientNamePtr = (void**)(((std::uintptr_t)client->GetNetChan()) + 0x1A8D); // Get client name from netchan.
+		void* clientNamePtr = (void**)(((std::uintptr_t)pClient->GetNetChan()) + 0x1A8D); // Get client name from netchan.
 		std::string clientName((char*)clientNamePtr, 32);                                // Get full name.
-		std::int64_t originID = client->m_iOriginID;
-		std::int64_t clientID = static_cast<std::int64_t>(client->m_iUserID + 1);
+		std::int64_t originID = pClient->m_iOriginID;
+		std::int64_t clientID = static_cast<std::int64_t>(pClient->m_iUserID + 1);
 
 		std::string ipAddress = "null"; // If this stays null they modified the packet somehow.
-		ADDRESS ipAddressField = ADDRESS(((std::uintptr_t)client->GetNetChan()) + 0x1AC0); // Get client ip from netchan.
+		ADDRESS ipAddressField = ADDRESS(((std::uintptr_t)pClient->GetNetChan()) + 0x1AC0); // Get client ip from netchan.
 		if (ipAddressField)
 		{
 			std::stringstream ss;
@@ -33,21 +33,21 @@ bool HIVEngineServer_PersistenceAvailable(std::int64_t thisptr, int index)
 			ipAddress = ss.str();
 		}
 
-		Sys_Print(SYS_DLL::SERVER, "\n");
-		Sys_Print(SYS_DLL::SERVER, "______________________________________________________________\n");
-		Sys_Print(SYS_DLL::SERVER, "] CLIENT_INSTANCE_DETAILS ------------------------------------\n");
-		Sys_Print(SYS_DLL::SERVER, "] INDEX: | '#%d'\n", index);
-		Sys_Print(SYS_DLL::SERVER, "] NAME : | '%s'\n", clientName.c_str());
-		Sys_Print(SYS_DLL::SERVER, "] OID  : | '%lld'\n", originID);
-		Sys_Print(SYS_DLL::SERVER, "] UID  : | '%lld'\n", clientID);
-		Sys_Print(SYS_DLL::SERVER, "] IPADR: | '%s'\n", ipAddress.c_str());
-		Sys_Print(SYS_DLL::SERVER, "--------------------------------------------------------------\n");
-		Sys_Print(SYS_DLL::SERVER, "\n");
+		DevMsg(eDLL::SERVER, "\n");
+		DevMsg(eDLL::SERVER, "______________________________________________________________\n");
+		DevMsg(eDLL::SERVER, "] CLIENT_INSTANCE_DETAILS ------------------------------------\n");
+		DevMsg(eDLL::SERVER, "] INDEX: | '#%d'\n", clientidx);
+		DevMsg(eDLL::SERVER, "] NAME : | '%s'\n", clientName.c_str());
+		DevMsg(eDLL::SERVER, "] OID  : | '%lld'\n", originID);
+		DevMsg(eDLL::SERVER, "] UID  : | '%lld'\n", clientID);
+		DevMsg(eDLL::SERVER, "] IPADR: | '%s'\n", ipAddress.c_str());
+		DevMsg(eDLL::SERVER, "--------------------------------------------------------------\n");
+		DevMsg(eDLL::SERVER, "\n");
 
-		g_bIsPersistenceVarSet[index] = true;
+		g_bIsPersistenceVarSet[clientidx] = true;
 	}
 	///////////////////////////////////////////////////////////////////////////
-	return IVEngineServer_PersistenceAvailable(thisptr, index);
+	return IVEngineServer_PersistenceAvailable(entidx, clientidx);
 }
 
 void IVEngineServer_Attach()

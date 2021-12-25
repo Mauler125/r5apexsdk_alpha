@@ -1,5 +1,5 @@
 #pragma once
-#include "client/CHLClient.h"
+#include "client/cdll_engine_int.h"
 namespace
 {
 	/* ==== CMATSYSTEMSURFACE =============================================================================================================================================== */
@@ -14,3 +14,18 @@ namespace
 #endif
 	ADDRESS g_pMatSystemSurface = p_CHLClient_PostInit.FindPatternSelf("48 83 3D", ADDRESS::Direction::DOWN, 40).ResolveRelativeAddressSelf(0x3, 0x8).GetPtr();
 }
+
+///////////////////////////////////////////////////////////////////////////////
+class HMatSystemSurface : public IDetour
+{
+	virtual void debugp()
+	{
+		std::cout << "| FUN: CMatSystemSurface::DrawColoredText   : 0x" << std::hex << std::uppercase << p_CMatSystemSurface_DrawColoredText.GetPtr() << std::setw(npad) << " |" << std::endl;
+		std::cout << "| FUN: CMatSystemSurface::Unknown0          : 0x" << std::hex << std::uppercase << p_CMatSystemSurface_Unknown0.GetPtr()        << std::setw(npad) << " |" << std::endl;
+		std::cout << "| VAR: g_pMatSystemSurface                  : 0x" << std::hex << std::uppercase << g_pMatSystemSurface.GetPtr()                 << std::setw(npad) << " |" << std::endl;
+		std::cout << "+----------------------------------------------------------------+" << std::endl;
+	}
+};
+///////////////////////////////////////////////////////////////////////////////
+
+REGISTER(HMatSystemSurface);

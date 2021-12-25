@@ -11,8 +11,8 @@ class CIOStream
 {
 	std::ofstream writer; // Output file stream.
 	std::ifstream reader; // Input file stream.
-	std::string filePath = ""; // Filepath.
-	eStreamFileMode currentMode = eStreamFileMode::NONE; // Current active mode.
+	std::string svFilePath = ""; // Filepath.
+	eStreamFileMode eCurrentMode = eStreamFileMode::NONE; // Current active mode.
 
 public:
 	CIOStream();

@@ -3,7 +3,7 @@
 #include "vgui/vgui_fpspanel.h"
 #include "vgui/CEngineVGui.h"
 
-ConVar* HCFPSPanel_Paint(std::int64_t thisptr)
+ConVar* HCFPSPanel_Paint(void* thisptr)
 {
 	g_pLogSystem.Update();
 	return CFPSPanel_Paint(thisptr);

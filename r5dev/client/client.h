@@ -2,6 +2,14 @@
 #include "tier0/basetypes.h"
 #include "server/IVEngineServer.h"
 
+//-----------------------------------------------------------------------------
+// Forward declarations
+//-----------------------------------------------------------------------------
+class CClient;
+
+///////////////////////////////////////////////////////////////////////////////
+extern CClient* g_pClient;
+
 namespace
 {
 #if defined (GAMEDLL_S0) || defined (GAMEDLL_S1)
@@ -13,15 +21,14 @@ namespace
 	const std::uintptr_t g_dwPersistenceVar = 0x5BC;
 	const std::uintptr_t g_dwCClientPadding = 303360;
 #endif
-	static ADDRESS g_pClientStart = p_IVEngineServer_PersistenceAvailable.FindPatternSelf("48 8D 0D", ADDRESS::Direction::DOWN, 150).ResolveRelativeAddressSelf(0x3, 0x7);
 }
 
 class CClient
 {
 public:
-	inline CClient* GetClientInstance(int index)
+	inline CClient* GetClientInstance(int nIndex)
 	{
-		return (CClient*)(std::uintptr_t)(g_pClientStart.GetPtr() + (index * g_dwCClientSize));
+		return (CClient*)(std::uintptr_t)(g_pClient + (nIndex * g_dwCClientSize));
 	}
 
 	void*& GetNetChan()
@@ -49,4 +56,14 @@ private:
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-extern CClient* g_pClient;
+class HClient : public IDetour
+{
+	virtual void debugp()
+	{
+		std::cout << "| VAR: g_pClient                            : 0x" << std::hex << std::uppercase << g_pClient << std::setw(0) << " |" << std::endl;
+		std::cout << "+----------------------------------------------------------------+" << std::endl;
+	}
+};
+///////////////////////////////////////////////////////////////////////////////
+
+REGISTER(HClient);

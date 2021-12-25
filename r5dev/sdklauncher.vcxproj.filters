@@ -39,7 +39,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="resource\ico\sdklauncher.ico">
+    <Image Include="resource\ico\sdklauncher_rel.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resource\ico\sdklauncher_dbg.ico">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

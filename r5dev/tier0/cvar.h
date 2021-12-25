@@ -15,26 +15,28 @@ namespace
 }
 
 //-------------------------------------------------------------------------
-// ENGINE DLL                                                             |
+// ENGINE                                                                 |
 extern ConVar* cm_debug_cmdquery;
 extern ConVar* cm_return_false_cmdquery_all;
 extern ConVar* cm_return_false_cmdquery_dev_cheat;
-extern ConVar* matchmaking_hostname_r5net;
 //-------------------------------------------------------------------------
-// SERVER DLL                                                             |
+// SERVER                                                                 |
 extern ConVar* sv_showconnecting;
 //-------------------------------------------------------------------------
-// CLIENT DLL                                                             |
+// CLIENT                                                                 |
 extern ConVar* cl_drawconsoleoverlay;
 extern ConVar* cl_consoleoverlay_lines;
 extern ConVar* cl_consoleoverlay_offset_x;
 extern ConVar* cl_consoleoverlay_offset_y;
 //-------------------------------------------------------------------------
-// FILESYSTEM DLL                                                         |
+// FILESYSTEM                                                             |
 extern ConVar* fs_warning_level_native;
 extern ConVar* fs_packedstore_entryblock_stats;
 //-------------------------------------------------------------------------
-// SQUIRREL API                                                           |
+// FILESYSTEM                                                             |
+extern ConVar* mat_showdxoutput;
+//-------------------------------------------------------------------------
+// SQUIRREL                                                               |
 extern ConVar* sq_showrsonloading;
 extern ConVar* sq_showscriptloading;
 extern ConVar* sq_showvmoutput;
@@ -42,3 +44,23 @@ extern ConVar* sq_showvmwarning;
 //-------------------------------------------------------------------------
 // NETCHANNEL                                                             |
 extern ConVar* net_userandomkey;
+extern ConVar* r5net_matchmaking_hostname;
+extern ConVar* r5net_show_debug;
+
+///////////////////////////////////////////////////////////////////////////////
+extern CCVar* g_pCvar;
+
+
+///////////////////////////////////////////////////////////////////////////////
+class HCvar : public IDetour
+{
+	virtual void debugp()
+	{
+		std::cout << "| FUN: CCvar::Disconnect                    : 0x" << std::hex << std::uppercase << p_CCvar_Disconnect.GetPtr() << std::setw(npad) << " |" << std::endl;
+		std::cout << "| VAR: g_pCvar                              : 0x" << std::hex << std::uppercase << g_pCvar                     << std::setw(0)    << " |" << std::endl;
+		std::cout << "+----------------------------------------------------------------+" << std::endl;
+	}
+};
+///////////////////////////////////////////////////////////////////////////////
+
+REGISTER(HCvar);

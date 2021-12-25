@@ -109,6 +109,11 @@ void Dedicated_Init()
 	//s1.Offset(0x1010).Patch({ 0xEB, 0x14 });                  // JNE --> JMP | Return early in _Host_RunFrame() for debugging perposes.
 
 	//-------------------------------------------------------------------------
+	// RUNTIME: HOST_NEWGAME
+	//-------------------------------------------------------------------------
+	Host_NewGame.Offset(0x637).Patch({ 0xE9, 0xC1, 0x00, 0x00, 0x00 }); // JNE --> JMP | Prevent connect localhost from being executed in Host_NewGame.
+
+	//-------------------------------------------------------------------------
 	// RUNTIME: EBISUSDK
 	//-------------------------------------------------------------------------
 	Origin_Init.Offset(0x0B).Patch({ 0xE9, 0x63, 0x02, 0x00, 0x00, 0x00 }); // JNZ --> JMP | Prevent EbisuSDK from initializing on the engine and server.
@@ -203,4 +208,50 @@ void RuntimePtc_Init() /* .TEXT */
 	//-------------------------------------------------------------------------
 	// JA  --> JMP | Prevent FairFight anti-cheat from initializing on the 
 	FairFight_Init.Offset(0x61).Patch({ 0xE9, 0xED, 0x00, 0x00, 0x00, 0x00 });
+}
+
+void RuntimePtc_Toggle() /* .TEXT */
+{
+	static bool g_nop = true;
+
+	if (g_nop)
+	{
+		//-------------------------------------------------------------------------
+		// CALL --> NOP | Allow some maps to be loaded by nopping out a call in LoadProp function
+		//WriteProcessMemory(GameProcess, LPVOID(dst007 + 0x5E8), "\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90", 11, NULL);
+
+		dst007.Offset(0x5E8).Patch({ 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 });
+
+
+		//-------------------------------------------------------------------------
+		// CALL --> NOP | Disable the viewmodel rendered to avoid a crash from a certain entity in desertlands_mu1
+		//WriteProcessMemory(GameProcess, LPVOID(dst008 + 0x67), "\x90\x90\x90\x90\x90", 5, NULL);
+		dst008.Offset(0x67).Patch({ 0x90, 0x90, 0x90, 0x90, 0x90 });
+
+
+		printf("\n");
+		printf("+--------------------------------------------------------+\n");
+		printf("|>>>>>>>>>>>>>>| TEXT OPCODES OVERWRITTEN |<<<<<<<<<<<<<<|\n");
+		printf("+--------------------------------------------------------+\n");
+		printf("\n");
+	}
+	else
+	{
+		//-------------------------------------------------------------------------
+		// NOP --> CALL | Recover function DST007
+		//WriteProcessMemory(GameProcess, LPVOID(dst007 + 0x5E8), "\x48\x8B\x03\xFF\x90\xB0\x02\x00\x00\x84\xC0", 11, NULL);
+
+		dst007.Offset(0x5E8).Patch({ 0x48, 0x8B, 0x03, 0xFF, 0x90, 0xB0, 0x02, 0x00, 0x00, 0x84, 0xC0 });
+		//-------------------------------------------------------------------------
+		// NOP --> CALL | Recover function DST008
+		//WriteProcessMemory(GameProcess, LPVOID(dst008 + 0x67), "\xE8\x54\xD8\xFF\xFF", 5, NULL);
+		dst008.Offset(0x67).Patch({ 0xE8, 0x54, 0xD8, 0xFF, 0xFF });
+
+		printf("\n");
+		printf("+--------------------------------------------------------+\n");
+		printf("|>>>>>>>>>>>>>>>| TEXT OPCODES RECOVERED |<<<<<<<<<<<<<<<|\n");
+		printf("+--------------------------------------------------------+\n");
+		printf("\n");
+	}
+	g_nop = !g_nop;
 }

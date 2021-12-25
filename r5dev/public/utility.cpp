@@ -65,11 +65,11 @@ DWORD64 FindPatternV1(const char* szModule, const unsigned char* szPattern, cons
 DWORD64 FindPatternSIMD(const char* szModule, const unsigned char* szPattern, const char* szMask)
 {
     MODULEINFO mInfo = GetModuleInfo(szModule);
-    DWORD64 base = (DWORD64)mInfo.lpBaseOfDll;
-    DWORD64 size = (DWORD64)mInfo.SizeOfImage;
+    DWORD64 dwBase = (DWORD64)mInfo.lpBaseOfDll;
+    DWORD64 dwSize = (DWORD64)mInfo.SizeOfImage;
 
-    unsigned char* pData = (unsigned char*)base;
-    unsigned int length  = (unsigned int)size;
+    unsigned char* pData = (unsigned char*)dwBase;
+    unsigned int length  = (unsigned int)dwSize;
 
     const unsigned char* end = pData + length - strlen(szMask);
     int num_masks = (int)ceil((float)strlen(szMask) / (float)16);
@@ -121,7 +121,7 @@ DWORD64 FindPatternSIMD(const char* szModule, const unsigned char* szPattern, co
 void DbgPrint(LPCSTR sFormat, ...)
 {
     CHAR sBuffer[512] = { 0 };
-    va_list sArgs;
+    va_list sArgs = {};
 
     // Get the variable arg pointer.
     va_start(sArgs, sFormat);
@@ -138,15 +138,15 @@ void DbgPrint(LPCSTR sFormat, ...)
 // For dumping data from a buffer to a file on the disk
 void HexDump(const char* szHeader, int nFunc, const void* pData, int nSize)
 {
-    static std::atomic<int> i, j, k = 0;
-    static unsigned char ascii[17] = { 0 };
-    static auto logger = spdlog::get("default_logger");
+    static unsigned char szAscii[17] = {};
+    static std::atomic<int> i = {}, j = {}, k = {};
+    static std::shared_ptr<spdlog::logger> logger = spdlog::get("default_logger");
 
     // Loop until the function returned to the first caller.
     while (k == 1) { /*Sleep(75);*/ }
 
     k = 1;
-    ascii[16] = '\0';
+    szAscii[16] = '\0';
 
     // Add new loggers here to replace the placeholder.
     if (nFunc == 0) { logger = g_spd_netchan_logger; }
@@ -167,8 +167,8 @@ void HexDump(const char* szHeader, int nFunc, const void* pData, int nSize)
         if (i % nSize == 0) { logger->trace(" 0x{:04X}  ", i); }
         logger->trace("{:02x} ", ((unsigned char*)pData)[i]);
 
-        if (((unsigned char*)pData)[i] >= ' ' && ((unsigned char*)pData)[i] <= '~') { ascii[i % 16] = ((unsigned char*)pData)[i]; }
-        else { ascii[i % 16] = '.'; }
+        if (((unsigned char*)pData)[i] >= ' ' && ((unsigned char*)pData)[i] <= '~') { szAscii[i % 16] = ((unsigned char*)pData)[i]; }
+        else { szAscii[i % 16] = '.'; }
 
         if ((i + 1) % 8 == 0 || i + 1 == nSize)
         {
@@ -178,20 +178,20 @@ void HexDump(const char* szHeader, int nFunc, const void* pData, int nSize)
             {
                 if (i + 1 == nSize)
                 {
-                    logger->trace("{:s}\n", ascii);
+                    logger->trace("{:s}\n", szAscii);
                     logger->trace("---------------------------------------------------------------------------\n");
                     logger->trace("\n");
                 }
                 else
                 {
                     i++;
-                    logger->trace("{:s}\n ", ascii);
+                    logger->trace("{:s}\n ", szAscii);
                     logger->trace("0x{:04X}  ", i--);
                 }
             }
             else if (i + 1 == nSize)
             {
-                ascii[(i + 1) % 16] = '\0';
+                szAscii[(i + 1) % 16] = '\0';
                 if ((i + 1) % 16 <= 8)
                 {
                     logger->trace(" ");
@@ -200,7 +200,7 @@ void HexDump(const char* szHeader, int nFunc, const void* pData, int nSize)
                 {
                     logger->trace("   ");
                 }
-                logger->trace("{:s}\n", ascii);
+                logger->trace("{:s}\n", szAscii);
                 logger->trace("---------------------------------------------------------------------------\n");
                 logger->trace("\n");
             }
@@ -212,9 +212,9 @@ void HexDump(const char* szHeader, int nFunc, const void* pData, int nSize)
 
 ///////////////////////////////////////////////////////////////////////////////
 // For encoding data in base64.
-std::string base64_encode(const std::string& in)
+std::string Base64Encode(const std::string& in)
 {
-    std::string out;
+    std::string results;
     int val = 0, valb = -6;
 
     for (unsigned char c : in)
@@ -223,26 +223,26 @@ std::string base64_encode(const std::string& in)
         valb += 8;
         while (valb >= 0)
         {
-            out.push_back("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"[(val >> valb) & 0x3F]);
+            results.push_back("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"[(val >> valb) & 0x3F]);
             valb -= 6;
         }
     }
     if (valb > -6)
     {
-        out.push_back("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"[((val << 8) >> (valb + 8)) & 0x3F]);
+        results.push_back("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"[((val << 8) >> (valb + 8)) & 0x3F]);
     }
-    while (out.size() % 4)
+    while (results.size() % 4)
     {
-        out.push_back('=');
+        results.push_back('=');
     }
-    return out;
+    return results;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // For decoding data in base64.
-std::string base64_decode(const std::string& in)
+std::string Base64Decode(const std::string& in)
 {
-    std::string out;
+    std::string results;
     int val = 0, valb = -8;
 
     std::vector<int> T(256, -1);
@@ -261,16 +261,16 @@ std::string base64_decode(const std::string& in)
         valb += 6;
         if (valb >= 0)
         {
-            out.push_back(char((val >> valb) & 0xFF));
+            results.push_back(char((val >> valb) & 0xFF));
             valb -= 8;
         }
     }
-    return out;
+    return results;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // For replacing parts of a given string.
-bool string_replace(std::string& str, const std::string& from, const std::string& to)
+bool StringReplace(std::string& str, const std::string& from, const std::string& to)
 {
     size_t start_pos = str.find(from);
     if (start_pos == std::string::npos)
@@ -284,12 +284,12 @@ bool string_replace(std::string& str, const std::string& from, const std::string
 
 ///////////////////////////////////////////////////////////////////////////////
 // For creating directories for output streams.
-std::string create_directories(std::string svFilePath)
+std::string CreateDirectories(std::string svFilePath)
 {
     std::filesystem::path fspPathOut(svFilePath);
     std::string results = fspPathOut.u8string();
 
-    string_replace(svFilePath, "\\ \\", "\\");
+    StringReplace(svFilePath, "\\ \\", "\\");
     fspPathOut = fspPathOut.parent_path();
 
     std::filesystem::create_directories(fspPathOut);

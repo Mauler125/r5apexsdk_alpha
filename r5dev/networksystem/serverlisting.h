@@ -2,13 +2,13 @@
 
 struct ServerListing
 {
-	std::string name;
-	std::string map = "mp_rr_canyonlands_staging";
-	std::string ip;
-	std::string port;
-	std::string playlist = "survival_dev";
-	bool hidden;
-	std::string remoteChecksum;
-	std::string version;
-	std::string netchanEncryptionKey;
+	std::string svServerName;
+	std::string svMapName = "mp_rr_canyonlands_staging";
+	std::string svIpAddress;
+	std::string svPort;
+	std::string svPlaylist = "survival_dev";
+	bool bHidden{};
+	std::string svRemoteChecksum;
+	std::string svVersion;
+	std::string svEncryptionKey;
 };

@@ -15,3 +15,5 @@
 #define MAX_SPLITSCREEN_CLIENTS	( 1 << MAX_SPLITSCREEN_CLIENT_BITS ) // 4 // this should == MAX_JOYSTICKS in InputEnums.h
 
 #define MAX_PLAYERS 128 // Max R5 players.
+
+#define SDK_VERSION "beta 1.6"

@@ -41,7 +41,7 @@
 #include "thirdparty/spdlog/include/sinks/stdout_sinks.h"
 #include "thirdparty/spdlog/include/sinks/ostream_sink.h"
 #include "public/include/utility.h"
-#include "public/include/address.h"
+#include "public/include/memaddr.h"
 #include "public/include/httplib.h"
 #include "public/include/json.hpp"
 

@@ -12,3 +12,16 @@ int HSys_Error_Internal(char* fmt, va_list args);
 
 void SysDll_Attach();
 void SysDll_Detach();
+
+///////////////////////////////////////////////////////////////////////////////
+class HSys_Dll : public IDetour
+{
+	virtual void debugp()
+	{
+		std::cout << "| FUN: Sys_Error_Internal                   : 0x" << std::hex << std::uppercase << p_Sys_Error_Internal.GetPtr() << std::setw(npad) << " |" << std::endl;
+		std::cout << "+----------------------------------------------------------------+" << std::endl;
+	}
+};
+///////////////////////////////////////////////////////////////////////////////
+
+REGISTER(HSys_Dll);

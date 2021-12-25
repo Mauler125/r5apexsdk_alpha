@@ -4,14 +4,15 @@
 #include "engine/sys_utils.h"
 
 //-----------------------------------------------------------------------------
-// Purpose: sets the EbisuSDK globals for dedicated
-// TODO   : recreate the struct instead
+// Purpose: sets the EbisuSDK globals for dedicated to satisfy command callbacks
 //-----------------------------------------------------------------------------
 void HEbisuSDK_Init()
 {
-	*(char*)g_bEbisuSDKInitialized.GetPtr()     = (char)0x1; // <- 1st EbisuSDK check
-	*(char*)g_bEbisuSDKCvarInitialized.GetPtr() = (char)0x1; // <- 2nd EbisuSDK check
-	*(char*)g_qEbisuSDKCvarInitialized.GetPtr() = (char)0x1; // <- 3rd EbisuSDK check
+#ifdef DEDICATED
+	*(char*)g_bEbisuSDKInitialized.GetPtr()     = (char)0x1; // <- 1st EbisuSDK
+	*(char*)g_bEbisuSDKCvarInitialized.GetPtr() = (char)0x1; // <- 2nd EbisuSDK
+	*(char*)g_qEbisuSDKCvarInitialized.GetPtr() = (char)0x1; // <- 3rd EbisuSDK
+#endif // DEDICATED
 }
 
 void EbisuSDK_Attach()

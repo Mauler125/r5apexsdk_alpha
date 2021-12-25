@@ -10,7 +10,6 @@ void DestroyRenderTarget();
 
 /////////////////////////////////////////////////////////////////////////////
 // Internals
-void PrintDXAddress();
 void InstallDXHooks();
 void DirectX_Shutdown();
 

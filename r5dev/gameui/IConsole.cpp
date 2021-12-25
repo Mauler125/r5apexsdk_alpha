@@ -19,6 +19,9 @@ History:
 
 ******************************************************************************/
 
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
 CConsole::CConsole()
 {
     ClearLog();
@@ -35,6 +38,9 @@ CConsole::CConsole()
     AddLog("[DEBUG] THREAD ID: %ld\n", g_dThreadId);
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
 CConsole::~CConsole()
 {
     ClearLog();
@@ -44,8 +50,9 @@ CConsole::~CConsole()
     }
 }
 
-///////////////////////////////////////////////////////////////////////////
-// Draw
+//-----------------------------------------------------------------------------
+// Purpose: draws the console frontend
+//-----------------------------------------------------------------------------
 void CConsole::Draw(const char* title, bool* bDraw)
 {
     bool copy_to_clipboard = false;
@@ -224,13 +231,14 @@ void CConsole::Draw(const char* title, bool* bDraw)
     ImGui::End();
 }
 
-///////////////////////////////////////////////////////////////////////////
-// Exec
+//-----------------------------------------------------------------------------
+// Purpose: executes submitted commands in a separate thread
+//-----------------------------------------------------------------------------
 void CConsole::ProcessCommand(const char* command_line)
 {
     AddLog("# %s\n", command_line);
 
-    std::thread t(&CConsole::ExecCommand, this, command_line);
+    std::thread t(IVEngineClient_CommandExecute, this, command_line);
     t.detach(); // Detach from render thread.
 
     // This is to avoid a race condition.
@@ -286,13 +294,9 @@ void CConsole::ProcessCommand(const char* command_line)
     m_bScrollToBottom = true;
 }
 
-void CConsole::ExecCommand(const char* command_line)
-{
-    IVEngineClient_CommandExecute(NULL, command_line);
-}
-
-///////////////////////////////////////////////////////////////////////////
-// Edit
+//-----------------------------------------------------------------------------
+// Purpose: text edit callback
+//-----------------------------------------------------------------------------
 int CConsole::TextEditCallback(ImGuiInputTextCallbackData* data)
 {
     switch (data->EventFlag)

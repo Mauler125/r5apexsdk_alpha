@@ -20,14 +20,15 @@ void HSys_Error(char* fmt, ...)
 	buf[sizeof(buf) -1] = 0;
 	va_end(args);
 
-	Sys_Print(SYS_DLL::ENGINE, "%s\n", buf);
+	DevMsg(eDLL::ENGINE, "%s\n", buf);
+	Sys_Error(buf);
 }
 
 //-----------------------------------------------------------------------------
 //	Sys_Print
 //
 //-----------------------------------------------------------------------------
-void Sys_Print(SYS_DLL idx, const char* fmt, ...)
+void DevMsg(eDLL idx, const char* fmt, ...)
 {
 	int vmIdx = (int)idx;
 	static bool initialized = false;
@@ -74,16 +75,16 @@ void Sys_Print(SYS_DLL idx, const char* fmt, ...)
 	std::string s = g_spd_sys_w_oss.str();
 	const char* c = s.c_str();
 
-	g_pLogSystem.AddLog((LogType_t)SYS_DLL::ENGINE, s);
+	g_pLogSystem.AddLog((LogType_t)eDLL::ENGINE, s);
 	Items.push_back(Strdup((const char*)c));
 #endif // !DEDICATED
 }
 
 //-----------------------------------------------------------------------------
-//	Sys_LoadAsset
+//	Sys_LoadAssetHelper
 //
 //-----------------------------------------------------------------------------
-void* HSys_LoadAsset(const CHAR* lpFileName, std::int64_t a2, LARGE_INTEGER* a3)
+void* HSys_LoadAssetHelper(const CHAR* lpFileName, std::int64_t a2, LARGE_INTEGER* a3)
 {
 	std::string mod_file;
 	std::string base_file = lpFileName;
@@ -98,25 +99,25 @@ void* HSys_LoadAsset(const CHAR* lpFileName, std::int64_t a2, LARGE_INTEGER* a3)
 		if (FileExists(mod_file.c_str()))
 		{
 			// Load decompressed pak files from 'mod_dir'.
-			Sys_Print(SYS_DLL::RTECH, "Loading pak: '%s'\n", mod_file.c_str());
-			return Sys_LoadAsset(mod_file.c_str(), a2, a3);
+			DevMsg(eDLL::RTECH, "Loading pak: '%s'\n", mod_file.c_str());
+			return Sys_LoadAssetHelper(mod_file.c_str(), a2, a3);
 		}
 	}
 	if (strstr(lpFileName, base_dir.c_str()))
 	{
-		Sys_Print(SYS_DLL::RTECH, "Loading pak: '%s'\n", lpFileName);
+		DevMsg(eDLL::RTECH, "Loading pak: '%s'\n", lpFileName);
 	}
-	return Sys_LoadAsset(lpFileName, a2, a3);
+	return Sys_LoadAssetHelper(lpFileName, a2, a3);
 }
 
 void SysUtils_Attach()
 {
 	DetourAttach((LPVOID*)&Sys_Error, &HSys_Error);
-	DetourAttach((LPVOID*)&Sys_LoadAsset, &HSys_LoadAsset);
+	DetourAttach((LPVOID*)&Sys_LoadAssetHelper, &HSys_LoadAssetHelper);
 }
 
 void SysUtils_Detach()
 {
 	DetourDetach((LPVOID*)&Sys_Error, &HSys_Error);
-	DetourDetach((LPVOID*)&Sys_LoadAsset, &HSys_LoadAsset);
+	DetourDetach((LPVOID*)&Sys_LoadAssetHelper, &HSys_LoadAssetHelper);
 }

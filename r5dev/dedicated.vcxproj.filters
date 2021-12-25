@@ -94,6 +94,9 @@
     <Filter Include="thirdparty\lzham\include">
       <UniqueIdentifier>{db372a17-c0de-4a8b-8aa8-9b3129cc5955}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sdk\bsplib">
+      <UniqueIdentifier>{8288ba1a-7609-42ef-af3b-850727635a99}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="client\client.h">
@@ -165,7 +168,7 @@
     <ClInclude Include="public\include\utility.h">
       <Filter>sdk\public\include</Filter>
     </ClInclude>
-    <ClInclude Include="public\include\address.h">
+    <ClInclude Include="public\include\memaddr.h">
       <Filter>sdk\public\include</Filter>
     </ClInclude>
     <ClInclude Include="public\include\bansystem.h">
@@ -549,6 +552,12 @@
     <ClInclude Include="mathlib\adler32.h">
       <Filter>sdk\mathlib</Filter>
     </ClInclude>
+    <ClInclude Include="bsplib\bsplib.h">
+      <Filter>sdk\bsplib</Filter>
+    </ClInclude>
+    <ClInclude Include="common\psuedodefs.h">
+      <Filter>sdk\common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="client\IVEngineClient.cpp">
@@ -661,6 +670,15 @@
     </ClCompile>
     <ClCompile Include="public\binstream.cpp">
       <Filter>sdk\public</Filter>
+    </ClCompile>
+    <ClCompile Include="bsplib\bsplib.cpp">
+      <Filter>sdk\bsplib</Filter>
+    </ClCompile>
+    <ClCompile Include="mathlib\adler32.cpp">
+      <Filter>sdk\mathlib</Filter>
+    </ClCompile>
+    <ClCompile Include="mathlib\crc32.cpp">
+      <Filter>sdk\mathlib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -12,3 +12,16 @@ namespace
 	void* (*Stryder_StitchRequest)(void* a1) = (void* (*)(void*))p_Stryder_StitchRequest.GetPtr(); /*48 89 5C 24 08 48 89 6C 24 10 48 89 74 24 18 57 48 83 EC 20 48 8B F9 E8 B4*/
 #endif
 }
+
+///////////////////////////////////////////////////////////////////////////////
+class HStryder : public IDetour
+{
+	virtual void debugp()
+	{
+		std::cout << "| FUN: Stryder_StitchRequest                : 0x" << std::hex << std::uppercase << p_Stryder_StitchRequest.GetPtr() << std::setw(npad) << " |" << std::endl;
+		std::cout << "+----------------------------------------------------------------+" << std::endl;
+	}
+};
+///////////////////////////////////////////////////////////////////////////////
+
+REGISTER(HStryder);

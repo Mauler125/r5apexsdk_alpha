@@ -7,7 +7,7 @@
 //-----------------------------------------------------------------------------
 CIOStream::CIOStream()
 {
-	currentMode = eStreamFileMode::NONE;
+	eCurrentMode = eStreamFileMode::NONE;
 }
 
 //-----------------------------------------------------------------------------
@@ -31,13 +31,13 @@ CIOStream::~CIOStream()
 // Input  : fileFullPath - mode
 // Output : true if operation is successfull
 //-----------------------------------------------------------------------------
-bool CIOStream::open(std::string fileFullPath, eStreamFileMode mode)
+bool CIOStream::open(std::string svFileFullPath, eStreamFileMode eMode)
 {
-	filePath = fileFullPath;
+	svFilePath = svFileFullPath;
 
-	if (mode == eStreamFileMode::WRITE)
+	if (eMode == eStreamFileMode::WRITE)
 	{
-		currentMode = mode;
+		eCurrentMode = eMode;
 
 		// check if we had a previously opened file to close it
 		if (writer.is_open())
@@ -45,17 +45,17 @@ bool CIOStream::open(std::string fileFullPath, eStreamFileMode mode)
 			writer.close();
 		}
 
-		writer.open(filePath.c_str(), std::ios::binary);
+		writer.open(svFilePath.c_str(), std::ios::binary);
 		if (!writer.is_open())
 		{
-			Sys_Print(SYS_DLL::FS, "Error opening file '%s' for write operation!\n", filePath.c_str());
-			currentMode = eStreamFileMode::NONE;
+			DevMsg(eDLL::FS, "Error opening file '%s' for write operation!\n", svFilePath.c_str());
+			eCurrentMode = eStreamFileMode::NONE;
 		}
 	}
 	// Read mode
-	else if (mode == eStreamFileMode::READ)
+	else if (eMode == eStreamFileMode::READ)
 	{
-		currentMode = mode;
+		eCurrentMode = eMode;
 
 		// check if we had a previously opened file to close it
 		if (reader.is_open())
@@ -63,16 +63,16 @@ bool CIOStream::open(std::string fileFullPath, eStreamFileMode mode)
 			reader.close();
 		}
 
-		reader.open(filePath.c_str(), std::ios::binary);
+		reader.open(svFilePath.c_str(), std::ios::binary);
 		if (!reader.is_open())
 		{
-			Sys_Print(SYS_DLL::FS, "Error opening file '%s' for read operation!\n", filePath.c_str());
-			currentMode = eStreamFileMode::NONE;
+			DevMsg(eDLL::FS, "Error opening file '%s' for read operation!\n", svFilePath.c_str());
+			eCurrentMode = eStreamFileMode::NONE;
 		}
 	}
 
 	// if the mode is still the NONE -> we failed
-	return currentMode == eStreamFileMode::NONE ? false : true;
+	return eCurrentMode == eStreamFileMode::NONE ? false : true;
 }
 
 //-----------------------------------------------------------------------------
@@ -80,11 +80,11 @@ bool CIOStream::open(std::string fileFullPath, eStreamFileMode mode)
 //-----------------------------------------------------------------------------
 void CIOStream::close()
 {
-	if (currentMode == eStreamFileMode::WRITE)
+	if (eCurrentMode == eStreamFileMode::WRITE)
 	{
 		writer.close();
 	}
-	else if (currentMode == eStreamFileMode::READ)
+	else if (eCurrentMode == eStreamFileMode::READ)
 	{
 		reader.close();
 	}
@@ -95,18 +95,18 @@ void CIOStream::close()
 //-----------------------------------------------------------------------------
 bool CIOStream::checkReadabilityStatus()
 {
-	if (currentMode != eStreamFileMode::READ)
+	if (eCurrentMode != eStreamFileMode::READ)
 	{
-		Sys_Print(SYS_DLL::FS, "Error: StreamFileMode doesn't match required mode for read operation.\n");
+		DevMsg(eDLL::FS, "Error: StreamFileMode doesn't match required mode for read operation.\n");
 		return false;
 	}
 
 	// check if we hit the end of the file.
 	if (reader.eof())
 	{
-		Sys_Print(SYS_DLL::FS, "Error: trying to read past EOF.\n");
+		DevMsg(eDLL::FS, "Error: trying to read past EOF.\n");
 		reader.close();
-		currentMode = eStreamFileMode::NONE;
+		eCurrentMode = eStreamFileMode::NONE;
 		return false;
 	}
 	return true;
@@ -117,9 +117,9 @@ bool CIOStream::checkReadabilityStatus()
 //-----------------------------------------------------------------------------
 bool CIOStream::checkWritabilityStatus()
 {
-	if (currentMode != eStreamFileMode::WRITE)
+	if (eCurrentMode != eStreamFileMode::WRITE)
 	{
-		Sys_Print(SYS_DLL::FS, "Error: StreamFileMode doesn't match required mode for write operation.\n");
+		DevMsg(eDLL::FS, "Error: StreamFileMode doesn't match required mode for write operation.\n");
 		return false;
 	}
 	return true;

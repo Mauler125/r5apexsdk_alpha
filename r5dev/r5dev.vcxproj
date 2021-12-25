@@ -19,7 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="client\CHLClient.cpp" />
+    <ClCompile Include="bsplib\bsplib.cpp" />
+    <ClCompile Include="client\cdll_engine_int.cpp" />
     <ClCompile Include="client\client.cpp" />
     <ClCompile Include="client\IVEngineClient.cpp" />
     <ClCompile Include="common\opcodes.cpp" />
@@ -41,6 +42,8 @@
     <ClCompile Include="gameui\IBrowser.cpp" />
     <ClCompile Include="inputsystem\inputsystem.cpp" />
     <ClCompile Include="launcher\IApplication.cpp" />
+    <ClCompile Include="mathlib\adler32.cpp" />
+    <ClCompile Include="mathlib\crc32.cpp" />
     <ClCompile Include="mathlib\IceKey.cpp" />
     <ClCompile Include="networksystem\r5net.cpp" />
     <ClCompile Include="public\bansystem.cpp" />
@@ -106,11 +109,13 @@
     <ClCompile Include="windows\input.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="client\CHLClient.h" />
+    <ClInclude Include="bsplib\bsplib.h" />
+    <ClInclude Include="client\cdll_engine_int.h" />
     <ClInclude Include="client\client.h" />
     <ClInclude Include="client\IVEngineClient.h" />
     <ClInclude Include="common\opcodes.h" />
     <ClInclude Include="common\protocol.h" />
+    <ClInclude Include="common\psuedodefs.h" />
     <ClInclude Include="core\init.h" />
     <ClInclude Include="core\logdef.h" />
     <ClInclude Include="core\r5dev.h" />
@@ -136,7 +141,7 @@
     <ClInclude Include="networksystem\r5net.h" />
     <ClInclude Include="networksystem\serverlisting.h" />
     <ClInclude Include="networksystem\sm_protocol.h" />
-    <ClInclude Include="public\include\address.h" />
+    <ClInclude Include="public\include\memaddr.h" />
     <ClInclude Include="public\include\bansystem.h" />
     <ClInclude Include="public\include\binstream.h" />
     <ClInclude Include="public\include\httplib.h" />
@@ -315,14 +320,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>ClangCL</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
     <UseOfMfc>Static</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>ClangCL</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
     <UseOfMfc>Static</UseOfMfc>

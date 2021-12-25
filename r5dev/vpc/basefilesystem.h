@@ -22,3 +22,16 @@ namespace
 ///////////////////////////////////////////////////////////////////////////////
 void CBaseFileSystem_Attach();
 void CBaseFileSystem_Detach();
+
+///////////////////////////////////////////////////////////////////////////////
+class HBaseFileSystem : public IDetour
+{
+	virtual void debugp()
+	{
+		std::cout << "| FUN: CBaseFileSystem::Warning             : 0x" << std::hex << std::uppercase << p_CBaseFileSystem_Warning.GetPtr() << std::setw(npad) << " |" << std::endl;
+		std::cout << "+----------------------------------------------------------------+" << std::endl;
+	}
+};
+///////////////////////////////////////////////////////////////////////////////
+
+REGISTER(HBaseFileSystem);

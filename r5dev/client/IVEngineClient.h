@@ -8,6 +8,18 @@ namespace
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-extern ADDRESS m_bRestrictServerCommands;
+extern bool* m_bRestrictServerCommands;
 
 ///////////////////////////////////////////////////////////////////////////////
+class HVEngineClient : public IDetour
+{
+	virtual void debugp()
+	{
+		std::cout << "| FUN: IVEngineClient::CommandExecute       : 0x" << std::hex << std::uppercase << p_IVEngineClient_CommandExecute.GetPtr() << std::setw(npad) << " |" << std::endl;
+		std::cout << "| VAR: m_bRestrictServerCommands            : 0x" << std::hex << std::uppercase << m_bRestrictServerCommands                << std::setw(0)    << " |" << std::endl;
+		std::cout << "+----------------------------------------------------------------+" << std::endl;
+	}
+};
+///////////////////////////////////////////////////////////////////////////////
+
+REGISTER(HVEngineClient);

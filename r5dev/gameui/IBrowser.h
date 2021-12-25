@@ -161,7 +161,6 @@ public:
     void Draw(const char* title, bool* bDraw);
     void UpdateHostingStatus();
     void ProcessCommand(const char* command_line);
-    void ExecCommand(const char* command_line);
 
     void RegenerateEncryptionKey();
     void ChangeEncryptionKeyTo(const std::string str);

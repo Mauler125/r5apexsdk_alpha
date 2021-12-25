@@ -5,7 +5,9 @@
 #include "tier0/cvar.h"
 #include "client/IVEngineClient.h"
 
-///////////////////////////////////////////////////////////////////////////////
+//-----------------------------------------------------------------------------
+// Purpose: state machine's main processing loop
+//-----------------------------------------------------------------------------
 void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 {
 	static auto setjmpFn            = ADDRESS(0x141205460).RCast<std::int64_t(*)(jmp_buf, void*)>();
@@ -30,27 +32,33 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 	static auto SendOfflineRequestToStryderFn  = ADDRESS(0x14033D380).RCast<void(*)()>();
 	static auto CEngine                        = ADDRESS(0X141741BA0).RCast<void*>();
 
-	static bool initialized;
-	if (!initialized)
+	static bool bInitialized = false;
+	if (!bInitialized)
 	{
 		IConVar_ClearHostNames();
 		ConCommand_InitConCommand();
 
 		IVEngineClient_CommandExecute(NULL, "exec autoexec.cfg");
 		IVEngineClient_CommandExecute(NULL, "exec autoexec_server.cfg");
+#ifndef DEDICATED
 		IVEngineClient_CommandExecute(NULL, "exec autoexec_client.cfg");
+#endif // !DEDICATED
 
-		if (net_userandomkey->m_iValue == 1)
+		*(bool*)m_bRestrictServerCommands = true; // Restrict commands.
+		void* disconnect = g_pCvar->FindCommand("disconnect");
+		*(std::int32_t*)((std::uintptr_t)disconnect + 0x38) |= FCVAR_SERVER_CAN_EXECUTE; // Make sure server is not restricted to this.
+
+		if (net_userandomkey->m_pParent->m_iValue == 1)
 		{
 			HNET_GenerateKey();
 		}
 
-		g_pCvar->FindVar("net_usesocketsforloopback")->m_iValue = 1;
+		g_pCvar->FindVar("net_usesocketsforloopback")->m_pParent->m_iValue = 1;
 
-		initialized = true;
+		bInitialized = true;
 	}
 
-	HostStates_t oldState;
+	HostStates_t oldState{};
 	void* placeHolder = nullptr;
 	if (setjmpFn(*host_abortserver, placeHolder))
 	{
@@ -69,7 +77,7 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 			{
 			case HostStates_t::HS_NEW_GAME:
 			{
-				Sys_Print(SYS_DLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_NEW_GAME | Loading level: '%s'\n", g_pHostState->m_levelName);
+				DevMsg(eDLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_NEW_GAME | Loading level: '%s'\n", g_pHostState->m_levelName);
 
 				// Inlined CHostState::State_NewGame
 				g_pHostState->m_bSplitScreenConnect = false;
@@ -81,7 +89,7 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 				if (!CModelLoader_Map_IsValidFn(g_CModelLoader, g_pHostState->m_levelName) // Check if map is valid and if we can start a new game.
 					|| !Host_NewGameFn(g_pHostState->m_levelName, nullptr, g_pHostState->m_bBackgroundLevel, g_pHostState->m_bSplitScreenConnect, nullptr) || !g_ServerGameClients)
 				{
-					Sys_Print(SYS_DLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_NEW_GAME | Error: Map not valid.\n");
+					DevMsg(eDLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_NEW_GAME | Error: Map not valid.\n");
 					// Inlined SCR_EndLoadingPlaque
 					if (*src_drawloading)
 					{
@@ -113,7 +121,7 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 				g_pHostState->m_iCurrentState = HostStates_t::HS_RUN; // Set current state to run.
 
 				// If our next state isn't a shutdown or its a forced shutdown then set next state to run.
-				if (g_pHostState->m_iNextState != HostStates_t::HS_SHUTDOWN || !g_pCvar->FindVar("host_hasIrreversibleShutdown")->m_iValue)
+				if (g_pHostState->m_iNextState != HostStates_t::HS_SHUTDOWN || !g_pCvar->FindVar("host_hasIrreversibleShutdown")->m_pParent->m_iValue)
 				{
 					g_pHostState->m_iNextState = HostStates_t::HS_RUN;
 				}
@@ -125,7 +133,7 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 			{
 				g_pHostState->m_flShortFrameTime = 1.5; // Set frame time.
 
-				Sys_Print(SYS_DLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_CHANGE_LEVEL_SP | Changing singleplayer level to: '%s'\n", g_pHostState->m_levelName);
+				DevMsg(eDLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_CHANGE_LEVEL_SP | Changing singleplayer level to: '%s'\n", g_pHostState->m_levelName);
 
 				if (CModelLoader_Map_IsValidFn(g_CModelLoader, g_pHostState->m_levelName)) // Check if map is valid and if we can start a new game.
 				{
@@ -133,7 +141,7 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 				}
 				else
 				{
-					Sys_Print(SYS_DLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_CHANGE_LEVEL_SP | Error: Unable to find map: '%s'\n", g_pHostState->m_levelName);
+					DevMsg(eDLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_CHANGE_LEVEL_SP | Error: Unable to find map: '%s'\n", g_pHostState->m_levelName);
 				}
 
 				//	Seems useless so nope.
@@ -143,7 +151,7 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 				g_pHostState->m_iCurrentState = HostStates_t::HS_RUN; // Set current state to run.
 
 				// If our next state isn't a shutdown or its a forced shutdown then set next state to run.
-				if (g_pHostState->m_iNextState != HostStates_t::HS_SHUTDOWN || !g_pCvar->FindVar("host_hasIrreversibleShutdown")->m_iValue)
+				if (g_pHostState->m_iNextState != HostStates_t::HS_SHUTDOWN || !g_pCvar->FindVar("host_hasIrreversibleShutdown")->m_pParent->m_iValue)
 				{
 					g_pHostState->m_iNextState = HostStates_t::HS_RUN;
 				}
@@ -156,7 +164,7 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 				using LevelShutdownFn = void(__thiscall*)(void*);
 				(*reinterpret_cast<LevelShutdownFn**>(*g_ServerDLL))[8](g_ServerDLL); // (*(void (__fastcall **)(void *))(*(_QWORD *)server_dll_var + 64i64))(server_dll_var);// LevelShutdown
 
-				Sys_Print(SYS_DLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_CHANGE_LEVEL_MP | Changing multiplayer level to: '%s'\n", g_pHostState->m_levelName);
+				DevMsg(eDLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_CHANGE_LEVEL_MP | Changing multiplayer level to: '%s'\n", g_pHostState->m_levelName);
 
 				if (CModelLoader_Map_IsValidFn(g_CModelLoader, g_pHostState->m_levelName)) // Check if map is valid and if we can start a new game.
 				{
@@ -166,7 +174,7 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 				}
 				else
 				{
-					Sys_Print(SYS_DLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_CHANGE_LEVEL_MP | Error: Unable to find map: '%s'\n", g_pHostState->m_levelName);
+					DevMsg(eDLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_CHANGE_LEVEL_MP | Error: Unable to find map: '%s'\n", g_pHostState->m_levelName);
 				}
 
 				//	Seems useless so nope.
@@ -176,7 +184,7 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 				g_pHostState->m_iCurrentState = HostStates_t::HS_RUN; // Set current state to run.
 
 				// If our next state isn't a shutdown or its a forced shutdown then set next state to run.
-				if (g_pHostState->m_iNextState != HostStates_t::HS_SHUTDOWN || !g_pCvar->FindVar("host_hasIrreversibleShutdown")->m_iValue)
+				if (g_pHostState->m_iNextState != HostStates_t::HS_SHUTDOWN || !g_pCvar->FindVar("host_hasIrreversibleShutdown")->m_pParent->m_iValue)
 				{
 					g_pHostState->m_iNextState = HostStates_t::HS_RUN;
 				}
@@ -190,13 +198,13 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 			}
 			case HostStates_t::HS_GAME_SHUTDOWN:
 			{
-				Sys_Print(SYS_DLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_GAME_SHUTDOWN | Shutdown game\n");
+				DevMsg(eDLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_GAME_SHUTDOWN | Shutdown game\n");
 				Host_Game_ShutdownFn(g_pHostState);
 				break;
 			}
 			case HostStates_t::HS_RESTART:
 			{
-				Sys_Print(SYS_DLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_RESTART | Restarting client\n");
+				DevMsg(eDLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_RESTART | Restarting client\n");
 				CL_EndMovieFn();
 				SendOfflineRequestToStryderFn(); // We have hostnames nulled anyway.
 				*(std::int32_t*)((std::uintptr_t)CEngine + 0xC) = 3; //g_CEngine.vtable->SetNextState(&g_CEngine, DLL_RESTART);
@@ -204,7 +212,7 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 			}
 			case HostStates_t::HS_SHUTDOWN:
 			{
-				Sys_Print(SYS_DLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_SHUTDOWN | Shutdown client\n");
+				DevMsg(eDLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_SHUTDOWN | Shutdown client\n");
 				CL_EndMovieFn();
 				SendOfflineRequestToStryderFn(); // We have hostnames nulled anyway.
 				*(std::int32_t*)((std::uintptr_t)CEngine + 0xC) = 2; //g_CEngine.vtable->SetNextState(&g_CEngine, DLL_CLOSE);
@@ -225,12 +233,12 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 
 void CHostState_Attach()
 {
-	//DetourAttach((LPVOID*)&CHostState_FrameUpdate, &HCHostState_FrameUpdate);
+	DetourAttach((LPVOID*)&CHostState_FrameUpdate, &HCHostState_FrameUpdate);
 }
 
 void CHostState_Detach()
 {
-	//DetourDetach((LPVOID*)&CHostState_FrameUpdate, &HCHostState_FrameUpdate);
+	DetourDetach((LPVOID*)&CHostState_FrameUpdate, &HCHostState_FrameUpdate);
 }
 
 CHostState* g_pHostState = reinterpret_cast<CHostState*>(p_CHostState_FrameUpdate.FindPatternSelf("48 8D ?? ?? ?? ?? 01", ADDRESS::Direction::DOWN, 100).ResolveRelativeAddressSelf(0x3, 0x7).GetPtr());;

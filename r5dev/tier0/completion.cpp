@@ -1,6 +1,13 @@
+//=============================================================================//
+//
+// Purpose: Completion functions for ConCommand callbacks
+//
+//=============================================================================//
+
 #include "core/stdafx.h"
 #include "windows/id3dx.h"
 #include "tier0/basetypes.h"
+#include "tier0/cvar.h"
 #include "tier0/IConVar.h"
 #include "tier0/completion.h"
 #include "engine/net_chan.h"
@@ -11,18 +18,18 @@
 #include "public/include/bansystem.h"
 
 #ifndef DEDICATED
-void CGameConsole_Callback(const CCommand& cmd)
+void _CGameConsole_f_CompletionFunc(const CCommand& cmd)
 {
 	g_bShowConsole = !g_bShowConsole;
 }
 
-void CCompanion_Callback(const CCommand& cmd)
+void _CCompanion_f_CompletionFunc(const CCommand& cmd)
 {
 	g_bShowBrowser = !g_bShowBrowser;
 }
 #endif // !DEDICATED
 
-void Kick_Callback(CCommand* cmd)
+void _Kick_f_CompletionFunc(CCommand* cmd)
 {
 	std::int32_t argSize = *(std::int32_t*)((std::uintptr_t)cmd + 0x4);
 	if (argSize < 2) // Do we atleast have 2 arguments?
@@ -30,8 +37,8 @@ void Kick_Callback(CCommand* cmd)
 		return;
 	}
 
-	CCommand& cmdReference = *cmd; // Get reference.
-	const char* firstArg = cmdReference[1]; // Get first arg.
+	CCommand& args = *cmd; // Get reference.
+	const char* firstArg = args[1]; // Get first arg.
 
 	for (int i = 0; i < MAX_PLAYERS; i++) // Loop through all possible client instances.
 	{
@@ -63,7 +70,7 @@ void Kick_Callback(CCommand* cmd)
 	}
 }
 
-void KickID_Callback(CCommand* cmd)
+void _KickID_f_CompletionFunc(CCommand* cmd)
 {
 	static auto HasOnlyDigits = [](const std::string& string)
 	{
@@ -83,8 +90,8 @@ void KickID_Callback(CCommand* cmd)
 		return;
 	}
 
-	CCommand& cmdReference = *cmd; // Get reference.
-	std::string firstArg = cmdReference[1]; // Get first arg.
+	CCommand& args = *cmd; // Get reference.
+	std::string firstArg = args[1]; // Get first arg.
 
 	try
 	{
@@ -102,7 +109,7 @@ void KickID_Callback(CCommand* cmd)
 				continue;
 			}
 
-			std::string finalIPAddress = "null"; // If this stays null they modified the packet somehow.
+			std::string finalIpAddress = "null"; // If this stays null they modified the packet somehow.
 			ADDRESS ipAddressField = ADDRESS(((std::uintptr_t)client->GetNetChan()) + 0x1AC0); // Get client ip from netchan.
 			if (ipAddressField)
 			{
@@ -112,7 +119,7 @@ void KickID_Callback(CCommand* cmd)
 					<< std::to_string(ipAddressField.Offset(0x2).GetValue<std::uint8_t>()) << "."
 					<< std::to_string(ipAddressField.Offset(0x3).GetValue<std::uint8_t>());
 
-				finalIPAddress = ss.str();
+				finalIpAddress = ss.str();
 			}
 
 			if (onlyDigits)
@@ -139,7 +146,7 @@ void KickID_Callback(CCommand* cmd)
 			}
 			else
 			{
-				if (firstArg.compare(finalIPAddress) != NULL) // Do the string equal?
+				if (firstArg.compare(finalIpAddress) != NULL) // Do the string equal?
 				{
 					continue;
 				}
@@ -150,12 +157,12 @@ void KickID_Callback(CCommand* cmd)
 	}
 	catch (std::exception& e)
 	{
-		Sys_Print(SYS_DLL::SERVER, "sv_kickid requires a UserID or OriginID. You can get the UserID with the 'status' command. Error: %s", e.what());
+		DevMsg(eDLL::SERVER, "sv_kickid requires a UserID or OriginID. You can get the UserID with the 'status' command. Error: %s", e.what());
 		return;
 	}
 }
 
-void Ban_Callback(CCommand* cmd)
+void _Ban_f_CompletionFunc(CCommand* cmd)
 {
 	std::int32_t argSize = *(std::int32_t*)((std::uintptr_t)cmd + 0x4);
 	if (argSize < 2) // Do we atleast have 2 arguments?
@@ -163,8 +170,8 @@ void Ban_Callback(CCommand* cmd)
 		return;
 	}
 
-	CCommand& cmdReference = *cmd; // Get reference.
-	const char* firstArg = cmdReference[1]; // Get first arg.
+	CCommand& args = *cmd; // Get reference.
+	const char* firstArg = args[1]; // Get first arg.
 
 	for (int i = 0; i < MAX_PLAYERS; i++) // Loop through all possible client instances.
 	{
@@ -192,7 +199,7 @@ void Ban_Callback(CCommand* cmd)
 			continue;
 		}
 
-		std::string finalIPAddress = "null"; // If this stays null they modified the packet somehow.
+		std::string finalIpAddress = "null"; // If this stays null they modified the packet somehow.
 		ADDRESS ipAddressField = ADDRESS(((std::uintptr_t)client->GetNetChan()) + 0x1AC0); // Get client ip from netchan.
 		if (ipAddressField && ipAddressField.GetValue<int>() != 0x0)
 		{
@@ -202,16 +209,16 @@ void Ban_Callback(CCommand* cmd)
 				<< std::to_string(ipAddressField.Offset(0x2).GetValue<std::uint8_t>()) << "."
 				<< std::to_string(ipAddressField.Offset(0x3).GetValue<std::uint8_t>());
 
-			finalIPAddress = ss.str();
+			finalIpAddress = ss.str();
 		}
 
-		g_pBanSystem->AddEntry(finalIPAddress, client->m_iOriginID); // Add ban entry.
+		g_pBanSystem->AddEntry(finalIpAddress, client->m_iOriginID); // Add ban entry.
 		g_pBanSystem->Save(); // Save ban list.
 		NET_DisconnectClient(client, i, "Banned from Server", 0, 1); // Disconnect client.
 	}
 }
 
-void BanID_Callback(CCommand* cmd)
+void _BanID_f_CompletionFunc(CCommand* cmd)
 {
 	static auto HasOnlyDigits = [](const std::string& string)
 	{
@@ -231,8 +238,8 @@ void BanID_Callback(CCommand* cmd)
 		return;
 	}
 
-	CCommand& cmdReference = *cmd; // Get reference.
-	std::string firstArg = cmdReference[1];
+	CCommand& args = *cmd; // Get reference.
+	std::string firstArg = args[1];
 
 	try
 	{
@@ -250,7 +257,7 @@ void BanID_Callback(CCommand* cmd)
 				continue;
 			}
 
-			std::string finalIPAddress = "null"; // If this stays null they modified the packet somehow.
+			std::string finalIpAddress = "null"; // If this stays null they modified the packet somehow.
 			ADDRESS ipAddressField = ADDRESS(((std::uintptr_t)client->GetNetChan()) + 0x1AC0); // Get client ip from netchan.
 			if (ipAddressField)
 			{
@@ -260,7 +267,7 @@ void BanID_Callback(CCommand* cmd)
 					<< std::to_string(ipAddressField.Offset(0x2).GetValue<std::uint8_t>()) << "."
 					<< std::to_string(ipAddressField.Offset(0x3).GetValue<std::uint8_t>());
 
-				finalIPAddress = ss.str();
+				finalIpAddress = ss.str();
 			}
 
 			if (onlyDigits)
@@ -283,18 +290,18 @@ void BanID_Callback(CCommand* cmd)
 					}
 				}
 
-				g_pBanSystem->AddEntry(finalIPAddress, client->m_iOriginID); // Add ban entry.
+				g_pBanSystem->AddEntry(finalIpAddress, client->m_iOriginID); // Add ban entry.
 				g_pBanSystem->Save(); // Save ban list.
 				NET_DisconnectClient(client, i, "Banned from Server", 0, 1); // Disconnect client.
 			}
 			else
 			{
-				if (firstArg.compare(finalIPAddress) != NULL) // Do the string equal?
+				if (firstArg.compare(finalIpAddress) != NULL) // Do the string equal?
 				{
 					continue;
 				}
 
-				g_pBanSystem->AddEntry(finalIPAddress, client->m_iOriginID); // Add ban entry.
+				g_pBanSystem->AddEntry(finalIpAddress, client->m_iOriginID); // Add ban entry.
 				g_pBanSystem->Save(); // Save ban list.
 				NET_DisconnectClient(client, i, "Banned from Server", 0, 1); // Disconnect client.
 			}
@@ -302,12 +309,12 @@ void BanID_Callback(CCommand* cmd)
 	}
 	catch (std::exception& e)
 	{
-		Sys_Print(SYS_DLL::SERVER, "Banid Error: %s", e.what());
+		DevMsg(eDLL::SERVER, "Banid Error: %s", e.what());
 		return;
 	}
 }
 
-void Unban_Callback(CCommand* cmd)
+void _Unban_f_CompletionFunc(CCommand* cmd)
 {
 	static auto HasOnlyDigits = [](const std::string& string)
 	{
@@ -327,11 +334,11 @@ void Unban_Callback(CCommand* cmd)
 		return;
 	}
 
-	CCommand& cmdReference = *cmd; // Get reference.
+	CCommand& args = *cmd; // Get reference.
 
 	try
 	{
-		const char* firstArg = cmdReference[1];
+		const char* firstArg = args[1];
 		if (HasOnlyDigits(firstArg)) // Check if we have an ip address or origin ID.
 		{
 			g_pBanSystem->DeleteEntry("noIP", std::stoll(firstArg)); // Delete ban entry.
@@ -345,17 +352,17 @@ void Unban_Callback(CCommand* cmd)
 	}
 	catch (std::exception& e)
 	{
-		Sys_Print(SYS_DLL::SERVER, "Unban Error: %s", e.what());
+		DevMsg(eDLL::SERVER, "Unban Error: %s", e.what());
 		return;
 	}
 }
 
-void ReloadBanList_Callback(CCommand* cmd)
+void _ReloadBanList_f_CompletionFunc(CCommand* cmd)
 {
 	g_pBanSystem->Load(); // Reload banlist.
 }
 
-void RTech_GenerateGUID_Callback(CCommand* cmd)
+void _RTech_GenerateGUID_f_CompletionFunc(CCommand* cmd)
 {
 	std::int32_t argSize = *(std::int32_t*)((std::uintptr_t)cmd + 0x4);
 
@@ -364,16 +371,16 @@ void RTech_GenerateGUID_Callback(CCommand* cmd)
 		return;
 	}
 
-	CCommand& cmdReference = *cmd; // Get reference.
-	const char* firstArg = cmdReference[1]; // Get first arg.
+	CCommand& args = *cmd; // Get reference.
+	const char* firstArg = args[1]; // Get first arg.
 	unsigned long long guid = g_pRtech->StringToGuid(firstArg);
 
-	Sys_Print(SYS_DLL::RTECH, "______________________________________________________________\n");
-	Sys_Print(SYS_DLL::RTECH, "] RTECH_HASH -------------------------------------------------\n");
-	Sys_Print(SYS_DLL::RTECH, "] GUID: '0x%llX'\n", guid);
+	DevMsg(eDLL::RTECH, "______________________________________________________________\n");
+	DevMsg(eDLL::RTECH, "] RTECH_HASH -------------------------------------------------\n");
+	DevMsg(eDLL::RTECH, "] GUID: '0x%llX'\n", guid);
 }
 
-void RTech_Decompress_Callback(CCommand* cmd)
+void _RTech_Decompress_f_CompletionFunc(CCommand* cmd)
 {
 	std::int32_t argSize = *(std::int32_t*)((std::uintptr_t)cmd + 0x4);
 
@@ -382,9 +389,9 @@ void RTech_Decompress_Callback(CCommand* cmd)
 		return;
 	}
 
-	CCommand& cmdReference = *cmd; // Get reference.
-	std::string firstArg  = cmdReference[1]; // Get first arg.
-	std::string secondArg = cmdReference[2]; // Get second arg.
+	CCommand& args = *cmd; // Get reference.
+	std::string firstArg  = args[1]; // Get first arg.
+	std::string secondArg = args[2]; // Get second arg.
 
 	const std::string mod_dir = "paks\\Win32\\";
 	const std::string base_dir = "paks\\Win64\\";
@@ -392,16 +399,16 @@ void RTech_Decompress_Callback(CCommand* cmd)
 	std::string pak_name_out = mod_dir + firstArg + ".rpak";
 	std::string pak_name_in = base_dir + firstArg + ".rpak";
 
-	Sys_Print(SYS_DLL::RTECH, "______________________________________________________________\n");
-	Sys_Print(SYS_DLL::RTECH, "] RTECH_DECOMPRESS -------------------------------------------\n");
+	DevMsg(eDLL::RTECH, "______________________________________________________________\n");
+	DevMsg(eDLL::RTECH, "] RTECH_DECOMPRESS -------------------------------------------\n");
 
 	if (!FileExists(pak_name_in.c_str()))
 	{
-		Sys_Print(SYS_DLL::RTECH, "Error: pak file '%s' does not exist!\n", pak_name_in.c_str());
+		DevMsg(eDLL::RTECH, "Error: pak file '%s' does not exist!\n", pak_name_in.c_str());
 		return;
 	}
 
-	Sys_Print(SYS_DLL::RTECH, "] Processing: '%s'\n", pak_name_in.c_str());
+	DevMsg(eDLL::RTECH, "] Processing: '%s'\n", pak_name_in.c_str());
 
 	std::vector<std::uint8_t> upak; // Compressed region.
 	std::ifstream ipak(pak_name_in, std::fstream::binary);
@@ -414,32 +421,32 @@ void RTech_Decompress_Callback(CCommand* cmd)
 	rpak_h* rheader = (rpak_h*)upak.data();
 	uint16_t flags = (rheader->m_nFlags[0] << 8) | rheader->m_nFlags[1];
 
-	Sys_Print(SYS_DLL::RTECH, "______________________________________________________________\n");
-	Sys_Print(SYS_DLL::RTECH, "] HEADER_DETAILS ---------------------------------------------\n");
-	Sys_Print(SYS_DLL::RTECH, "] Magic    : '%08X'\n", rheader->m_nMagic);
-	Sys_Print(SYS_DLL::RTECH, "] Version  : '%u'\n", (rheader->m_nVersion));
-	Sys_Print(SYS_DLL::RTECH, "] Flags    : '%04X'\n", (flags));
-	Sys_Print(SYS_DLL::RTECH, "] Hash     : '%llu'\n", rheader->m_nHash);
-	Sys_Print(SYS_DLL::RTECH, "] Entries  : '%zu'\n", rheader->m_nAssetEntryCount);
-	Sys_Print(SYS_DLL::RTECH, "______________________________________________________________\n");
-	Sys_Print(SYS_DLL::RTECH, "] COMPRESSION_DETAILS ----------------------------------------\n");
-	Sys_Print(SYS_DLL::RTECH, "] Size disk: '%lld'\n", rheader->m_nSizeDisk);
-	Sys_Print(SYS_DLL::RTECH, "] Size decp: '%lld'\n", rheader->m_nSizeMemory);
-	Sys_Print(SYS_DLL::RTECH, "] Ratio    : '%.02f'\n", (rheader->m_nSizeDisk * 100.f) / rheader->m_nSizeMemory);
+	DevMsg(eDLL::RTECH, "______________________________________________________________\n");
+	DevMsg(eDLL::RTECH, "] HEADER_DETAILS ---------------------------------------------\n");
+	DevMsg(eDLL::RTECH, "] Magic    : '%08X'\n", rheader->m_nMagic);
+	DevMsg(eDLL::RTECH, "] Version  : '%u'\n", (rheader->m_nVersion));
+	DevMsg(eDLL::RTECH, "] Flags    : '%04X'\n", (flags));
+	DevMsg(eDLL::RTECH, "] Hash     : '%llu'\n", rheader->m_nHash);
+	DevMsg(eDLL::RTECH, "] Entries  : '%zu'\n", rheader->m_nAssetEntryCount);
+	DevMsg(eDLL::RTECH, "______________________________________________________________\n");
+	DevMsg(eDLL::RTECH, "] COMPRESSION_DETAILS ----------------------------------------\n");
+	DevMsg(eDLL::RTECH, "] Size disk: '%lld'\n", rheader->m_nSizeDisk);
+	DevMsg(eDLL::RTECH, "] Size decp: '%lld'\n", rheader->m_nSizeMemory);
+	DevMsg(eDLL::RTECH, "] Ratio    : '%.02f'\n", (rheader->m_nSizeDisk * 100.f) / rheader->m_nSizeMemory);
 
 	if (rheader->m_nMagic != 'kaPR')
 	{
-		Sys_Print(SYS_DLL::RTECH, "Error: pak file '%s' has invalid magic!\n", pak_name_in.c_str());
+		DevMsg(eDLL::RTECH, "Error: pak file '%s' has invalid magic!\n", pak_name_in.c_str());
 		return;
 	}
 	if ((rheader->m_nFlags[1] & 1) != 1)
 	{
-		Sys_Print(SYS_DLL::RTECH, "Error: pak file '%s' already decompressed!\n", pak_name_in.c_str());
+		DevMsg(eDLL::RTECH, "Error: pak file '%s' already decompressed!\n", pak_name_in.c_str());
 		return;
 	}
 	if (rheader->m_nSizeDisk != upak.size())
 	{
-		Sys_Print(SYS_DLL::RTECH, "Error: pak file '%s' decompressed size '%u' doesn't match expected value '%u'!\n", pak_name_in.c_str(), upak.size(), rheader->m_nSizeMemory);
+		DevMsg(eDLL::RTECH, "Error: pak file '%s' decompressed size '%u' doesn't match expected value '%u'!\n", pak_name_in.c_str(), upak.size(), rheader->m_nSizeMemory);
 		return;
 	}
 
@@ -448,12 +455,12 @@ void RTech_Decompress_Callback(CCommand* cmd)
 
 	if (dsize == rheader->m_nSizeDisk)
 	{
-		Sys_Print(SYS_DLL::RTECH, "Error: calculated size: '%zu' expected: '%zu'!\n", dsize, rheader->m_nSizeMemory);
+		DevMsg(eDLL::RTECH, "Error: calculated size: '%zu' expected: '%zu'!\n", dsize, rheader->m_nSizeMemory);
 		return;
 	}
 	else
 	{
-		Sys_Print(SYS_DLL::RTECH, "] Calculated size: '%zu'\n", dsize);
+		DevMsg(eDLL::RTECH, "] Calculated size: '%zu'\n", dsize);
 	}
 
 	std::vector<std::uint8_t> pakbuf(rheader->m_nSizeMemory, 0);
@@ -464,7 +471,7 @@ void RTech_Decompress_Callback(CCommand* cmd)
 	std::uint8_t decomp_result = g_pRtech->Decompress(params, upak.size(), pakbuf.size());
 	if (decomp_result != 1)
 	{
-		Sys_Print(SYS_DLL::RTECH, "Error: decompression failed for '%s' return value: '%u'!\n", pak_name_in.c_str(), +decomp_result);
+		DevMsg(eDLL::RTECH, "Error: decompression failed for '%s' return value: '%u'!\n", pak_name_in.c_str(), +decomp_result);
 		return;
 	}
 
@@ -477,21 +484,21 @@ void RTech_Decompress_Callback(CCommand* cmd)
 	out_block.write((char*)pakbuf.data(), params[5]);
 	out_header.write((char*)rheader, PAK_HEADER_SIZE);
 
-	Sys_Print(SYS_DLL::RTECH, "] Decompressed rpak to: '%s'\n", pak_name_out.c_str());
-	Sys_Print(SYS_DLL::RTECH, "--------------------------------------------------------------\n");
+	DevMsg(eDLL::RTECH, "] Decompressed rpak to: '%s'\n", pak_name_out.c_str());
+	DevMsg(eDLL::RTECH, "--------------------------------------------------------------\n");
 }
 
-void NET_TraceNetChan_Callback(CCommand* cmd)
+void _NET_TraceNetChan_f_CompletionFunc(CCommand* cmd)
 {
 	static bool bTraceNetChannel = false;
 	if (!bTraceNetChannel)
 	{
-		g_pCvar->FindVar("net_usesocketsforloopback")->m_iValue = 1;
-		Sys_Print(SYS_DLL::ENGINE, "\n");
-		Sys_Print(SYS_DLL::ENGINE, "+--------------------------------------------------------+\n");
-		Sys_Print(SYS_DLL::ENGINE, "|>>>>>>>>>>>>>| NETCHANNEL TRACE ACTIVATED |<<<<<<<<<<<<<|\n");
-		Sys_Print(SYS_DLL::ENGINE, "+--------------------------------------------------------+\n");
-		Sys_Print(SYS_DLL::ENGINE, "\n");
+		g_pCvar->FindVar("net_usesocketsforloopback")->m_pParent->m_iValue = 1;
+		DevMsg(eDLL::ENGINE, "\n");
+		DevMsg(eDLL::ENGINE, "+--------------------------------------------------------+\n");
+		DevMsg(eDLL::ENGINE, "|>>>>>>>>>>>>>| NETCHANNEL TRACE ACTIVATED |<<<<<<<<<<<<<|\n");
+		DevMsg(eDLL::ENGINE, "+--------------------------------------------------------+\n");
+		DevMsg(eDLL::ENGINE, "\n");
 
 		// Begin the detour transaction to hook the the process
 		DetourTransactionBegin();
@@ -507,11 +514,11 @@ void NET_TraceNetChan_Callback(CCommand* cmd)
 	}
 	else
 	{
-		Sys_Print(SYS_DLL::ENGINE, "\n");
-		Sys_Print(SYS_DLL::ENGINE, "+--------------------------------------------------------+\n");
-		Sys_Print(SYS_DLL::ENGINE, "|>>>>>>>>>>>>| NETCHANNEL TRACE DEACTIVATED |<<<<<<<<<<<<|\n");
-		Sys_Print(SYS_DLL::ENGINE, "+--------------------------------------------------------+\n");
-		Sys_Print(SYS_DLL::ENGINE, "\n");
+		DevMsg(eDLL::ENGINE, "\n");
+		DevMsg(eDLL::ENGINE, "+--------------------------------------------------------+\n");
+		DevMsg(eDLL::ENGINE, "|>>>>>>>>>>>>| NETCHANNEL TRACE DEACTIVATED |<<<<<<<<<<<<|\n");
+		DevMsg(eDLL::ENGINE, "+--------------------------------------------------------+\n");
+		DevMsg(eDLL::ENGINE, "\n");
 
 		// Begin the detour transaction to hook the the process
 		DetourTransactionBegin();
@@ -525,7 +532,7 @@ void NET_TraceNetChan_Callback(CCommand* cmd)
 	bTraceNetChannel = !bTraceNetChannel;
 }
 
-void VPK_Decompress_Callback(CCommand* cmd)
+void _VPK_Decompress_f_CompletionFunc(CCommand* cmd)
 {
 	std::int32_t argSize = *(std::int32_t*)((std::uintptr_t)cmd + 0x4);
 
@@ -534,15 +541,15 @@ void VPK_Decompress_Callback(CCommand* cmd)
 		return;
 	}
 
-	CCommand& cmdReference = *cmd; // Get reference.
-	std::string firstArg = cmdReference[1]; // Get first arg.
+	CCommand& args = *cmd; // Get reference.
+	std::string firstArg = args[1]; // Get first arg.
 	std::string szPathOut = "platform\\vpk";
 
 	std::chrono::milliseconds msStart = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
 
-	Sys_Print(SYS_DLL::FS, "______________________________________________________________\n");
-	Sys_Print(SYS_DLL::FS, "] FS_DECOMPRESS ----------------------------------------------\n");
-	Sys_Print(SYS_DLL::FS, "] Processing: '%s'\n", firstArg.c_str());
+	DevMsg(eDLL::FS, "______________________________________________________________\n");
+	DevMsg(eDLL::FS, "] FS_DECOMPRESS ----------------------------------------------\n");
+	DevMsg(eDLL::FS, "] Processing: '%s'\n", firstArg.c_str());
 
 	vpk_dir_h vpk = g_pPackedStore->GetPackDirFile(firstArg);
 	g_pPackedStore->InitLzParams();
@@ -553,17 +560,17 @@ void VPK_Decompress_Callback(CCommand* cmd)
 	std::chrono::milliseconds msEnd = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
 	float duration = msEnd.count() - msStart.count();
 
-	Sys_Print(SYS_DLL::FS, "______________________________________________________________\n");
-	Sys_Print(SYS_DLL::FS, "] OPERATION_DETAILS ------------------------------------------\n");
-	Sys_Print(SYS_DLL::FS, "] Time elapsed: '%.3f' seconds\n", (duration / 1000));
-	Sys_Print(SYS_DLL::FS, "] Decompressed vpk to: '%s'\n", szPathOut.c_str());
-	Sys_Print(SYS_DLL::FS, "--------------------------------------------------------------\n");
+	DevMsg(eDLL::FS, "______________________________________________________________\n");
+	DevMsg(eDLL::FS, "] OPERATION_DETAILS ------------------------------------------\n");
+	DevMsg(eDLL::FS, "] Time elapsed: '%.3f' seconds\n", (duration / 1000));
+	DevMsg(eDLL::FS, "] Decompressed vpk to: '%s'\n", szPathOut.c_str());
+	DevMsg(eDLL::FS, "--------------------------------------------------------------\n");
 }
 
-void NET_SetKey_Callback(CCommand* cmd)
+void _NET_SetKey_f_CompletionFunc(CCommand* cmd)
 {
-	CCommand& cmdReference = *cmd; // Get reference.
-	std::string firstArg = cmdReference[1]; // Get first arg.
+	CCommand& args = *cmd; // Get reference.
+	std::string firstArg = args[1]; // Get first arg.
 
 	std::int32_t argSize = *(std::int32_t*)((std::uintptr_t)cmd + 0x4);
 
@@ -575,7 +582,7 @@ void NET_SetKey_Callback(CCommand* cmd)
 	HNET_SetKey(firstArg);
 }
 
-void NET_GenerateKey_Callback(CCommand* cmd)
+void _NET_GenerateKey_f_CompletionFunc(CCommand* cmd)
 {
 	HNET_GenerateKey();
 }

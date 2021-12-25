@@ -60,3 +60,17 @@ void CEngineVGui_Detach();
 
 ///////////////////////////////////////////////////////////////////////////////
 extern CLogSystem g_pLogSystem;
+
+///////////////////////////////////////////////////////////////////////////////
+class HEngineVGui : public IDetour
+{
+	virtual void debugp()
+	{
+		std::cout << "| FUN: CEngineVGui::Paint                   : 0x" << std::hex << std::uppercase << p_CEngineVGui_Paint.GetPtr()   << std::setw(npad) << " |" << std::endl;
+		std::cout << "| FUN: CEngineVGui::Unknown                 : 0x" << std::hex << std::uppercase << p_CEngineVGui_Unknown.GetPtr() << std::setw(npad) << " |" << std::endl;
+		std::cout << "+----------------------------------------------------------------+" << std::endl;
+	}
+};
+///////////////////////////////////////////////////////////////////////////////
+
+REGISTER(HEngineVGui);

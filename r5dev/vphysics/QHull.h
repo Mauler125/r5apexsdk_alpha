@@ -13,7 +13,19 @@ namespace
 int HQHull_PrintError(char* fmt, va_list args);
 int HQHull_PrintDebug(char* fmt, va_list args);
 
-void AttachQHullHooks();
-void DetachQHullHooks();
+void QHull_Attach();
+void QHull_Detach();
 
 ///////////////////////////////////////////////////////////////////////////////
+class HQHull : public IDetour
+{
+	virtual void debugp()
+	{
+		std::cout << "| FUN: QHull_PrintError                     : 0x" << std::hex << std::uppercase << p_QHull_PrintError.GetPtr() << std::setw(npad) << " |" << std::endl;
+		std::cout << "| FUN: QHull_PrintDebug                     : 0x" << std::hex << std::uppercase << p_QHull_PrintDebug.GetPtr() << std::setw(npad) << " |" << std::endl;
+		std::cout << "+----------------------------------------------------------------+" << std::endl;
+	}
+};
+///////////////////////////////////////////////////////////////////////////////
+
+REGISTER(HQHull);

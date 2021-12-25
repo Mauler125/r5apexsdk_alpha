@@ -1,22 +1,31 @@
+//=============================================================================//
+//
+// Purpose: Netchannel system utilities
+//
+//=============================================================================//
+
 #include "core/stdafx.h"
 #include "core/logdef.h"
+#include "tier0/cvar.h"
 #include "engine/sys_utils.h"
 #include "engine/net_chan.h"
 #include "engine/baseclient.h"
 #include "server/IVEngineServer.h"
+
+#ifndef DEDICATED
 #include "gameui/IConsole.h"
-#include "tier0/cvar.h"
+#endif // !DEDICATED
 
 //-----------------------------------------------------------------------------
 // Purpose: hook and log the receive datagram
 //-----------------------------------------------------------------------------
-bool HNET_ReceiveDatagram(int sock, netpacket_t* inpacket, bool raw)
+bool HNET_ReceiveDatagram(int iSocket, netpacket_s* pInpacket, bool bRaw)
 {
-	bool result = NET_ReceiveDatagram(sock, inpacket, raw);
+	bool result = NET_ReceiveDatagram(iSocket, pInpacket, bRaw);
 	if (result)
 	{
 		// Log received packet data
-		HexDump("[+] NET_ReceiveDatagram", 0, &inpacket->data[NULL], inpacket->wiresize);
+		HexDump("[+] NET_ReceiveDatagram", 0, &pInpacket->data[NULL], pInpacket->wiresize);
 	}
 	return result;
 }
@@ -24,13 +33,13 @@ bool HNET_ReceiveDatagram(int sock, netpacket_t* inpacket, bool raw)
 //-----------------------------------------------------------------------------
 // Purpose: hook and log the send datagram
 //-----------------------------------------------------------------------------
-void* HNET_SendDatagram(SOCKET s, const char* buf, int len, int flags)
+void* HNET_SendDatagram(SOCKET s, const char* szPayload, int iLenght, int nFlags)
 {
-	void* result = NET_SendDatagram(s, buf, len, flags);
+	void* result = NET_SendDatagram(s, szPayload, iLenght, nFlags);
 	if (result)
 	{
 		// Log transmitted packet data
-		HexDump("[+] NET_SendDatagram", 0, buf, len);
+		HexDump("[+] NET_SendDatagram", 0, szPayload, iLenght);
 	}
 	return result;
 }
@@ -38,15 +47,15 @@ void* HNET_SendDatagram(SOCKET s, const char* buf, int len, int flags)
 //-----------------------------------------------------------------------------
 // Purpose: sets the user specified encryption key
 //-----------------------------------------------------------------------------
-void HNET_SetKey(std::string key)
+void HNET_SetKey(std::string svNetKey)
 {
 	g_szNetKey.clear();
-	g_szNetKey = key;
+	g_szNetKey = svNetKey;
 
-	Sys_Print(SYS_DLL::ENGINE, "______________________________________________________________\n");
-	Sys_Print(SYS_DLL::ENGINE, "] NET_KEY ----------------------------------------------------\n");
-	Sys_Print(SYS_DLL::ENGINE, "] BASE64: '%s'\n", g_szNetKey.c_str());
-	Sys_Print(SYS_DLL::ENGINE, "--------------------------------------------------------------\n");
+	DevMsg(eDLL::ENGINE, "______________________________________________________________\n");
+	DevMsg(eDLL::ENGINE, "] NET_KEY ----------------------------------------------------\n");
+	DevMsg(eDLL::ENGINE, "] BASE64: '%s'\n", g_szNetKey.c_str());
+	DevMsg(eDLL::ENGINE, "--------------------------------------------------------------\n");
 
 	NET_SetKey(g_pNetKey, g_szNetKey.c_str());
 }
@@ -57,18 +66,18 @@ void HNET_SetKey(std::string key)
 void HNET_GenerateKey()
 {
 	g_szNetKey.clear();
-	net_userandomkey->m_iValue = 1;
+	net_userandomkey->m_pParent->m_iValue = 1;
 
 	BCRYPT_ALG_HANDLE hAlgorithm;
 	if (BCryptOpenAlgorithmProvider(&hAlgorithm, L"RNG", 0, 0) < 0)
 	{
-		Sys_Print(SYS_DLL::ENGINE, "Failed to open rng algorithm\n");
+		DevMsg(eDLL::ENGINE, "Failed to open rng algorithm\n");
 		return;
 	}
 	unsigned char pBuffer[0x10u];
 	if (BCryptGenRandom(hAlgorithm, pBuffer, 0x10u, 0) < 0)
 	{
-		Sys_Print(SYS_DLL::ENGINE, "Failed to generate random data\n");
+		DevMsg(eDLL::ENGINE, "Failed to generate random data\n");
 		return;
 	}
 
@@ -77,12 +86,12 @@ void HNET_GenerateKey()
 		g_szNetKey += pBuffer[i];
 	}
 
-	g_szNetKey = base64_encode(g_szNetKey);
+	g_szNetKey = Base64Encode(g_szNetKey);
 
-	Sys_Print(SYS_DLL::ENGINE, "______________________________________________________________\n");
-	Sys_Print(SYS_DLL::ENGINE, "] NET_KEY ----------------------------------------------------\n");
-	Sys_Print(SYS_DLL::ENGINE, "] BASE64: '%s'\n", g_szNetKey.c_str());
-	Sys_Print(SYS_DLL::ENGINE, "--------------------------------------------------------------\n");
+	DevMsg(eDLL::ENGINE, "______________________________________________________________\n");
+	DevMsg(eDLL::ENGINE, "] NET_KEY ----------------------------------------------------\n");
+	DevMsg(eDLL::ENGINE, "] BASE64: '%s'\n", g_szNetKey.c_str());
+	DevMsg(eDLL::ENGINE, "--------------------------------------------------------------\n");
 
 	NET_SetKey(g_pNetKey, g_szNetKey.c_str());
 }
@@ -102,31 +111,31 @@ void HNET_PrintFunc(const char* fmt, ...)
 	buf[sizeof(buf) -1] = 0;
 	va_end(args);
 
-	Sys_Print(SYS_DLL::CLIENT, "%s\n", buf);
+	DevMsg(eDLL::CLIENT, "%s\n", buf);
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: disconnect the client and shutdown netchannel
 //-----------------------------------------------------------------------------
-void NET_DisconnectClient(CClient* client, int index, const char* reason, uint8_t unk1, char unk2)
+void NET_DisconnectClient(CClient* pClient, int nIndex, const char* szReason, uint8_t unk1, char unk2)
 {
-	if (!client) //	Client valid?
+	if (!pClient) //	Client valid?
 	{
 		return;
 	}
-	if (std::strlen(reason) == NULL) // Is reason null?
+	if (std::strlen(szReason) == NULL) // Is reason null?
 	{
 		return;
 	}
-	if (!client->GetNetChan())
+	if (!pClient->GetNetChan())
 	{
 		return;
 	}
 
-	NET_Shutdown(client->GetNetChan(), reason, unk1, unk2); // Shutdown netchan.
-	client->GetNetChan() = nullptr;                         // Null netchan.
-	CBaseClient_Clear((std::int64_t)client);                // Reset CClient instance for client.
-	g_bIsPersistenceVarSet[index] = false;                  // Reset Persistence var.
+	NET_Shutdown(pClient->GetNetChan(), szReason, unk1, unk2); // Shutdown netchan.
+	pClient->GetNetChan() = nullptr;                           // Null netchan.
+	CBaseClient_Clear((std::int64_t)pClient);                  // Reset CClient instance for client.
+	g_bIsPersistenceVarSet[nIndex] = false;                    // Reset Persistence var.
 }
 
 ///////////////////////////////////////////////////////////////////////////////

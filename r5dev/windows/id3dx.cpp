@@ -2,6 +2,7 @@
 #ifndef DEDICATED // This file should not be compiled for DEDICATED!
 //------------------------------
 #define STB_IMAGE_IMPLEMENTATION
+#include "tier0/cvar.h"
 #include "windows/id3dx.h"
 #include "windows/input.h"
 #include "gameui/IConsole.h"
@@ -216,9 +217,12 @@ void GetPresent()
 		&nFeatureLevelsSupported,
 		&pContext)))
 	{
-		Sys_Print(SYS_DLL::MS, "+--------------------------------------------------------+\n");
-		Sys_Print(SYS_DLL::MS, "| >>>>>>>>>| VIRTUAL METHOD TABLE HOOK FAILED |<<<<<<<<< |\n");
-		Sys_Print(SYS_DLL::MS, "+--------------------------------------------------------+\n");
+		if (mat_showdxoutput->m_pParent->m_iValue > 0)
+		{
+			DevMsg(eDLL::MS, "+--------------------------------------------------------+\n");
+			DevMsg(eDLL::MS, "| >>>>>>>>>| VIRTUAL METHOD TABLE HOOK FAILED |<<<<<<<<< |\n");
+			DevMsg(eDLL::MS, "+--------------------------------------------------------+\n");
+		}
 		DirectX_Shutdown();
 		return;
 	}
@@ -255,13 +259,16 @@ void GetPresent()
 
 void SetupImGui()
 {
-	ImGui::CreateContext();
+	///////////////////////////////////////////////////////////////////////////////
 	IMGUI_CHECKVERSION();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGui::CreateContext();
 	ImGui_ImplWin32_Init(g_hGameWindow);
 	ImGui_ImplDX11_Init(g_pDevice, g_pDeviceContext);
 	ImGui::GetIO().ImeWindowHandle = g_hGameWindow;
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+
+	///////////////////////////////////////////////////////////////////////////////
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_IsSRGB;
 }
 
 void DrawImGui()
@@ -344,9 +351,13 @@ void DestroyRenderTarget()
 		g_pRenderTargetView->Release();
 		g_pRenderTargetView = nullptr;
 		g_pDeviceContext->OMSetRenderTargets(0, 0, 0);
-		Sys_Print(SYS_DLL::MS, "+--------------------------------------------------------+\n");
-		Sys_Print(SYS_DLL::MS, "| >>>>>>>>>>>>>>| RENDER TARGET DESTROYED |<<<<<<<<<<<<< |\n");
-		Sys_Print(SYS_DLL::MS, "+--------------------------------------------------------+\n");
+
+		if (mat_showdxoutput->m_pParent->m_iValue > 0)
+		{
+			DevMsg(eDLL::MS, "+--------------------------------------------------------+\n");
+			DevMsg(eDLL::MS, "| >>>>>>>>>>>>>>| RENDER TARGET DESTROYED |<<<<<<<<<<<<< |\n");
+			DevMsg(eDLL::MS, "+--------------------------------------------------------+\n");
+		}
 	}
 }
 
@@ -384,10 +395,13 @@ HRESULT __stdcall Present(IDXGISwapChain* pSwapChain, UINT nSyncInterval, UINT n
 	{
 		if (FAILED(GetDeviceAndCtxFromSwapchain(pSwapChain, &g_pDevice, &g_pDeviceContext)))
 		{
+			if (mat_showdxoutput->m_pParent->m_iValue > 0)
+			{
+				DevMsg(eDLL::MS, "+--------------------------------------------------------+\n");
+				DevMsg(eDLL::MS, "| >>>>>>>>>>| GET DVS AND CTX FROM SCP FAILED |<<<<<<<<< |\n");
+				DevMsg(eDLL::MS, "+--------------------------------------------------------+\n");
+			}
 			return g_fnIDXGISwapChainPresent(pSwapChain, nSyncInterval, nFlags);
-			Sys_Print(SYS_DLL::MS, "+--------------------------------------------------------+\n");
-			Sys_Print(SYS_DLL::MS, "| >>>>>>>>>>| GET DVS AND CTX FROM SCP FAILED |<<<<<<<<< |\n");
-			Sys_Print(SYS_DLL::MS, "+--------------------------------------------------------+\n");
 		}
 
 		CreateRenderTarget(pSwapChain);
@@ -497,7 +511,6 @@ void InstallDXHooks()
 
 void DirectX_Shutdown()
 {
-
 	// Begin the detour transaction
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
@@ -519,16 +532,20 @@ void DirectX_Shutdown()
 	ImGui_ImplDX11_Shutdown();
 }
 
-void PrintDXAddress()
+class HIDXGI : public IDetour
 {
-	std::cout << "+--------------------------------------------------------+" << std::endl;
-	std::cout << "| ID3D11DeviceContext      : " << std::hex << std::uppercase << g_pDeviceContext          << std::setw(13) << " |" << std::endl;
-	std::cout << "| ID3D11Device             : " << std::hex << std::uppercase << g_pDevice                 << std::setw(13) << " |" << std::endl;
-	std::cout << "| ID3D11RenderTargetView   : " << std::hex << std::uppercase << g_pRenderTargetView       << std::setw(13) << " |" << std::endl;
-	std::cout << "| IDXGISwapChain           : " << std::hex << std::uppercase << g_pSwapChain              << std::setw(13) << " |" << std::endl;
-	std::cout << "| IDXGISwapChainPresent    : " << std::hex << std::uppercase << g_fnIDXGISwapChainPresent << std::setw(13) << " |" << std::endl;
-	std::cout << "+--------------------------------------------------------+" << std::endl;
-}
+	virtual void debugp()
+	{
+		std::cout << "+--------------------------------------------------------+" << std::endl;
+		std::cout << "| VAR: ID3D11DeviceContext      : " << std::hex << std::uppercase << g_pDeviceContext          << std::setw(npad) << " |" << std::endl;
+		std::cout << "| VAR: ID3D11Device             : " << std::hex << std::uppercase << g_pDevice                 << std::setw(npad) << " |" << std::endl;
+		std::cout << "| VAR: ID3D11RenderTargetView   : " << std::hex << std::uppercase << g_pRenderTargetView       << std::setw(npad) << " |" << std::endl;
+		std::cout << "| VAR: IDXGISwapChain           : " << std::hex << std::uppercase << g_pSwapChain              << std::setw(npad) << " |" << std::endl;
+		std::cout << "| VAR: IDXGISwapChainPresent    : " << std::hex << std::uppercase << g_fnIDXGISwapChainPresent << std::setw(npad) << " |" << std::endl;
+		std::cout << "+--------------------------------------------------------+" << std::endl;
+	}
+	///////////////////////////////////////////////////////////////////////////////
+};
 
 //#################################################################################
 // ENTRYPOINT
@@ -552,4 +569,5 @@ void DirectX_Init()
 		CloseHandle(hThread);
 	}
 }
+//REGISTER(HIDXGI);
 #endif // !DEDICATED

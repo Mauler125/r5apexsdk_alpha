@@ -47,3 +47,22 @@ void hsq_newslot(void* sqvm, int idx);
 
 void SQAPI_Attach();
 void SQAPI_Detach();
+
+///////////////////////////////////////////////////////////////////////////////
+class HSqapi : public IDetour
+{
+	virtual void debugp()
+	{
+		std::cout << "| FUN: sq_pushbool                          : 0x" << std::hex << std::uppercase << p_sq_pushbool.GetPtr()    << std::setw(npad) << " |" << std::endl;
+		std::cout << "| FUN: sq_pushstring                        : 0x" << std::hex << std::uppercase << p_sq_pushstring.GetPtr()  << std::setw(npad) << " |" << std::endl;
+		std::cout << "| FUN: sq_pushinteger                       : 0x" << std::hex << std::uppercase << p_sq_pushinteger.GetPtr() << std::setw(npad) << " |" << std::endl;
+		std::cout << "| FUN: sq_newarray                          : 0x" << std::hex << std::uppercase << p_sq_newarray.GetPtr()    << std::setw(npad) << " |" << std::endl;
+		std::cout << "| FUN: sq_arrayappend                       : 0x" << std::hex << std::uppercase << p_sq_arrayappend.GetPtr() << std::setw(npad) << " |" << std::endl;
+		std::cout << "| FUN: sq_newtable                          : 0x" << std::hex << std::uppercase << p_sq_newtable.GetPtr()    << std::setw(npad) << " |" << std::endl;
+		std::cout << "| FUN: sq_newslot                           : 0x" << std::hex << std::uppercase << p_sq_newslot.GetPtr()     << std::setw(npad) << " |" << std::endl;
+		std::cout << "+----------------------------------------------------------------+" << std::endl;
+	}
+};
+///////////////////////////////////////////////////////////////////////////////
+
+REGISTER(HSqapi);

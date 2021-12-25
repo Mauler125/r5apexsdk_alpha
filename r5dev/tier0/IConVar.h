@@ -128,16 +128,16 @@ namespace
 {
 	/* ==== ICONVAR ========================================================================================================================================================= */
 	ADDRESS p_IConVar_IsFlagSet = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x48\x8B\x41\x48\x85\x50\x38", "xxxxxxx");
-	bool (*IConVar_IsFlagSet)(ConVar* cvar, int flag) = (bool (*)(ConVar*, int))p_IConVar_IsFlagSet.GetPtr(); /*48 8B 41 48 85 50 38*/
+	bool (*IConVar_IsFlagSet)(ConVar* pConVar, int nFlag) = (bool (*)(ConVar*, int))p_IConVar_IsFlagSet.GetPtr(); /*48 8B 41 48 85 50 38*/
 
 	ADDRESS p_ConVar_SetInfo = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x40\x53\x48\x83\xEC\x60\x48\x8B\xD9\xC6\x41\x10\x00\x33\xC9\x48\x8D\x05\x00\x00\x00\x00\x48\x89\x4C\x24\x00\x0F\x57\xC0\x48\x89\x4C\x24\x00\x48\x89\x03\x48\x8D\x05\x00\x00\x00\x00\x48\x89\x43\x40", "xxxxxxxxxxxxxxxxxx????xxxx?xxxxxxx?xxxxxx????xxxx");
 	void* (*ConVar_SetInfo)(void* a1, int a2, int a3, int a4, void* a5) = (void* (*)(void* a1, int a2, int a3, int a4, void* a5))p_ConVar_SetInfo.GetPtr(); /*40 53 48 83 EC 60 48 8B D9 C6 41 10 00 33 C9 48 8D 05 ? ? ? ? 48 89 4C 24 ? 0F 57 C0 48 89 4C 24 ? 48 89 03 48 8D 05 ? ? ? ? 48 89 43 40*/
 #if defined (GAMEDLL_S0) || defined (GAMEDLL_S1)
 	ADDRESS p_ConVar_Register = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x48\x89\x5C\x24\x00\x48\x89\x6C\x24\x00\x48\x89\x74\x24\x00\x48\x89\x7C\x24\x00\x41\x56\x48\x83\xEC\x30\xF3\x0F\x10\x44\x24\x00", "xxxx?xxxx?xxxx?xxxx?xxxxxxxxxxx?"); /*48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC 30 F3 0F 10 44 24 ?*/
-	void* (*ConVar_Register)(ConVar* allocatedConvar, const char* name, const char* defaultValue, int flags, const char* helpString, bool bMin, float fMin, bool bMax, float fMax, void* callback, void* unk) = (void* (*)(ConVar*, const char*, const char*, int, const char*, bool, float, bool, float, void*, void*))p_ConVar_Register.GetPtr();
+	void* (*ConVar_Register)(ConVar* allocatedConvar, const char* szName, const char* szDefaultValue, int nFlags, const char* szHelpString, bool bMin, float fMin, bool bMax, float fMax, void* pCallback, void* unk) = (void* (*)(ConVar*, const char*, const char*, int, const char*, bool, float, bool, float, void*, void*))p_ConVar_Register.GetPtr();
 #elif defined (GAMEDLL_S2) || defined (GAMEDLL_S3)
 	ADDRESS p_ConVar_Register = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x48\x89\x5C\x24\x00\x48\x89\x6C\x24\x00\x48\x89\x74\x24\x00\x57\x48\x83\xEC\x40\xF3\x0F\x10\x84\x24\x00\x00\x00\x00", "xxxx?xxxx?xxxx?xxxxxxxxxx????"); /*48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC 40 F3 0F 10 84 24 ? ? ? ?*/
-	void* (*ConVar_Register)(ConVar* allocatedConvar, const char* name, const char* defaultValue, int flags, const char* helpString, bool bMin, float fMin, bool bMax, float fMax, void* callback, void* unk) = (void* (*)(ConVar*, const char*, const char*, int, const char*, bool, float, bool, float, void*, void*))p_ConVar_Register.GetPtr();
+	void* (*ConVar_Register)(ConVar* allocatedConvar, const char* szName, const char* szDefaultValue, int nFlags, const char* szHelpString, bool bMin, float fMin, bool bMax, float fMax, void* pCallback, void* unk) = (void* (*)(ConVar*, const char*, const char*, int, const char*, bool, float, bool, float, void*, void*))p_ConVar_Register.GetPtr();
 #endif
 }
 
@@ -148,7 +148,7 @@ namespace
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool HIConVar_IsFlagSet(ConVar* cvar, int flag);
+bool HIConVar_IsFlagSet(ConVar* pConVar, int nFlag);
 void IConVar_InitConVar();
 void IConVar_ClearHostNames();
 
@@ -156,4 +156,18 @@ void IConVar_Attach();
 void IConVar_Detach();
 
 ///////////////////////////////////////////////////////////////////////////////
-extern CCVar* g_pCvar;
+class HConVar : public IDetour
+{
+	virtual void debugp()
+	{
+		std::cout << "| FUN: IConVar::IsFlagSet                   : 0x" << std::hex << std::uppercase << p_IConVar_IsFlagSet.GetPtr() << std::setw(npad) << " |" << std::endl;
+		std::cout << "| FUN: IConVar::SetInfo                     : 0x" << std::hex << std::uppercase << p_ConVar_SetInfo.GetPtr()    << std::setw(npad) << " |" << std::endl;
+		std::cout << "| FUN: IConVar::Register                    : 0x" << std::hex << std::uppercase << p_ConVar_Register.GetPtr()   << std::setw(npad) << " |" << std::endl;
+		std::cout << "| VAR: g_pConVarVtable                      : 0x" << std::hex << std::uppercase << g_pConVarVtable.GetPtr()     << std::setw(npad) << " |" << std::endl;
+		std::cout << "| VAR: g_pIConVarVtable                     : 0x" << std::hex << std::uppercase << g_pIConVarVtable.GetPtr()    << std::setw(npad) << " |" << std::endl;
+		std::cout << "+----------------------------------------------------------------+" << std::endl;
+	}
+};
+///////////////////////////////////////////////////////////////////////////////
+
+REGISTER(HConVar);

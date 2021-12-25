@@ -12,3 +12,16 @@ std::int64_t* HCBaseClient_Clear(std::int64_t client);
 
 void CBaseClient_Attach();
 void CBaseClient_Detach();
+
+///////////////////////////////////////////////////////////////////////////////
+class HBaseClient : public IDetour
+{
+	virtual void debugp()
+	{
+		std::cout << "| FUN: CBaseClient::Clear                   : 0x" << std::hex << std::uppercase << p_CBaseClient_Clear.GetPtr() << std::setw(npad) << " |" << std::endl;
+		std::cout << "+----------------------------------------------------------------+" << std::endl;
+	}
+};
+///////////////////////////////////////////////////////////////////////////////
+
+REGISTER(HBaseClient);

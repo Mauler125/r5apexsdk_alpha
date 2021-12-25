@@ -13,7 +13,7 @@ void PrintLastError()
         size_t size = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
             NULL, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&messageBuffer, 0, NULL);
 
-        spdlog::error("{}", messageBuffer);
+        spdlog::error("{}\n", messageBuffer);
         LocalFree(messageBuffer);
     }
 }
@@ -219,7 +219,7 @@ int main(int argc, char* argv[], char* envp[])
     spdlog::warn("All FCVAR_CHEAT | FCVAR_DEVELOPMENTONLY ConVar's/ConCommand's will be enabled.\n");
     spdlog::warn("Connected clients will be able to set and execute anything flagged FCVAR_CHEAT | FCVAR_DEVELOPMENTONLY.\n");
     std::cout << "--------------------------------------------------------------------------------------------------------" << std::endl;
-    spdlog::warn("Use DEBUG     [1] for development and debugging purposes.\n");
+    spdlog::warn("Use DEBUG     [1] for research and development purposes.\n");
     spdlog::warn("Use RELEASE   [2] for playing and server hosting purposes.\n");
     spdlog::warn("Use DEDICATED [3] for running and hosting a dedicated server.\n");
     std::cout << "--------------------------------------------------------------------------------------------------------" << std::endl;
@@ -266,7 +266,6 @@ int main(int argc, char* argv[], char* envp[])
             return EXIT_FAILURE;
         }
     }
-
     spdlog::error("R5Reloaded requires numerical input to launch.\n");
 
     Sleep(5000);

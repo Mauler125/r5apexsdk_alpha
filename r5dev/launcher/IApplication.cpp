@@ -3,20 +3,18 @@
 #include "ebisusdk/EbisuSDK.h"
 
 //-----------------------------------------------------------------------------
-// Purpose:
+// Purpose: 
 //-----------------------------------------------------------------------------
-std::int64_t HIApplication_Main(std::int64_t a1, std::int64_t a2)
+void* HIApplication_Main(void* a1, void* a2)
 {
-#ifdef DEDICATED
 	HEbisuSDK_Init();
-#endif // DEDICATED
 	return IAppSystem_Main(a1, a2);
 }
 
 //-----------------------------------------------------------------------------
-// Purpose:
+// Purpose: 
 //-----------------------------------------------------------------------------
-char HIApplication_Create(std::int64_t a1)
+bool HIApplication_Create(void* a1)
 {
 	return IAppSystem_Create(a1);
 }

@@ -5,12 +5,12 @@
 struct user_creds
 {
 	std::uint8_t  gap0[16];
-	std::uint32_t ipaddr;
+	std::uint32_t m_nIpAddr;
 	std::uint8_t  gap1[4];
-	std::int32_t  protocol_ver;
+	std::int32_t  m_nProtocolVer;
 	std::uint8_t  gap2[12];
-	std::int64_t  nucleus_id;
-	std::int64_t  user_id;
+	std::int64_t  m_nNucleusID;
+	std::int64_t  m_nUserID;
 };
 
 namespace
@@ -27,7 +27,7 @@ namespace
 	void* (*CServer_Authenticate)(void* cserver, user_creds* creds) = (void* (*)(void* cserver, user_creds * creds))p_CServer_Authenticate.GetPtr(); /*40 55 57 41 55 41 57 48 8D AC 24 ?? ?? ?? ??*/
 #endif
 	ADDRESS p_CServer_RejectConnection = g_mGameDll.FindPatternSIMD((std::uint8_t*)"\x4C\x89\x4C\x24\x00\x53\x55\x56\x57\x48\x81\xEC\x00\x00\x00\x00\x49\x8B\xD9", "xxxx?xxxxxxx????xxx");
-	void* (*CServer_RejectConnection)(void* cserver, unsigned int a2, user_creds* creds, const char* message) = (void* (*)(void*, unsigned int, user_creds*, const char*))p_CServer_RejectConnection.GetPtr(); /*4C 89 4C 24 ?? 53 55 56 57 48 81 EC ?? ?? ?? ?? 49 8B D9*/
+	void* (*CServer_RejectConnection)(void* pServer, unsigned int a2, user_creds* pCreds, const char* szMessage) = (void* (*)(void*, unsigned int, user_creds*, const char*))p_CServer_RejectConnection.GetPtr(); /*4C 89 4C 24 ?? 53 55 56 57 48 81 EC ?? ?? ?? ?? 49 8B D9*/
 }
 
 void CServer_Attach();
@@ -37,3 +37,17 @@ void IsClientBanned(R5Net::Client* r5net, const std::string ipaddr, std::int64_t
 void* HCServer_Authenticate(void* cserver, user_creds* inpacket);
 
 extern bool g_bCheckCompBanDB;
+
+///////////////////////////////////////////////////////////////////////////////
+class HServer : public IDetour
+{
+	virtual void debugp()
+	{
+		std::cout << "| FUN: CServer::Authenticate                : 0x" << std::hex << std::uppercase << p_CServer_Authenticate.GetPtr()     << std::setw(npad) << " |" << std::endl;
+		std::cout << "| FUN: CServer::RejectConnection            : 0x" << std::hex << std::uppercase << p_CServer_RejectConnection.GetPtr() << std::setw(npad) << " |" << std::endl;
+		std::cout << "+----------------------------------------------------------------+" << std::endl;
+	}
+};
+///////////////////////////////////////////////////////////////////////////////
+
+REGISTER(HServer);

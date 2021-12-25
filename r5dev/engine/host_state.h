@@ -48,3 +48,18 @@ void CHostState_Detach();
 
 ///////////////////////////////////////////////////////////////////////////////
 extern CHostState* g_pHostState;
+
+
+///////////////////////////////////////////////////////////////////////////////
+class HHostState : public IDetour
+{
+	virtual void debugp()
+	{
+		std::cout << "| FUN: CHostState::FrameUpdate              : 0x" << std::hex << std::uppercase << p_CHostState_FrameUpdate.GetPtr() << std::setw(npad) << " |" << std::endl;
+		std::cout << "| VAR: g_pHostState                         : 0x" << std::hex << std::uppercase << g_pHostState                      << std::setw(0)    << " |" << std::endl;
+		std::cout << "+----------------------------------------------------------------+" << std::endl;
+	}
+};
+///////////////////////////////////////////////////////////////////////////////
+
+REGISTER(HHostState);

@@ -17,20 +17,33 @@ namespace
 
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef DEDICATED
-void CGameConsole_Callback(const CCommand& cmd);
-void CCompanion_Callback(const CCommand& cmd);
+void _CGameConsole_f_CompletionFunc(const CCommand& cmd);
+void _CCompanion_f_CompletionFunc(const CCommand& cmd);
 #endif // !DEDICATED
-void Kick_Callback(CCommand* cmd);
-void KickID_Callback(CCommand* cmd);
-void Ban_Callback(CCommand* cmd);
-void BanID_Callback(CCommand* cmd);
-void Unban_Callback(CCommand* cmd);
-void ReloadBanList_Callback(CCommand* cmd);
-void RTech_GenerateGUID_Callback(CCommand* cmd);
-void RTech_Decompress_Callback(CCommand* cmd);
-void VPK_Decompress_Callback(CCommand* cmd);
-void NET_TraceNetChan_Callback(CCommand* cmd);
-void NET_SetKey_Callback(CCommand* cmd);
-void NET_GenerateKey_Callback(CCommand* cmd);
+void _Kick_f_CompletionFunc(CCommand* cmd);
+void _KickID_f_CompletionFunc(CCommand* cmd);
+void _Ban_f_CompletionFunc(CCommand* cmd);
+void _BanID_f_CompletionFunc(CCommand* cmd);
+void _Unban_f_CompletionFunc(CCommand* cmd);
+void _ReloadBanList_f_CompletionFunc(CCommand* cmd);
+void _RTech_GenerateGUID_f_CompletionFunc(CCommand* cmd);
+void _RTech_Decompress_f_CompletionFunc(CCommand* cmd);
+void _VPK_Decompress_f_CompletionFunc(CCommand* cmd);
+void _NET_TraceNetChan_f_CompletionFunc(CCommand* cmd);
+void _NET_SetKey_f_CompletionFunc(CCommand* cmd);
+void _NET_GenerateKey_f_CompletionFunc(CCommand* cmd);
+
 
 ///////////////////////////////////////////////////////////////////////////////
+class HCompletion : public IDetour
+{
+	virtual void debugp()
+	{
+		std::cout << "| FUN: Map_Callback                         : 0x" << std::hex << std::uppercase << p_Map_Callback.GetPtr()               << std::setw(npad) << " |" << std::endl;
+		std::cout << "| FUN: DownloadPlaylists_Callback           : 0x" << std::hex << std::uppercase << p_DownloadPlaylists_Callback.GetPtr() << std::setw(npad) << " |" << std::endl;
+		std::cout << "+----------------------------------------------------------------+" << std::endl;
+	}
+};
+///////////////////////////////////////////////////////////////////////////////
+
+REGISTER(HCompletion);

@@ -30,6 +30,9 @@ History:
 
 ******************************************************************************/
 
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
 IBrowser::IBrowser()
 {
     memset(m_chServerConnStringBuffer, 0, sizeof(m_chServerConnStringBuffer));
@@ -53,7 +56,7 @@ IBrowser::IBrowser()
         }
     }
 
-    m_szMatchmakingHostName = matchmaking_hostname_r5net->m_pzsCurrentValue;
+    m_szMatchmakingHostName = r5net_matchmaking_hostname->m_pzsCurrentValue;
     static std::thread hostingServerRequestThread([this]()
     {
         while (true)
@@ -78,11 +81,17 @@ IBrowser::IBrowser()
     else { assert(rcData == NULL); }
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
 IBrowser::~IBrowser()
 {
     //delete r5net;
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: updates the hoster's status
+//-----------------------------------------------------------------------------
 void IBrowser::UpdateHostingStatus()
 {
     if (!g_pHostState || !g_pCvar)
@@ -106,7 +115,7 @@ void IBrowser::UpdateHostingStatus()
             break;
         }
 
-        if (*reinterpret_cast<std::int32_t*>(g_nRemoteFunctionCallsChecksum.GetPtr()) == NULL) // Check if script checksum is valid yet.
+        if (*g_nRemoteFunctionCallsChecksum == NULL) // Check if script checksum is valid yet.
         {
             break;
         }
@@ -115,10 +124,10 @@ void IBrowser::UpdateHostingStatus()
         {
 
         case EServerVisibility::HIDDEN:
-            m_Server.hidden = true;
+            m_Server.bHidden = true;
             break;
         case EServerVisibility::PUBLIC:
-            m_Server.hidden = false;
+            m_Server.bHidden = false;
             break;
         default:
             break;
@@ -132,6 +141,9 @@ void IBrowser::UpdateHostingStatus()
     }
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: refreshes the server browser list with available servers
+//-----------------------------------------------------------------------------
 void IBrowser::RefreshServerList()
 {
     static bool bThreadLocked = false;
@@ -143,9 +155,9 @@ void IBrowser::RefreshServerList()
     {
         std::thread t([this]()
         {
-            Sys_Print(SYS_DLL::CLIENT, "Refreshing server list with string '%s'\n", matchmaking_hostname_r5net->m_pzsCurrentValue);
+            DevMsg(eDLL::CLIENT, "Refreshing server list with string '%s'\n", r5net_matchmaking_hostname->m_pzsCurrentValue);
             bThreadLocked = true;
-            m_vServerList = r5net->GetServersList(m_szServerListMessage);
+            m_vServerList = g_pR5net->GetServersList(m_szServerListMessage);
             bThreadLocked = false;
         });
 
@@ -153,19 +165,22 @@ void IBrowser::RefreshServerList()
     }
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: sends the hosting POST request to the comp server
+//-----------------------------------------------------------------------------
 void IBrowser::SendHostingPostRequest()
 {
     m_szHostToken = std::string();
-    Sys_Print(SYS_DLL::CLIENT, "Sending PostServerHost request\n");
-    bool result = r5net->PostServerHost(m_szHostRequestMessage, m_szHostToken,
+    DevMsg(eDLL::CLIENT, "Sending PostServerHost request\n");
+    bool result = g_pR5net->PostServerHost(m_szHostRequestMessage, m_szHostToken,
         ServerListing{
-            m_Server.name,
+            m_Server.svServerName,
             std::string(g_pHostState->m_levelName),
             "",
             g_pCvar->FindVar("hostport")->m_pzsCurrentValue,
             g_pCvar->FindVar("mp_gamemode")->m_pzsCurrentValue,
-            m_Server.hidden,
-            std::to_string(*reinterpret_cast<std::int32_t*>(g_nRemoteFunctionCallsChecksum.GetPtr())),
+            m_Server.bHidden,
+            std::to_string(*g_nRemoteFunctionCallsChecksum),
 
             std::string(),
             g_szNetKey.c_str()
@@ -189,7 +204,9 @@ void IBrowser::SendHostingPostRequest()
     }
 }
 
-
+//-----------------------------------------------------------------------------
+// Purpose: draws the compmenu
+//-----------------------------------------------------------------------------
 void IBrowser::CompMenu()
 {
     ImGui::BeginTabBar("CompMenu");
@@ -208,6 +225,9 @@ void IBrowser::CompMenu()
     ImGui::EndTabBar();
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: draws the server browser section
+//-----------------------------------------------------------------------------
 void IBrowser::ServerBrowserSection()
 {
     ImGui::BeginGroup();
@@ -234,10 +254,10 @@ void IBrowser::ServerBrowserSection()
 
         for (ServerListing& server : m_vServerList)
         {
-            const char* name     = server.name.c_str();
-            const char* map      = server.map.c_str();
-            const char* port     = server.port.c_str();
-            const char* playlist = server.playlist.c_str();
+            const char* name     = server.svServerName.c_str();
+            const char* map      = server.svMapName.c_str();
+            const char* port     = server.svPort.c_str();
+            const char* playlist = server.svPlaylist.c_str();
 
             if (m_imServerBrowserFilter.PassFilter(name)
                 || m_imServerBrowserFilter.PassFilter(map)
@@ -257,11 +277,11 @@ void IBrowser::ServerBrowserSection()
 
                 ImGui::TableNextColumn();
                 std::string selectButtonText = "Connect##";
-                selectButtonText += (server.name + server.ip + server.map);
+                selectButtonText += (server.svServerName + server.svIpAddress + server.svMapName);
 
                 if (ImGui::Button(selectButtonText.c_str()))
                 {
-                    ConnectToServer(server.ip, server.port, server.netchanEncryptionKey);
+                    ConnectToServer(server.svIpAddress, server.svPort, server.svEncryptionKey);
                 }
             }
 
@@ -294,6 +314,9 @@ void IBrowser::ServerBrowserSection()
     ImGui::PopItemWidth();
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: draws the hidden private server modal
+//-----------------------------------------------------------------------------
 void IBrowser::HiddenServersModal()
 {
     bool modalOpen = true;
@@ -331,11 +354,11 @@ void IBrowser::HiddenServersModal()
         {
             m_szHiddenServerRequestMessage.clear();
             ServerListing server;
-            bool result = r5net->GetServerByToken(server, m_szHiddenServerRequestMessage, m_szHiddenServerToken); // Send token connect request.
-            if (!server.name.empty())
+            bool result = g_pR5net->GetServerByToken(server, m_szHiddenServerRequestMessage, m_szHiddenServerToken); // Send token connect request.
+            if (!server.svServerName.empty())
             {
-                ConnectToServer(server.ip, server.port, server.netchanEncryptionKey); // Connect to the server
-                m_szHiddenServerRequestMessage = "Found Server: " + server.name;
+                ConnectToServer(server.svIpAddress, server.svPort, server.svEncryptionKey); // Connect to the server
+                m_szHiddenServerRequestMessage = "Found Server: " + server.svServerName;
                 m_ivHiddenServerMessageColor = ImVec4(0.00f, 1.00f, 0.00f, 1.00f);
                 ImGui::CloseCurrentPopup();
             }
@@ -356,37 +379,40 @@ void IBrowser::HiddenServersModal()
     }
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: draws the host section
+//-----------------------------------------------------------------------------
 void IBrowser::HostServerSection()
 {
     static std::string szServerNameErr = "";
 
-    ImGui::InputTextWithHint("##ServerHost_ServerName", "Server Name (Required)", &m_Server.name);
+    ImGui::InputTextWithHint("##ServerHost_ServerName", "Server Name (Required)", &m_Server.svServerName);
     ImGui::Spacing();
 
-    if (ImGui::BeginCombo("Playlist##ServerHost_PlaylistBox", m_Server.playlist.c_str()))
+    if (ImGui::BeginCombo("Playlist##ServerHost_PlaylistBox", m_Server.svPlaylist.c_str()))
     {
         for (auto& item : g_szAllPlaylists)
         {
-            if (ImGui::Selectable(item.c_str(), item == m_Server.playlist))
+            if (ImGui::Selectable(item.c_str(), item == m_Server.svPlaylist))
             {
-                m_Server.playlist = item;
+                m_Server.svPlaylist = item;
             }
         }
         ImGui::EndCombo();
     }
 
-    if (ImGui::BeginCombo("Map##ServerHost_MapListBox", m_Server.map.c_str()))
+    if (ImGui::BeginCombo("Map##ServerHost_MapListBox", m_Server.svMapName.c_str()))
     {
         for (auto& item : m_vszMapsList)
         {
-            if (ImGui::Selectable(item.c_str(), item == m_Server.map))
+            if (ImGui::Selectable(item.c_str(), item == m_Server.svMapName))
             {
-                m_Server.map = item;
+                m_Server.svMapName = item;
                 for (auto it = mapArray.begin(); it != mapArray.end(); ++it)
                 {
-                    if (it->second.compare(m_Server.map) == NULL)
+                    if (it->second.compare(m_Server.svMapName) == NULL)
                     {
-                        m_Server.map = it->first;
+                        m_Server.svMapName = it->first;
                     }
                 }
             }
@@ -421,9 +447,9 @@ void IBrowser::HostServerSection()
         if (ImGui::Button("Start Server##ServerHost_StartServerButton", ImVec2(ImGui::GetWindowSize().x, 32)))
         {
             szServerNameErr.clear();
-            if (!m_Server.name.empty() && !m_Server.playlist.empty() && !m_Server.map.empty())
+            if (!m_Server.svServerName.empty() && !m_Server.svPlaylist.empty() && !m_Server.svMapName.empty())
             {
-                Sys_Print(SYS_DLL::ENGINE, "Starting Server with name '%s', map '%s' and playlist '%s'\n", m_Server.name.c_str(), m_Server.map.c_str(), m_Server.playlist.c_str());
+                DevMsg(eDLL::ENGINE, "Starting Server with name '%s', map '%s' and playlist '%s'\n", m_Server.svServerName.c_str(), m_Server.svMapName.c_str(), m_Server.svPlaylist.c_str());
                 szServerNameErr = std::string();
                 UpdateHostingStatus();
 
@@ -431,29 +457,29 @@ void IBrowser::HostServerSection()
                 * Playlist gets parsed in two instances, first in LoadPlaylist all the neccessary values.
                 * Then when you would normally call launchplaylist which calls StartPlaylist it would cmd call mp_gamemode which parses the gamemode specific part of the playlist..
                 */
-                KeyValues_LoadPlaylist(m_Server.playlist.c_str());
+                KeyValues_LoadPlaylist(m_Server.svPlaylist.c_str());
                 std::stringstream cgmd;
-                cgmd << "mp_gamemode " << m_Server.playlist;
+                cgmd << "mp_gamemode " << m_Server.svPlaylist;
                 ProcessCommand(cgmd.str().c_str());
 
                 // This is to avoid a race condition.
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
                 std::stringstream cmd;
-                cmd << "map " << m_Server.map;
+                cmd << "map " << m_Server.svMapName;
                 ProcessCommand(cmd.str().c_str());
             }
             else
             {
-                if (m_Server.name.empty())
+                if (m_Server.svServerName.empty())
                 {
                     szServerNameErr = "No Server Name assigned.";
                 }
-                else if (m_Server.playlist.empty())
+                else if (m_Server.svPlaylist.empty())
                 {
                     szServerNameErr = "No Playlist assigned.";
                 }
-                else if (m_Server.map.empty())
+                else if (m_Server.svMapName.empty())
                 {
                     szServerNameErr = "'levelname' was empty.";
                 }
@@ -464,9 +490,9 @@ void IBrowser::HostServerSection()
     if (ImGui::Button("Force Start##ServerHost_ForceStart", ImVec2(ImGui::GetWindowSize().x, 32)))
     {
         szServerNameErr.clear();
-        if (!m_Server.playlist.empty() && !m_Server.map.empty())
+        if (!m_Server.svPlaylist.empty() && !m_Server.svMapName.empty())
         {
-            Sys_Print(SYS_DLL::ENGINE, "Starting Server with map '%s' and playlist '%s'\n", m_Server.map.c_str(), m_Server.playlist.c_str());
+            DevMsg(eDLL::ENGINE, "Starting Server with map '%s' and playlist '%s'\n", m_Server.svMapName.c_str(), m_Server.svPlaylist.c_str());
             szServerNameErr = std::string();
             UpdateHostingStatus();
 
@@ -474,25 +500,25 @@ void IBrowser::HostServerSection()
             * Playlist gets parsed in two instances, first in LoadPlaylist all the neccessary values.
             * Then when you would normally call launchplaylist which calls StartPlaylist it would cmd call mp_gamemode which parses the gamemode specific part of the playlist..
             */
-            KeyValues_LoadPlaylist(m_Server.playlist.c_str());
+            KeyValues_LoadPlaylist(m_Server.svPlaylist.c_str());
             std::stringstream cgmd;
-            cgmd << "mp_gamemode " << m_Server.playlist;
+            cgmd << "mp_gamemode " << m_Server.svPlaylist;
             ProcessCommand(cgmd.str().c_str());
 
             // This is to avoid a race condition.
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
             std::stringstream cmd;
-            cmd << "map " << m_Server.map;
+            cmd << "map " << m_Server.svMapName;
             ProcessCommand(cmd.str().c_str());
         }
         else
         {
-            if (m_Server.playlist.empty())
+            if (m_Server.svPlaylist.empty())
             {
                 szServerNameErr = "No Playlist assigned.";
             }
-            else if (m_Server.map.empty())
+            else if (m_Server.svMapName.empty())
             {
                 szServerNameErr = "'levelname' was empty.";
             }
@@ -510,16 +536,16 @@ void IBrowser::HostServerSection()
     {
         if (ImGui::Button("Reload Scripts##ServerHost_ReloadServerButton", ImVec2(ImGui::GetWindowSize().x, 32)))
         {
-            Sys_Print(SYS_DLL::ENGINE, "Recompiling scripts\n");
+            DevMsg(eDLL::ENGINE, "Recompiling scripts\n");
             ProcessCommand("reparse_weapons");
             ProcessCommand("reload");
         }
 
         if (ImGui::Button("Change Level##ServerHost_ChangeLevel", ImVec2(ImGui::GetWindowSize().x, 32)))
         {
-            if (!m_Server.map.empty())
+            if (!m_Server.svMapName.empty())
             {
-                strncpy_s(g_pHostState->m_levelName, m_Server.map.c_str(), 64); // Copy new map into hoststate levelname. 64 is size of m_levelname.
+                strncpy_s(g_pHostState->m_levelName, m_Server.svMapName.c_str(), 64); // Copy new map into hoststate levelname. 64 is size of m_levelname.
                 g_pHostState->m_iNextState = HostStates_t::HS_CHANGE_LEVEL_MP; // Force CHostState::FrameUpdate to change the level.
             }
             else
@@ -544,16 +570,19 @@ void IBrowser::HostServerSection()
     }
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: draws the settings section
+//-----------------------------------------------------------------------------
 void IBrowser::SettingsSection()
 {
     ImGui::InputTextWithHint("Hostname##MatchmakingServerString", "Matchmaking Server String", &m_szMatchmakingHostName);
     if (ImGui::Button("Update Hostname"))
     {
-        matchmaking_hostname_r5net->m_pzsCurrentValue = m_szMatchmakingHostName.c_str();
-        if (r5net)
+        r5net_matchmaking_hostname->m_pzsCurrentValue = m_szMatchmakingHostName.c_str();
+        if (g_pR5net)
         {
-            delete r5net;
-            r5net = new R5Net::Client(matchmaking_hostname_r5net->m_pzsCurrentValue);
+            delete g_pR5net;
+            g_pR5net = new R5Net::Client(r5net_matchmaking_hostname->m_pzsCurrentValue);
         }
     }
     ImGui::InputText("Netkey##SettingsSection_EncKey", (char*)g_szNetKey.c_str(), ImGuiInputTextFlags_ReadOnly);
@@ -563,6 +592,9 @@ void IBrowser::SettingsSection()
     }
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: draws the main browser frontend
+//-----------------------------------------------------------------------------
 void IBrowser::Draw(const char* title, bool* bDraw)
 {
     if (!m_bThemeSet)
@@ -605,20 +637,21 @@ void IBrowser::Draw(const char* title, bool* bDraw)
     ImGui::End();
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: executes submitted commands in a separate thread
+//-----------------------------------------------------------------------------
 void IBrowser::ProcessCommand(const char* command_line)
 {
-    std::thread t(&IBrowser::ExecCommand, this, command_line);
-    t.detach();
+    std::thread t(IVEngineClient_CommandExecute, this, command_line);
+    t.detach(); // Detach from render thread.
 
     // This is to avoid a race condition.
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
 }
 
-void IBrowser::ExecCommand(const char* command_line)
-{
-    IVEngineClient_CommandExecute(NULL, command_line);
-}
-
+//-----------------------------------------------------------------------------
+// Purpose: connects to specified server
+//-----------------------------------------------------------------------------
 void IBrowser::ConnectToServer(const std::string ip, const std::string port, const std::string encKey)
 {
     if (!encKey.empty())
@@ -631,6 +664,9 @@ void IBrowser::ConnectToServer(const std::string ip, const std::string port, con
     ProcessCommand(cmd.str().c_str());
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: connects to specified server
+//-----------------------------------------------------------------------------
 void IBrowser::ConnectToServer(const std::string connString, const std::string encKey)
 {
     if (!encKey.empty())
@@ -643,11 +679,17 @@ void IBrowser::ConnectToServer(const std::string connString, const std::string e
     ProcessCommand(cmd.str().c_str());
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: regenerates encryption key
+//-----------------------------------------------------------------------------
 void IBrowser::RegenerateEncryptionKey()
 {
     HNET_GenerateKey();
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: changes encryption key to specified one
+//-----------------------------------------------------------------------------
 void IBrowser::ChangeEncryptionKeyTo(const std::string str)
 {
     HNET_SetKey(str);
