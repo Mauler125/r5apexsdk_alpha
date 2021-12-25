@@ -29,14 +29,14 @@ std::vector<ServerListing> R5Net::Client::GetServersList(std::string& svOutMessa
 
     if (r5net_show_debug->m_pParent->m_iValue > 0)
     {
-       DevMsg(eDLL::ENGINE, "Sending GetServerList post.\n");
+       DevMsg(eDLL_T::ENGINE, "Sending GetServerList post.\n");
     }
 
     httplib::Result htResults = m_HttpClient.Post("/servers", jsReqBody.dump().c_str(), jsReqBody.dump().length(), "application/json");
 
     if (r5net_show_debug->m_pParent->m_iValue > 0)
     {
-        DevMsg(eDLL::ENGINE, "GetServerList replied with '%d'.\n", htResults->status);
+        DevMsg(eDLL_T::ENGINE, "GetServerList replied with '%d'.\n", htResults->status);
     }
 
     if (htResults && htResults->status == 200) // STATUS_OK
@@ -127,14 +127,14 @@ bool R5Net::Client::PostServerHost(std::string& svOutMessage, std::string& svOut
 
     if (r5net_show_debug->m_pParent->m_iValue > 0)
     {
-        DevMsg(eDLL::ENGINE, "Sending PostServerHost post '%s'.\n", svRequestBody.c_str());
+        DevMsg(eDLL_T::ENGINE, "Sending PostServerHost post '%s'.\n", svRequestBody.c_str());
     }
 
     httplib::Result htResults = m_HttpClient.Post("/servers/add", svRequestBody.c_str(), svRequestBody.length(), "application/json");
 
     if (r5net_show_debug->m_pParent->m_iValue > 0)
     {
-        DevMsg(eDLL::ENGINE, "PostServerHost replied with '%d'.\n", htResults->status);
+        DevMsg(eDLL_T::ENGINE, "PostServerHost replied with '%d'.\n", htResults->status);
     }
 
     if (htResults && htResults->status == 200) // STATUS_OK
@@ -215,14 +215,14 @@ bool R5Net::Client::GetServerByToken(ServerListing& slOutServer, std::string& sv
 
     if (r5net_show_debug->m_pParent->m_iValue > 0)
     {
-        DevMsg(eDLL::ENGINE, "Sending GetServerByToken post.\n");
+        DevMsg(eDLL_T::ENGINE, "Sending GetServerByToken post.\n");
     }
 
     httplib::Result htResults = m_HttpClient.Post("/server/byToken", jsRequestBody.dump().c_str(), jsRequestBody.dump().length(), "application/json");
 
     if (r5net_show_debug->m_pParent->m_iValue > 0)
     {
-        DevMsg(eDLL::ENGINE, "GetServerByToken replied with '%d'\n", htResults->status);
+        DevMsg(eDLL_T::ENGINE, "GetServerByToken replied with '%d'\n", htResults->status);
     }
 
     if (htResults && htResults->status == 200) // STATUS_OK

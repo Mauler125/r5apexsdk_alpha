@@ -20,7 +20,7 @@ void HSys_Error(char* fmt, ...)
 	buf[sizeof(buf) -1] = 0;
 	va_end(args);
 
-	DevMsg(eDLL::ENGINE, "%s\n", buf);
+	DevMsg(eDLL_T::ENGINE, "%s\n", buf);
 	Sys_Error(buf);
 }
 
@@ -28,7 +28,7 @@ void HSys_Error(char* fmt, ...)
 //	Sys_Print
 //
 //-----------------------------------------------------------------------------
-void DevMsg(eDLL idx, const char* fmt, ...)
+void DevMsg(eDLL_T idx, const char* fmt, ...)
 {
 	int vmIdx = (int)idx;
 	static bool initialized = false;
@@ -75,7 +75,7 @@ void DevMsg(eDLL idx, const char* fmt, ...)
 	std::string s = g_spd_sys_w_oss.str();
 	const char* c = s.c_str();
 
-	g_pLogSystem.AddLog((LogType_t)eDLL::ENGINE, s);
+	g_pLogSystem.AddLog((LogType_t)eDLL_T::ENGINE, s);
 	Items.push_back(Strdup((const char*)c));
 #endif // !DEDICATED
 }
@@ -99,13 +99,13 @@ void* HSys_LoadAssetHelper(const CHAR* lpFileName, std::int64_t a2, LARGE_INTEGE
 		if (FileExists(mod_file.c_str()))
 		{
 			// Load decompressed pak files from 'mod_dir'.
-			DevMsg(eDLL::RTECH, "Loading pak: '%s'\n", mod_file.c_str());
+			DevMsg(eDLL_T::RTECH, "Loading pak: '%s'\n", mod_file.c_str());
 			return Sys_LoadAssetHelper(mod_file.c_str(), a2, a3);
 		}
 	}
 	if (strstr(lpFileName, base_dir.c_str()))
 	{
-		DevMsg(eDLL::RTECH, "Loading pak: '%s'\n", lpFileName);
+		DevMsg(eDLL_T::RTECH, "Loading pak: '%s'\n", lpFileName);
 	}
 	return Sys_LoadAssetHelper(lpFileName, a2, a3);
 }

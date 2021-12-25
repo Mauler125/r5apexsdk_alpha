@@ -45,7 +45,7 @@ void Strtrim(char* s)
 void ImGuiConfig::Load()
 {
     std::filesystem::path fsPath = std::filesystem::current_path() /= "platform\\imgui.json"; // Get current path + imgui.json
-    DevMsg(eDLL::MS, "Loading ImGui config file '%s'\n", fsPath.string().c_str());
+    DevMsg(eDLL_T::MS, "Loading ImGui config file '%s'\n", fsPath.string().c_str());
 
     nlohmann::json jsIn;
     try
@@ -72,7 +72,7 @@ void ImGuiConfig::Load()
     }
     catch (const std::exception& ex)
     {
-        DevMsg(eDLL::MS, "ImGui config file '%s' not found. Changing the settings in the console or server browser options re-create's it. Exception: '%s'\n", fsPath.string().c_str(), ex.what());
+        DevMsg(eDLL_T::MS, "ImGui config file '%s' not found. Changing the settings in the console or server browser options re-create's it. Exception: '%s'\n", fsPath.string().c_str(), ex.what());
         return;
     }
 }
@@ -93,7 +93,7 @@ void ImGuiConfig::Save()
 
     std::filesystem::path fsPath = std::filesystem::current_path() /= "platform\\imgui.json"; // Get current path + imgui.json
 
-    DevMsg(eDLL::MS, "Saving ImGui config file '%s'\n", fsPath.string().c_str());
+    DevMsg(eDLL_T::MS, "Saving ImGui config file '%s'\n", fsPath.string().c_str());
     std::ofstream outFile(fsPath, std::ios::out | std::ios::trunc); // Write config file.
 
     outFile << jsOut.dump(4); // Dump it into config file.

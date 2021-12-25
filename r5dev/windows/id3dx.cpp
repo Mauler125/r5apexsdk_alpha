@@ -213,9 +213,9 @@ void GetPresent()
 	{
 		if (mat_showdxoutput->m_pParent->m_iValue > 0)
 		{
-			DevMsg(eDLL::MS, "+--------------------------------------------------------+\n");
-			DevMsg(eDLL::MS, "| >>>>>>>>>| VIRTUAL METHOD TABLE HOOK FAILED |<<<<<<<<< |\n");
-			DevMsg(eDLL::MS, "+--------------------------------------------------------+\n");
+			DevMsg(eDLL_T::MS, "+--------------------------------------------------------+\n");
+			DevMsg(eDLL_T::MS, "| >>>>>>>>>| VIRTUAL METHOD TABLE HOOK FAILED |<<<<<<<<< |\n");
+			DevMsg(eDLL_T::MS, "+--------------------------------------------------------+\n");
 		}
 		DirectX_Shutdown();
 		return;
@@ -348,9 +348,9 @@ void DestroyRenderTarget()
 
 		if (mat_showdxoutput->m_pParent->m_iValue > 0)
 		{
-			DevMsg(eDLL::MS, "+--------------------------------------------------------+\n");
-			DevMsg(eDLL::MS, "| >>>>>>>>>>>>>>| RENDER TARGET DESTROYED |<<<<<<<<<<<<< |\n");
-			DevMsg(eDLL::MS, "+--------------------------------------------------------+\n");
+			DevMsg(eDLL_T::MS, "+--------------------------------------------------------+\n");
+			DevMsg(eDLL_T::MS, "| >>>>>>>>>>>>>>| RENDER TARGET DESTROYED |<<<<<<<<<<<<< |\n");
+			DevMsg(eDLL_T::MS, "+--------------------------------------------------------+\n");
 		}
 	}
 }
@@ -391,9 +391,9 @@ HRESULT __stdcall Present(IDXGISwapChain* pSwapChain, UINT nSyncInterval, UINT n
 		{
 			if (mat_showdxoutput->m_pParent->m_iValue > 0)
 			{
-				DevMsg(eDLL::MS, "+--------------------------------------------------------+\n");
-				DevMsg(eDLL::MS, "| >>>>>>>>>>| GET DVS AND CTX FROM SCP FAILED |<<<<<<<<< |\n");
-				DevMsg(eDLL::MS, "+--------------------------------------------------------+\n");
+				DevMsg(eDLL_T::MS, "+--------------------------------------------------------+\n");
+				DevMsg(eDLL_T::MS, "| >>>>>>>>>>| GET DVS AND CTX FROM SCP FAILED |<<<<<<<<< |\n");
+				DevMsg(eDLL_T::MS, "+--------------------------------------------------------+\n");
 			}
 			return g_fnIDXGISwapChainPresent(pSwapChain, nSyncInterval, nFlags);
 		}

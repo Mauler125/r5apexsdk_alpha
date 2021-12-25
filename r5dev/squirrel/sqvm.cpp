@@ -182,12 +182,12 @@ void* HSQVM_LoadRson(const char* szRsonName)
 	{
 		if (sq_showrsonloading->m_pParent->m_iValue > 0)
 		{
-			DevMsg(eDLL::ENGINE, "\n");
-			DevMsg(eDLL::ENGINE, "______________________________________________________________\n");
-			DevMsg(eDLL::ENGINE, "] RSON_DISK --------------------------------------------------\n");
-			DevMsg(eDLL::ENGINE, "] PATH: '%s'\n", szFilePath);
-			DevMsg(eDLL::ENGINE, "--------------------------------------------------------------\n");
-			DevMsg(eDLL::ENGINE, "\n");
+			DevMsg(eDLL_T::ENGINE, "\n");
+			DevMsg(eDLL_T::ENGINE, "______________________________________________________________\n");
+			DevMsg(eDLL_T::ENGINE, "] RSON_DISK --------------------------------------------------\n");
+			DevMsg(eDLL_T::ENGINE, "] PATH: '%s'\n", szFilePath);
+			DevMsg(eDLL_T::ENGINE, "--------------------------------------------------------------\n");
+			DevMsg(eDLL_T::ENGINE, "\n");
 		}
 		return SQVM_LoadRson(szFilePath);
 	}
@@ -195,12 +195,12 @@ void* HSQVM_LoadRson(const char* szRsonName)
 	{
 		if (sq_showrsonloading->m_pParent->m_iValue > 0)
 		{
-			DevMsg(eDLL::ENGINE, "\n");
-			DevMsg(eDLL::ENGINE, "______________________________________________________________\n");
-			DevMsg(eDLL::ENGINE, "] RSON_VPK ---------------------------------------------------\n");
-			DevMsg(eDLL::ENGINE, "] PATH: '%s'\n", szRsonName);
-			DevMsg(eDLL::ENGINE, "--------------------------------------------------------------\n");
-			DevMsg(eDLL::ENGINE, "\n");
+			DevMsg(eDLL_T::ENGINE, "\n");
+			DevMsg(eDLL_T::ENGINE, "______________________________________________________________\n");
+			DevMsg(eDLL_T::ENGINE, "] RSON_VPK ---------------------------------------------------\n");
+			DevMsg(eDLL_T::ENGINE, "] PATH: '%s'\n", szRsonName);
+			DevMsg(eDLL_T::ENGINE, "--------------------------------------------------------------\n");
+			DevMsg(eDLL_T::ENGINE, "\n");
 		}
 	}
 	return SQVM_LoadRson(szRsonName);
@@ -225,7 +225,7 @@ bool HSQVM_LoadScript(void* sqvm, const char* szScriptPath, const char* szScript
 
 	if (sq_showscriptloading->m_pParent->m_iValue > 0)
 	{
-		DevMsg(eDLL::ENGINE, "Loading SQVM Script '%s'\n", filepath);
+		DevMsg(eDLL_T::ENGINE, "Loading SQVM Script '%s'\n", filepath);
 	}
 
 	// Returns true if the script exists on the disk
@@ -236,7 +236,7 @@ bool HSQVM_LoadScript(void* sqvm, const char* szScriptPath, const char* szScript
 
 	if (sq_showscriptloading->m_pParent->m_iValue > 0)
 	{
-		DevMsg(eDLL::ENGINE, "FAILED. Try SP / VPK for '%s'\n", filepath);
+		DevMsg(eDLL_T::ENGINE, "FAILED. Try SP / VPK for '%s'\n", filepath);
 	}
 
 	///////////////////////////////////////////////////////////////////////////////

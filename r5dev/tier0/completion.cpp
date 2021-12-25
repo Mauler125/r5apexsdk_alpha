@@ -157,7 +157,7 @@ void _KickID_f_CompletionFunc(CCommand* cmd)
 	}
 	catch (std::exception& e)
 	{
-		DevMsg(eDLL::SERVER, "sv_kickid requires a UserID or OriginID. You can get the UserID with the 'status' command. Error: %s", e.what());
+		DevMsg(eDLL_T::SERVER, "sv_kickid requires a UserID or OriginID. You can get the UserID with the 'status' command. Error: %s", e.what());
 		return;
 	}
 }
@@ -309,7 +309,7 @@ void _BanID_f_CompletionFunc(CCommand* cmd)
 	}
 	catch (std::exception& e)
 	{
-		DevMsg(eDLL::SERVER, "Banid Error: %s", e.what());
+		DevMsg(eDLL_T::SERVER, "Banid Error: %s", e.what());
 		return;
 	}
 }
@@ -352,7 +352,7 @@ void _Unban_f_CompletionFunc(CCommand* cmd)
 	}
 	catch (std::exception& e)
 	{
-		DevMsg(eDLL::SERVER, "Unban Error: %s", e.what());
+		DevMsg(eDLL_T::SERVER, "Unban Error: %s", e.what());
 		return;
 	}
 }
@@ -375,9 +375,9 @@ void _RTech_GenerateGUID_f_CompletionFunc(CCommand* cmd)
 	const char* firstArg = args[1]; // Get first arg.
 	unsigned long long guid = g_pRtech->StringToGuid(firstArg);
 
-	DevMsg(eDLL::RTECH, "______________________________________________________________\n");
-	DevMsg(eDLL::RTECH, "] RTECH_HASH -------------------------------------------------\n");
-	DevMsg(eDLL::RTECH, "] GUID: '0x%llX'\n", guid);
+	DevMsg(eDLL_T::RTECH, "______________________________________________________________\n");
+	DevMsg(eDLL_T::RTECH, "] RTECH_HASH -------------------------------------------------\n");
+	DevMsg(eDLL_T::RTECH, "] GUID: '0x%llX'\n", guid);
 }
 
 void _RTech_Decompress_f_CompletionFunc(CCommand* cmd)
@@ -399,16 +399,16 @@ void _RTech_Decompress_f_CompletionFunc(CCommand* cmd)
 	std::string pak_name_out = mod_dir + firstArg + ".rpak";
 	std::string pak_name_in = base_dir + firstArg + ".rpak";
 
-	DevMsg(eDLL::RTECH, "______________________________________________________________\n");
-	DevMsg(eDLL::RTECH, "] RTECH_DECOMPRESS -------------------------------------------\n");
+	DevMsg(eDLL_T::RTECH, "______________________________________________________________\n");
+	DevMsg(eDLL_T::RTECH, "] RTECH_DECOMPRESS -------------------------------------------\n");
 
 	if (!FileExists(pak_name_in.c_str()))
 	{
-		DevMsg(eDLL::RTECH, "Error: pak file '%s' does not exist!\n", pak_name_in.c_str());
+		DevMsg(eDLL_T::RTECH, "Error: pak file '%s' does not exist!\n", pak_name_in.c_str());
 		return;
 	}
 
-	DevMsg(eDLL::RTECH, "] Processing: '%s'\n", pak_name_in.c_str());
+	DevMsg(eDLL_T::RTECH, "] Processing: '%s'\n", pak_name_in.c_str());
 
 	std::vector<std::uint8_t> upak; // Compressed region.
 	std::ifstream ipak(pak_name_in, std::fstream::binary);
@@ -421,32 +421,32 @@ void _RTech_Decompress_f_CompletionFunc(CCommand* cmd)
 	rpak_h* rheader = (rpak_h*)upak.data();
 	uint16_t flags = (rheader->m_nFlags[0] << 8) | rheader->m_nFlags[1];
 
-	DevMsg(eDLL::RTECH, "______________________________________________________________\n");
-	DevMsg(eDLL::RTECH, "] HEADER_DETAILS ---------------------------------------------\n");
-	DevMsg(eDLL::RTECH, "] Magic    : '%08X'\n", rheader->m_nMagic);
-	DevMsg(eDLL::RTECH, "] Version  : '%u'\n", (rheader->m_nVersion));
-	DevMsg(eDLL::RTECH, "] Flags    : '%04X'\n", (flags));
-	DevMsg(eDLL::RTECH, "] Hash     : '%llu'\n", rheader->m_nHash);
-	DevMsg(eDLL::RTECH, "] Entries  : '%zu'\n", rheader->m_nAssetEntryCount);
-	DevMsg(eDLL::RTECH, "______________________________________________________________\n");
-	DevMsg(eDLL::RTECH, "] COMPRESSION_DETAILS ----------------------------------------\n");
-	DevMsg(eDLL::RTECH, "] Size disk: '%lld'\n", rheader->m_nSizeDisk);
-	DevMsg(eDLL::RTECH, "] Size decp: '%lld'\n", rheader->m_nSizeMemory);
-	DevMsg(eDLL::RTECH, "] Ratio    : '%.02f'\n", (rheader->m_nSizeDisk * 100.f) / rheader->m_nSizeMemory);
+	DevMsg(eDLL_T::RTECH, "______________________________________________________________\n");
+	DevMsg(eDLL_T::RTECH, "] HEADER_DETAILS ---------------------------------------------\n");
+	DevMsg(eDLL_T::RTECH, "] Magic    : '%08X'\n", rheader->m_nMagic);
+	DevMsg(eDLL_T::RTECH, "] Version  : '%u'\n", (rheader->m_nVersion));
+	DevMsg(eDLL_T::RTECH, "] Flags    : '%04X'\n", (flags));
+	DevMsg(eDLL_T::RTECH, "] Hash     : '%llu'\n", rheader->m_nHash);
+	DevMsg(eDLL_T::RTECH, "] Entries  : '%zu'\n", rheader->m_nAssetEntryCount);
+	DevMsg(eDLL_T::RTECH, "______________________________________________________________\n");
+	DevMsg(eDLL_T::RTECH, "] COMPRESSION_DETAILS ----------------------------------------\n");
+	DevMsg(eDLL_T::RTECH, "] Size disk: '%lld'\n", rheader->m_nSizeDisk);
+	DevMsg(eDLL_T::RTECH, "] Size decp: '%lld'\n", rheader->m_nSizeMemory);
+	DevMsg(eDLL_T::RTECH, "] Ratio    : '%.02f'\n", (rheader->m_nSizeDisk * 100.f) / rheader->m_nSizeMemory);
 
 	if (rheader->m_nMagic != 'kaPR')
 	{
-		DevMsg(eDLL::RTECH, "Error: pak file '%s' has invalid magic!\n", pak_name_in.c_str());
+		DevMsg(eDLL_T::RTECH, "Error: pak file '%s' has invalid magic!\n", pak_name_in.c_str());
 		return;
 	}
 	if ((rheader->m_nFlags[1] & 1) != 1)
 	{
-		DevMsg(eDLL::RTECH, "Error: pak file '%s' already decompressed!\n", pak_name_in.c_str());
+		DevMsg(eDLL_T::RTECH, "Error: pak file '%s' already decompressed!\n", pak_name_in.c_str());
 		return;
 	}
 	if (rheader->m_nSizeDisk != upak.size())
 	{
-		DevMsg(eDLL::RTECH, "Error: pak file '%s' decompressed size '%u' doesn't match expected value '%u'!\n", pak_name_in.c_str(), upak.size(), rheader->m_nSizeMemory);
+		DevMsg(eDLL_T::RTECH, "Error: pak file '%s' decompressed size '%u' doesn't match expected value '%u'!\n", pak_name_in.c_str(), upak.size(), rheader->m_nSizeMemory);
 		return;
 	}
 
@@ -455,12 +455,12 @@ void _RTech_Decompress_f_CompletionFunc(CCommand* cmd)
 
 	if (dsize == rheader->m_nSizeDisk)
 	{
-		DevMsg(eDLL::RTECH, "Error: calculated size: '%zu' expected: '%zu'!\n", dsize, rheader->m_nSizeMemory);
+		DevMsg(eDLL_T::RTECH, "Error: calculated size: '%zu' expected: '%zu'!\n", dsize, rheader->m_nSizeMemory);
 		return;
 	}
 	else
 	{
-		DevMsg(eDLL::RTECH, "] Calculated size: '%zu'\n", dsize);
+		DevMsg(eDLL_T::RTECH, "] Calculated size: '%zu'\n", dsize);
 	}
 
 	std::vector<std::uint8_t> pakbuf(rheader->m_nSizeMemory, 0);
@@ -471,7 +471,7 @@ void _RTech_Decompress_f_CompletionFunc(CCommand* cmd)
 	std::uint8_t decomp_result = g_pRtech->Decompress(params, upak.size(), pakbuf.size());
 	if (decomp_result != 1)
 	{
-		DevMsg(eDLL::RTECH, "Error: decompression failed for '%s' return value: '%u'!\n", pak_name_in.c_str(), +decomp_result);
+		DevMsg(eDLL_T::RTECH, "Error: decompression failed for '%s' return value: '%u'!\n", pak_name_in.c_str(), +decomp_result);
 		return;
 	}
 
@@ -484,8 +484,8 @@ void _RTech_Decompress_f_CompletionFunc(CCommand* cmd)
 	out_block.write((char*)pakbuf.data(), params[5]);
 	out_header.write((char*)rheader, PAK_HEADER_SIZE);
 
-	DevMsg(eDLL::RTECH, "] Decompressed rpak to: '%s'\n", pak_name_out.c_str());
-	DevMsg(eDLL::RTECH, "--------------------------------------------------------------\n");
+	DevMsg(eDLL_T::RTECH, "] Decompressed rpak to: '%s'\n", pak_name_out.c_str());
+	DevMsg(eDLL_T::RTECH, "--------------------------------------------------------------\n");
 }
 
 void _NET_TraceNetChan_f_CompletionFunc(CCommand* cmd)
@@ -494,11 +494,11 @@ void _NET_TraceNetChan_f_CompletionFunc(CCommand* cmd)
 	if (!bTraceNetChannel)
 	{
 		g_pCvar->FindVar("net_usesocketsforloopback")->m_pParent->m_iValue = 1;
-		DevMsg(eDLL::ENGINE, "\n");
-		DevMsg(eDLL::ENGINE, "+--------------------------------------------------------+\n");
-		DevMsg(eDLL::ENGINE, "|>>>>>>>>>>>>>| NETCHANNEL TRACE ACTIVATED |<<<<<<<<<<<<<|\n");
-		DevMsg(eDLL::ENGINE, "+--------------------------------------------------------+\n");
-		DevMsg(eDLL::ENGINE, "\n");
+		DevMsg(eDLL_T::ENGINE, "\n");
+		DevMsg(eDLL_T::ENGINE, "+--------------------------------------------------------+\n");
+		DevMsg(eDLL_T::ENGINE, "|>>>>>>>>>>>>>| NETCHANNEL TRACE ACTIVATED |<<<<<<<<<<<<<|\n");
+		DevMsg(eDLL_T::ENGINE, "+--------------------------------------------------------+\n");
+		DevMsg(eDLL_T::ENGINE, "\n");
 
 		// Begin the detour transaction to hook the the process
 		DetourTransactionBegin();
@@ -514,11 +514,11 @@ void _NET_TraceNetChan_f_CompletionFunc(CCommand* cmd)
 	}
 	else
 	{
-		DevMsg(eDLL::ENGINE, "\n");
-		DevMsg(eDLL::ENGINE, "+--------------------------------------------------------+\n");
-		DevMsg(eDLL::ENGINE, "|>>>>>>>>>>>>| NETCHANNEL TRACE DEACTIVATED |<<<<<<<<<<<<|\n");
-		DevMsg(eDLL::ENGINE, "+--------------------------------------------------------+\n");
-		DevMsg(eDLL::ENGINE, "\n");
+		DevMsg(eDLL_T::ENGINE, "\n");
+		DevMsg(eDLL_T::ENGINE, "+--------------------------------------------------------+\n");
+		DevMsg(eDLL_T::ENGINE, "|>>>>>>>>>>>>| NETCHANNEL TRACE DEACTIVATED |<<<<<<<<<<<<|\n");
+		DevMsg(eDLL_T::ENGINE, "+--------------------------------------------------------+\n");
+		DevMsg(eDLL_T::ENGINE, "\n");
 
 		// Begin the detour transaction to hook the the process
 		DetourTransactionBegin();
@@ -547,9 +547,9 @@ void _VPK_Decompress_f_CompletionFunc(CCommand* cmd)
 
 	std::chrono::milliseconds msStart = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
 
-	DevMsg(eDLL::FS, "______________________________________________________________\n");
-	DevMsg(eDLL::FS, "] FS_DECOMPRESS ----------------------------------------------\n");
-	DevMsg(eDLL::FS, "] Processing: '%s'\n", firstArg.c_str());
+	DevMsg(eDLL_T::FS, "______________________________________________________________\n");
+	DevMsg(eDLL_T::FS, "] FS_DECOMPRESS ----------------------------------------------\n");
+	DevMsg(eDLL_T::FS, "] Processing: '%s'\n", firstArg.c_str());
 
 	vpk_dir_h vpk = g_pPackedStore->GetPackDirFile(firstArg);
 	g_pPackedStore->InitLzParams();
@@ -560,11 +560,11 @@ void _VPK_Decompress_f_CompletionFunc(CCommand* cmd)
 	std::chrono::milliseconds msEnd = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
 	float duration = msEnd.count() - msStart.count();
 
-	DevMsg(eDLL::FS, "______________________________________________________________\n");
-	DevMsg(eDLL::FS, "] OPERATION_DETAILS ------------------------------------------\n");
-	DevMsg(eDLL::FS, "] Time elapsed: '%.3f' seconds\n", (duration / 1000));
-	DevMsg(eDLL::FS, "] Decompressed vpk to: '%s'\n", szPathOut.c_str());
-	DevMsg(eDLL::FS, "--------------------------------------------------------------\n");
+	DevMsg(eDLL_T::FS, "______________________________________________________________\n");
+	DevMsg(eDLL_T::FS, "] OPERATION_DETAILS ------------------------------------------\n");
+	DevMsg(eDLL_T::FS, "] Time elapsed: '%.3f' seconds\n", (duration / 1000));
+	DevMsg(eDLL_T::FS, "] Decompressed vpk to: '%s'\n", szPathOut.c_str());
+	DevMsg(eDLL_T::FS, "--------------------------------------------------------------\n");
 }
 
 void _NET_SetKey_f_CompletionFunc(CCommand* cmd)

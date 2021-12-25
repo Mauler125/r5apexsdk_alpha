@@ -77,7 +77,7 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 			{
 			case HostStates_t::HS_NEW_GAME:
 			{
-				DevMsg(eDLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_NEW_GAME | Loading level: '%s'\n", g_pHostState->m_levelName);
+				DevMsg(eDLL_T::ENGINE, "CHostState::FrameUpdate | CASE:HS_NEW_GAME | Loading level: '%s'\n", g_pHostState->m_levelName);
 
 				// Inlined CHostState::State_NewGame
 				g_pHostState->m_bSplitScreenConnect = false;
@@ -89,7 +89,7 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 				if (!CModelLoader_Map_IsValidFn(g_CModelLoader, g_pHostState->m_levelName) // Check if map is valid and if we can start a new game.
 					|| !Host_NewGameFn(g_pHostState->m_levelName, nullptr, g_pHostState->m_bBackgroundLevel, g_pHostState->m_bSplitScreenConnect, nullptr) || !g_ServerGameClients)
 				{
-					DevMsg(eDLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_NEW_GAME | Error: Map not valid.\n");
+					DevMsg(eDLL_T::ENGINE, "CHostState::FrameUpdate | CASE:HS_NEW_GAME | Error: Map not valid.\n");
 					// Inlined SCR_EndLoadingPlaque
 					if (*src_drawloading)
 					{
@@ -133,7 +133,7 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 			{
 				g_pHostState->m_flShortFrameTime = 1.5; // Set frame time.
 
-				DevMsg(eDLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_CHANGE_LEVEL_SP | Changing singleplayer level to: '%s'\n", g_pHostState->m_levelName);
+				DevMsg(eDLL_T::ENGINE, "CHostState::FrameUpdate | CASE:HS_CHANGE_LEVEL_SP | Changing singleplayer level to: '%s'\n", g_pHostState->m_levelName);
 
 				if (CModelLoader_Map_IsValidFn(g_CModelLoader, g_pHostState->m_levelName)) // Check if map is valid and if we can start a new game.
 				{
@@ -141,7 +141,7 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 				}
 				else
 				{
-					DevMsg(eDLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_CHANGE_LEVEL_SP | Error: Unable to find map: '%s'\n", g_pHostState->m_levelName);
+					DevMsg(eDLL_T::ENGINE, "CHostState::FrameUpdate | CASE:HS_CHANGE_LEVEL_SP | Error: Unable to find map: '%s'\n", g_pHostState->m_levelName);
 				}
 
 				//	Seems useless so nope.
@@ -164,7 +164,7 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 				using LevelShutdownFn = void(__thiscall*)(void*);
 				(*reinterpret_cast<LevelShutdownFn**>(*g_ServerDLL))[8](g_ServerDLL); // (*(void (__fastcall **)(void *))(*(_QWORD *)server_dll_var + 64i64))(server_dll_var);// LevelShutdown
 
-				DevMsg(eDLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_CHANGE_LEVEL_MP | Changing multiplayer level to: '%s'\n", g_pHostState->m_levelName);
+				DevMsg(eDLL_T::ENGINE, "CHostState::FrameUpdate | CASE:HS_CHANGE_LEVEL_MP | Changing multiplayer level to: '%s'\n", g_pHostState->m_levelName);
 
 				if (CModelLoader_Map_IsValidFn(g_CModelLoader, g_pHostState->m_levelName)) // Check if map is valid and if we can start a new game.
 				{
@@ -174,7 +174,7 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 				}
 				else
 				{
-					DevMsg(eDLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_CHANGE_LEVEL_MP | Error: Unable to find map: '%s'\n", g_pHostState->m_levelName);
+					DevMsg(eDLL_T::ENGINE, "CHostState::FrameUpdate | CASE:HS_CHANGE_LEVEL_MP | Error: Unable to find map: '%s'\n", g_pHostState->m_levelName);
 				}
 
 				//	Seems useless so nope.
@@ -198,13 +198,13 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 			}
 			case HostStates_t::HS_GAME_SHUTDOWN:
 			{
-				DevMsg(eDLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_GAME_SHUTDOWN | Shutdown game\n");
+				DevMsg(eDLL_T::ENGINE, "CHostState::FrameUpdate | CASE:HS_GAME_SHUTDOWN | Shutdown game\n");
 				Host_Game_ShutdownFn(g_pHostState);
 				break;
 			}
 			case HostStates_t::HS_RESTART:
 			{
-				DevMsg(eDLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_RESTART | Restarting client\n");
+				DevMsg(eDLL_T::ENGINE, "CHostState::FrameUpdate | CASE:HS_RESTART | Restarting client\n");
 				CL_EndMovieFn();
 				SendOfflineRequestToStryderFn(); // We have hostnames nulled anyway.
 				*(std::int32_t*)((std::uintptr_t)CEngine + 0xC) = 3; //g_CEngine.vtable->SetNextState(&g_CEngine, DLL_RESTART);
@@ -212,7 +212,7 @@ void HCHostState_FrameUpdate(void* rcx, void* rdx, float time)
 			}
 			case HostStates_t::HS_SHUTDOWN:
 			{
-				DevMsg(eDLL::ENGINE, "CHostState::FrameUpdate | CASE:HS_SHUTDOWN | Shutdown client\n");
+				DevMsg(eDLL_T::ENGINE, "CHostState::FrameUpdate | CASE:HS_SHUTDOWN | Shutdown client\n");
 				CL_EndMovieFn();
 				SendOfflineRequestToStryderFn(); // We have hostnames nulled anyway.
 				*(std::int32_t*)((std::uintptr_t)CEngine + 0xC) = 2; //g_CEngine.vtable->SetNextState(&g_CEngine, DLL_CLOSE);

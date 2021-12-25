@@ -19,7 +19,7 @@ namespace
 	/* ==== ------- ========================================================================================================================================================= */
 }
 
-enum class eDLL : int
+enum class eDLL_T : int
 {
 	SERVER = 0, // Game DLL
 	CLIENT = 1, // Game DLL
@@ -32,7 +32,7 @@ enum class eDLL : int
 
 ///////////////////////////////////////////////////////////////////////////////
 void HSys_Error(char* fmt, ...);
-void DevMsg(eDLL idx, const char* fmt, ...);
+void DevMsg(eDLL_T idx, const char* fmt, ...);
 
 void SysUtils_Attach();
 void SysUtils_Detach();

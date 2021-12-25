@@ -155,7 +155,7 @@ void IBrowser::RefreshServerList()
     {
         std::thread t([this]()
         {
-            DevMsg(eDLL::CLIENT, "Refreshing server list with string '%s'\n", r5net_matchmaking_hostname->m_pzsCurrentValue);
+            DevMsg(eDLL_T::CLIENT, "Refreshing server list with string '%s'\n", r5net_matchmaking_hostname->m_pzsCurrentValue);
             bThreadLocked = true;
             m_vServerList = g_pR5net->GetServersList(m_szServerListMessage);
             bThreadLocked = false;
@@ -171,7 +171,7 @@ void IBrowser::RefreshServerList()
 void IBrowser::SendHostingPostRequest()
 {
     m_szHostToken = std::string();
-    DevMsg(eDLL::CLIENT, "Sending PostServerHost request\n");
+    DevMsg(eDLL_T::CLIENT, "Sending PostServerHost request\n");
     bool result = g_pR5net->PostServerHost(m_szHostRequestMessage, m_szHostToken,
         ServerListing{
             m_Server.svServerName,
@@ -449,7 +449,7 @@ void IBrowser::HostServerSection()
             szServerNameErr.clear();
             if (!m_Server.svServerName.empty() && !m_Server.svPlaylist.empty() && !m_Server.svMapName.empty())
             {
-                DevMsg(eDLL::ENGINE, "Starting Server with name '%s', map '%s' and playlist '%s'\n", m_Server.svServerName.c_str(), m_Server.svMapName.c_str(), m_Server.svPlaylist.c_str());
+                DevMsg(eDLL_T::ENGINE, "Starting Server with name '%s', map '%s' and playlist '%s'\n", m_Server.svServerName.c_str(), m_Server.svMapName.c_str(), m_Server.svPlaylist.c_str());
                 szServerNameErr = std::string();
                 UpdateHostingStatus();
 
@@ -492,7 +492,7 @@ void IBrowser::HostServerSection()
         szServerNameErr.clear();
         if (!m_Server.svPlaylist.empty() && !m_Server.svMapName.empty())
         {
-            DevMsg(eDLL::ENGINE, "Starting Server with map '%s' and playlist '%s'\n", m_Server.svMapName.c_str(), m_Server.svPlaylist.c_str());
+            DevMsg(eDLL_T::ENGINE, "Starting Server with map '%s' and playlist '%s'\n", m_Server.svMapName.c_str(), m_Server.svPlaylist.c_str());
             szServerNameErr = std::string();
             UpdateHostingStatus();
 
@@ -536,7 +536,7 @@ void IBrowser::HostServerSection()
     {
         if (ImGui::Button("Reload Scripts##ServerHost_ReloadServerButton", ImVec2(ImGui::GetWindowSize().x, 32)))
         {
-            DevMsg(eDLL::ENGINE, "Recompiling scripts\n");
+            DevMsg(eDLL_T::ENGINE, "Recompiling scripts\n");
             ProcessCommand("reparse_weapons");
             ProcessCommand("reload");
         }

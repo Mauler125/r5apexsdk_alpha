@@ -62,10 +62,10 @@ void HNET_SetKey(std::string svNetKey)
 	g_szNetKey.clear();
 	g_szNetKey = svNetKey;
 
-	DevMsg(eDLL::ENGINE, "______________________________________________________________\n");
-	DevMsg(eDLL::ENGINE, "] NET_KEY ----------------------------------------------------\n");
-	DevMsg(eDLL::ENGINE, "] BASE64: '%s'\n", g_szNetKey.c_str());
-	DevMsg(eDLL::ENGINE, "--------------------------------------------------------------\n");
+	DevMsg(eDLL_T::ENGINE, "______________________________________________________________\n");
+	DevMsg(eDLL_T::ENGINE, "] NET_KEY ----------------------------------------------------\n");
+	DevMsg(eDLL_T::ENGINE, "] BASE64: '%s'\n", g_szNetKey.c_str());
+	DevMsg(eDLL_T::ENGINE, "--------------------------------------------------------------\n");
 
 	NET_SetKey(g_pNetKey, g_szNetKey.c_str());
 }
@@ -81,13 +81,13 @@ void HNET_GenerateKey()
 	BCRYPT_ALG_HANDLE hAlgorithm;
 	if (BCryptOpenAlgorithmProvider(&hAlgorithm, L"RNG", 0, 0) < 0)
 	{
-		DevMsg(eDLL::ENGINE, "Failed to open rng algorithm\n");
+		DevMsg(eDLL_T::ENGINE, "Failed to open rng algorithm\n");
 		return;
 	}
 	unsigned char pBuffer[0x10u];
 	if (BCryptGenRandom(hAlgorithm, pBuffer, 0x10u, 0) < 0)
 	{
-		DevMsg(eDLL::ENGINE, "Failed to generate random data\n");
+		DevMsg(eDLL_T::ENGINE, "Failed to generate random data\n");
 		return;
 	}
 
@@ -98,10 +98,10 @@ void HNET_GenerateKey()
 
 	g_szNetKey = Base64Encode(g_szNetKey);
 
-	DevMsg(eDLL::ENGINE, "______________________________________________________________\n");
-	DevMsg(eDLL::ENGINE, "] NET_KEY ----------------------------------------------------\n");
-	DevMsg(eDLL::ENGINE, "] BASE64: '%s'\n", g_szNetKey.c_str());
-	DevMsg(eDLL::ENGINE, "--------------------------------------------------------------\n");
+	DevMsg(eDLL_T::ENGINE, "______________________________________________________________\n");
+	DevMsg(eDLL_T::ENGINE, "] NET_KEY ----------------------------------------------------\n");
+	DevMsg(eDLL_T::ENGINE, "] BASE64: '%s'\n", g_szNetKey.c_str());
+	DevMsg(eDLL_T::ENGINE, "--------------------------------------------------------------\n");
 
 	NET_SetKey(g_pNetKey, g_szNetKey.c_str());
 }
@@ -121,7 +121,7 @@ void HNET_PrintFunc(const char* fmt, ...)
 	buf[sizeof(buf) -1] = 0;
 	va_end(args);
 
-	DevMsg(eDLL::CLIENT, "%s\n", buf);
+	DevMsg(eDLL_T::CLIENT, "%s\n", buf);
 }
 
 //-----------------------------------------------------------------------------

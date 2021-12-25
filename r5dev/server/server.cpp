@@ -66,13 +66,13 @@ void* HCServer_Authenticate(void* pServer, user_creds* pInpacket)
 
 	if (sv_showconnecting->m_pParent->m_iValue > 0)
 	{
-		DevMsg(eDLL::SERVER, "\n");
-		DevMsg(eDLL::SERVER, "______________________________________________________________\n");
-		DevMsg(eDLL::SERVER, "] AUTHENTICATION_DETAILS -------------------------------------\n");
-		DevMsg(eDLL::SERVER, "] UserID   : | '%s'\n", pInpacket->m_nUserID);
-		DevMsg(eDLL::SERVER, "] OriginID : | '%lld'\n", pInpacket->m_nNucleusID);
-		DevMsg(eDLL::SERVER, "] IP-ADDR  : | '%s'\n", svIpAddress.c_str());
-		DevMsg(eDLL::SERVER, "--------------------------------------------------------------\n");
+		DevMsg(eDLL_T::SERVER, "\n");
+		DevMsg(eDLL_T::SERVER, "______________________________________________________________\n");
+		DevMsg(eDLL_T::SERVER, "] AUTHENTICATION_DETAILS -------------------------------------\n");
+		DevMsg(eDLL_T::SERVER, "] UserID   : | '%s'\n", pInpacket->m_nUserID);
+		DevMsg(eDLL_T::SERVER, "] OriginID : | '%lld'\n", pInpacket->m_nNucleusID);
+		DevMsg(eDLL_T::SERVER, "] IP-ADDR  : | '%s'\n", svIpAddress.c_str());
+		DevMsg(eDLL_T::SERVER, "--------------------------------------------------------------\n");
 	}
 
 	if (g_pBanSystem->IsBanListValid()) // Is the banlist vector valid?
@@ -83,15 +83,15 @@ void* HCServer_Authenticate(void* pServer, user_creds* pInpacket)
 
 			if (sv_showconnecting->m_pParent->m_iValue > 0)
 			{
-				DevMsg(eDLL::SERVER, "] NOTICE   : | THIS CLIENT IS BANNED!\n");
-				DevMsg(eDLL::SERVER, "--------------------------------------------------------------\n\n");
+				DevMsg(eDLL_T::SERVER, "] NOTICE   : | THIS CLIENT IS BANNED!\n");
+				DevMsg(eDLL_T::SERVER, "--------------------------------------------------------------\n\n");
 			}
 			return nullptr;
 		}
 	}
 	if (sv_showconnecting->m_pParent->m_iValue > 0)
 	{
-		DevMsg(eDLL::SERVER, "\n");
+		DevMsg(eDLL_T::SERVER, "\n");
 	}
 
 	if (g_bCheckCompBanDB)

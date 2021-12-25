@@ -33,16 +33,16 @@ bool HIVEngineServer_PersistenceAvailable(void* entidx, int clientidx)
 			ipAddress = ss.str();
 		}
 
-		DevMsg(eDLL::SERVER, "\n");
-		DevMsg(eDLL::SERVER, "______________________________________________________________\n");
-		DevMsg(eDLL::SERVER, "] CLIENT_INSTANCE_DETAILS ------------------------------------\n");
-		DevMsg(eDLL::SERVER, "] INDEX: | '#%d'\n", clientidx);
-		DevMsg(eDLL::SERVER, "] NAME : | '%s'\n", clientName.c_str());
-		DevMsg(eDLL::SERVER, "] OID  : | '%lld'\n", originID);
-		DevMsg(eDLL::SERVER, "] UID  : | '%lld'\n", clientID);
-		DevMsg(eDLL::SERVER, "] IPADR: | '%s'\n", ipAddress.c_str());
-		DevMsg(eDLL::SERVER, "--------------------------------------------------------------\n");
-		DevMsg(eDLL::SERVER, "\n");
+		DevMsg(eDLL_T::SERVER, "\n");
+		DevMsg(eDLL_T::SERVER, "______________________________________________________________\n");
+		DevMsg(eDLL_T::SERVER, "] CLIENT_INSTANCE_DETAILS ------------------------------------\n");
+		DevMsg(eDLL_T::SERVER, "] INDEX: | '#%d'\n", clientidx);
+		DevMsg(eDLL_T::SERVER, "] NAME : | '%s'\n", clientName.c_str());
+		DevMsg(eDLL_T::SERVER, "] OID  : | '%lld'\n", originID);
+		DevMsg(eDLL_T::SERVER, "] UID  : | '%lld'\n", clientID);
+		DevMsg(eDLL_T::SERVER, "] IPADR: | '%s'\n", ipAddress.c_str());
+		DevMsg(eDLL_T::SERVER, "--------------------------------------------------------------\n");
+		DevMsg(eDLL_T::SERVER, "\n");
 
 		g_bIsPersistenceVarSet[clientidx] = true;
 	}
