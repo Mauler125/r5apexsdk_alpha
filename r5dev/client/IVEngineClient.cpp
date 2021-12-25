@@ -1,3 +1,9 @@
+//=============================================================================//
+//
+// Purpose: Interface the engine exposes to the game DLL
+//
+//=============================================================================//
+
 #include "core/stdafx.h"
 #include "tier0/basetypes.h"
 #include "client/IVEngineClient.h"
