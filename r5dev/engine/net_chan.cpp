@@ -7,6 +7,7 @@
 #include "core/stdafx.h"
 #include "core/logdef.h"
 #include "tier0/cvar.h"
+#include "tier0/completion.h"
 #include "engine/sys_utils.h"
 #include "engine/net_chan.h"
 #include "engine/baseclient.h"
@@ -15,6 +16,15 @@
 #ifndef DEDICATED
 #include "gameui/IConsole.h"
 #endif // !DEDICATED
+
+//-----------------------------------------------------------------------------
+// Purpose: shutdown netchannel
+//-----------------------------------------------------------------------------
+void NET_ShutDown(void* thisptr, const char* szReason, std::uint8_t a1, char a2)
+{
+	DownloadPlaylists_Callback(); // Re-load playlist from disk after getting disconnected from the server.
+	NET_ShutDown(thisptr, szReason, a1, a2);
+}
 
 //-----------------------------------------------------------------------------
 // Purpose: hook and log the receive datagram
