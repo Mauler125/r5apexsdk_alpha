@@ -19,6 +19,11 @@ extern HRESULT __stdcall Present(IDXGISwapChain* pSwapChain, UINT nSyncInterval,
 extern bool LoadTextureBuffer(unsigned char* buffer, int len, ID3D11ShaderResourceView** out_srv, int* out_width, int* out_height);
 
 /////////////////////////////////////////////////////////////////////////////
+// Typedefs
+typedef HRESULT(__stdcall* IDXGISwapChainPresent)(IDXGISwapChain* pSwapChain, UINT nSyncInterval, UINT nFlags);
+typedef HRESULT(__stdcall* IDXGIResizeBuffers)   (IDXGISwapChain* pSwapChain, UINT nBufferCount, UINT nWidth, UINT nHeight, DXGI_FORMAT dxFormat, UINT nSwapChainFlags);
+
+/////////////////////////////////////////////////////////////////////////////
 // Globals
 extern DWORD g_dThreadId;
 extern BOOL  g_bShowConsole;
@@ -104,3 +109,10 @@ enum class DXGISwapChainVTbl : short
 	GetFrameStatistics                   = 16,
 	GetLastPresentCount                  = 17,
 };
+
+class HIDXGI : public IDetour
+{
+	virtual void debugp();
+	///////////////////////////////////////////////////////////////////////////////
+};
+REGISTER(HIDXGI);

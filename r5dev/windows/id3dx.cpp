@@ -25,10 +25,6 @@ History:
 **********************************************************************************/
 
 ///////////////////////////////////////////////////////////////////////////////////
-typedef HRESULT(__stdcall* IDXGISwapChainPresent)(IDXGISwapChain* pSwapChain, UINT nSyncInterval, UINT nFlags);
-typedef HRESULT(__stdcall* IDXGIResizeBuffers)   (IDXGISwapChain* pSwapChain, UINT nBufferCount, UINT nWidth, UINT nHeight, DXGI_FORMAT dxFormat, UINT nSwapChainFlags);
-
-///////////////////////////////////////////////////////////////////////////////////
 typedef BOOL(WINAPI* IPostMessageA)(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 typedef BOOL(WINAPI* IPostMessageW)(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 
@@ -531,20 +527,16 @@ void DirectX_Shutdown()
 	ImGui_ImplDX11_Shutdown();
 }
 
-class HIDXGI : public IDetour
+void HIDXGI::debugp()
 {
-	virtual void debugp()
-	{
-		std::cout << "+--------------------------------------------------------+" << std::endl;
-		std::cout << "| VAR: ID3D11DeviceContext      : " << std::hex << std::uppercase << g_pDeviceContext          << std::setw(npad) << " |" << std::endl;
-		std::cout << "| VAR: ID3D11Device             : " << std::hex << std::uppercase << g_pDevice                 << std::setw(npad) << " |" << std::endl;
-		std::cout << "| VAR: ID3D11RenderTargetView   : " << std::hex << std::uppercase << g_pRenderTargetView       << std::setw(npad) << " |" << std::endl;
-		std::cout << "| VAR: IDXGISwapChain           : " << std::hex << std::uppercase << g_pSwapChain              << std::setw(npad) << " |" << std::endl;
-		std::cout << "| VAR: IDXGISwapChainPresent    : " << std::hex << std::uppercase << g_fnIDXGISwapChainPresent << std::setw(npad) << " |" << std::endl;
-		std::cout << "+--------------------------------------------------------+" << std::endl;
-	}
 	///////////////////////////////////////////////////////////////////////////////
-};
+	std::cout << "| VAR: ID3D11DeviceContext                  : " << std::hex << std::uppercase << g_pDeviceContext          << std::setw(4) << " |" << std::endl;
+	std::cout << "| VAR: ID3D11Device                         : " << std::hex << std::uppercase << g_pDevice                 << std::setw(4) << " |" << std::endl;
+	std::cout << "| VAR: ID3D11RenderTargetView               : " << std::hex << std::uppercase << g_pRenderTargetView       << std::setw(4) << " |" << std::endl;
+	std::cout << "| VAR: IDXGISwapChain                       : " << std::hex << std::uppercase << g_pSwapChain              << std::setw(4) << " |" << std::endl;
+	std::cout << "| VAR: IDXGISwapChainPresent                : " << std::hex << std::uppercase << g_fnIDXGISwapChainPresent << std::setw(4) << " |" << std::endl;
+	std::cout << "+----------------------------------------------------------------+" << std::endl;
+}
 
 //#################################################################################
 // ENTRYPOINT
@@ -568,5 +560,4 @@ void DirectX_Init()
 		CloseHandle(hThread);
 	}
 }
-//REGISTER(HIDXGI);
 #endif // !DEDICATED
