@@ -68,16 +68,14 @@ LRESULT CALLBACK DXGIMsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 LRESULT CALLBACK HwndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	if (uMsg == WM_KEYDOWN)
+	if (uMsg == WM_KEYDOWN || uMsg == WM_SYSKEYDOWN)
 	{
-		if (wParam == VK_OEM_3 || wParam == VK_INSERT) // For non-US keyboard layouts.
+		if (wParam == g_pImGuiConfig->IConsole_Config.m_nBind0 || wParam == g_pImGuiConfig->IConsole_Config.m_nBind1)
 		{
 			g_bShowConsole = !g_bShowConsole;
 		}
-	}
-	if (uMsg == WM_SYSKEYDOWN)
-	{
-		if (wParam == VK_F10 || wParam == VK_F12)
+
+		if (wParam == g_pImGuiConfig->IBrowser_Config.m_nBind0 || wParam == g_pImGuiConfig->IBrowser_Config.m_nBind1)
 		{
 			g_bShowBrowser = !g_bShowBrowser;
 		}
